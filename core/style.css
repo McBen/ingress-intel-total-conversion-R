@@ -71,6 +71,14 @@ i.large {
   pointer-events: none;
 }
 
+.RESISTANCE {
+  color: #00c2ff;
+}
+
+.ENLIGHTENED {
+  color: #28f428;
+}
+
 .enl {
   color: #03fe03 !important;
 }
@@ -123,9 +131,6 @@ a:hover {
   color: #ffce00;
 }
 
-#historydetails .missing {
-}
-
 #historydetails span {
   color: #ff4a4a;
 }
@@ -165,15 +170,6 @@ a:hover {
   border-width: 0 1px;
   margin: -4px 0;
   padding: 4px 0.2em;
-}
-
-.RESISTANCE {
-  color: #00c2ff;
-}
-
-.ALIENS,
-.ENLIGHTENED {
-  color: #28f428;
 }
 
 #portal_highlight_select {
