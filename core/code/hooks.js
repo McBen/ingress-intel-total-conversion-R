@@ -65,7 +65,7 @@ window._hooks = {};
 window.VALID_HOOKS = []; // stub for compatibility
 
 var isRunning = 0;
-window.runHooks = function(event, data) {
+window.runHooks = function (event, data) {
   if (!_hooks[event]) { return true; }
   var interrupted = false;
   isRunning++;
@@ -76,20 +76,16 @@ window.runHooks = function(event, data) {
         return false; // break from $.each
       }
     } catch (e) {
-      log.error('error running hook ' + event,
-        '\n' + e,
-        '\ncallback: ', callback,
-        '\ndata: ', data
-      );
+      log.error('error running hook', { event: event, error: e, source: callback && callback.toString(), data: data });
     }
   });
   isRunning--;
   return !interrupted;
 };
 
-window.pluginCreateHook = function() {}; // stub for compatibility
+window.pluginCreateHook = function () { }; // stub for compatibility
 
-window.addHook = function(event, callback) {
+window.addHook = function (event, callback) {
   if (typeof callback !== 'function') {
     throw new Error('Callback must be a function.');
   }
@@ -102,7 +98,7 @@ window.addHook = function(event, callback) {
 };
 
 // callback must the SAME function to be unregistered.
-window.removeHook = function(event, callback) {
+window.removeHook = function (event, callback) {
   if (typeof callback !== 'function') {
     throw new Error('Callback must be a function.');
   }
