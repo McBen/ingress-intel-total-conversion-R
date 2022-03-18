@@ -1,15 +1,15 @@
 // UTILS + MISC  ///////////////////////////////////////////////////////
 
 // retrieves parameter from the URL?query=string.
-window.getURLParam = function(param) {
+window.getURLParam = function (param) {
   var items = window.location.search.substr(1).split('&');
   if (items == "") return "";
 
-  for (var i=0; i<items.length; i++) {
+  for (var i = 0; i < items.length; i++) {
     var item = items[i].split('=');
 
     if (item[0] == param) {
-      var val = item.length==1 ? '' : decodeURIComponent (item[1].replace(/\+/g,' '));
+      var val = item.length == 1 ? '' : decodeURIComponent(item[1].replace(/\+/g, ' '));
       return val;
     }
   }
@@ -19,10 +19,10 @@ window.getURLParam = function(param) {
 
 // read cookie by name.
 // http://stackoverflow.com/a/5639455/1684530 by cwolves
-window.readCookie = function(name){
+window.readCookie = function (name) {
   var C, i, c = document.cookie.split('; ');
   var cookies = {};
-  for(i=c.length-1; i>=0; i--){
+  for (i = c.length - 1; i >= 0; i--) {
     C = c[i].split('=');
     cookies[C[0]] = unescape(C[1]);
   }
@@ -48,16 +48,16 @@ window.writeCookie = function (name, val, forcedExpireTime) {
   document.cookie = name + '=' + val + expires + '; path=/';
 };
 
-window.eraseCookie = function(name) {
+window.eraseCookie = function (name) {
   document.cookie = name + '=; expires=Thu, 1 Jan 1970 00:00:00 GMT; path=/';
 }
 
 //certain values were stored in cookies, but we're better off using localStorage instead - make it easy to convert
-window.convertCookieToLocalStorage = function(name) {
-  var cookie=readCookie(name);
-  if(cookie !== undefined) {
-    log.log('converting cookie '+name+' to localStorage');
-    if(localStorage[name] === undefined) {
+window.convertCookieToLocalStorage = function (name) {
+  var cookie = readCookie(name);
+  if (cookie !== undefined) {
+    log.log('converting cookie ' + name + ' to localStorage');
+    if (localStorage[name] === undefined) {
       localStorage[name] = cookie;
     }
     eraseCookie(name);
@@ -66,30 +66,30 @@ window.convertCookieToLocalStorage = function(name) {
 
 // add thousand separators to given number.
 // http://stackoverflow.com/a/1990590/1684530 by Doug Neiner.
-window.digits = function(d) {
+window.digits = function (d) {
   // U+2009 - Thin Space. Recommended for use as a thousands separator...
   // https://en.wikipedia.org/wiki/Space_(punctuation)#Table_of_spaces
-  return (d+"").replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1&#8201;");
+  return (d + "").replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1&#8201;");
 }
 
 
-window.zeroPad = function(number,pad) {
+window.zeroPad = function (number, pad) {
   number = number.toString();
   var zeros = pad - number.length;
-  return Array(zeros>0?zeros+1:0).join("0") + number;
+  return Array(zeros > 0 ? zeros + 1 : 0).join("0") + number;
 }
 
 
 // converts javascript timestamps to HH:mm:ss format if it was today;
 // otherwise it returns YYYY-MM-DD
-window.unixTimeToString = function(time, full) {
-  if(!time) return null;
+window.unixTimeToString = function (time, full) {
+  if (!time) return null;
   var d = new Date(typeof time === 'string' ? parseInt(time) : time);
   var time = d.toLocaleTimeString();
-//  var time = zeroPad(d.getHours(),2)+':'+zeroPad(d.getMinutes(),2)+':'+zeroPad(d.getSeconds(),2);
-  var date = d.getFullYear()+'-'+zeroPad(d.getMonth()+1,2)+'-'+zeroPad(d.getDate(),2);
-  if(typeof full !== 'undefined' && full) return date + ' ' + time;
-  if(d.toDateString() == new Date().toDateString())
+  //  var time = zeroPad(d.getHours(),2)+':'+zeroPad(d.getMinutes(),2)+':'+zeroPad(d.getSeconds(),2);
+  var date = d.getFullYear() + '-' + zeroPad(d.getMonth() + 1, 2) + '-' + zeroPad(d.getDate(), 2);
+  if (typeof full !== 'undefined' && full) return date + ' ' + time;
+  if (d.toDateString() == new Date().toDateString())
     return time;
   else
     return date;
@@ -97,22 +97,22 @@ window.unixTimeToString = function(time, full) {
 
 // converts a javascript time to a precise date and time (optionally with millisecond precision)
 // formatted in ISO-style YYYY-MM-DD hh:mm:ss.mmm - but using local timezone
-window.unixTimeToDateTimeString = function(time, millisecond) {
-  if(!time) return null;
+window.unixTimeToDateTimeString = function (time, millisecond) {
+  if (!time) return null;
   var d = new Date(typeof time === 'string' ? parseInt(time) : time);
-  return d.getFullYear()+'-'+zeroPad(d.getMonth()+1,2)+'-'+zeroPad(d.getDate(),2)
-    +' '+zeroPad(d.getHours(),2)+':'+zeroPad(d.getMinutes(),2)+':'+zeroPad(d.getSeconds(),2)+(millisecond?'.'+zeroPad(d.getMilliseconds(),3):'');
+  return d.getFullYear() + '-' + zeroPad(d.getMonth() + 1, 2) + '-' + zeroPad(d.getDate(), 2)
+    + ' ' + zeroPad(d.getHours(), 2) + ':' + zeroPad(d.getMinutes(), 2) + ':' + zeroPad(d.getSeconds(), 2) + (millisecond ? '.' + zeroPad(d.getMilliseconds(), 3) : '');
 }
 
-window.unixTimeToHHmm = function(time) {
-  if(!time) return null;
+window.unixTimeToHHmm = function (time) {
+  if (!time) return null;
   var d = new Date(typeof time === 'string' ? parseInt(time) : time);
   var h = '' + d.getHours(); h = h.length === 1 ? '0' + h : h;
   var s = '' + d.getMinutes(); s = s.length === 1 ? '0' + s : s;
-  return  h + ':' + s;
+  return h + ':' + s;
 }
 
-window.formatInterval = function(seconds,maxTerms) {
+window.formatInterval = function (seconds, maxTerms) {
 
   var d = Math.floor(seconds / 86400);
   var h = Math.floor((seconds % 86400) / 3600);
@@ -120,32 +120,32 @@ window.formatInterval = function(seconds,maxTerms) {
   var s = seconds % 60;
 
   var terms = [];
-  if (d > 0) terms.push(d+'d');
-  if (h > 0) terms.push(h+'h');
-  if (m > 0) terms.push(m+'m');
-  if (s > 0 || terms.length==0) terms.push(s+'s');
+  if (d > 0) terms.push(d + 'd');
+  if (h > 0) terms.push(h + 'h');
+  if (m > 0) terms.push(m + 'm');
+  if (s > 0 || terms.length == 0) terms.push(s + 's');
 
-  if (maxTerms) terms = terms.slice(0,maxTerms);
+  if (maxTerms) terms = terms.slice(0, maxTerms);
 
   return terms.join(' ');
 }
 
 
-window.rangeLinkClick = function() {
-  if(window.portalRangeIndicator)
+window.rangeLinkClick = function () {
+  if (window.portalRangeIndicator)
     window.map.fitBounds(window.portalRangeIndicator.getBounds());
-  if(window.isSmartphone())
+  if (window.isSmartphone())
     window.show('map');
 }
 
-window.showPortalPosLinks = function(lat, lng, name) {
+window.showPortalPosLinks = function (lat, lng, name) {
   var encoded_name = encodeURIComponent(name);
   var qrcode = '<div id="qrcode"></div>';
-  var script = '<script>$(\'#qrcode\').qrcode({text:\'GEO:'+lat+','+lng+'\'});</script>';
-  var gmaps = '<a href="https://maps.google.com/maps?ll='+lat+','+lng+'&q='+lat+','+lng+'%20('+encoded_name+')">Google Maps</a>';
-  var bingmaps = '<a href="https://www.bing.com/maps/?v=2&cp='+lat+'~'+lng+'&lvl=16&sp=Point.'+lat+'_'+lng+'_'+encoded_name+'___">Bing Maps</a>';
-  var osm = '<a href="https://www.openstreetmap.org/?mlat='+lat+'&mlon='+lng+'&zoom=16">OpenStreetMap</a>';
-  var latLng = '<span>' + lat + ',' + lng +'</span>';
+  var script = '<script>$(\'#qrcode\').qrcode({text:\'GEO:' + lat + ',' + lng + '\'});</script>';
+  var gmaps = '<a href="https://maps.google.com/maps?ll=' + lat + ',' + lng + '&q=' + lat + ',' + lng + '%20(' + encoded_name + ')">Google Maps</a>';
+  var bingmaps = '<a href="https://www.bing.com/maps/?v=2&cp=' + lat + '~' + lng + '&lvl=16&sp=Point.' + lat + '_' + lng + '_' + encoded_name + '___">Bing Maps</a>';
+  var osm = '<a href="https://www.openstreetmap.org/?mlat=' + lat + '&mlon=' + lng + '&zoom=16">OpenStreetMap</a>';
+  var latLng = '<span>' + lat + ',' + lng + '</span>';
   dialog({
     html: '<div style="text-align: center;">' + qrcode + script + gmaps + '; ' + bingmaps + '; ' + osm + '<br />' + latLng + '</div>',
     title: name,
@@ -153,45 +153,45 @@ window.showPortalPosLinks = function(lat, lng, name) {
   });
 }
 
-window.isTouchDevice = function() {
+window.isTouchDevice = function () {
   return 'ontouchstart' in window // works on most browsers
-      || 'onmsgesturechange' in window; // works on ie10
+    || 'onmsgesturechange' in window; // works on ie10
 };
 
 // !!deprecated
 // to be ovewritten in app.js
-window.androidCopy = function(text) {
+window.androidCopy = function (text) {
   return true; // i.e. execute other actions
 }
 
 // returns number of pixels left to scroll down before reaching the
 // bottom. Works similar to the native scrollTop function.
-window.scrollBottom = function(elm) {
-  if(typeof elm === 'string') elm = $(elm);
+window.scrollBottom = function (elm) {
+  if (typeof elm === 'string') elm = $(elm);
   return elm.get(0).scrollHeight - elm.innerHeight() - elm.scrollTop();
 }
 
-window.zoomToAndShowPortal = function(guid, latlng) {
+window.zoomToAndShowPortal = function (guid, latlng) {
   map.setView(latlng, DEFAULT_ZOOM);
   // if the data is available, render it immediately. Otherwise defer
   // until it becomes available.
-  if(window.portals[guid])
+  if (window.portals[guid])
     renderPortalDetails(guid);
   else
     urlPortal = guid;
 }
 
-window.selectPortalByLatLng = function(lat, lng) {
-  if(lng === undefined && lat instanceof Array) {
+window.selectPortalByLatLng = function (lat, lng) {
+  if (lng === undefined && lat instanceof Array) {
     lng = lat[1];
     lat = lat[0];
-  } else if(lng === undefined && lat instanceof L.LatLng) {
+  } else if (lng === undefined && lat instanceof L.LatLng) {
     lng = lat.lng;
     lat = lat.lat;
   }
-  for(var guid in window.portals) {
+  for (var guid in window.portals) {
     var latlng = window.portals[guid].getLatLng();
-    if(latlng.lat == lat && latlng.lng == lng) {
+    if (latlng.lat == lat && latlng.lng == lng) {
       renderPortalDetails(guid);
       return;
     }
@@ -204,68 +204,68 @@ window.selectPortalByLatLng = function(lat, lng) {
 
 // escape a javascript string, so quotes and backslashes are escaped with a backslash
 // (for strings passed as parameters to html onclick="..." for example)
-window.escapeJavascriptString = function(str) {
-  return (str+'').replace(/[\\"']/g,'\\$&');
+window.escapeJavascriptString = function (str) {
+  return (str + '').replace(/[\\"']/g, '\\$&');
 }
 
 //escape special characters, such as tags
-window.escapeHtmlSpecialChars = function(str) {
+window.escapeHtmlSpecialChars = function (str) {
   var div = document.createElement('div');
   var text = document.createTextNode(str);
   div.appendChild(text);
   return div.innerHTML;
 }
 
-window.prettyEnergy = function(nrg) {
-  return nrg> 1000 ? Math.round(nrg/1000) + ' k': nrg;
+window.prettyEnergy = function (nrg) {
+  return nrg > 1000 ? Math.round(nrg / 1000) + ' k' : nrg;
 }
 
-window.uniqueArray = function(arr) {
-  return $.grep(arr, function(v, i) {
+window.uniqueArray = function (arr) {
+  return $.grep(arr, function (v, i) {
     return $.inArray(v, arr) === i;
   });
 }
 
-window.genFourColumnTable = function(blocks) {
-  var t = $.map(blocks, function(detail, index) {
-    if(!detail) return '';
-    var title = detail[2] ? ' title="'+escapeHtmlSpecialChars(detail[2]) + '"' : '';
-    if(index % 2 === 0)
-      return '<tr><td'+title+'>'+detail[1]+'</td><th'+title+'>'+detail[0]+'</th>';
+window.genFourColumnTable = function (blocks) {
+  var t = $.map(blocks, function (detail, index) {
+    if (!detail) return '';
+    var title = detail[2] ? ' title="' + escapeHtmlSpecialChars(detail[2]) + '"' : '';
+    if (index % 2 === 0)
+      return '<tr><td' + title + '>' + detail[1] + '</td><th' + title + '>' + detail[0] + '</th>';
     else
-      return '    <th'+title+'>'+detail[0]+'</th><td'+title+'>'+detail[1]+'</td></tr>';
+      return '    <th' + title + '>' + detail[0] + '</th><td' + title + '>' + detail[1] + '</td></tr>';
   }).join('');
-  if(t.length % 2 === 1) t + '<td></td><td></td></tr>';
+  if (t.length % 2 === 1) t + '<td></td><td></td></tr>';
   return t;
 }
 
 
 // converts given text with newlines (\n) and tabs (\t) to a HTML
 // table automatically.
-window.convertTextToTableMagic = function(text) {
+window.convertTextToTableMagic = function (text) {
   // check if it should be converted to a table
-  if(!text.match(/\t/)) return text.replace(/\n/g, '<br>');
+  if (!text.match(/\t/)) return text.replace(/\n/g, '<br>');
 
   var data = [];
   var columnCount = 0;
 
   // parse data
   var rows = text.split('\n');
-  $.each(rows, function(i, row) {
+  $.each(rows, function (i, row) {
     data[i] = row.split('\t');
-    if(data[i].length > columnCount) columnCount = data[i].length;
+    if (data[i].length > columnCount) columnCount = data[i].length;
   });
 
   // build the table
   var table = '<table>';
-  $.each(data, function(i, row) {
+  $.each(data, function (i, row) {
     table += '<tr>';
-    $.each(data[i], function(k, cell) {
+    $.each(data[i], function (k, cell) {
       var attributes = '';
-      if(k === 0 && data[i].length < columnCount) {
-        attributes = ' colspan="'+(columnCount - data[i].length + 1)+'"';
+      if (k === 0 && data[i].length < columnCount) {
+        attributes = ' colspan="' + (columnCount - data[i].length + 1) + '"';
       }
-      table += '<td'+attributes+'>'+cell+'</td>';
+      table += '<td' + attributes + '>' + cell + '</td>';
     });
     table += '</tr>';
   });
@@ -274,13 +274,13 @@ window.convertTextToTableMagic = function(text) {
 }
 
 // Given 3 sets of points in an array[3]{lat, lng} returns the area of the triangle
-window.calcTriArea = function(p) {
-  return Math.abs((p[0].lat*(p[1].lng-p[2].lng)+p[1].lat*(p[2].lng-p[0].lng)+p[2].lat*(p[0].lng-p[1].lng))/2);
+window.calcTriArea = function (p) {
+  return Math.abs((p[0].lat * (p[1].lng - p[2].lng) + p[1].lat * (p[2].lng - p[0].lng) + p[2].lat * (p[0].lng - p[1].lng)) / 2);
 }
 
-function clamp (n,max,min) {
-  if (n===0) { return 0; }
-  return n>0 ? Math.min(n,max) : Math.max(n,min);
+function clamp(n, max, min) {
+  if (n === 0) { return 0; }
+  return n > 0 ? Math.min(n, max) : Math.max(n, min);
 }
 
 var MAX_LATITUDE = 85.051128; // L.Projection.SphericalMercator.MAX_LATITUDE
@@ -322,7 +322,7 @@ window.pnpoly = function (polygon, point) {
   // j records previous value. Also handles wrapping around.
   for (var i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
     inside ^= polygon[i].y > point.y !== polygon[j].y > point.y &&
-              point.x - polygon[i].x < (polygon[j].x - polygon[i].x) * (point.y - polygon[i].y) / (polygon[j].y - polygon[i].y);
+      point.x - polygon[i].x < (polygon[j].x - polygon[i].x) * (point.y - polygon[i].y) / (polygon[j].y - polygon[i].y);
   }
   // Let's make js as magical as C. Yay.
   return !!inside;
@@ -338,27 +338,27 @@ window.pnpoly = function (polygon, point) {
 window.makePermalink = function (latlng, options) {
   options = options || {};
 
-  function round (l) { // ensures that lat,lng are with same precision as in stock intel permalinks
-    return Math.floor(l*1e6)/1e6;
+  function round(l) { // ensures that lat,lng are with same precision as in stock intel permalinks
+    return Math.floor(l * 1e6) / 1e6;
   }
   var args = [];
   if (!latlng || options.includeMapView) {
     var c = window.map.getCenter();
     args.push(
-      'll='+[round(c.lat),round(c.lng)].join(','),
-      'z='+window.map.getZoom()
+      'll=' + [round(c.lat), round(c.lng)].join(','),
+      'z=' + window.map.getZoom()
     );
   }
   if (latlng) {
     if ('lat' in latlng) { latlng = [latlng.lat, latlng.lng]; }
-    args.push('pll='+latlng.join(','));
+    args.push('pll=' + latlng.join(','));
   }
   var url = options.fullURL ? '@url_intel_base@' : '/';
   return url + '?' + args.join('&');
 };
 
 Object.defineProperty(String.prototype, 'capitalize', {
-  value: function() {
+  value: function () {
     return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();
   }
 });
@@ -366,8 +366,8 @@ Object.defineProperty(String.prototype, 'capitalize', {
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith#polyfill
 if (!String.prototype.startsWith) {
   Object.defineProperty(String.prototype, 'startsWith', {
-    value: function(search, rawPos) {
-      var pos = rawPos > 0 ? rawPos|0 : 0;
+    value: function (search, rawPos) {
+      var pos = rawPos > 0 ? rawPos | 0 : 0;
       return this.substring(pos, pos + search.length) === search;
     }
   });
@@ -385,7 +385,7 @@ if (!Math.trunc) {
 // https://tc39.github.io/ecma262/#sec-array.prototype.find
 if (!Array.prototype.find) {
   Object.defineProperty(Array.prototype, 'find', {
-    value: function(predicate) {
+    value: function (predicate) {
       // 1. Let O be ? ToObject(this value).
       if (this == null) {
         throw TypeError('"this" is null or not defined');
@@ -437,7 +437,7 @@ if (!Element.prototype.matches) {
 }
 
 if (!Element.prototype.closest) {
-  Element.prototype.closest = function(s) {
+  Element.prototype.closest = function (s) {
     var el = this;
 
     do {
