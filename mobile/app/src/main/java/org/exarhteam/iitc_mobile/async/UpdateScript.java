@@ -48,7 +48,7 @@ public class UpdateScript extends AsyncTask<String, Void, Boolean> {
             String downloadURL = mScriptInfo.get("downloadURL");
             if (updateURL == null) updateURL = downloadURL;
             if (updateURL == null) return false;
-            if (!isUpdateAllowed(updateURL)) return false;
+            if (isUpdateForbidden(updateURL)) return false;
 
             final String updateMetaScript = downloadFile(updateURL);
             if (updateMetaScript == null) {
@@ -74,7 +74,7 @@ public class UpdateScript extends AsyncTask<String, Void, Boolean> {
                     downloadURL = updateInfo.get("downloadURL");
                 }
 
-                if (!isUpdateAllowed(downloadURL)) return false;
+                if (isUpdateForbidden(downloadURL)) return false;
                 updatedScript = downloadFile(downloadURL);
                 if (updatedScript == null) {
                     return false;
@@ -94,11 +94,11 @@ public class UpdateScript extends AsyncTask<String, Void, Boolean> {
         }
     }
 
-    private boolean isUpdateAllowed(final String url) throws MalformedURLException {
+    private boolean isUpdateForbidden(final String url) throws MalformedURLException {
         if (new URL(url).getProtocol().equals("https"))
-            return true;
+            return false;
 
-        return !mForceSecureUpdates;
+        return mForceSecureUpdates;
     }
 
     private String downloadFile(final String url) throws IOException {
