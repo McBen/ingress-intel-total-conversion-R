@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="title_activity_settings">Settings</string>
     <string name="toggle_map">Toggle map visibility</string>
     <string name="clear_log">Clear log</string>
     <string name="debug_run">Run</string>
