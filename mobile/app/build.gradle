@@ -25,7 +25,6 @@ def metaFDroid(outputFileName) {
 
 android {
     compileSdkVersion 29
-    buildToolsVersion = '29.0.3'
 
     defaultConfig {
         applicationId "org.exarhteam.iitc_mobile"
@@ -77,12 +76,12 @@ android {
         }
     }
 
-    lintOptions {
-        abortOnError false
-    }
     compileOptions {
         sourceCompatibility = '1.8'
         targetCompatibility = '1.8'
+    }
+    lint {
+        abortOnError false
     }
 
     applicationVariants.all { variant ->
