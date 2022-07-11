@@ -17,10 +17,12 @@ def getVersionCodeTimeStamps = { ->
 }
 
 def metaFDroid(outputFileName) {
+    /*
     new File(outputFileName, "version_fdroid.txt").text = [
             ["versionName", android.defaultConfig.versionName].join("="),
             ["versionCode", android.defaultConfig.versionCode].join("="),
     ].join("\n")
+    */
 }
 
 android {
