@@ -245,7 +245,6 @@ public class IITC_WebViewClient extends WebViewClient {
 
         if (url.contains("/css/ap_icons.css")
                 || url.contains("/css/map_icons.css")
-                || url.contains("/css/common.css")
                 || url.contains("/css/misc_icons.css")
                 || url.contains("/css/style_full.css")
                 || url.contains("/css/style_mobile.css")
