@@ -49,8 +49,8 @@ public class IITC_WebViewClient extends WebViewClient {
     private Dialog createSignInDialog(final HttpAuthHandler handler, final String host, final String realm,
             final String username, final String password) {
         final View v = mIitc.getLayoutInflater().inflate(R.layout.dialog_http_authentication, null);
-        final TextView tvUsername = (TextView) v.findViewById(R.id.username);
-        final TextView tvPassword = (TextView) v.findViewById(R.id.password);
+        final TextView tvUsername = v.findViewById(R.id.username);
+        final TextView tvPassword = v.findViewById(R.id.password);
         final String title = String.format(mIitc.getString(R.string.sign_in_to), host, realm);
 
         if (username != null)

@@ -79,7 +79,7 @@ public class IITC_Mobile extends AppCompatActivity
         implements OnSharedPreferenceChangeListener, NfcAdapter.CreateNdefMessageCallback, OnLocaleChangedListener {
     private static final String mIntelUrl = "https://intel.ingress.com/";
 
-    private LocalizationActivityDelegate localizationDelegate = new LocalizationActivityDelegate(this);
+    private final LocalizationActivityDelegate localizationDelegate = new LocalizationActivityDelegate(this);
     private SharedPreferences mSharedPrefs;
     private IITC_FileManager mFileManager;
     private IITC_WebView mIitcWebView;
@@ -175,12 +175,12 @@ public class IITC_Mobile extends AppCompatActivity
         debugScrollButton = findViewById(R.id.debugScrollButton);
 
         mImageLoading = findViewById(R.id.imageLoading);
-        mIitcWebView = (IITC_WebView) findViewById(R.id.iitc_webview);
+        mIitcWebView = findViewById(R.id.iitc_webview);
         mLayoutDebug = findViewById(R.id.layoutDebug);
-        mLvDebug = (RecyclerView) findViewById(R.id.lvDebug);
+        mLvDebug = findViewById(R.id.lvDebug);
         mViewDebug = findViewById(R.id.viewDebug);
-        mBtnToggleMap = (ImageButton) findViewById(R.id.btnToggleMapVisibility);
-        mEditCommand = (EditText) findViewById(R.id.editCommand);
+        mBtnToggleMap = findViewById(R.id.btnToggleMapVisibility);
+        mEditCommand = findViewById(R.id.editCommand);
         mEditCommand.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(final View v, final int keyCode, final KeyEvent event) {
@@ -249,7 +249,7 @@ public class IITC_Mobile extends AppCompatActivity
         mUserLocation.setLocationMode(Integer.parseInt(mSharedPrefs.getString("pref_user_location_mode", "0")));
 
         // compat actionbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.iitc_toolbar);
+        Toolbar toolbar = findViewById(R.id.iitc_toolbar);
         setSupportActionBar(toolbar);
 
         // pass ActionBar to helper because we deprecated getActionBar
@@ -999,7 +999,7 @@ public class IITC_Mobile extends AppCompatActivity
                 "console.log('>>> ' + obj.code);" +
                 "try{result=eval(obj.code);}catch(e){if(e.stack) console.error(e.stack);throw e;}" +
                 "if(result!==undefined) console.log(result===null?null:result.toString());" +
-                "})(" + obj.toString() + ");";
+                "})(" + obj + ");";
 
         mIitcWebView.loadJS(js);
     }

@@ -22,7 +22,7 @@ import com.akexorcist.localizationactivity.core.OnLocaleChangedListener;
 import java.util.Locale;
 
 public class IntroActivity extends AppIntro implements OnLocaleChangedListener {
-    private LocalizationActivityDelegate localizationDelegate = new LocalizationActivityDelegate(this);
+    private final LocalizationActivityDelegate localizationDelegate = new LocalizationActivityDelegate(this);
 
     private IITC_Localization mLocalization;
     private SharedPreferences mSharedPrefs;

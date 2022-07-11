@@ -113,9 +113,9 @@ public class IITC_MapSettings implements OnItemSelectedListener, OnItemClickList
         final LayoutInflater inflater = (LayoutInflater) mIitc.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View header = inflater.inflate(R.layout.map_options_header, null);
 
-        mSpinnerHighlighter = (Spinner) header.findViewById(R.id.spinnerHighlighter);
-        mSpinnerBaseMap = (Spinner) header.findViewById(R.id.spinnerBaseLayer);
-        mListViewOverlayLayers = (ListView) mIitc.findViewById(R.id.right_drawer);
+        mSpinnerHighlighter = header.findViewById(R.id.spinnerHighlighter);
+        mSpinnerBaseMap = header.findViewById(R.id.spinnerBaseLayer);
+        mListViewOverlayLayers = mIitc.findViewById(R.id.right_drawer);
 
         mListViewOverlayLayers.addHeaderView(header);
 

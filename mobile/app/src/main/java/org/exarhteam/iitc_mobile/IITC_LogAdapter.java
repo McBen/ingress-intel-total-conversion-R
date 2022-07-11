@@ -19,7 +19,7 @@ import java.util.List;
 public class IITC_LogAdapter extends RecyclerView.Adapter<IITC_LogAdapter.ViewHolder> implements Log.Receiver {
     private final IITC_Mobile mIitc;
     private int mObservers = 0;
-    private List<Message> logs = new ArrayList<>();
+    private final List<Message> logs = new ArrayList<>();
     private boolean isScrollToEnd = true;
     private int manualPosition = -1;
 
@@ -130,7 +130,7 @@ public class IITC_LogAdapter extends RecyclerView.Adapter<IITC_LogAdapter.ViewHo
             if (msg == null || msg.isEmpty())
                 msg = sw.toString();
             else
-                msg += "\n" + sw.toString();
+                msg += "\n" + sw;
         }
 
         holder.msg.setText(msg);
@@ -148,10 +148,10 @@ public class IITC_LogAdapter extends RecyclerView.Adapter<IITC_LogAdapter.ViewHo
 
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView icon;
-        private TextView msg;
-        private TextView tag;
-        private TextView time;
+        private final ImageView icon;
+        private final TextView msg;
+        private final TextView tag;
+        private final TextView time;
 
         ViewHolder(View view) {
             super(view);

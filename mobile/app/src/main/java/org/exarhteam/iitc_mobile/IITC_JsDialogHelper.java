@@ -88,7 +88,7 @@ public class IITC_JsDialogHelper {
         } else {
             final View view = LayoutInflater.from(context).inflate(
                     R.layout.js_prompt, null);
-            final EditText edit = ((EditText) view.findViewById(R.id.value));
+            final EditText edit = view.findViewById(R.id.value);
             edit.setText(mDefaultValue);
             builder.setPositiveButton(positiveTextId, new PositiveListener(edit));
             ((TextView) view.findViewById(R.id.message)).setText(mMessage);

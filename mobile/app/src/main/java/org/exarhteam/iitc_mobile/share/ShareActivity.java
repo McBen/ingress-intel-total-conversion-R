@@ -158,7 +158,7 @@ public class ShareActivity extends FragmentActivity implements ActionBar.TabList
             return;
         }
 
-        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager = findViewById(R.id.pager);
         mViewPager.setAdapter(mFragmentAdapter);
 
         mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {

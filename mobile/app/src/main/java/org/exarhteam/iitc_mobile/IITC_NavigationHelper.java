@@ -49,14 +49,14 @@ public class IITC_NavigationHelper extends ActionBarDrawerToggle implements OnIt
     private String mHighlighter = null;
 
     public IITC_NavigationHelper(final IITC_Mobile iitc, final ActionBar bar, Toolbar toolbar) {
-        super(iitc, (DrawerLayout) iitc.findViewById(R.id.drawer_layout),
+        super(iitc, iitc.findViewById(R.id.drawer_layout),
                 toolbar, R.string.drawer_open, R.string.drawer_close);
 
         mIitc = iitc;
         mActionBar = bar;
-        mDrawerLeft = (ListView) iitc.findViewById(R.id.left_drawer);
+        mDrawerLeft = iitc.findViewById(R.id.left_drawer);
         mDrawerRight = iitc.findViewById(R.id.right_drawer);
-        mDrawerLayout = (DrawerLayout) iitc.findViewById(R.id.drawer_layout);
+        mDrawerLayout = iitc.findViewById(R.id.drawer_layout);
         mDexRunning = iitc.isDexRunning();
 
         mPrefs = PreferenceManager.getDefaultSharedPreferences(iitc);

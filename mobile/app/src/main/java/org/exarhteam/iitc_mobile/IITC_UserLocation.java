@@ -60,7 +60,7 @@ public class IITC_UserLocation implements CompassListener, LocationListener {
         }
 
         mIitc.getWebView().loadJS("if(window.plugin && window.plugin.userLocation)"
-                + "window.plugin.userLocation.onOrientationChange(" + String.valueOf(orientation) + ");");
+                + "window.plugin.userLocation.onOrientationChange(" + orientation + ");");
     }
 
     private void updateListeners() {
@@ -148,10 +148,7 @@ public class IITC_UserLocation implements CompassListener, LocationListener {
             return true;
         } else if (isNewer && !isLessAccurate) {
             return true;
-        } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
-            return true;
-        }
-        return false;
+        } else return isNewer && !isSignificantlyLessAccurate && isFromSameProvider;
     }
 
     public boolean hasCurrentLocation() {

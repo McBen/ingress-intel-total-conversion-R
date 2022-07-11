@@ -41,7 +41,7 @@ public final class Log {
 
         URL_PATTERN = Pattern.compile("^https?://([a-z.-]+)" + Pattern.quote(IITC_FileManager.DOMAIN) + "/(.*)$",
                 Pattern.CASE_INSENSITIVE);
-    };
+    }
 
     private static synchronized void log(final int priority, final String tag, final String msg, final Throwable tr) {
         final Date now = new Date();
@@ -328,14 +328,14 @@ public final class Log {
                 if (msg == null || msg.isEmpty())
                     msg = sw.toString();
                 else
-                    msg += "\n" + sw.toString();
+                    msg += "\n" + sw;
             }
 
             return getDateString() + " " + priority + " " + getTag() + "\n" + msg;
         }
     }
 
-    public static interface Receiver {
+    public interface Receiver {
         void handle(Message message);
     }
 }

@@ -49,7 +49,7 @@ public class IITC_DeviceAccountLogin implements AccountManagerCallback<Bundle>, 
             final LayoutInflater inflater = mIitc.getLayoutInflater();
             final View v = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
 
-            final TextView tv = (TextView) v.findViewById(android.R.id.text1);
+            final TextView tv = v.findViewById(android.R.id.text1);
             tv.setText(mAccounts[position].name);
 
             return tv;

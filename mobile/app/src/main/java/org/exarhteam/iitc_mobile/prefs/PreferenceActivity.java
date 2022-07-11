@@ -12,7 +12,7 @@ import com.akexorcist.localizationactivity.core.OnLocaleChangedListener;
 import org.exarhteam.iitc_mobile.fragments.MainSettings;
 
 public class PreferenceActivity extends Activity implements OnLocaleChangedListener {
-    private LocalizationActivityDelegate localizationDelegate = new LocalizationActivityDelegate(this);
+    private final LocalizationActivityDelegate localizationDelegate = new LocalizationActivityDelegate(this);
 
     @Override
     protected void attachBaseContext(Context newBase) {
