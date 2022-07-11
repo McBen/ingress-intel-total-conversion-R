@@ -23,8 +23,8 @@
         <activity
             android:name="org.exarhteam.iitc_mobile.IITC_Mobile"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize|uiMode"
-            android:label="@string/app_name"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -94,7 +94,8 @@
             android:name="org.exarhteam.iitc_mobile.prefs.PluginPreferenceActivity"
             android:theme="@style/AppPrefTheme"
             android:configChanges="orientation|keyboard|keyboardHidden|screenSize"
-            android:label="@string/activity_plugins">
+            android:label="@string/activity_plugins"
+            android:exported="true">
             <!-- Handles external user plugins -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
