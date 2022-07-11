@@ -82,7 +82,7 @@ public class IITC_WebView extends WebView {
             // remove ";wv " marker as Google blocks WebViews from using OAuth
             mMobileUserAgent = original_ua.replace("; wv", "");
         } else { // KitKat and older
-            mMobileUserAgent = original_ua.replaceFirst("Version\\/\\d\\.\\d+ ", "");
+            mMobileUserAgent = original_ua.replaceFirst("Version/\\d\\.\\d+ ", "");
         }
         setUserAgent();
 
