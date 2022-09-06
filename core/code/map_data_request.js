@@ -220,8 +220,8 @@ window.MapDataRequest.prototype.refresh = function() {
 
   var x1 = lngToTile(bounds.getWest(), tileParams);
   var x2 = lngToTile(bounds.getEast(), tileParams);
-  var y1 = latToTile(bounds.getNorth(), tileParams);
-  var y2 = latToTile(bounds.getSouth(), tileParams);
+  var y1 = Math.max(latToTile(bounds.getNorth(), tileParams), 0);
+  var y2 = Math.min(latToTile(bounds.getSouth(), tileParams), tileParams.tilesPerEdge);
 
   // calculate the full bounds for the data - including the part of the tiles off the screen edge
   var dataBounds = L.latLngBounds([
