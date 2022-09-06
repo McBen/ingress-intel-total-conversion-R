@@ -245,8 +245,11 @@ window.Render.prototype.deleteFieldEntity = function(guid) {
     var fd = f.options.details;
 
     fieldsFactionLayers[f.options.team].removeLayer(f);
+    if (f.childs) {
+      f.childs.forEach(poly => fieldsFactionLayers[f.options.team].removeLayer(poly));
+    }
     delete window.fields[guid];
-    window.runHooks('fieldRemoved', {field: f, data: f.options.data });
+    window.runHooks('fieldRemoved', { field: f, data: f.options.data });
   }
 }
 
@@ -373,7 +376,7 @@ function createPortalMarker(latlng, dataOptions) {
   }
   function handler_portal_dblclick (e) {
     window.renderPortalDetails(e.target.options.guid);
-    window.map.setView(e.target.getLatLng(), DEFAULT_ZOOM);
+    window.map.setView(L.latLng(dataOptions.data.latE6 / 1E6, dataOptions.data.lngE6 / 1E6), DEFAULT_ZOOM);
   }
   function handler_portal_contextmenu (e) {
     window.renderPortalDetails(e.target.options.guid);
@@ -446,13 +449,35 @@ window.Render.prototype.createFieldEntity = function(ent) {
     this.deleteFieldEntity(ent[0]); // option 2, for now
   }
 
-  var team = teamStringToId(ent[2][1]);
   var latlngs = [
-    L.latLng(data.points[0].latE6/1E6, data.points[0].lngE6/1E6),
-    L.latLng(data.points[1].latE6/1E6, data.points[1].lngE6/1E6),
-    L.latLng(data.points[2].latE6/1E6, data.points[2].lngE6/1E6)
+    L.latLng(data.points[0].latE6 / 1E6, data.points[0].lngE6 / 1E6),
+    L.latLng(data.points[1].latE6 / 1E6, data.points[1].lngE6 / 1E6),
+    L.latLng(data.points[2].latE6 / 1E6, data.points[2].lngE6 / 1E6)
   ];
 
+  const bounds = map.getBounds();
+  while (latlngs[0].lng - 360 > bounds.getWest()) { latlngs.forEach(ll => ll.lng -= 360) }
+  while (latlngs[0].lng + 360 < bounds.getWest()) { latlngs.forEach(ll => ll.lng += 360) }
+
+  var poly = createField(latlngs, ent, data);
+  while (latlngs[0].lng + 360 < bounds.getEast()) {
+    latlngs.forEach(ll => ll.lng += 360);
+
+    const subField = createField(latlngs, ent, data);
+    if (!poly.childs) poly.childs = [];
+    poly.childs.push(subField);
+  }
+
+  runHooks('fieldAdded', { field: poly });
+  window.fields[ent[0]] = poly;
+
+  fieldsFactionLayers[poly.options.team].addLayer(poly);
+  if (poly.childs) poly.childs.forEach(poly => fieldsFactionLayers[poly.options.team].addLayer(poly));
+}
+
+
+function createField(latlngs, ent, data) {
+  const team = teamStringToId(ent[2][1]);
   var poly = L.geodesicPolygon(latlngs, {
     fillColor: COLORS[team],
     fillOpacity: 0.25,
@@ -466,15 +491,10 @@ window.Render.prototype.createFieldEntity = function(ent) {
     data: data,
   });
 
-  runHooks('fieldAdded',{field: poly});
-
-  window.fields[ent[0]] = poly;
-
-  // TODO? postpone adding to the layer??
-  fieldsFactionLayers[poly.options.team].addLayer(poly);
+  return poly;
 }
 
-window.Render.prototype.createLinkEntity = function(ent,faked) {
+window.Render.prototype.createLinkEntity = function (ent) {
   // Niantic have been faking link entities, based on data from fields
   // these faked links are sent along with the real portal links, causing duplicates
   // the faked ones all have longer GUIDs, based on the field GUID (with _ab, _ac, _bc appended)
