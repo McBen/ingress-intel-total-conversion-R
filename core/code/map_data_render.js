@@ -230,8 +230,11 @@ window.Render.prototype.deleteLinkEntity = function(guid) {
   if (guid in window.links) {
     var l = window.links[guid];
     linksFactionLayers[l.options.team].removeLayer(l);
+    if (l.childs) {
+      l.childs.forEach(poly => linksFactionLayers[l.options.team].removeLayer(poly));
+    }
     delete window.links[guid];
-    window.runHooks('linkRemoved', {link: l, data: l.options.data });
+    window.runHooks('linkRemoved', { link: l, data: l.options.data });
   }
 }
 
@@ -283,17 +286,19 @@ window.Render.prototype.createPlaceholderPortalEntity = function(guid,latE6,lngE
 }
 
 
-window.Render.prototype.createPortalEntity = function(ent, details) { // details expected in decodeArray.portal
-  this.seenPortalsGuid[ent[0]] = true;  // flag we've seen it
+window.Render.prototype.createPortalEntity = function (ent, details) { // details expected in decodeArray.portal
+
+  const guid = ent[0];
+  this.seenPortalsGuid[guid] = true;  // flag we've seen it
 
   var previousData = undefined;
 
   var data = decodeArray.portal(ent[2], details);
 
   // check if entity already exists
-  if (ent[0] in window.portals) {
+  if (guid in window.portals) {
     // yes. now check to see if the entity data we have is newer than that in place
-    var p = window.portals[ent[0]];
+    var p = window.portals[guid];
 
     if (!data.history || p.options.data.history === data.history)
       if (p.options.timestamp >= ent[1]) {
@@ -313,7 +318,7 @@ window.Render.prototype.createPortalEntity = function(ent, details) { // details
       data.history = previousData.history;
     }
 
-    this.deletePortalEntity(ent[0]);
+    this.deletePortalEntity(guid);
   }
 
   var portalLevel = parseInt(data.level)||0;
@@ -332,8 +337,35 @@ window.Render.prototype.createPortalEntity = function(ent, details) { // details
     data: data
   };
 
-  window.pushPortalGuidPositionCache(ent[0], data.latE6, data.lngE6);
+  window.pushPortalGuidPositionCache(guid, data.latE6, data.lngE6);
 
+  const bounds = map.getBounds();
+  let transposedLL = L.latLng(latlng.lat, latlng.lng);
+  while (transposedLL.lng - 360 > bounds.getWest()) { transposedLL.lng -= 360; }
+  while (transposedLL.lng + 360 < bounds.getWest()) { transposedLL.lng += 360; }
+
+  var marker = createPortalMarker(transposedLL, dataOptions);
+  while (transposedLL.lng + 360 < bounds.getEast()) {
+    transposedLL = L.latLng(transposedLL.lat, transposedLL.lng + 360);
+    const submarker = createPortalMarker(transposedLL, dataOptions);
+    if (!marker.childs) marker.childs = [];
+    marker.childs.push(submarker);
+  }
+
+
+  window.runHooks('portalAdded', { portal: marker, previousData: previousData });
+  window.portals[guid] = marker;
+
+  checkIfURLPortal(guid, latlng);
+  updateSelectedPortal(guid)
+
+  window.ornaments.addPortal(marker);
+
+  this.addPortalToMapLayer(marker);
+}
+
+
+function createPortalMarker(latlng, dataOptions) {
   var marker = createMarker(latlng, dataOptions);
 
   function handler_portal_click (e) {
@@ -356,36 +388,32 @@ window.Render.prototype.createPortalEntity = function(ent, details) { // details
   marker.on('dblclick', handler_portal_dblclick);
   marker.on('contextmenu', handler_portal_contextmenu);
 
-  window.runHooks('portalAdded', {portal: marker, previousData: previousData});
+  return marker;
+}
 
-  window.portals[ent[0]] = marker;
-
+function checkIfURLPortal(guid, latLng) {
   // check for URL links to portal, and select it if this is the one
-  if (urlPortalLL && urlPortalLL[0] == marker.getLatLng().lat && urlPortalLL[1] == marker.getLatLng().lng) {
+  if (urlPortalLL && urlPortalLL[0] == latLng.lat && urlPortalLL[1] == latLng.lng) {
     // URL-passed portal found via pll parameter - set the guid-based parameter
-    log.log('urlPortalLL '+urlPortalLL[0]+','+urlPortalLL[1]+' matches portal GUID '+ent[0]);
+    log.log('urlPortalLL ' + urlPortalLL[0] + ',' + urlPortalLL[1] + ' matches portal GUID ' + guid);
 
-    urlPortal = ent[0];
+    urlPortal = guid;
     urlPortalLL = undefined;  // clear the URL parameter so it's not matched again
   }
-  if (urlPortal == ent[0]) {
+  if (urlPortal == guid) {
     // URL-passed portal found via guid parameter - set it as the selected portal
-    log.log('urlPortal GUID '+urlPortal+' found - selecting...');
-    selectedPortal = ent[0];
+    log.log('urlPortal GUID ' + urlPortal + ' found - selecting...');
+    selectedPortal = guid;
     urlPortal = undefined;  // clear the URL parameter so it's not matched again
   }
+}
 
+function updateSelectedPortal(guid) {
   // (re-)select the portal, to refresh the sidebar on any changes
-  if (ent[0] == selectedPortal) {
-    log.log('portal guid '+ent[0]+' is the selected portal - re-rendering portal details');
-    renderPortalDetails (selectedPortal);
+  if (guid == selectedPortal) {
+    log.log('portal guid ' + guid + ' is the selected portal - re-rendering portal details');
+    renderPortalDetails(selectedPortal);
   }
-
-  window.ornaments.addPortal(marker);
-
-  //TODO? postpone adding to the map layer
-  this.addPortalToMapLayer(marker);
-
 }
 
 
@@ -486,15 +514,42 @@ window.Render.prototype.createLinkEntity = function(ent,faked) {
     this.deleteLinkEntity(ent[0]); // option 2 - for now
   }
 
-  var team = teamStringToId(ent[2][1]);
   var latlngs = [
-    L.latLng(data.oLatE6/1E6, data.oLngE6/1E6),
-    L.latLng(data.dLatE6/1E6, data.dLngE6/1E6)
+    L.latLng(data.oLatE6 / 1E6, data.oLngE6 / 1E6),
+    L.latLng(data.dLatE6 / 1E6, data.dLngE6 / 1E6)
   ];
+
+  const bounds = map.getBounds();
+  while (latlngs[0].lng - 360 > bounds.getWest()) { latlngs[0].lng -= 360; latlngs[1].lng -= 360; }
+  while (latlngs[0].lng + 360 < bounds.getWest()) { latlngs[0].lng += 360; latlngs[1].lng += 360; }
+
+
+  var poly = createLink(latlngs, ent, data);
+
+  while (latlngs[0].lng + 360 < bounds.getEast()) {
+    latlngs[0].lng += 360;
+    latlngs[1].lng += 360;
+
+    const subLink = createLink(latlngs, ent, data);
+    if (!poly.childs) poly.childs = [];
+    poly.childs.push(subLink);
+  }
+
+  runHooks('linkAdded', { link: poly });
+  window.links[ent[0]] = poly;
+
+  linksFactionLayers[poly.options.team].addLayer(poly);
+  if (poly.childs) poly.childs.forEach(poly => linksFactionLayers[poly.options.team].addLayer(poly));
+}
+
+
+function createLink(latlngs, ent, data) {
+  var team = teamStringToId(data.team);
+
   var poly = L.geodesicPolyline(latlngs, {
     color: COLORS[team],
     opacity: 1,
-    weight: faked ? 1 : 2,
+    weight: 2,
     interactive: false,
 
     team: team,
@@ -504,20 +559,15 @@ window.Render.prototype.createLinkEntity = function(ent,faked) {
     data: data
   });
 
-  runHooks('linkAdded', {link: poly});
-
-  window.links[ent[0]] = poly;
-
-  linksFactionLayers[poly.options.team].addLayer(poly);
+  return poly;
 }
 
 
-
-window.Render.prototype.rescalePortalMarkers = function() {
+window.Render.prototype.rescalePortalMarkers = function () {
   if (this.portalMarkerScale === undefined || this.portalMarkerScale != portalMarkerScale()) {
     this.portalMarkerScale = portalMarkerScale();
 
-    log.log('Render: map zoom '+map.getZoom()+' changes portal scale to '+portalMarkerScale()+' - redrawing all portals');
+    log.log('Render: map zoom ' + map.getZoom() + ' changes portal scale to ' + portalMarkerScale() + ' - redrawing all portals');
 
     //NOTE: we're not calling this because it resets highlights - we're calling it as it
     // resets the style (inc size) of all portal markers, applying the new scale
@@ -527,12 +577,14 @@ window.Render.prototype.rescalePortalMarkers = function() {
 
 
 
-// add the portal to the visible map layer
-window.Render.prototype.addPortalToMapLayer = function(portal) {
-  portalsFactionLayers[parseInt(portal.options.level)||0][portal.options.team].addLayer(portal);
+window.Render.prototype.addPortalToMapLayer = function (portal) {
+  const layer = portalsFactionLayers[parseInt(portal.options.level) || 0][portal.options.team];
+  layer.addLayer(portal);
+  if (portal.childs) portal.childs.forEach(sub => layer.addLayer(sub));
 }
 
-window.Render.prototype.removePortalFromMapLayer = function(portal) {
-  //remove it from the portalsLevels layer
-  portalsFactionLayers[parseInt(portal.options.level)||0][portal.options.team].removeLayer(portal);
+window.Render.prototype.removePortalFromMapLayer = function (portal) {
+  const layer = portalsFactionLayers[parseInt(portal.options.level) || 0][portal.options.team];
+  layer.removeLayer(portal);
+  if (portal.childs) portal.childs.forEach(sub => layer.removeLayer(sub));
 }

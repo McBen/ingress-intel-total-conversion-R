@@ -206,11 +206,9 @@ window.MapDataRequest.prototype.refresh = function() {
   this.queuedTiles = {};
 
 
-  var bounds = clampLatLngBounds(map.getBounds());
+  var bounds = map.getBounds();
   var mapZoom = map.getZoom();
-
   var dataZoom = getDataZoomForMapZoom(mapZoom);
-
   var tileParams = getMapZoomTileParameters(dataZoom);
 
 
@@ -264,6 +262,7 @@ window.MapDataRequest.prototype.refresh = function() {
   // map center point - for fetching center tiles first
   var mapCenterPoint = map.project(map.getCenter(), mapZoom);
 
+  x2 = Math.min(x2, x1 + tileParams.tilesPerEdge - 1);
   // y goes from left to right
   for (var y = y1; y <= y2; y++) {
     // x goes from bottom to top(?)

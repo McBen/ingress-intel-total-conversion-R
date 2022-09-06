@@ -160,9 +160,10 @@ window.tileToLat = function(y, params) {
   return 180 / Math.PI * Math.atan(0.5 * (Math.exp(n) - Math.exp(-n)));
 }
 
-window.pointToTileId = function(params, x, y) {
+window.pointToTileId = function (params, x, y) {
 //change to quadkey construction
 //as of 2014-05-06: zoom_x_y_minlvl_maxlvl_maxhealth
-
-  return params.zoom + "_" + x + "_" + y + "_" + params.level + "_8_100";
+  const tiles = params.tilesPerEdge;
+  const xwrap = (x % tiles + tiles) % tiles;
+  return params.zoom + "_" + xwrap + "_" + y + "_" + params.level + "_8_100";
 }
