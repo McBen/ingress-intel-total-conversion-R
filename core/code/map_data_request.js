@@ -262,7 +262,12 @@ window.MapDataRequest.prototype.refresh = function() {
   // map center point - for fetching center tiles first
   var mapCenterPoint = map.project(map.getCenter(), mapZoom);
 
+  if (x2 - x1 > tileParams.tilesPerEdge) {
+    const d = Math.floor((x2 - x1) / (tileParams.tilesPerEdge * 2)) * tileParams.tilesPerEdge;
+    x1 += d;
   x2 = Math.min(x2, x1 + tileParams.tilesPerEdge - 1);
+  }
+
   // y goes from left to right
   for (var y = y1; y <= y2; y++) {
     // x goes from bottom to top(?)
