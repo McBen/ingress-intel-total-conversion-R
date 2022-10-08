@@ -3,6 +3,7 @@ import { SearchDialog } from "../dialogs/search";
 import { IITCMenu } from "./menu";
 import { GLOPT, IITCOptions } from "../../helper/options";
 import { toast } from "../toast";
+import { aboutIITC } from "../dialogs/about";
 
 
 export const initializeMenu = (iitcmenu: IITCMenu): void => {
@@ -99,6 +100,6 @@ const onLocationFound = (): void => {
 
 
 const isGettingLocation = (): boolean => {
-    return scanningLocation;
+    return !scanningLocation;
 }
 

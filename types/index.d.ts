@@ -5,7 +5,6 @@ import * as L from "leaflet";
 // TODO remove old interface
 // OLD IITC interface ... these should be replaced
 declare global {
-    function aboutIITC(): void;
     function load(name: string): any;
     function dialog(options: any): JQuery;
     function formatPasscodeLong(a: any): any;
@@ -28,9 +27,21 @@ declare global {
             setup: () => void,
             showDialog: () => void
         }
-
     }
 
+    const script_info: ScriptInfo;
 }
 
-type BootCallback = () => void;
+
+type BootCallback = { (): void; info: ScriptInfo };
+export interface ScriptInfo {
+    buildName: string; // buildname (ex: "local")
+    dateTimeVersion: string; // build time (sub version)
+    pluginId: string; // unique ID (used in App)
+    error?: string; // error text if "setup" call failed
+    script: {
+        version: string,
+        name: string,
+        description: string
+    }
+}

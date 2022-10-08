@@ -1,7 +1,9 @@
+import { aboutIITC } from "./ui/dialogs/about";
+
 window.setupSidebar = function () {
     window.setupStyles();
     setupIcons();
-  window.setupPlayerStat();
+    window.setupPlayerStat();
     setupSidebarToggle();
     setupLargeImagePreview();
     setupAddons();
@@ -154,7 +156,7 @@ function setupAddons() {
         .appendTo('#toolbox');
 
 
-  window.artifact.setup();
+    window.artifact.setup();
 
-  window.RegionScoreboard.setup();
+    window.RegionScoreboard.setup();
 }
