@@ -1,24 +1,43 @@
-// @author         jonatkins
-// @name           IITC: Ingress intel map total conversion
-// @version        0.33.0
-// @description    Total conversion for the ingress intel map.
-// @run-at         document-end
+if (typeof unsafeWindow !== "undefined") {
+  window = unsafeWindow;
+  document = window.document;
+}
 
-
-window.script_info = plugin_info;
+global.$ = $;
+global.jQuery = jQuery;
+require("jquery-ui/ui/widgets/accordion.js");
+require("jquery-ui/ui/widgets/autocomplete.js");
+require("jquery-ui/ui/widgets/button.js");
+require("jquery-ui/ui/widgets/checkboxradio.js");
+require("jquery-ui/ui/widgets/controlgroup.js");
+require("jquery-ui/ui/widgets/datepicker.js");
+require("jquery-ui/ui/widgets/dialog.js");
+require("jquery-ui/ui/widgets/draggable.js");
+require("jquery-ui/ui/widgets/droppable.js");
+require("jquery-ui/ui/widgets/menu.js");
+require("jquery-ui/ui/widgets/mouse.js");
+require("jquery-ui/ui/widgets/progressbar.js");
+require("jquery-ui/ui/widgets/resizable.js");
+require("jquery-ui/ui/widgets/selectable.js");
+require("jquery-ui/ui/widgets/selectmenu.js");
+require("jquery-ui/ui/widgets/slider.js");
+require("jquery-ui/ui/widgets/sortable.js");
+require("jquery-ui/ui/widgets/spinner.js");
+require("jquery-ui/ui/widgets/tabs.js");
+require("jquery-ui/ui/widgets/tooltip.js");
 
 // REPLACE ORIG SITE ///////////////////////////////////////////////////
 if (document.documentElement.getAttribute('itemscope') !== null) {
   throw new Error('Ingress Intel Website is down, not a userscript issue.');
 }
-window.iitcBuildDate = '@build_date@';
+window.iitcBuildDate = process.env.BUILD_DATE;
 
 // disable vanilla JS
 window.onload = function () { };
 document.body.onload = function () { };
 
-//originally code here parsed the <Script> tags from the page to find the one that defined the PLAYER object
-//however, that's already been executed, so we can just access PLAYER - no messing around needed!
+// originally code here parsed the <Script> tags from the page to find the one that defined the PLAYER object
+// however, that's already been executed, so we can just access PLAYER - no messing around needed!
 
 if (!window.PLAYER || !PLAYER.nickname) {
   // page doesn’t have a script tag with player information.
@@ -33,7 +52,7 @@ if (!window.PLAYER || !PLAYER.nickname) {
   // FIXME: handle nia takedown in progress
 
   // add login form stylesheet
-  '@require_css:login.css@'
+  require("./login.css");
 
   throw new Error("Couldn't retrieve player data. Are you logged in?");
 }
@@ -46,11 +65,7 @@ if (!window.PLAYER || !PLAYER.nickname) {
 // possible without requiring scripts.
 document.head.innerHTML = ''
   + '<title>Ingress Intel Map</title>'
-  + '<style>' + '@include_css:external/jquery-ui-1.12.1-resizable.css@' + '</style>'
   + '<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:100,100italic,300,300italic,400,400italic,500,500italic,700,700italic&subset=latin,cyrillic-ext,greek-ext,greek,vietnamese,latin-ext,cyrillic"/>';
-
-'@require_css:style.css@'
-'@require_css:external/leaflet.css@'
 
 // remove body element entirely to remove event listeners
 document.body = document.createElement('body');
@@ -78,7 +93,7 @@ document.body.innerHTML = ''
   + '    <div id="playerstat">t</div>'
   + '    <div id="gamestat">&nbsp;loading global control stats</div>'
   + '    <div id="searchwrapper">'
-  + '      <button title="Current location" id="buttongeolocation"><img src="' + '@include_img:images/current-location.png@' + '" alt="Current location"/></button>'
+  + `      <button title="Current location" id="buttongeolocation"><img src="${require('./images/current-location.png')}" alt="Current location"/></button>`
   + '      <input id="search" placeholder="Search location…" type="search" accesskey="f" title="Search for a place [f]"/>'
   + '    </div>'
   + '    <div id="portaldetails"></div>'
@@ -94,8 +109,8 @@ document.body.innerHTML = ''
 // CONFIG OPTIONS ////////////////////////////////////////////////////
 window.REFRESH = 30; // refresh view every 30s (base time)
 window.ZOOM_LEVEL_ADJ = 5; // add 5 seconds per zoom level
-window.ON_MOVE_REFRESH = 2.5;  //refresh time to use after a movement event
-window.MINIMUM_OVERRIDE_REFRESH = 10; //limit on refresh time since previous refresh, limiting repeated move refresh rate
+window.ON_MOVE_REFRESH = 2.5; // refresh time to use after a movement event
+window.MINIMUM_OVERRIDE_REFRESH = 10; // limit on refresh time since previous refresh, limiting repeated move refresh rate
 window.REFRESH_GAME_SCORE = 15 * 60; // refresh game score every 15 minutes
 window.MAX_IDLE_TIME = 15 * 60; // stop updating map after 15min idling
 window.HIDDEN_SCROLLBAR_ASSUMED_WIDTH = 20;
@@ -175,7 +190,9 @@ window.portalAccessIndicator = null;
 window.mapRunsUserAction = false;
 
 // var portalsLayers, linksLayer, fieldsLayer;
-var portalsFactionLayers, linksFactionLayers, fieldsFactionLayers;
+global.portalsFactionLayers = undefined;
+global.linksFactionLayers = undefined;
+global.fieldsFactionLayers = undefined;
 
 // contain references to all entities loaded from the server. If render limits are hit,
 // not all may be added to the leaflet layers
@@ -187,11 +204,21 @@ window.fields = {};
 // overwrite data
 if (typeof window.plugin !== 'function') window.plugin = function () { };
 
-var ulog = (function (module) {
-  '@include_raw:external/ulog.min.js@';
-  return module;
-}({})).exports;
+require("./code");
 
-'@bundle_code@';
+var info = {};
+if (typeof GM_info !== 'undefined' && GM_info && GM_info.script) {
+  info.script = {
+    version: GM_info.script.version,
+    name: GM_info.script.name,
+    description: GM_info.script.description
+  };
+} else {
+  info.script = {
+    version: "",
+    name: "",
+    description: ""
+  };
+}
+global.script_info = info;
 
-/* exported ulog, portalsFactionLayers, linksFactionLayers, fieldsFactionLayers -- eslint */

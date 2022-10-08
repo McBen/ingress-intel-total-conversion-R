@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "noImplicitAny": false,
+    "moduleResolution": "node",
+    "module": "es6",
+    "target": "es6",
+    "allowJs": false, // true,
+    "esModuleInterop": true,
+    "importHelpers": true,
+    "sourceMap": true,
+    "jsx": "react",
+    "baseUrl": "./",
+  },
+  "ts-node": {
+    "compilerOptions": {
+      "module": "CommonJS"
+    }
+  }
+}
