@@ -7,20 +7,16 @@
     },
     "extends": [
         "eslint:recommended",
-        "plugin:prettier/recommended",
+        // "plugin:prettier/recommended", // FIXME: gives me unresolveable "Delete CR" errors on Win32
         "prettier",
         "plugin:@typescript-eslint/recommended",
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
         "plugin:unicorn/recommended"
     ],
-    "ignorePatterns": [
-        "/core/external/*.js",
-        "/plugins/external/*.js"
-    ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": 6,
-        "project": "tsconfig.eslint.json",
+        "project": "tsconfig.json",
         "sourceType": "module"
     },
     "plugins": [
@@ -176,26 +172,21 @@
         "unicorn/filename-case": [
             "error",
             {
-                "case": "pascalCase",
-                "ignore": [
-                    ".*\\.d\\.ts$",
-                    "^index(\\.d)?\\.ts$",
-                    "\\.spec\\.ts$"
-                ]
+                "case": "snakeCase"
             }
         ],
-        "unicorn/prefer-ternary": "off",
-        "unicorn/no-lonely-if": "off",
-        "unicorn/no-array-reduce": "off",
-        "unicorn/no-array-for-each": "off",
-        "unicorn/no-nested-ternary": "off",
         "unicorn/no-array-callback-reference": "off",
+        "unicorn/no-array-for-each": "off",
+        "unicorn/no-array-reduce": "off",
+        "unicorn/no-lonely-if": "off",
+        "unicorn/no-nested-ternary": "off",
         "unicorn/no-zero-fractions": "off",
         "unicorn/numeric-separators-style": "off",
-        "unicorn/prefer-number-properties": "off",
         "unicorn/prefer-dom-node-append": "off",
         "unicorn/prefer-dom-node-remove": "off",
+        "unicorn/prefer-number-properties": "off",
         "unicorn/prefer-spread": "off",
+        "unicorn/prefer-ternary": "off",
         "unicorn/prevent-abbreviations": [
             "error",
             {
@@ -211,7 +202,7 @@
                     },
                     "j": {
                         "index": false
-                    },
+                    }
                 }
             }
         ]
