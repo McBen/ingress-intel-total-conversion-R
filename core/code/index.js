@@ -3,7 +3,6 @@ require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"artifact.
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"chat.js\")!./chat.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"cookieLaw.js\")!./cookieLaw.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"data_cache.js\")!./data_cache.js");
-require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"dialog.js\")!./dialog.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"dialog_about.js\")!./dialog_about.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"entity_decode.js\")!./entity_decode.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"entity_info.js\")!./entity_info.js");

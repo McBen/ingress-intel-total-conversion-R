@@ -203,7 +203,6 @@ function boot() {
   window.checkCookieLaw();
   window.extractFromStock();
   window.setupIdle();
-  window.setupDialogs();
   window.setupDataTileParams();
   window.setupMap();
   window.setupOMS();
