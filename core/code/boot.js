@@ -30,9 +30,9 @@ window.setupTooltips = function (element) {
 
 function setupIngressMarkers() {
   L.Icon.Default.mergeOptions({
-    iconUrl: '@include_img:images/marker-ingress.png@',
-    iconRetinaUrl: '@include_img:images/marker-ingress-2x.png@',
-    shadowUrl: '@include_img:external/images/marker-shadow.png@'
+    iconUrl: require("../images/marker-ingress.png"),
+    iconRetinaUrl: require("../images/marker-ingress-2x.png"),
+    shadowUrl: require("../external/images/marker-shadow.png")
   });
   L.Icon.Default.imagePath = ' '; // in order to suppress _detectIconPath (it fails with data-urls)
 
