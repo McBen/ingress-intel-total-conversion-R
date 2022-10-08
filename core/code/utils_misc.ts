@@ -1,3 +1,4 @@
+import L from "leaflet";
 import { dialog } from "./dialog";
 
 /**
@@ -18,6 +19,9 @@ export const getURLParam = (param: string): string => {
     return "";
 }
 
+globalThis.getURLParam = getURLParam; // OLD EXPORT
+
+
 /**
  * read cookie by name.
  * http://stackoverflow.com/a/5639455/1684530 by cwolves
@@ -31,6 +35,9 @@ export const readCookie = (name: string): string => {
     }
     return cookies[name];
 }
+
+globalThis.readCookie = readCookie; // OLD EXPORT
+
 
 /**
  * Store a cookie
@@ -49,11 +56,17 @@ export const writeCookie = (name: string, value: string, forcedExpireTime: numbe
     }
 
     document.cookie = name + "=" + value + expires + "; path=/;SameSite=Strict";
-};
+}
+
+globalThis.writeCookie = writeCookie; // OLD EXPORT
+
 
 export const eraseCookie = (name: string): void => {
     document.cookie = name + "=; expires=Thu, 1 Jan 1970 00:00:00 GMT; path=/";
 }
+
+globalThis.eraseCookie = eraseCookie; // OLD EXPORT
+
 
 /**
  * add thousand separators to given number.
@@ -64,6 +77,7 @@ export const digits = (d: number | string): string => {
     // https://en.wikipedia.org/wiki/Space_(punctuation)#Table_of_spaces
     return d.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1&#8201;");
 }
+globalThis.digits = digits; // OLD EXPORT
 
 
 export const zeroPad = (num: number, pad: number): string => {
@@ -71,6 +85,7 @@ export const zeroPad = (num: number, pad: number): string => {
     const zeros = pad - numStr.length;
     return Array(zeros > 0 ? zeros + 1 : 0).join("0") + numStr;
 }
+globalThis.zeroPad = zeroPad; // OLD EXPORT
 
 
 /**
@@ -90,6 +105,8 @@ export const unixTimeToString = (time: string | number, full?: boolean): string 
         return date;
     }
 }
+globalThis.unixTimeToString = unixTimeToString; // OLD EXPORT
+
 
 // converts a javascript time to a precise date and time (optionally with millisecond precision)
 // formatted in ISO-style YYYY-MM-DD hh:mm:ss.mmm - but using local timezone
@@ -99,6 +116,8 @@ export const unixTimeToDateTimeString = (time, millisecond) => {
     return d.getFullYear() + "-" + zeroPad(d.getMonth() + 1, 2) + "-" + zeroPad(d.getDate(), 2)
         + " " + zeroPad(d.getHours(), 2) + ":" + zeroPad(d.getMinutes(), 2) + ":" + zeroPad(d.getSeconds(), 2) + (millisecond ? "." + zeroPad(d.getMilliseconds(), 3) : "");
 }
+globalThis.unixTimeToDateTimeString = unixTimeToDateTimeString; // OLD EXPORT
+
 
 export const unixTimeToHHmm = (time) => {
     if (!time) return null;
@@ -107,6 +126,8 @@ export const unixTimeToHHmm = (time) => {
     let s = "" + d.getMinutes(); s = s.length === 1 ? "0" + s : s;
     return h + ":" + s;
 }
+globalThis.unixTimeToHHmm = unixTimeToHHmm; // OLD EXPORT
+
 
 export const formatInterval = (seconds, maxTerms) => {
 
@@ -125,6 +146,8 @@ export const formatInterval = (seconds, maxTerms) => {
 
     return terms.join(" ");
 }
+globalThis.formatInterval = formatInterval; // OLD EXPORT
+
 
 export const showPortalPosLinks = (lat, lng, name) => {
     const encoded_name = encodeURIComponent(name);
@@ -140,21 +163,25 @@ export const showPortalPosLinks = (lat, lng, name) => {
         id: "poslinks"
     });
 }
+globalThis.showPortalPosLinks = showPortalPosLinks; // OLD EXPORT
 
 export const isTouchDevice = (): boolean => {
     return "ontouchstart" in window // works on most browsers
         || "onmsgesturechange" in window; // works on ie10
-};
+}
+globalThis.isTouchDevice = isTouchDevice; // OLD EXPORT
 
 
 /**
  * returns number of pixels left to scroll down before reaching the
  * bottom. Works similar to the native scrollTop function.
  */
-export const scrollBottom = (elm) => {
-    if (typeof elm === "string") elm = $(elm);
-    return elm.get(0).scrollHeight - elm.innerHeight() - elm.scrollTop();
+export const scrollBottom = (element: string | JQuery): number => {
+    if (typeof element === "string") element = $(element);
+    return element.get(0).scrollHeight - element.innerHeight() - element.scrollTop();
 }
+globalThis.scrollBottom = scrollBottom; // OLD EXPORT
+
 
 /**
  * converts given text with newlines (\n) and tabs (\t) to a HTML table automatically.
@@ -189,4 +216,77 @@ export const convertTextToTableMagic = (text: string): string => {
     table += "</table>";
     return table;
 }
+globalThis.convertTextToTableMagic = convertTextToTableMagic; // OLD EXPORT
 
+
+/**
+ * escape a javascript string, so quotes and backslashes are escaped with a backslash
+ * (for strings passed as parameters to html onclick="..." for example)
+ */
+export const escapeJavascriptString = (str: string): string => {
+    return (str + "").replace(/[\\"']/g, "\\$&");
+}
+globalThis.escapeJavascriptString = escapeJavascriptString; // OLD EXPORT
+
+/**
+ * escape special characters, such as tags
+ */
+export const escapeHtmlSpecialChars = (str: string): string => {
+    const div = document.createElement("div");
+    const text = document.createTextNode(str);
+    div.appendChild(text);
+    return div.innerHTML;
+}
+globalThis.escapeHtmlSpecialChars = escapeHtmlSpecialChars; // OLD EXPORT
+
+
+export const prettyEnergy = (nrg: number): string => {
+    return nrg > 1000 ? Math.round(nrg / 1000).toString() + " k" : nrg.toString();
+}
+globalThis.prettyEnergy = prettyEnergy; // OLD EXPORT
+
+
+export const uniqueArray = <T>(array: T[]): T[] => {
+    return [...new Set(array)];
+}
+globalThis.uniqueArray = uniqueArray; // OLD EXPORT
+
+
+type genFourEnty = [string, string, string | undefined] | undefined;
+export const genFourColumnTable = (blocks: genFourEnty[]): string => {
+    const lines = blocks.map((detail, index) => {
+        if (!detail) return "";
+        const title = detail[2] ? ` title="${escapeHtmlSpecialChars(detail[2])}"` : "";
+        if (index % 2 === 0) {
+            return `<tr><td${title}>${detail[1]}</td><th${title}>${detail[0]}</th>`;
+        } else {
+            return `    <th${title}>${detail[0]}</th><td${title}>${detail[1]}</td></tr>`;
+        }
+    }).join("");
+    return lines;
+}
+globalThis.genFourColumnTable = genFourColumnTable; // OLD EXPORT
+
+
+const clamp = (n: number, max: number, min: number): number => {
+    if (n === 0) { return 0; }
+    return n > 0 ? Math.min(n, max) : Math.max(n, min);
+}
+
+const MAX_LATITUDE = 85.051128; // L.Projection.SphericalMercator.MAX_LATITUDE
+export const clampLatLng = (latlng: L.LatLng): [number, number] => {
+    // Ingress accepts requests only for this range
+    return [
+        clamp(latlng.lat, MAX_LATITUDE, -MAX_LATITUDE),
+        clamp(latlng.lng, 179.999999, -180)
+    ];
+}
+globalThis.clampLatLng = clampLatLng; // OLD EXPORT
+
+
+export const clampLatLngBounds = (bounds: L.LatLngBounds): L.LatLngBounds => {
+    const SW = bounds.getSouthWest();
+    const NE = bounds.getNorthEast();
+    return L.latLngBounds(clampLatLng(SW), clampLatLng(NE));
+}
+globalThis.clampLatLngBounds = clampLatLngBounds; // OLD EXPORT

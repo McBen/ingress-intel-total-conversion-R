@@ -34,6 +34,6 @@ require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"search.js
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"send_request.js\")!./send_request.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"smartphone.js\")!./smartphone.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"status_bar.js\")!./status_bar.js");
-require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"utils_misc.js\")!./utils_misc.js");
+require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"utils_misc_old.js\")!./utils_misc_old.js");
 
 import "./boot"
