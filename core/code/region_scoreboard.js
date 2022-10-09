@@ -1,4 +1,4 @@
-window.RegionScoreboardSetup = (function() {
+window.RegionScoreboard = (function() {
 
   var mainDialog;
   var regionScore;
@@ -196,7 +196,7 @@ window.RegionScoreboardSetup = (function() {
     mainDialog.html(
       '<div class="cellscore">' +
         '<b>Region scores for ' + regionScore.regionName + '</b>' +
-        '<div class="historychart">' + createResults() + HistoryChart(regionScore, logscale) + '</div>' +
+        '<div class="historychart">' + createResults() + RegionScoreboard.HistoryChart.create(regionScore, logscale) + '</div>' +
         '<b>Checkpoint overview</b><div>' + createHistoryTable() + '</div>' +
         '<b>Top agents</b><div>' + createAgentTable() + '</div>' +
       '</div>' +
@@ -449,7 +449,7 @@ window.RegionScoreboardSetup = (function() {
     return ('0' + time.getDate()).slice(-2) + '.' + ('0' + (time.getMonth() + 1)).slice(-2) + ' ' + ('0' + time.getHours()).slice(-2) + ':00';
   }
 
-  return function setup() {
+  function setup() {
     if (window.useAppPanes()) {
       app.addPane('regionScoreboard', 'Region scores', 'ic_action_view_as_list');
       addHook('paneChanged', function (pane) {
@@ -462,18 +462,21 @@ window.RegionScoreboardSetup = (function() {
     } else {
       $('<a>')
         .html('Region scores')
-        .attr({
-          id: 'scoreboard',
-          title: 'View regional scoreboard'
-        })
+        .attr('title','View regional scoreboard')
         .click(showDialog)
         .appendTo('#toolbox');
     }
   }
+
+  return {
+    setup: setup,
+    showDialog: showDialog
+  };
+
 }());
 
 
-var HistoryChart = (function() {
+RegionScoreboard.HistoryChart = (function() {
   var regionScore;
   var scaleFct;
   var logscale;
@@ -655,5 +658,8 @@ var HistoryChart = (function() {
           num);
   }
 
-  return create;
+  return {
+    create: create
+  };
+
 }());
