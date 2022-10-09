@@ -11,10 +11,18 @@
     "sourceMap": true,
     "jsx": "react",
     "baseUrl": "./",
+    "typeRoots": [
+      "node_modules/@types",
+      "types"
+    ],
   },
   "ts-node": {
     "compilerOptions": {
       "module": "CommonJS"
     }
-  }
+  },
+  "include": [
+    "types/*.d.ts",
+    "core/**/*.ts"
+  ]
 }

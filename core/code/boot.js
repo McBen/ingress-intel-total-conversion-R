@@ -3,6 +3,7 @@
 // created a basic framework. All of these functions should only ever
 // be run once.
 import "overlapping-marker-spiderfier-leaflet";
+import { setupMenu } from "./ui/menu/menu";
 const log = require("ulog")("boot.js");
 
 
@@ -215,6 +216,8 @@ function boot() {
   window.portalDetail.setup();
   window.setupRedeem();
   window.setupSidebar();
+
+  setupMenu();
 
   loadPlugins();
 
