@@ -6,6 +6,7 @@
 @import "styles/artifact.pcss";
 @import "styles/redeem.pcss";
 @import "styles/regionscore.pcss";
+@import "styles/menu.pcss";
 
 .text-overflow-ellipsis {
   display: inline-block;

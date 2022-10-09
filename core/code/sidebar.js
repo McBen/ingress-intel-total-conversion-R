@@ -153,7 +153,8 @@ function setupAddons() {
         .click(aboutIITC)
         .appendTo('#toolbox');
 
-    window.artifact.setup();
 
-    window.RegionScoreboardSetup();
+  window.artifact.setup();
+
+  window.RegionScoreboard.setup();
 }
