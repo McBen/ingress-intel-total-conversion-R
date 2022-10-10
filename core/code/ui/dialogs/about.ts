@@ -1,6 +1,7 @@
-import { dialog } from "./ui/dialog";
+import { dialog } from "../dialog";
 import anylogger from "anylogger"
-import { ScriptInfo } from "types";
+import { ScriptInfo } from "../../../../types";
+
 
 const log = anylogger("dialog_about");
 

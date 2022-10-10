@@ -1,4 +1,4 @@
-import { convertTextToTableMagic } from "./utils_misc";
+import { convertTextToTableMagic } from "../utils_misc";
 import anylogger from "anylogger"
 
 const log = anylogger("dialog");
@@ -160,8 +160,9 @@ export const dialog = (options: DialogOptions): JQuery => {
         closeText: "",
         title: "",
         buttons: {
-            "OK": function () {
-                $(this).dialog("close");
+            "OK": (event: JQuery.MouseEventBase) => {
+                const thisDialog = $(event.target).closest(".ui-dialog").find(".ui-dialog-content");
+                thisDialog.dialog("close");
             }
         },
         open: function () {
@@ -330,7 +331,3 @@ export const alert = (text: string | HTMLElement | JQuery, isHTML: boolean, clos
 
     return dialog(options);
 }
-
-// OLD EXPORT
-globalThis.alert = alert as any;
-globalThis.dialog = dialog;
