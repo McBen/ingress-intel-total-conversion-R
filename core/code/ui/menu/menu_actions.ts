@@ -2,6 +2,7 @@ import { PasscodeDialog } from "../dialogs/passcode";
 import { SearchDialog } from "../dialogs/search";
 import { IITCMenu } from "./menu";
 import { GLOPT, IITCOptions } from "../../helper/options";
+import { toast } from "../toast";
 
 
 export const initializeMenu = (iitcmenu: IITCMenu): void => {
@@ -13,14 +14,10 @@ export const initializeMenu = (iitcmenu: IITCMenu): void => {
     iitcmenu.addEntry({ name: "Draw\\DrawTools Options" }); // TODO: Draw
     iitcmenu.addEntry({ name: "Misc" });
 
-    iitcmenu.addEntry({ name: "View\\Go to current location", onClick: () => { window.map.locate({ setView: true, maxZoom: 13 }); return; } });
+    iitcmenu.addEntry({ name: "View\\Go to current location", onClick: panToLocation, isEnabled: isGettingLocation });
     iitcmenu.addEntry({
         name: "View\\Show Zoom-Buttons",
-        onClick: () => {
-            const old = IITCOptions.getSafe(GLOPT.SHOW_ZOOM_BUTTONS, true);
-            IITCOptions.set(GLOPT.SHOW_ZOOM_BUTTONS, !old);
-            updateZoomButtons();
-        },
+        onClick: toogleZoomButtons,
         hasCheckbox: true,
         isChecked: () => IITCOptions.getSafe(GLOPT.SHOW_ZOOM_BUTTONS, true)
     });
@@ -66,6 +63,42 @@ export const showRegionScore = (): void => {
 }
 
 
+const toogleZoomButtons = (): void => {
+    const old = IITCOptions.getSafe(GLOPT.SHOW_ZOOM_BUTTONS, true);
+    IITCOptions.set(GLOPT.SHOW_ZOOM_BUTTONS, !old);
+    updateZoomButtons();
+}
+
+
 const updateZoomButtons = (): void => {
     $(".leaflet-control-zoom").toggle(IITCOptions.getSafe(GLOPT.SHOW_ZOOM_BUTTONS, true));
 }
+
+
+let scanningLocation = false;
+const panToLocation = (): void => {
+    if (scanningLocation) return;
+
+    window.map.locate({ setView: true, maxZoom: 13 });
+    scanningLocation = true;
+
+    window.map.on("locationerror", onLocationError);
+    window.map.on("locationfound", onLocationFound);
+}
+
+
+const onLocationError = (): void => {
+    toast("can't get location");
+    scanningLocation = false;
+}
+
+
+const onLocationFound = (): void => {
+    scanningLocation = false;
+}
+
+
+const isGettingLocation = (): boolean => {
+    return scanningLocation;
+}
+
