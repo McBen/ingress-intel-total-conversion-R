@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { initializeMenu } from "./menu_actions";
-import { MenuDialog, MenuEntry } from "./MenuDialog";
+import { MenuDialog, MenuEntry } from "./menu_dialog";
 
 
 export type MenuDefinition = {

@@ -44,7 +44,7 @@ export class MenuDialog {
             this.addSubMenu(entry);
         }
 
-        return entry.subMenu!.getSubMenu(menuPath);
+        return entry.subMenu.getSubMenu(menuPath);
     }
 
     addSeparator(menuPath: string): void {
@@ -97,7 +97,7 @@ export class MenuDialog {
             element.on("click", () => {
                 if (options.isEnabled && !options.isEnabled()) return;
 
-                const keepOpen = options.onClick!();
+                const keepOpen = options.onClick();
 
                 if (keepOpen) {
                     this.updateEntries();
