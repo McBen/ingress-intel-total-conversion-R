@@ -1,4 +1,5 @@
 /// <reference path="./layerchooser.d.ts" />
+/// <reference path="./types.d.ts" />
 import * as L from "leaflet";
 
 // TODO remove old interface
