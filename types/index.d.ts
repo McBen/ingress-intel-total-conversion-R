@@ -1,5 +1,6 @@
 /// <reference path="./layerchooser.d.ts" />
 /// <reference path="./types.d.ts" />
+/// <reference path="./intel.d.ts" />
 import * as L from "leaflet";
 
 // TODO remove old interface
@@ -10,6 +11,7 @@ declare global {
     function formatPasscodeLong(a: any): any;
     function postAjax(request: string, options: any, callbackA: any, callbackB: any): any;
     function setupPlayerStat(): void;
+    function useAppPanes(): boolean;
 
     interface Window {
         plugin: any;
@@ -22,14 +24,14 @@ declare global {
         search: {
             setup: () => void
         }
-
-        RegionScoreboard: {
-            setup: () => void,
-            showDialog: () => void
-        }
     }
 
     const script_info: ScriptInfo;
+
+    // Intel
+    const PLAYER: {
+        team: string;
+    }
 }
 
 

@@ -25,7 +25,6 @@ require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"portal_hi
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"portal_info.js\")!./portal_info.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"portal_marker.js\")!./portal_marker.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"redeeming.js\")!./redeeming.js");
-require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"region_scoreboard.js\")!./region_scoreboard.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"request_handling.js\")!./request_handling.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"sidebar.js\")!./sidebar.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"search.js\")!./search.js");

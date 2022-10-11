@@ -4,6 +4,7 @@ import { IITCMenu } from "./menu";
 import { GLOPT, IITCOptions } from "../../helper/options";
 import { toast } from "../toast";
 import { aboutIITC } from "../dialogs/about";
+import { RegionScoreDialog } from "../dialogs/regionscore/dialog";
 
 
 export const initializeMenu = (iitcmenu: IITCMenu): void => {
@@ -58,12 +59,6 @@ export const initializeMenu = (iitcmenu: IITCMenu): void => {
     updateZoomButtons();
 }
 
-
-export const showRegionScore = (): void => {
-    window.RegionScoreboard.showDialog();
-}
-
-
 const toogleZoomButtons = (): void => {
     const old = IITCOptions.getSafe(GLOPT.SHOW_ZOOM_BUTTONS, true);
     IITCOptions.set(GLOPT.SHOW_ZOOM_BUTTONS, !old);
@@ -75,6 +70,9 @@ const updateZoomButtons = (): void => {
     $(".leaflet-control-zoom").toggle(IITCOptions.getSafe(GLOPT.SHOW_ZOOM_BUTTONS, true));
 }
 
+const showRegionScore = (): void => {
+    RegionScoreDialog.showDialog();
+}
 
 let scanningLocation = false;
 const panToLocation = (): void => {
