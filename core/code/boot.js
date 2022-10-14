@@ -241,7 +241,6 @@ require("leaflet");
 require("leaflet/dist/leaflet.css");
 require("leaflet.gridlayer.googlemutant");
 
-require("../external/autolink-min.js"); // TODO move to dependencies
 require("../external/L.Geodesic.js"); // TODO move to dependencies
 require("../external/oms.min.js"); // TODO move to dependencies
 

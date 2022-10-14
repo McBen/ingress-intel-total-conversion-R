@@ -1,4 +1,5 @@
-window.chat = function() {};
+require("autolink-js");
+window.chat = function () { };
 
 //WORK IN PROGRESS - NOT YET USED!!
 window.chat.commTabs = [

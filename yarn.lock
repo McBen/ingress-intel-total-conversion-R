@@ -692,6 +692,11 @@ asynckit@^0.4.0:
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
   integrity sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==
 
+autolink-js@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/autolink-js/-/autolink-js-1.0.2.tgz#2fb443ab8b101ab1591560cc699b2a5c33f0bdf3"
+  integrity sha512-n0U28h26NunE/6luncL4qul/SoGERg3KAf/z4NBf3rjS7M6RhHL29Nh6wqtkaXQo7E0H5F3//TJ0iyPOEcJM+g==
+
 aws-sign2@~0.7.0:
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/aws-sign2/-/aws-sign2-0.7.0.tgz#b46e890934a9591f2d2f6f86d7e6a9f1b3fe76a8"
