@@ -23,4 +23,5 @@ export const generateHeader = (): HeaderObject => ({
     "grant": "none",
     "version": `1.0.0.${getBuildNumber()}`,
     "description": `[${environment.BUILD_DATE}${environment.BUILD_NAME}] Total conversion for the ingress intel map - Refurbished.`,
+    "downloadURL": `${process.env.downloadURL}`
 });

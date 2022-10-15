@@ -8,6 +8,9 @@ on:
 permissions:
   contents: write
 
+env:
+  downloadURL: https://mcben.github.io/ingress-intel-total-conversion-R/nightly/total-conversion-build.user.js
+
 jobs:
   build:
     runs-on: ubuntu-latest
