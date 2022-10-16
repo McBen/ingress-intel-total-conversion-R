@@ -7,4 +7,13 @@ export default merge(configure, {
   watchOptions: {
     poll: 100,
   },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        enforce: "pre",
+        use: ["source-map-loader"],
+      },
+    ]
+  }
 });
