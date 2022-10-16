@@ -1,5 +1,6 @@
 import { Plugin } from "./plugins";
 import { Options } from "./helper/options";
+import { PluginMigrated } from "./plugin_migrated";
 
 export class PluginManager {
 
@@ -14,7 +15,8 @@ export class PluginManager {
     migrateOld(): void {
         // TODO: parse bootplugins and convert
         window.bootPlugins.forEach(bootPlugin => {
-
+            const plugin = new PluginMigrated(bootPlugin);
+            this.plugins.push(plugin);
         });
     }
 
