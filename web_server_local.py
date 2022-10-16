@@ -6,6 +6,7 @@ import argparse
 import os
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, test
+from pathlib import Path
 
 import settings
 
@@ -22,10 +23,9 @@ try:
 except ValueError as err:
     parser.error(err)
 
-directory = os.fspath(settings.build_target_dir)
+directory = os.fspath(Path(__file__).parent/ 'build')
 if not os.path.isdir(directory):
     parser.error(f'Directory not found: {directory}')
 
 handler_class = partial(SimpleHTTPRequestHandler, directory=directory)  # Python 3.7+
-print(f'Update channel: {settings.build_name}')
 test(HandlerClass=handler_class, port=args.port, bind='localhost')
