@@ -51,9 +51,9 @@ declare namespace IITC {
         "peRES" |
         "peFW_ENL" | /** Firework */
         "peFW_RES" | /** Firework */
-        'peBN_BLM' | /** Black lives matter */
-        'peNEMESIS' |
-        'peTOASTY' |
+        "peBN_BLM" | /** Black lives matter */
+        "peNEMESIS" |
+        "peTOASTY" |
         string;
 
 

@@ -1,15 +1,18 @@
-window.checkCookieLaw = function () {
+import { readCookie, writeCookie } from "../../utils_misc";
 
-    const acceptCookies = window.readCookie('_ncc');
+const NCC_EXPIRE = 60;
+
+export const checkCookieLaw = (): void => {
+
+    const acceptCookies = readCookie("_ncc");
     if (typeof (acceptCookies) !== "undefined") return;
 
-    var NCC_EXPIRE = 60;
-    const html = '<p>We use cookies to give you the best possible user experience.</p>' +
+    const html = "<p>We use cookies to give you the best possible user experience.</p>" +
         'Read our cookies policy <a href="https://nianticlabs.com/cookies/">here</a> ' +
-        'to learn more about our use of cookies, your choices, and how to change your browser settings.'
+        "to learn more about our use of cookies, your choices, and how to change your browser settings."
 
     dialog({
-        title: 'Niantic Cookies Policy',
+        title: "Niantic Cookies Policy",
         html,
         modal: true,
         buttons: [
@@ -17,19 +20,19 @@ window.checkCookieLaw = function () {
                 text: "Decline",
                 id: "cookiedecline",
                 click: function () {
-                    writeCookie("_ncc", 0, NCC_EXPIRE);
+                    writeCookie("_ncc", "0", NCC_EXPIRE);
                     $(this).dialog("close");
                 },
             },
             {
                 text: "Accept",
                 click: function () {
-                    writeCookie("_ncc", 1, NCC_EXPIRE);
+                    writeCookie("_ncc", "1", NCC_EXPIRE);
                     $(this).dialog("close");
                 },
             }
         ]
     });
 
-    $('#cookiedecline').css("margin-right", "2em");
+    $("#cookiedecline").css("margin-right", "2em");
 }

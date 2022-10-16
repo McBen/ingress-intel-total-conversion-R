@@ -1,10 +1,7 @@
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"app.js\")!./app.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"artifact.js\")!./artifact.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"chat.js\")!./chat.js");
-require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"cookieLaw.js\")!./cookieLaw.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"data_cache.js\")!./data_cache.js");
-require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"dialog.js\")!./dialog.js");
-require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"dialog_about.js\")!./dialog_about.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"entity_decode.js\")!./entity_decode.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"entity_info.js\")!./entity_info.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"extract_niantic_parameters.js\")!./extract_niantic_parameters.js");
@@ -28,13 +25,12 @@ require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"portal_hi
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"portal_info.js\")!./portal_info.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"portal_marker.js\")!./portal_marker.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"redeeming.js\")!./redeeming.js");
-require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"region_scoreboard.js\")!./region_scoreboard.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"request_handling.js\")!./request_handling.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"sidebar.js\")!./sidebar.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"search.js\")!./search.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"send_request.js\")!./send_request.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"smartphone.js\")!./smartphone.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"status_bar.js\")!./status_bar.js");
-require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"utils_misc.js\")!./utils_misc.js");
+require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"utils_misc_old.js\")!./utils_misc_old.js");
 
 import "./boot"

@@ -4,6 +4,7 @@
 // be run once.
 import "overlapping-marker-spiderfier-leaflet";
 import { setupMenu } from "./ui/menu/menu";
+import { checkCookieLaw } from "./ui/dialogs/cookielaw";
 const log = require("ulog")("boot.js");
 
 
@@ -200,10 +201,9 @@ function boot() {
   loadPlugins('boot');
 
   setupIngressMarkers();
-  window.checkCookieLaw();
+  checkCookieLaw();
   window.extractFromStock();
   window.setupIdle();
-  window.setupDialogs();
   window.setupDataTileParams();
   window.setupMap();
   window.setupOMS();
@@ -234,6 +234,8 @@ function boot() {
 // Styles
 require("../external/jquery-ui-1.12.1-resizable.css");
 require("../style.css");
+
+require("./iitc_compability.ts");
 
 // Leaflet
 window.L_NO_TOUCH = navigator.maxTouchPoints === 0; // prevent mobile style on desktop https://github.com/IITC-CE/ingress-intel-total-conversion/pull/189
