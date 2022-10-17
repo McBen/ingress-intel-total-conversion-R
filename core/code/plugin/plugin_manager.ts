@@ -15,6 +15,20 @@ export class PluginManager {
     migrateOld(): void {
         window.bootPlugins.forEach(bootPlugin => {
             const plugin = new PluginMigrated(bootPlugin);
+            this.add(plugin);
+        });
+        window.bootPlugins = [];
+    }
+
+
+    private add(plugin: Plugin): void {
+        const basename = plugin.name;
+        let index = 0;
+        while (this.getPlugin(plugin.name)) {
+            index++;
+            plugin.name = `${basename}-${index}`;
+        }
+        this.plugins.push(plugin);
     }
 
 
