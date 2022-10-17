@@ -66,6 +66,11 @@ export class Plugin {
     }
 
 
+    isActive(): boolean {
+        return this.activated > 0;
+    }
+
+
     activate(): void {
         /** overwrite me */
     }

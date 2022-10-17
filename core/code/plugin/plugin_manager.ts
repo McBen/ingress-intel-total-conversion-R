@@ -46,4 +46,9 @@ export class PluginManager {
     }
 
 
+    getListOfActivePlugins(): string[] {
+        return this.plugins.filter(p => p.isActive())
+            .map(p => p.name);
+    }
+
 }
