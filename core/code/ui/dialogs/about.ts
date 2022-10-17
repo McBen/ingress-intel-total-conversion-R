@@ -5,6 +5,9 @@ import { ScriptInfo } from "../../../../types";
 
 const log = anylogger("dialog_about");
 
+
+const Homepage = "https://github.com/McBen/ingress-intel-total-conversion-R/blob/master/README.md";
+
 export const aboutIITC = (): void => {
 
     const html = createDialogContent();
@@ -24,9 +27,8 @@ const createDialogContent = (): string => {
         + "<div>Ingress Intel Total Conversion</div> "
         + "<hr>"
         + "<div>"
-        + '  <a href="' + "@url_homepage@" + '" target="_blank">IITC Homepage</a> |' // TODO Add URL
-        + '  <a href="' + "@url_tg@" + '" target="_blank">Telegram channel</a><br />' // TODO Add URL
-        + "   On the script’s homepage you can:"
+        + `  <a href="${Homepage}" target="_blank">IITC Homepage</a> |`
+        + "   On the script's homepage you can:"
         + "   <ul>"
         + "     <li>Find Updates</li>"
         + "     <li>Get Plugins</li>"
