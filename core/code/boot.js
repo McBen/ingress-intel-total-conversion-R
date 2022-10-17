@@ -11,7 +11,7 @@ import { setupDataTileParameters } from "./map/map_data_calc_tools";
 import { IITC } from "./IITC";
 
 const log = anylogger("Boot");
-// localStorage.setItem('log', 'debug')
+localStorage.setItem('log', '*=debug,-map_data_request,-map_data_render')
 
 
 window.setupTooltips = function (element) {
