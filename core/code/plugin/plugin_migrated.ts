@@ -1,8 +1,9 @@
-import { BootCallback } from "types";
 import { Plugin } from "./plugins";
 import anylogger from "anylogger"
+import { BootCallback } from "../../../types";
+import { LogApp } from "../IITC";
 
-const log = anylogger("Plugins");
+const log = anylogger(LogApp.Plugins);
 
 export class PluginMigrated extends Plugin {
 

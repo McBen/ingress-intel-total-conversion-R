@@ -1,5 +1,5 @@
 import { Plugin } from "./plugins";
-import { Options } from "./helper/options";
+import { Options } from "../helper/options";
 import { PluginMigrated } from "./plugin_migrated";
 
 export class PluginManager {
@@ -9,15 +9,12 @@ export class PluginManager {
 
     constructor() {
         this.plugins = [];
-        this.options = new Options("iitc_plugins");
+        this.options = new Options("IITC_plugins");
     }
 
     migrateOld(): void {
-        // TODO: parse bootplugins and convert
         window.bootPlugins.forEach(bootPlugin => {
             const plugin = new PluginMigrated(bootPlugin);
-            this.plugins.push(plugin);
-        });
     }
 
 
