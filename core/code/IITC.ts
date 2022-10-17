@@ -1,11 +1,6 @@
 /* eslint-disable unicorn/filename-case */
 import { PluginManager } from "./plugin/plugin_manager";
 
-export enum LogApp {
-    Plugins = "Plugins",
-}
-
-
 
 export class IITCMain {
     readonly plugins: PluginManager;

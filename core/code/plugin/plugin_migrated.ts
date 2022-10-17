@@ -1,7 +1,7 @@
 import { Plugin } from "./plugins";
 import anylogger from "anylogger"
 import { BootCallback } from "../../../types";
-import { LogApp } from "../IITC";
+import { LogApp } from "../helper/log_apps";
 
 const log = anylogger(LogApp.Plugins);
 
