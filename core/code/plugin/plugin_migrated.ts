@@ -27,6 +27,8 @@ export class PluginMigrated extends Plugin {
                 this.description = iitcPlugin.info.script.description || this.description;
             }
         }
+
+        this.name = this.name.replace(/^IITC[\s-]+plugin:\s+/i, "");
     }
 
 
