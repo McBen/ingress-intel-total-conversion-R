@@ -304,7 +304,7 @@ export class MapDataRequest {
 
         window.runHooks("mapDataRefreshStart", { bounds, mapZoom, dataZoom, minPortalLevel: tiles.level, tileBounds: dataBounds });
 
-        this.render.startRenderPass(tiles.level, dataBounds);
+        this.render.startRenderPass(dataBounds);
 
         window.runHooks("mapDataEntityInject", { callback: this.render.processGameEntities.bind(this.render) });
 

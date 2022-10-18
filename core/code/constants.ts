@@ -12,11 +12,13 @@ export const FACTION_CSS = ["none", "res", "enl"];
  * min zoom for intel map - should match that used by stock intel
  */
 export const MIN_ZOOM = 3;
-
+/**
+ * used when zoom level is not specified explicitly (must contain all the portals)
+ */
+export const DEFAULT_ZOOM = 15;
 
 
 // User Parameters
 //  Constants the use might want to change
-globalThis.MAX_IDLE_TIME = 15 * 60; // stop updating map after 15min idling
-globalThis.REFRESH = 30; // refresh view every 30s (base time)
-
+// globalThis.MAX_IDLE_TIME = 15 * 60; // stop updating map after 15min idling
+// globalThis.REFRESH = 30; // refresh view every 30s (base time)

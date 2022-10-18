@@ -29,6 +29,8 @@ declare global {
     function teamStringToId(faction: string): number;
     function createMarker(latlng: L.LatLng, data: IITC.PortalOptions): IITC.Portal;
     function pushPortalGuidPositionCache(guid: PortalGUID, latE6: number, lngE6: number): void;
+    function show(paneID: string): void;
+    function isSmartphone(): boolean;
 
     function addHook(event: string, callback: (data: any) => void);
     function runHooks(event: string, data: any): void;
@@ -68,7 +70,12 @@ declare global {
     }
 
     const artifact: {
-        getArtifactEntities: () => { [index: string]: IITC.Portal }
+        getArtifactEntities: () => IITC.EntityData[];
+    }
+
+    type DecodePortalDetails = "core" | "summary" | "detailed" | "extended" | "anyknown";
+    const decodeArray: {
+        portal: (a: any, kind: DecodePortalDetails) => IITC.PortalData | IITC.PortalDataDetail
     }
 
     const niantic_params: {

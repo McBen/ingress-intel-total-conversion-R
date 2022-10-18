@@ -166,6 +166,8 @@ declare namespace IITC {
         onRemove?: (result: SearchResult) => void;
     }
 
+
+    type EntityData = EntityLink | EntityField | EntityPortal;
     type EntityLink = [
         guid: string,
         timestamp: number,

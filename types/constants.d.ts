@@ -1,2 +1,2 @@
-declare const MAX_IDLE_TIME: number;
-declare const REFRESH: number;
+declare let MAX_IDLE_TIME: number;
+declare let REFRESH: number;

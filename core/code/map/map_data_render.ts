@@ -1,6 +1,6 @@
 import * as L from "leaflet";
 import anylogger from "anylogger"
-import { FACTION, FACTION_COLORS } from "../constants";
+import { DEFAULT_ZOOM, FACTION, FACTION_COLORS } from "../constants";
 import { TileData } from "./map_data_request";
 const log = anylogger("Map");
 
@@ -10,9 +10,7 @@ const log = anylogger("Map");
  */
 export class Render {
 
-    private portalMarkerScale;
-
-    private isRendering;
+    private portalMarkerScale: number;
 
     /**
      *  object - represents the set of all deleted game entity GUIDs seen in a render pass
@@ -23,24 +21,15 @@ export class Render {
     private seenLinksGuid = {};
     private seenFieldsGuid = {};
 
-    private bounds: L.LatLngBounds;
-    private level;
-
-
     /**
      * start a render pass. called as we start to make the batch of data requests to the servers
      */
-    startRenderPass(level, bounds: L.LatLngBounds): void {
-        this.isRendering = true;
-
+    startRenderPass(bounds: L.LatLngBounds): void {
         this.deletedGuid = {};
 
         this.seenPortalsGuid = {};
         this.seenLinksGuid = {};
         this.seenFieldsGuid = {};
-
-        this.bounds = bounds;
-        this.level = level;
 
         // we pad the bounds used for clearing a litle bit, as entities are sometimes returned outside of their specified tile boundaries
         // this will just avoid a few entity removals at start of render when they'll just be added again
@@ -125,7 +114,7 @@ export class Render {
         });
     }
 
-    processGameEntities(entities: TileData[], details?: string) { // details expected in decodeArray.portal
+    processGameEntities(entities: IITC.EntityData[], details?: DecodePortalDetails) { // details expected in decodeArray.portal
         // we loop through the entities three times - for fields, links and portals separately
         // this is a reasonably efficient work-around for leafletjs limitations on svg render order
 
@@ -184,8 +173,6 @@ export class Render {
 
         // reorder portals to be after links/fields
         this.bringPortalsToFront();
-
-        this.isRendering = false;
 
         // re-select the selected portal, to re-render the side-bar. ensures that any data calculated from the map data is up to date
         if (selectedPortal) {
@@ -285,7 +272,7 @@ export class Render {
     }
 
 
-    createPortalEntity(ent: IITC.EntityPortal, details): void { // details expected in decodeArray.portal
+    createPortalEntity(ent: IITC.EntityPortal, details: DecodePortalDetails): void { // details expected in decodeArray.portal
         this.seenPortalsGuid[ent[0]] = true;  // flag we've seen it
 
         let previousData;
@@ -317,7 +304,7 @@ export class Render {
             this.deletePortalEntity(ent[0]);
         }
 
-        let portalLevel = parseInt(data.level) || 0;
+        let portalLevel = data.level;
         const team = teamStringToId(data.team);
         // the data returns unclaimed portals as level 1 - but IITC wants them treated as level 0
         if (team === FACTION.none) portalLevel = 0;
@@ -510,7 +497,7 @@ export class Render {
     }
 
 
-    rescalePortalMarkers = function () {
+    rescalePortalMarkers() {
         if (this.portalMarkerScale === undefined || this.portalMarkerScale !== portalMarkerScale()) {
             this.portalMarkerScale = portalMarkerScale();
 
