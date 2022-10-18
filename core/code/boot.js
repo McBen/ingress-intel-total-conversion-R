@@ -5,6 +5,7 @@
 import "overlapping-marker-spiderfier-leaflet";
 import { setupMenu } from "./ui/menu/menu";
 import { checkCookieLaw } from "./ui/dialogs/cookielaw";
+import { setupDataTileParameters } from "./map/map_data_calc_tools";
 const log = require("ulog")("boot.js");
 
 
@@ -203,8 +204,8 @@ function boot() {
   setupIngressMarkers();
   checkCookieLaw();
   window.extractFromStock();
-  window.setupIdle();
-  window.setupDataTileParams();
+  setupDataTileParameters();
+  require("idle.ts"); // or idle.reset()
   window.setupMap();
   window.setupOMS();
   window.ornaments.setup();
