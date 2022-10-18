@@ -82,7 +82,7 @@ interface TileRequestResult {
     error: string
 }
 
-interface TileData {
+export interface TileData {
     deletedGameEntityGuids?: string[],
     gameEntities?: [],
     error?: string

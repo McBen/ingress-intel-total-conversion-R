@@ -3,6 +3,7 @@
 /// <reference path="./types.d.ts" />
 /// <reference path="./intel.d.ts" />
 /// <reference path="./constants.d.ts" />
+/// <reference path="./leaflet_extentions/index.d.ts" />
 import * as L from "leaflet";
 
 
@@ -25,6 +26,9 @@ declare global {
     function renderUpdateStatus(): void;
     function resetHighlightedPortals(): void;
     function portalMarkerScale(): number;
+    function teamStringToId(faction: string): number;
+    function createMarker(latlng: L.LatLng, data: IITC.PortalOptions): IITC.Portal;
+    function pushPortalGuidPositionCache(guid: PortalGUID, latE6: number, lngE6: number): void;
 
     function addHook(event: string, callback: (data: any) => void);
     function runHooks(event: string, data: any): void;
@@ -56,10 +60,15 @@ declare global {
             ZOOM_TO_LEVEL: number[],
             TILES_PER_EDGE: number[]
         }
+
+        ornaments: {
+            addPortal: (p: IITC.Portal) => void,
+            removePortal: (p: IITC.Portal) => void
+        }
     }
 
     const artifact: {
-        getArtifactEntities: () => { [index: string]: IITC.Portal };
+        getArtifactEntities: () => { [index: string]: IITC.Portal }
     }
 
     const niantic_params: {
@@ -73,8 +82,14 @@ declare global {
 
     /** guid of current selected portal */
     let selectedPortal: PortalGUID | null;
+    let urlPortal: PortalGUID | null;
+    let urlPortalLL: [number, number] | undefined;
 
     const script_info: ScriptInfo;
+
+    const PLAYER: {
+        team: string;
+    }
 }
 
 

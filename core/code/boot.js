@@ -205,7 +205,7 @@ function boot() {
   checkCookieLaw();
   window.extractFromStock();
   setupDataTileParameters();
-  require("idle.ts"); // or idle.reset()
+  require("./map/idle.ts"); // or idle.reset()
   window.setupMap();
   window.setupOMS();
   window.ornaments.setup();
