@@ -10,7 +10,7 @@ export interface ServerResult {
     topAgents: { team: string, nick: string }[];
     regionName: string;
     gameScore: [ENL: string, RES: string];
-    scoreHistory: [];
+    scoreHistory: [string, string, string][];
 }
 
 
@@ -34,10 +34,9 @@ export class RegionScore {
 
         this.checkpoints = [];
 
-        for (var i = 0; i < serverResult.scoreHistory.length; i++) {
-            var h = serverResult.scoreHistory[i];
-            this.checkpoints[parseInt(h[0])] = [parseInt(h[1]), parseInt(h[2])];
-        }
+        serverResult.scoreHistory.forEach(cp => {
+            this.checkpoints[parseInt(cp[0])] = [parseInt(cp[1]), parseInt(cp[2])];
+        });
 
         this.cycleStartTime = new Date(Math.floor(Date.now() / CYCLE_DURATION) * CYCLE_DURATION);
     }
@@ -102,41 +101,21 @@ export class RegionScore {
 
     private getScoreMedian(faction: FACTION): number {
         if (this.median[faction] < 0) {
-            var idx = faction === FACTION.RES ? 1 : 0;
-            var values = this.checkpoints.map(function (val) { return val[idx]; });
-            values = values.filter(function (n) { return n !== undefined; });
+            const index = faction === FACTION.RES ? 1 : 0;
+            const values = this.checkpoints.map(cp => cp[index])
+                .filter(score => score !== undefined);
             this.median[faction] = this.findMedian(values);
         }
 
         return this.median[faction];
-    };
+    }
 
     private findMedian(values: number[]): number {
-        var len = values.length;
-        var rank = Math.floor((len - 1) / 2);
+        if (values.length === 0) return 0;
 
-        if (len === 0) return 0;
-
-        var l = 0, m = len - 1;
-        var b, i, j, x;
-        while (l < m) {
-            x = values[rank];
-            i = l;
-            j = m;
-            do {
-                while (values[i] < x) i++;
-                while (x < values[j]) j--;
-                if (i <= j) {
-                    b = values[i];
-                    values[i] = values[j];
-                    values[j] = b;
-                    i++; j--;
-                }
-            } while (i <= j);
-            if (j < rank) l = i;
-            if (rank < i) m = j;
-        }
-        return values[rank];
+        values = values.sort();
+        const mid = Math.floor((values.length - 1) / 2);
+        return values[mid];
     }
 
     getLastCP(): number {

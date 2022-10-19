@@ -18,7 +18,7 @@ declare namespace IITC {
     interface PortalOptions extends L.CircleOptions {
         guid: PortalGUID;
         ent: any;
-        level: number;
+        level?: number;
         team: number;
         timestamp: number;
         data: PortalData;
@@ -38,6 +38,7 @@ declare namespace IITC {
         team: string;
         timestamp: number;
         title: string;
+        history: number;
     }
 
     type Ornaments =
@@ -149,17 +150,58 @@ declare namespace IITC {
     interface SearchResult {
         title: string; // Will be interpreted as HTML, so make sure to escape properly.
         description: JQuery | any[] | Element | Text | string;
-        layer?: L.ILayer; // a ILayer to be added to the map when the user selects this search result. Will be generated if not set. Set to `null` to prevent the result from being added to the map.
+        /** 
+         * a ILayer to be added to the map when the user selects this search result.
+         * Will be generated if not set. Set to `null` to prevent the result from being
+         * added to the map.
+         */
+        layer?: L.Layer;
         icon?: string; // a URL to a icon to display in the result list. Should be 12x12.
-        onSelected?: (result: SearchResult, event: UIEvent) => (boolean | void); // a handler to be called when the result is selected. May return `true` to prevent the map from being repositioned. You may reposition the map yourself or do other work.
+        /**
+         * a handler to be called when the result is selected.
+         * May return `true` to prevent the map from being repositioned.
+         * You may reposition the map yourself or do other work.
+         */
+        onSelected?: (result: SearchResult, event: UIEvent) => (boolean | void);
         onRemove?: (result: SearchResult) => void;
     }
 
-    interface TileParameters {
-        level: number; // deprecated
-        tilesPerEdge: number;
-        minLinkLength: number;
-        hasPortals: boolean;
-        zoom: number;
-    }
+
+    type EntityData = EntityLink | EntityField | EntityPortal;
+    type EntityLink = [
+        guid: string,
+        timestamp: number,
+        data: [
+            type: "e",
+            team: string,
+            oGuid: string,
+            oLatE6: number,
+            oLngE6: number,
+            dGuid: string,
+            dLatE6: number,
+            dLngE6: number
+        ]
+    ]
+
+    type EntityField = [
+        guid: string,
+        timestamp: number,
+        data: [
+            type: "r",
+            team: string,
+            points: [guid: string, latE6: number, lngE6: number][],
+        ]
+    ]
+
+    type EntityPortal = [
+        guid: string,
+        timestamp: number,
+        data: [
+            type: "p",
+            team: string,
+            latE6: number,
+            lngE6: number,
+        ]
+    ]
+
 }

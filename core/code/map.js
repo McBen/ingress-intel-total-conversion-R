@@ -1,5 +1,6 @@
 /* global log -- eslint */
-function setupCRS () {
+import { MapDataRequest } from "./map/map_data_request";
+
 
   // use the earth radius value from s2 geometry library
   // https://github.com/google/s2-geometry-library-java/blob/c28f287b996c0cedc5516a0426fbd49f6c9611ec/src/com/google/common/geometry/S2LatLng.java#L31
@@ -269,7 +270,7 @@ window.setupMap = function () {
   });
 
   // create the map data requester
-  window.mapDataRequest = new window.MapDataRequest();
+  window.mapDataRequest = new MapDataRequest();
   window.mapDataRequest.start();
 
   // start the refresh process with a small timeout, so the first data request happens quickly

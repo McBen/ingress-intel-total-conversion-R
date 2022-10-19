@@ -16,8 +16,8 @@ export class RegionScoreDialog {
         const latE6 = Math.round(latLng.lat * 1e6);
         const lngE6 = Math.round(latLng.lng * 1e6);
 
-        const dialog = new RegionScoreDialog();
-        dialog.showRegion(latE6, lngE6);
+        const regioDialog = new RegionScoreDialog();
+        regioDialog.showRegion(latE6, lngE6);
     }
 
     static setup(): void { // TODO let it do it them self or do it in one place?
