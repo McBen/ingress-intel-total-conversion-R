@@ -5,6 +5,7 @@ import { LogApp } from "../helper/log_apps";
 
 const log = anylogger(LogApp.Plugins);
 
+
 export class PluginMigrated extends Plugin {
 
     private setup: () => void;
@@ -33,6 +34,8 @@ export class PluginMigrated extends Plugin {
 
 
     activate(): void {
+        require("../iitc_compability");
+
         log.info("Starting Plugin", this.name);
         this.setup();
         this.error = undefined;
