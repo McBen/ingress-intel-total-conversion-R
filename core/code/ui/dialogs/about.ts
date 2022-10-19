@@ -1,9 +1,9 @@
 import { dialog } from "../dialog";
-import anylogger from "anylogger"
 import { IITC } from "../../IITC";
 import { Plugin } from "../../plugin/plugins";
 
-const log = anylogger("dialog_about");
+import { Log, LogApp } from "../../helper/log_apps";
+const log = Log(LogApp.Dialog);
 
 
 const Homepage = "https://github.com/McBen/ingress-intel-total-conversion-R/blob/master/README.md";

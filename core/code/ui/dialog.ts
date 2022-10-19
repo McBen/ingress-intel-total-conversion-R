@@ -1,7 +1,8 @@
 import { convertTextToTableMagic } from "../utils_misc";
-import anylogger from "anylogger"
 
-const log = anylogger("dialog");
+import { Log, LogApp } from "../helper/log_apps";
+const log = Log(LogApp.Dialog);
+
 
 
 /* The global ID of onscreen dialogs.

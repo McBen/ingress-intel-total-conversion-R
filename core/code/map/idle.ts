@@ -1,6 +1,6 @@
 // IDLE HANDLING /////////////////////////////////////////////////////
-import anylogger from "anylogger"
-const log = anylogger("Idle");
+import { Log, LogApp } from "../helper/log_apps";
+const log = Log(LogApp.Idle);
 
 const IDLE_POLL_TIME = 10;
 export type IdleResumeCallback = () => void;

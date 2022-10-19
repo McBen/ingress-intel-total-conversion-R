@@ -5,9 +5,9 @@ import { DataCache } from "./data_cache";
 import { RenderDebugTiles, TileState } from "./map_data_debug";
 import { clampLatLngBounds } from "../utils_misc";
 import { getDataZoomForMapZoom, getMapZoomTileParameters, latToTile, lngToTile, pointToTileId, tileToLat, tileToLng } from "./map_data_calc_tools";
-import anylogger from "anylogger"
+import { Log, LogApp } from "../helper/log_apps";
 import { idle } from "./idle";
-const log = anylogger("Map");
+const log = Log(LogApp.Map);
 
 
 

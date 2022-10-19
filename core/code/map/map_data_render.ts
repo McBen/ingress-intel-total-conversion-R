@@ -1,8 +1,8 @@
 import * as L from "leaflet";
-import anylogger from "anylogger"
 import { DEFAULT_ZOOM, FACTION, FACTION_COLORS } from "../constants";
 import { TileData } from "./map_data_request";
-const log = anylogger("Map");
+import { Log, LogApp } from "../helper/log_apps";
+const log = Log(LogApp.Map);
 
 
 /**

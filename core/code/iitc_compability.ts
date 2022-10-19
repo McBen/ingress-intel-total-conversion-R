@@ -3,8 +3,8 @@ import { alert, dialog } from "./ui/dialog";
 import { idle, IdleResumeCallback } from "./map/idle";
 import * as CalcTools from "./map/map_data_calc_tools";
 
-import anylogger from "anylogger"
-const log = anylogger("iitc_compabiltiy");
+import { Log, LogApp } from "./helper/log_apps";
+const log = Log(LogApp.Plugins);
 
 // DIALOG
 globalThis.alert = alert as any;
@@ -28,7 +28,6 @@ globalThis.latToTile = CalcTools.latToTile;
 globalThis.tileToLng = CalcTools.tileToLng;
 globalThis.tileToLat = CalcTools.tileToLat;
 globalThis.pointToTileId = CalcTools.pointToTileId;
-
 
 
 
