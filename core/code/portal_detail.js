@@ -1,3 +1,5 @@
+import { DataCache } from "./map/data_cache";
+
 /// PORTAL DETAIL //////////////////////////////////////
 // code to retrieve the new portal detail data from the servers
 
