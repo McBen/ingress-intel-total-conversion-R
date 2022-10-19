@@ -46,11 +46,6 @@ const EMPTY_RESPONSE_RUN_QUEUE_DELAY = 5; // also long delay - empty responses a
 const TIMEOUT_REQUEST_RUN_QUEUE_DELAY = 0;
 
 
-// render queue
-// number of items to process in each render pass. there are pros and cons to smaller and larger values
-// (however, if using leaflet canvas rendering, it makes sense to push as much as possible through every time)
-const RENDER_BATCH_SIZE = window.map.options.preferCanvas ? 1e9 : 1500;
-
 // delay before repeating the render loop. this gives a better chance for user interaction
 const RENDER_PAUSE = window.isApp ? 0.2 : 0.1; // 200ms mobile, 100ms desktop
 
@@ -121,6 +116,7 @@ export class MapDataRequest {
     private successTileCount: number;
     private failedTileCount: number;
     private staleTileCount: number;
+    private RENDER_BATCH_SIZE: number;
 
     /**
      * the 'set' of requested tile QKs
@@ -142,6 +138,11 @@ export class MapDataRequest {
         this.renderQueue = [];
         this.renderQueueTimer = undefined;
         this.renderQueuePaused = false;
+
+        // render queue
+        // number of items to process in each render pass. there are pros and cons to smaller and larger values
+        // (however, if using leaflet canvas rendering, it makes sense to push as much as possible through every time)
+        this.RENDER_BATCH_SIZE = window.map.options.preferCanvas ? 1e9 : 1500;
 
         this.idle = false;
 
@@ -733,7 +734,7 @@ export class MapDataRequest {
     }
 
     processRenderQueue() {
-        let drawEntityLimit = RENDER_BATCH_SIZE;
+        let drawEntityLimit = this.RENDER_BATCH_SIZE;
 
 
         // TODO: we don't take account of how many of the entities are actually new/removed - they
