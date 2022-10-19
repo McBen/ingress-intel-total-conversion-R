@@ -515,13 +515,13 @@ export class Render {
      * add the portal to the visible map layer
      */
     addPortalToMapLayer(portal: IITC.Portal) {
-        portalsFactionLayers[portal.options.level][portal.options.team].addLayer(portal);
+        portalsFactionLayers[portal.options.level || 0][portal.options.team].addLayer(portal);
     }
 
 
     removePortalFromMapLayer(portal: IITC.Portal) {
         // remove it from the portalsLevels layer
-        portalsFactionLayers[portal.options.level][portal.options.team].removeLayer(portal);
+        portalsFactionLayers[portal.options.level || 0][portal.options.team].removeLayer(portal);
     }
 
 }

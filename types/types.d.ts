@@ -18,7 +18,7 @@ declare namespace IITC {
     interface PortalOptions extends L.CircleOptions {
         guid: PortalGUID;
         ent: any;
-        level: number;
+        level?: number;
         team: number;
         timestamp: number;
         data: PortalData;
