@@ -1,7 +1,7 @@
 import { dialog } from "../dialog";
 import anylogger from "anylogger"
-import { ScriptInfo } from "../../../../types";
-
+import { IITC } from "../../IITC";
+import { Plugin } from "../../plugin/plugins";
 
 const log = anylogger("dialog_about");
 
@@ -60,73 +60,21 @@ const createDialogContent = (): string => {
 
 const getPlugins = (): string => {
 
-    const pluginsInfo: ScriptInfo[] = (window.bootPlugins as any).info;
+    const pluginNames = IITC.plugins.getListOfActivePlugins();
+    const plugins = pluginNames.map(pname => {
+        const plugin = IITC.plugins.getPlugin(pname);
+        return pluginInfoToString(plugin!)
+    });
 
-    const extra = getIITCVersionAddition();
-
-    const plugins = pluginsInfo.map(convertPluginInfo)
-        .sort((a, b) => a.name > b.name ? 1 : -1)
-        .map(p => pluginInfoToString(p, extra))
-        .join("\n");
-
-    return plugins;
+    return plugins.join("\n");
 }
 
-type PluginInfo = {
-    build: string;
-    name: string;
-    date: string;
-    error: string | undefined;
-    version: string | undefined;
-    description: string | undefined;
-}
 
-const convertPluginInfo = (info: ScriptInfo, index: number): PluginInfo => {
-    // Plugins metadata come from 2 sources:
-    // - buildName, pluginId, dateTimeVersion: inserted in plugin body by build script
-    //   (only standard plugins)
-    // - script.name/version/description: from GM_info object, passed to wrapper
-    //   `script` may be not available if userscript manager does not provede GM_info
-    //   (atm: IITC-Mobile for iOS)
-    const result: PluginInfo = {
-        build: info.buildName,
-        name: info.pluginId,
-        date: info.dateTimeVersion,
-        error: info.error,
-        version: undefined,
-        description: undefined
-    };
-
-    const script = info.script;
-    if (script) {
-        if (typeof script.name === "string") {
-            result.name = script.name.replace(/^IITC[\s-]+plugin:\s+/i, ""); // cut non-informative name part
-        }
-        result.version = script.version;
-        result.description = script.description;
-    }
-
-    if (!result.name) {
-        if (script_info.script) { // check if GM_info is available
-            result.name = `[unknown plugin: index ${index}]`;
-            result.description = "this plugin does not have proper wrapper; report to it's author";
-        } else { // userscript manager fault
-            result.name = `[3rd-party plugin: index ${index}]`;
-        }
-    }
-
-    return result;
-}
-
-const pluginInfoToString = (p: PluginInfo, extra?: string): string => {
+const pluginInfoToString = (p: Plugin): string => {
     let classname = "";
     let description = p.description || "";
     const name = p.name;
-    const verinfo = formatVersionInfo(p, extra);
-
-    if (isStandardPlugin(p)) {
-        classname += "plugin-is-standard";
-    }
+    const verinfo = ` - <code>${p.version}</code>`;
 
     if (p.error) {
         classname += " plugin-error";
@@ -137,46 +85,10 @@ const pluginInfoToString = (p: PluginInfo, extra?: string): string => {
 }
 
 
-const isStandardPlugin = (plugin): boolean => {
-    return (plugin.build === script_info.buildName && plugin.date === script_info.dateTimeVersion);
-}
-
-
-
 const getIITCVersion = (): string => {
     const iitc = script_info;
     const version = (iitc.script && iitc.script.version || iitc.dateTimeVersion);
-    return `${version} [${iitc.buildName}]`;
-}
-
-
-const getIITCVersionAddition = (): string | undefined => {
-    const extra = script_info.script && script_info.script.version.match(/^\d+\.\d+\.\d+(\..+)$/);
-    return extra && extra[1];
-}
-
-
-const formatVersionInfo = (p: PluginInfo, extra?: string): string => {
-    if (p.version && extra) {
-        const cutPos = p.version.length - extra.length;
-        // cut extra version component (timestamp) if it is equal to main script's one
-        if (p.version.substring(cutPos) === extra) {
-            p.version = p.version.substring(0, cutPos);
-        }
-    }
-
-    p.version = p.version || p.date;
-    if (p.version) {
-        const tooltip = [];
-        if (p.build) { tooltip.push("[" + p.build + "]"); }
-        if (p.date && p.date !== p.version) { tooltip.push(p.date); }
-
-        const title = tooltip[0] ? ' title="' + tooltip.join(" ") + '"' : "";
-
-        return ` - <code${title}>${p.version}</code>`;
-    }
-
-    return "";
+    return `${version}`;
 }
 
 

@@ -3,10 +3,15 @@
 // created a basic framework. All of these functions should only ever
 // be run once.
 import "overlapping-marker-spiderfier-leaflet";
-import { setupMenu } from "./ui/menu/menu";
+import "ulog";
+import anylogger from "anylogger"
 import { checkCookieLaw } from "./ui/dialogs/cookielaw";
+import { setupMenu } from "./ui/menu/menu";
 import { setupDataTileParameters } from "./map/map_data_calc_tools";
-const log = require("ulog")("boot.js");
+import { IITC } from "./IITC";
+
+const log = anylogger("Boot");
+localStorage.setItem('log', '*=debug,-map_data_request,-map_data_render')
 
 
 window.setupTooltips = function (element) {
@@ -220,7 +225,8 @@ function boot() {
 
   setupMenu();
 
-  loadPlugins();
+  // loadPlugins();
+  IITC.init();
 
   window.runOnSmartphonesAfterBoot();
   window.runOnAppAfterBoot();
