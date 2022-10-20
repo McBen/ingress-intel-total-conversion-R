@@ -1,9 +1,9 @@
 /* eslint-disable unicorn/prevent-abbreviations */
 /// <reference path="./layerchooser.d.ts" />
 /// <reference path="./types.d.ts" />
-/// <reference path="./intel.d.ts" />
 /// <reference path="./constants.d.ts" />
 /// <reference path="./leaflet_extentions/index.d.ts" />
+import "./intel.d.ts";
 import * as L from "leaflet";
 
 
@@ -93,10 +93,6 @@ declare global {
     let urlPortalLL: [number, number] | undefined;
 
     const script_info: ScriptInfo;
-
-    const PLAYER: {
-        team: string;
-    }
 }
 
 

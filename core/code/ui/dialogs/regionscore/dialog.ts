@@ -3,6 +3,7 @@ import { convertTextToTableMagic, digits } from "../../../utils_misc";
 import { HistoryChart } from "./history_chart";
 import { CP_COUNT, RegionScore, ServerResult } from "./region_score";
 import { dialog } from "../../dialog";
+import { player } from "../../../helper/player";
 
 
 export class RegionScoreDialog {
@@ -156,7 +157,7 @@ export class RegionScoreDialog {
 
     createHistoryTable() {
 
-        const invert = PLAYER.team === "RESISTANCE";
+        const invert = player.isTeam(FACTION.RES);
         const order = (a: string, b: string): string => {
             return invert ? b + a : a + b;
         }
@@ -213,7 +214,7 @@ export class RegionScoreDialog {
     createResults() {
 
         const maxAverage = this.regionScore.getAvgScoreMax();
-        const order = (PLAYER.team === "RESISTANCE" ? [FACTION.RES, FACTION.ENL] : [FACTION.ENL, FACTION.RES]);
+        const order = player.preferedTeamOrder();
 
         let result = '<table id="overview" title="">';
         for (let t = 0; t < 2; t++) {
