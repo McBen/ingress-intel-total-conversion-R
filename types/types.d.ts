@@ -167,13 +167,14 @@ declare namespace IITC {
     }
 
 
+    type EntityTeam = "R" | "E" | "N";
     type EntityData = EntityLink | EntityField | EntityPortal;
     type EntityLink = [
         guid: string,
         timestamp: number,
         data: [
             type: "e",
-            team: string,
+            team: EntityTeam,
             oGuid: string,
             oLatE6: number,
             oLngE6: number,
@@ -188,20 +189,68 @@ declare namespace IITC {
         timestamp: number,
         data: [
             type: "r",
-            team: string,
+            team: EntityTeam,
             points: [guid: string, latE6: number, lngE6: number][],
         ]
     ]
 
-    type EntityPortal = [
+    type EntityPortal = EntityPortalBasic | EntityPortalOverview | EntityPortalDetailed;
+
+    type EntityPortalBasic = [
         guid: string,
         timestamp: number,
         data: [
             type: "p",
-            team: string,
+            team: EntityTeam,
             latE6: number,
             lngE6: number,
         ]
     ]
 
+    type EntityPortalOverview = [
+        guid: string,
+        timestamp: number,
+        data: [
+            type: "p",
+            team: EntityTeam,
+            latE6: number,
+            lngE6: number,
+            level: number,
+            health: number,
+            resCount: number,
+            image: string,
+            title: string,
+            ornaments: [],
+            mission: boolean,
+            mission50plus: boolean,
+            artifactBrief: null | [],
+            timestamp: number
+        ]
+    ]
+
+    type EntityPortalDetailed = [
+        guid: string,
+        timestamp: number,
+        data: [
+            type: "p",
+            team: EntityTeam,
+            latE6: number,
+            lngE6: number,
+            level: number,
+            health: number,
+            resCount: number,
+            image: string,
+            title: string,
+            ornaments: [],
+            mission: boolean,
+            mission50plus: boolean,
+            artifactBrief: null | [],
+            timestamp: number,
+            mods: [null, null, null, null],
+            resonators: [],
+            owner: string,
+            artifactDetail: [],
+            history: number | undefined
+        ]
+    ]
 }
