@@ -7,7 +7,6 @@ require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"extract_n
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"layerchooser.js\")!./layerchooser.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"ornaments.js\")!./ornaments.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"panes.js\")!./panes.js");
-require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"player_names.js\")!./player_names.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"portal_data.js\")!./portal_data.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"portal_detail.js\")!./portal_detail.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"portal_detail_display.js\")!./portal_detail_display.js");
