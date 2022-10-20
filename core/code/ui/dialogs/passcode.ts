@@ -1,9 +1,29 @@
+import { PlayerData } from "../../../../types/intel";
+import { COLORS_LVL } from "../../constants";
+import { escapeHtmlSpecialChars } from "../../utils_misc";
+
+
 interface ResultData {
+    rewards: Rewards;
+    playerData: PlayerData;
+    error?: string;
+}
+
+interface Rewards {
     other: string[];
     xm: string;
     ap: string;
-    inventory: any;
+    inventory: RewardItem[];
 }
+
+interface RewardItem {
+    name: string;
+    awards: {
+        level: number,
+        count: number
+    }[]
+}
+
 
 export class PasscodeDialog {
 
@@ -55,8 +75,8 @@ export class PasscodeDialog {
 
         window.postAjax(
             "redeemReward", { passcode },
-            response => this.showResult(passcode, response),
-            response => this.handleError(passcode, response)
+            response => this.showResult(passcode, response as ResultData),
+            response => this.handleError(passcode, response as JQuery.jqXHR<any>)
         );
     }
 
@@ -94,53 +114,11 @@ export class PasscodeDialog {
         this.getPasscodeSection(passcode).append(errorMessage);
     }
 
-    /* data = 
-    {
-      "rewards": {
-        "ap": "0",
-        "xm": "1331",
-        "other": [],
-        "inventory": [
-          {
-            "name": "Power Cube",
-            "awards": [
-              {
-                "level": 8,
-                "count": 10
-              }
-            ]
-          },
-          {
-            "name": "Media",
-            "awards": [
-              {
-                "level": 1,
-                "count": 1
-              }
-            ]
-          }
-        ]
-      },
-      "playerData": {
-        "ap": "50740745",
-        "energy": 18910,
-        "team": "RESISTANCE",
-        "available_invites": 282,
-        "verified_level": 16,
-        "xm_capacity": "22000",
-        "min_ap_for_current_level": "40000000",
-        "min_ap_for_next_level": "0",
-        "guid": "8ef1445e36e4423584251f94dc6db261.c",
-        "recursion_count": "1",
-        "nickname": "Hevne"
-      }
-    }*/
-    showResult(passcode: string, data: any): void {
 
-        console.debug(data);
+    showResult(passcode: string, data: ResultData): void {
 
         if (data.error) {
-            this.logError(passcode, data.error as string);
+            this.logError(passcode, data.error);
             return;
         }
 
@@ -150,16 +128,99 @@ export class PasscodeDialog {
         }
 
         if (data.playerData) {
-            // FIXME PLAYER data
-            // window.PLAYER = data.playerData;
+            // @ts-ignore
+            PLAYER = data.playerData;
             window.setupPlayerStat();
         }
 
 
-        // FIXME formatPasscodeLong format
-        const reward = window.formatPasscodeLong(data.rewards as ResultData) as unknown as string;
+        const reward = this.formatPasscodeLong(data.rewards);
 
         this.getPasscodeSection(passcode).html(reward);
     }
 
+
+    formatPasscodeLong(data: Rewards): string {
+        let html = '<p><strong>Passcode confirmed. Acquired items:</strong></p><ul class="redeemReward">';
+
+        if (data.other) {
+            data.other.forEach(item => {
+                html += "<li>" + escapeHtmlSpecialChars(item) + "</li>";
+            });
+        }
+
+        if (parseInt(data.xm) > 0) {
+            html += "<li>" + escapeHtmlSpecialChars(data.xm) + " XM</li>";
+        }
+        if (parseInt(data.ap) > 0) {
+            html += "<li>" + escapeHtmlSpecialChars(data.ap) + " AP</li>";
+        }
+
+        if (data.inventory) {
+            data.inventory.forEach(type => {
+                type.awards.forEach(item => {
+                    html += `<li>${item.count}x `;
+
+                    const l = item.level;
+                    if (l > 0) {
+                        html += `<span class="itemlevel" style="color:${COLORS_LVL[l]}">L${l}</span> `;
+                    }
+
+                    html += escapeHtmlSpecialChars(type.name) + "</li>";
+                });
+            });
+        }
+
+        html += "</ul>"
+        return html;
+    }
+
+    /*
+    window.formatPasscodeShort = function(data) {
+    
+      if(data.other) {
+        var awards = data.other.map(window.escapeHtmlSpecialChars);
+      } else {
+        var awards = [];
+      }
+    
+      if(0 < data.xm)
+        awards.push(window.escapeHtmlSpecialChars(data.xm) + ' XM');
+      if(0 < data.ap)
+        awards.push(window.escapeHtmlSpecialChars(data.ap) + ' AP');
+    
+      if(data.inventory) {
+        data.inventory.forEach(function(type) {
+          type.awards.forEach(function(item) {
+            var str = "";
+            if(item.count > 1)
+              str += item.count + "&nbsp;";
+    
+            if(window.REDEEM_SHORT_NAMES[type.name.toLowerCase()]) {
+              var shortName = window.REDEEM_SHORT_NAMES[type.name.toLowerCase()];
+    
+              var l = item.level;
+              if(0 < l) {
+                l = parseInt(l);
+                str += '<span class="itemlevel" style="color:' + COLORS_LVL[l] + '">' + shortName + l + '</span>';
+              } else {
+                str += shortName;
+              }
+            } else { // no short name known
+              var l = item.level;
+              if(0 < l) {
+                l = parseInt(l);
+                str += '<span class="itemlevel" style="color:' + COLORS_LVL[l] + '">L' + l + '</span> ';
+              }
+              str += type.name;
+            }
+    
+            awards.push(str);
+          });
+        });
+      }
+    
+      return '<p class="redeemReward">' + awards.join(', ') + '</p>'
+    }    
+    */
 }
