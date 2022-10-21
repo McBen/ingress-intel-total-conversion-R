@@ -35,7 +35,6 @@ window.runOnSmartphonesBeforeBoot = function () {
 
   window.smartphone.mapButton = $('<a>map</a>').click(function () {
     $('#map').css({ 'visibility': 'visible', 'opacity': '1' });
-    $('#updatestatus').show();
     $('#chatcontrols a .active').removeClass('active');
     $("#chatcontrols a:contains('map')").addClass('active');
   });
@@ -134,6 +133,7 @@ window.runOnSmartphonesAfterBoot = function () {
   window.show('map');
 
   // add a div/hook for updating mobile info
+  // TODO: the old  "updatestatus" is no longer available
   $('#updatestatus').prepend('<div id="mobileinfo" onclick="show(\'info\')"></div>');
   window.addHook('portalSelected', window.smartphoneInfo);
   // init msg of status bar. hint for the user that a tap leads to the info screen

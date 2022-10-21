@@ -96,7 +96,6 @@ document.body.innerHTML = ''
   + '    <div id="toolbox"></div>'
   + '  </div>'
   + '</div>'
-  + '<div id="updatestatus"><div id="innerstatus"></div></div>'
   // avoid error by stock JS
   + '<div id="play_button"></div>'
   + '<div id="header"><div id="nav"></div></div>';

@@ -7,6 +7,7 @@
 @import "styles/redeem.pcss";
 @import "styles/regionscore.pcss";
 @import "styles/menu.pcss";
+@import "styles/statusbar.pcss";
 @import "styles/toast.pcss";
 
 .text-overflow-ellipsis {
@@ -146,38 +147,6 @@ a:hover {
   color: #03fe03;
 }
 
-/* update status */
-#updatestatus {
-  background-color: rgba(8, 48, 78, 0.9);
-  border-bottom: 0;
-  border-top: 1px solid #20a8b1;
-  border-left: 1px solid #20a8b1;
-  bottom: 0;
-  color: #ffce00;
-  font-size: 13px;
-  padding: 4px;
-  position: fixed;
-  right: 0;
-  z-index: 3002;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-#updatestatus .map {
-  margin-left: 8px;
-}
-
-#loadlevel {
-  background: #fff;
-  color: #000000;
-  display: inline-block;
-  min-width: 1.8em;
-  border: 1px solid #20a8b1;
-  border-width: 0 1px;
-  margin: -4px 0;
-  padding: 4px 0.2em;
-}
 
 .pl_nudge_date:after {
   background: no-repeat url(//commondatastorage.googleapis.com/ingress.com/img/nudge_pointy.png);

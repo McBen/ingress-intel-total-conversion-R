@@ -30,5 +30,6 @@ globalThis.tileToLat = CalcTools.tileToLat;
 globalThis.pointToTileId = CalcTools.pointToTileId;
 
 
+globalThis.renderUpdateStatus = () => { /** */ };
 
 log.info("IITC Compabiltiy layer loaded");

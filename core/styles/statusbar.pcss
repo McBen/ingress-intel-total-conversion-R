@@ -1,0 +1,30 @@
+.statusbar {
+
+    #mapstatus {
+        padding: 0 3px;
+    }
+
+    .zoomdetails {
+        margin-right: 8px;
+    }        
+
+    .progress {
+        background: green;
+        display: inline-block;
+        height:60%;
+        margin-right: 5px;
+        vertical-align: middle;
+        animation: fadegreen 4s infinite alternate;
+
+        &.loaderror {
+            animation: none;
+            background: red;
+            font-size: 13px;
+        }
+
+        @keyframes fadegreen {
+            from {background-color: #070;}
+            to {background-color: #0c0;}
+        }                
+    }            
+}

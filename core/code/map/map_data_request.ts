@@ -7,6 +7,7 @@ import { clampLatLngBounds } from "../utils_misc";
 import { getDataZoomForMapZoom, getMapZoomTileParameters, latToTile, lngToTile, pointToTileId, tileToLat, tileToLng } from "./map_data_calc_tools";
 import { Log, LogApp } from "../helper/log_apps";
 import { idle } from "./idle";
+import { mapStatus, MapStatus } from "../ui/status";
 const log = Log(LogApp.Map);
 
 
@@ -146,9 +147,6 @@ export class MapDataRequest {
 
         this.idle = false;
 
-        // ensure we have some initial map status
-        this.setStatus("startup", undefined, -1);
-
         // add a portalDetailLoaded hook, so we can use the extended details to update portals on the map
         window.addHook("portalDetailLoaded", data => {
             if (data.success) {
@@ -170,7 +168,7 @@ export class MapDataRequest {
 
         // then set a timeout to start the first refresh
         this.refreshOnTimeout(STARTUP_REFRESH);
-        this.setStatus("refreshing", undefined, -1);
+        this.updateStatus();
 
         this.cache.startExpireInterval(15);
     }
@@ -179,7 +177,7 @@ export class MapDataRequest {
     mapMoveStart() {
         log.log("refresh map movestart");
 
-        this.setStatus("paused");
+        this.clearStatus();
         this.clearTimeout();
         this.pauseRenderQueue(true);
     }
@@ -197,7 +195,7 @@ export class MapDataRequest {
                 const remainingTime = (this.timerExpectedTimeoutTime - Date.now()) / 1000;
 
                 if (remainingTime > MOVE_REFRESH) {
-                    this.setStatus("done", "Map moved, but no data updates needed");
+                    this.clearStatus();
                     this.refreshOnTimeout(remainingTime);
                     this.pauseRenderQueue(false);
                     return;
@@ -205,7 +203,7 @@ export class MapDataRequest {
             }
         }
 
-        this.setStatus("refreshing", undefined, -1);
+        this.updateStatus();
         this.refreshOnTimeout(MOVE_REFRESH);
     }
 
@@ -215,7 +213,7 @@ export class MapDataRequest {
         if (this.idle) {
             log.log("refresh map idle resume");
             this.idle = false;
-            this.setStatus("idle restart", undefined, -1);
+            this.updateStatus();
             this.refreshOnTimeout(IDLE_RESUME_REFRESH);
         }
     }
@@ -244,15 +242,22 @@ export class MapDataRequest {
     }
 
 
-    setStatus(short: string, long?: string, progress?: number) {
-        this.status = { short, long, progress };
-        window.renderUpdateStatus();
+    updateStatus(): void {
+        const allTiles = this.requestedTileCount;
+        const loaded = this.failedTileCount + this.successTileCount + this.staleTileCount;
+        // const failed = this.failedRequestCount;
+
+        mapStatus.update({
+            total: allTiles,
+            done: loaded,
+            failed: this.failedTileCount
+        });
     }
 
-
-    getStatus(): RequestStatus {
-        return this.status;
+    clearStatus(): void {
+        mapStatus.update();
     }
+
 
 
     refresh() {
@@ -260,7 +265,7 @@ export class MapDataRequest {
         // if we're idle, don't refresh
         if (idle.isIdle()) {
             log.log("suspending map refresh - is idle");
-            this.setStatus("idle");
+            this.clearStatus();
             this.idle = true;
             return;
         }
@@ -375,7 +380,7 @@ export class MapDataRequest {
 
         tilesToFetch.forEach(qk => this.queuedTiles[qk] = qk);
 
-        this.setStatus("loading", undefined, -1);
+        this.updateStatus();
 
         // technically a request hasn't actually finished - however, displayed portal data has been refreshed
         // so as far as plugins are concerned, it should be treated as a finished request
@@ -454,16 +459,7 @@ export class MapDataRequest {
         }
 
 
-        // update status
-        const pendingTileCount = this.requestedTileCount - (this.successTileCount + this.failedTileCount + this.staleTileCount);
-        const longText = "Tiles: " + this.cachedTileCount + " cached, " +
-            this.successTileCount + " loaded, " +
-            (this.staleTileCount ? this.staleTileCount + " stale, " : "") +
-            (this.failedTileCount ? this.failedTileCount + " failed, " : "") +
-            pendingTileCount + " remaining";
-
-        const progress = this.requestedTileCount > 0 ? (this.requestedTileCount - pendingTileCount) / this.requestedTileCount : undefined;
-        this.setStatus("loading", longText, progress);
+        this.updateStatus();
     }
 
 
@@ -773,17 +769,13 @@ export class MapDataRequest {
 
             window.runHooks("mapDataRefreshEnd", {});
 
-            const longStatus = "Tiles: " + this.cachedTileCount + " cached, " +
-                this.successTileCount + " loaded, " +
-                (this.staleTileCount ? this.staleTileCount + " stale, " : "") +
-                (this.failedTileCount ? this.failedTileCount + " failed, " : "") +
-                "in " + duration + " seconds";
 
             // refresh timer based on time to run this pass, with a minimum of REFRESH seconds
             const minRefresh = window.map.getZoom() > 12 ? REFRESH_CLOSE : REFRESH_FAR;
             const refreshTimer = Math.max(minRefresh, duration * FETCH_TO_REFRESH_FACTOR);
             this.refreshOnTimeout(refreshTimer);
-            this.setStatus(this.failedTileCount ? "errors" : this.staleTileCount ? "out of date" : "done", longStatus);
+
+            this.updateStatus();
         }
     }
 }
