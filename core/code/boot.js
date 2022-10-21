@@ -219,7 +219,6 @@ function boot() {
   window.updateGameScore();
   window.search.setup();
   window.portalDetail.setup();
-  window.setupRedeem();
   window.setupSidebar();
 
   setupMenu();
