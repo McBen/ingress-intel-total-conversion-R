@@ -6,7 +6,6 @@ window.setupSidebar = function () {
     window.setupPlayerStat();
     setupSidebarToggle();
     setupLargeImagePreview();
-    setupAddons();
     $('#sidebar').show();
 };
 
@@ -127,34 +126,4 @@ function setupLargeImagePreview() {
             width: dlgWidth,
         });
     });
-}
-
-// fixed Addons ****************************************************************
-
-function setPermaLink() {
-    this.href = window.makePermalink(null, true);
-}
-
-function setupAddons() {
-    $('<a>')
-        .html('Permalink')
-        .attr({
-            id: 'permalink',
-            title: 'URL link to this map view'
-        })
-        .on({
-            mouseover: setPermaLink,
-            click: setPermaLink
-        })
-        .appendTo('#toolbox');
-
-    $('<a>')
-        .html('About IITC')
-        .attr('id', 'about-iitc')
-        .css('cursor', 'help')
-        .click(aboutIITC)
-        .appendTo('#toolbox');
-
-
-    window.artifact.setup();
 }
