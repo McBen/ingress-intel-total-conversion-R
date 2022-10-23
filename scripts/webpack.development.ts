@@ -14,6 +14,19 @@ export default merge(configure, {
         enforce: "pre",
         use: ["source-map-loader"],
       },
+      {
+        test: /\.tsx?$/,
+        enforce: 'pre',
+        exclude: /(node_modules|\.spec\.js)/,
+        use: [{
+          loader: 'webpack-strip-block',
+          options: {
+            start: 'RELEASE-START',
+            end: 'RELEASE-END'
+          }
+        }]
+      },
     ]
-  }
+  },
+
 });

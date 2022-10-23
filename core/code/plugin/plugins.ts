@@ -15,12 +15,16 @@ export class Plugin {
     enable(manager: PluginManager): boolean {
         if (!this.activateRequirements(manager)) return false;
 
-        // try {
-        this.activate();
-        /* } catch {
+        /* RELEASE-START */
+        try {
+            /* RELEASE-END */
+            this.activate();
+            /* RELEASE-START */
+        } catch {
             this.error = "failed to initialize";
             return false;
-        }*/ // TODO this should only be in release
+        }
+        /* RELEASE-END */
 
         this.activated++;
     }
