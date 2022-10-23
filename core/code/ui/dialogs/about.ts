@@ -28,13 +28,6 @@ const createDialogContent = (): string => {
         + "<hr>"
         + "<div>"
         + `  <a href="${Homepage}" target="_blank">IITC Homepage</a> |`
-        + "   On the script's homepage you can:"
-        + "   <ul>"
-        + "     <li>Find Updates</li>"
-        + "     <li>Get Plugins</li>"
-        + "     <li>Report Bugs</li>"
-        + "     <li>Contribute!</li>"
-        + "   </ul>"
         + "</div>"
         + "<hr>"
         + "<div>Version: " + getIITCVersion() + "</div>";
@@ -42,12 +35,6 @@ const createDialogContent = (): string => {
     if (isShortOnLocalStorage()) {
         html += '<div class="warning">You are running low on LocalStorage memory.<br/>Please free some space to prevent data loss.</div>';
     }
-
-    /*  TODO: Add me
-       if (window.isApp && app.getVersionName) {
-            html += '<div>IITC Mobile ' + app.getVersionName() + '</div>';
-        }
-        */
 
     const plugins = getPlugins();
     if (plugins) {
@@ -63,7 +50,7 @@ const getPlugins = (): string => {
     const pluginNames = IITC.plugins.getListOfActivePlugins();
     const plugins = pluginNames.map(pname => {
         const plugin = IITC.plugins.getPlugin(pname);
-        return pluginInfoToString(plugin!)
+        return pluginInfoToString(plugin)
     });
 
     return plugins.join("\n");
