@@ -309,8 +309,8 @@ export class MapDataRequest {
 
         window.runHooks("mapDataEntityInject", { callback: this.render.processGameEntities.bind(this.render) });
 
-
-        this.render.processGameEntities(artifact.getArtifactEntities(), "summary");
+        // TODO special artifacts handling
+        // this.render.processGameEntities(artifact.getArtifactEntities(), "summary");
 
         let logMessage = `requesting data tiles at zoom ${dataZoom}`;
         logMessage += " (L" + tiles.level + "+ portals";
