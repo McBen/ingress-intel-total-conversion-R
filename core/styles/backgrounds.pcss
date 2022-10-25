@@ -1,0 +1,63 @@
+:root {
+    --iitc-border-color: #ad1ba5;
+    --iitc-border-color_hi: #b002b0;
+    --iitc-bg-color: #252222ff;
+    --iitc-bg-color-trans: rgba(37, 34, 34, 0.9);
+    --iitc-bg-color-trans2: rgba(37, 34, 34,0.8);
+    --iitc-bg-color-hi: #353030ff;
+    --iitc-text: #f0f0f0ff;
+    --iitc-text-highlit: #FFCE00;
+    --iitc-button-bg: rgba(72, 42, 72, 0.9);
+}
+
+
+
+.iitcontainer {
+    z-index: 1000;
+    position: fixed;
+}
+
+.iitcbar {
+    color: var(--iitc-text);
+    display: inline-block;
+    background-size: 100% 26px;
+    height: 26px;
+    box-shadow: 0px 8px 16px -8px #000000;
+    padding: 0 10px 0 10px;
+    /* background: black; */
+
+    &.top {
+        background-image: url("../../assets/images/menu/bg2.png");
+    }
+    &.bottom {
+        background-image: url("../../assets/images/menu/bg5.png");
+    }
+}
+
+.iitcbaredge {
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    width: 20px;
+    height: 26px;
+    display: inline-block;
+    vertical-align: bottom;
+
+    &.topleft {
+        background-image: url("../../assets/images/menu/bg1.png");
+    }
+
+    &.topright {
+        background-image: url("../../assets/images/menu/bg3.png");
+    }        
+
+    &.bottomleft {
+        vertical-align: top;
+        background-image: url("../../assets/images/menu/bg4.png");
+    }
+
+    &.bottomright {
+        vertical-align: top;
+        background-image: url("../../assets/images/menu/bg6.png");
+    }        
+}
+

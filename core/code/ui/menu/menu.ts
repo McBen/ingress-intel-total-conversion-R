@@ -37,7 +37,7 @@ export class IITCMenu extends MenuDialog {
     constructor() {
         super();
 
-        this.root.attr("class", "iitcbars");
+        this.root.attr("class", "iitcbar top");
     }
 
     getBaseMenuElement(): JQuery {
@@ -231,8 +231,9 @@ export const setupMenu = (): void => {
 
     initializeMenu(iitcmenu);
 
-    const menu = $("<div>", { class: "iitcontainer" }).append(
-        iitcmenu.getBaseMenuElement()
+    const menu = $("<div>", { class: "iitcontainer iitcmenu" }).append(
+        iitcmenu.getBaseMenuElement(),
+        $("<span>", { class: "iitcbaredge topright" })
     );
 
     $("body").append(menu);

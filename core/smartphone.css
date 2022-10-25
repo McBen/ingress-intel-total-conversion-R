@@ -2,18 +2,6 @@ body {
   color: #fff;
 }
 
-#updatestatus {
-  background: #262c32;
-  width: 100%;
-  color: #d4d5d6;
-  border: 0;
-  padding: 0;
-}
-
-#updatestatus .map {
-  margin-left: 4px;
-}
-
 #innerstatus {
   padding: 4px;
   float: right;
@@ -52,7 +40,8 @@ body {
 
 #mobileinfo .resonator {
   position: absolute;
-  width: 12%; /* a little less that 1/8 to have a small distance */
+  width: 12%;
+  /* a little less that 1/8 to have a small distance */
   height: 100%;
   top: 0;
   border-top: 3px solid red;
@@ -109,9 +98,11 @@ body {
 #searchwrapper {
   font-size: 1.2em;
 }
+
 #searchwrapper .ui-accordion-header {
   padding: 0.3em 0;
 }
+
 #searchwrapper li {
   line-height: 1.3em;
 }
@@ -163,7 +154,7 @@ body {
   font-weight: bold;
 }
 
-#chatcontrols a.active + a {
+#chatcontrols a.active+a {
   border-left-color: #ffce00;
 }
 
@@ -185,7 +176,7 @@ body {
   border: 0;
 }
 
-#sidebar > * {
+#sidebar>* {
   width: 100%;
 }
 
@@ -217,7 +208,7 @@ body {
   border: 2px outset #20a8b1;
 }
 
-#toolbox > a {
+#toolbox>a {
   padding: 5px;
   margin-top: 3px;
   margin-bottom: 3px;

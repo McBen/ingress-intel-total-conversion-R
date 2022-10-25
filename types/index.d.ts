@@ -67,6 +67,7 @@ declare global {
             addPortal: (p: IITC.Portal) => void,
             removePortal: (p: IITC.Portal) => void
         }
+
     }
 
     const artifact: {
