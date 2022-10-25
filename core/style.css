@@ -1,5 +1,6 @@
 @import "styles/leaflet_tweaks";
 @import "styles/print";
+@import "styles/backgrounds.pcss";
 @import "styles/chat.pcss";
 @import "styles/dialog.pcss";
 @import "styles/sidebar.pcss";

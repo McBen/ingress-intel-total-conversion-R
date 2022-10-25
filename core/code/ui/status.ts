@@ -20,9 +20,9 @@ export class MapStatusBar {
 
 
     createControl(): void {
-        $("<div>", { class: "iitcontainer bottom statusbar" }).append(
+        $("<div>", { class: "iitcontainer statusbar" }).append(
             $("<span>", { class: "iitcbaredge bottomleft" }),
-            $("<div>", { id: "mapstatus", class: "iitcbars bottom" }).append(
+            $("<div>", { id: "mapstatus", class: "iitcbar bottom" }).append(
                 $("<div>", { class: "progress loaded" }),
                 $("<div>", { class: "progress loaderror" }),
                 $("<span>", { class: "zoomdetails" })
