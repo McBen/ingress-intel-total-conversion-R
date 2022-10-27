@@ -1,5 +1,5 @@
 import { PasscodeDialog } from "../dialogs/passcode";
-import { SearchDialog } from "../dialogs/search";
+import { SearchDialog } from "../dialogs/search/dialog";
 import { IITCMenu } from "./menu";
 import { GLOPT, IITCOptions } from "../../helper/options";
 import { toast } from "../toast";
