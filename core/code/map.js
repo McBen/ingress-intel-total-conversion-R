@@ -1,4 +1,5 @@
 /* global log -- eslint */
+import { addHook } from "./helper/hooks";
 import { MapDataRequest } from "./map/map_data_request";
 
 function setupCRS() {
@@ -34,7 +35,7 @@ function setupCRS() {
   });
 }
 
-function normLL (lat, lng, zoom) {
+function normLL(lat, lng, zoom) {
   return {
     center: [
       parseFloat(lat) || 0,
@@ -45,7 +46,7 @@ function normLL (lat, lng, zoom) {
 }
 
 // retrieves the last shown position from URL or from a cookie
-function getPosition () {
+function getPosition() {
   var url = window.getURLParam;
 
   var zoom = url('z');
@@ -53,7 +54,7 @@ function getPosition () {
   var lngE6 = url('lngE6');
   if (latE6 && lngE6) {
     log.log('mappos: reading email URL params');
-    return normLL(parseInt(latE6)/1E6, parseInt(lngE6)/1E6, zoom);
+    return normLL(parseInt(latE6) / 1E6, parseInt(lngE6) / 1E6, zoom);
   }
 
   var ll = url('ll') || url('pll');
@@ -71,7 +72,7 @@ function getPosition () {
   }
 }
 
-function createDefaultBaseMapLayers () {
+function createDefaultBaseMapLayers() {
   var baseLayers = {};
 
   /*
@@ -90,35 +91,40 @@ function createDefaultBaseMapLayers () {
   // (not available over https though - not on the right domain name anyway)
   var cartoAttr = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, &copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
   var cartoUrl = 'https://{s}.basemaps.cartocdn.com/{theme}/{z}/{x}/{y}.png';
-  baseLayers['CartoDB Dark Matter'] = L.tileLayer(cartoUrl, {attribution: cartoAttr, theme: 'dark_all'});
-  baseLayers['CartoDB Positron'] = L.tileLayer(cartoUrl, {attribution: cartoAttr, theme: 'light_all'});
+  baseLayers['CartoDB Dark Matter'] = L.tileLayer(cartoUrl, { attribution: cartoAttr, theme: 'dark_all' });
+  baseLayers['CartoDB Positron'] = L.tileLayer(cartoUrl, { attribution: cartoAttr, theme: 'light_all' });
 
   // Google Maps - including ingress default (using the stock-intel API-key)
   baseLayers['Google Default Ingress Map'] = L.gridLayer.googleMutant(
-    { type: 'roadmap',
+    {
+      type: 'roadmap',
       backgroundColor: '#0e3d4e',
       styles: [
-        { featureType: 'all', elementType: 'all',
-          stylers: [{visibility: 'on'}, {hue: '#131c1c'}, {saturation: '-50'}, {invert_lightness: true}] },
-        { featureType: 'water', elementType: 'all',
-          stylers: [{visibility: 'on'}, {hue: '#005eff'}, {invert_lightness: true}] },
-        { featureType: 'poi', stylers: [{visibility: 'off'}] },
-        { featureType: 'transit', elementType: 'all', stylers: [{visibility: 'off'}] },
-        { featureType: 'road', elementType: 'labels.icon', stylers: [{invert_lightness: !0}] }
+        {
+          featureType: 'all', elementType: 'all',
+          stylers: [{ visibility: 'on' }, { hue: '#131c1c' }, { saturation: '-50' }, { invert_lightness: true }]
+        },
+        {
+          featureType: 'water', elementType: 'all',
+          stylers: [{ visibility: 'on' }, { hue: '#005eff' }, { invert_lightness: true }]
+        },
+        { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+        { featureType: 'transit', elementType: 'all', stylers: [{ visibility: 'off' }] },
+        { featureType: 'road', elementType: 'labels.icon', stylers: [{ invert_lightness: !0 }] }
       ],
     });
-  baseLayers['Google Roads'] = L.gridLayer.googleMutant({type: 'roadmap'});
-  var trafficMutant = L.gridLayer.googleMutant({type: 'roadmap'});
+  baseLayers['Google Roads'] = L.gridLayer.googleMutant({ type: 'roadmap' });
+  var trafficMutant = L.gridLayer.googleMutant({ type: 'roadmap' });
   trafficMutant.addGoogleLayer('TrafficLayer');
   baseLayers['Google Roads + Traffic'] = trafficMutant;
-  baseLayers['Google Satellite'] = L.gridLayer.googleMutant({type: 'satellite'});
-  baseLayers['Google Hybrid'] = L.gridLayer.googleMutant({type: 'hybrid'});
-  baseLayers['Google Terrain'] = L.gridLayer.googleMutant({type: 'terrain'});
+  baseLayers['Google Satellite'] = L.gridLayer.googleMutant({ type: 'satellite' });
+  baseLayers['Google Hybrid'] = L.gridLayer.googleMutant({ type: 'hybrid' });
+  baseLayers['Google Terrain'] = L.gridLayer.googleMutant({ type: 'terrain' });
 
   return baseLayers;
 }
 
-function createDefaultOverlays () {
+function createDefaultOverlays() {
   /* global portalsFactionLayers: true, linksFactionLayers: true, fieldsFactionLayers: true -- eslint*/
   /* eslint-disable dot-notation  */
 
@@ -215,7 +221,7 @@ window.setupMap = function () {
   map.addLayer(overlays.Neutral);
   delete overlays.Neutral;
 
-  var layerChooser = window.layerChooser = new window.LayerChooser(baseLayers, overlays, {map: map})
+  var layerChooser = window.layerChooser = new window.LayerChooser(baseLayers, overlays, { map: map })
     .addTo(map);
 
   $.each(overlays, function (_, layer) {
@@ -224,9 +230,9 @@ window.setupMap = function () {
     // as users often become confused if they accidentally switch a standard layer off, display a warning in this case
     $('#portaldetails')
       .html('<div class="layer_off_warning">'
-         + '<p><b>Warning</b>: some of the standard layers are turned off. Some portals/links/fields will not be visible.</p>'
-         + '<a id="enable_standard_layers">Enable standard layers</a>'
-         + '</div>');
+        + '<p><b>Warning</b>: some of the standard layers are turned off. Some portals/links/fields will not be visible.</p>'
+        + '<a id="enable_standard_layers">Enable standard layers</a>'
+        + '</div>');
     $('#enable_standard_layers').on('click', function () {
       $.each(overlays, function (ind, overlay) {
         if (!map.hasLayer(overlay)) {
@@ -258,7 +264,7 @@ window.setupMap = function () {
   });
   map.on('moveend', function () {
     window.mapRunsUserAction = false;
-    window.startRefreshTimeout(window.ON_MOVE_REFRESH*1000);
+    window.startRefreshTimeout(window.ON_MOVE_REFRESH * 1000);
   });
 
   // set a 'moveend' handler for the map to clear idle state. e.g. after mobile 'my location' is used.
@@ -266,7 +272,7 @@ window.setupMap = function () {
   map.on('moveend', window.idleReset);
 
   window.addResumeFunction(function () {
-    window.startRefreshTimeout(window.ON_MOVE_REFRESH*1000);
+    window.startRefreshTimeout(window.ON_MOVE_REFRESH * 1000);
   });
 
   // create the map data requester
@@ -276,21 +282,21 @@ window.setupMap = function () {
   // start the refresh process with a small timeout, so the first data request happens quickly
   // (the code originally called the request function directly, and triggered a normal delay for the next refresh.
   //  however, the moveend/zoomend gets triggered on map load, causing a duplicate refresh. this helps prevent that
-  window.startRefreshTimeout(window.ON_MOVE_REFRESH*1000);
+  window.startRefreshTimeout(window.ON_MOVE_REFRESH * 1000);
 
   // adds a base layer to the map. done separately from the above,
   // so that plugins that add base layers can be the default
-  window.addHook('iitcLoaded', function () {
+  addHook('iitcLoaded', function () {
     var stored = layerChooser.getLayer(layerChooser.lastBaseLayerName);
     map.addLayer(stored || baseLayers['CartoDB Dark Matter']);
 
     // (setting an initial position, before a base layer is added, causes issues with leaflet) // todo check
     var pos = getPosition();
     if (!pos) {
-      pos = {center: [0, 0], zoom: 1};
-      map.locate({setView: true});
+      pos = { center: [0, 0], zoom: 1 };
+      map.locate({ setView: true });
     }
-    map.setView(pos.center, pos.zoom, {reset: true});
+    map.setView(pos.center, pos.zoom, { reset: true });
 
     // read here ONCE, so the URL is only evaluated one time after the
     // necessary data has been loaded.

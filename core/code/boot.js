@@ -217,7 +217,6 @@ function boot() {
   window.setupTooltips();
   window.chat.setup();
   window.updateGameScore();
-  window.search.setup();
   window.portalDetail.setup();
   window.setupSidebar();
 

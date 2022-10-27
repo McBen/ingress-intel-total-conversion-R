@@ -1,19 +1,20 @@
+/* eslint-disable @typescript-eslint/no-empty-interface */
 /* tslint:disable:no-namespace */
 /* tslint:disable:no-empty-interface */
 
 // geodesic
 declare namespace L {
-    interface GeodesicPolylineStatic extends PolylineStatic { }
+    interface GeodesicPolylineStatic extends L.Polyline { }
     export const GeodesicPolyline: GeodesicPolylineStatic;
     export interface GeodesicPolyline extends Polyline {
         getLatLngs(): L.LatLng[];
     }
 
-    interface GeodesicPolygonStatic extends PolygonStatic { }
+    interface GeodesicPolygonStatic extends L.Polygon { }
     export const GeodesicPolygon: GeodesicPolygonStatic;
     export interface GeodesicPolygon extends GeodesicPolyline { }
 
-    interface GeodesicCircleStatic extends PolylineStatic { }
+    interface GeodesicCircleStatic extends L.Polyline { }
     export const GeodesicCircle: GeodesicCircleStatic;
     export interface GeodesicCircle extends GeodesicPolyline { }
 

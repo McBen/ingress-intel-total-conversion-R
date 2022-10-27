@@ -5,7 +5,6 @@ require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"entity_de
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"entity_info.js\")!./entity_info.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"extract_niantic_parameters.js\")!./extract_niantic_parameters.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"game_status.js\")!./game_status.js");
-require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"hooks.js\")!./hooks.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"layerchooser.js\")!./layerchooser.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"map.js\")!./map.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"ornaments.js\")!./ornaments.js");
