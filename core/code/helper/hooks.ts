@@ -1,3 +1,7 @@
+import { Log, LogApp } from "../helper/log_apps";
+const log = Log(LogApp.Events);
+
+
 // PLUGIN HOOKS ////////////////////////////////////////////////////////
 // Plugins may listen to any number of events by specifying the name of
 // the event to listen to and handing a function that should be exe-
@@ -67,60 +71,58 @@
 // geoSearch:
 // search:
 
-window._hooks = {};
-window.VALID_HOOKS = []; // stub for compatibility
 
-var isRunning = 0;
-window.runHooks = function(event, data) {
-  if (!_hooks[event]) { return true; }
-  var interrupted = false;
-  isRunning++;
-  $.each(_hooks[event], function (ind, callback) {
-    // try {
-    if (callback(data) === false) {
-      interrupted = true;
-      return false; // break from $.each
-    }
-    // FIXME catch error only in production code
-    /* } catch (e) {
-      log.error('error running hook', { event: event, error: e, source: callback && callback.toString(), data: data });
-    } */
-  });
-  isRunning--;
-  return !interrupted;
+
+type HookCallback = (data: any) => boolean | void;
+
+/*
+type EventMapDataRefreshStart = { bounds: L.LatLngBounds, mapZoom: number, dataZoom: number, minPortalLevel: number, tileBounds: L.LatLngBounds };
+type mapDataRefreshStart_hook = (event: "mapDataRefreshStart", callback: (e: EventMapDataRefreshStart) => void) => void;
+type generic_hook = (event: string, callback: HookCallback) => void;
+*/
+
+export const hooks: { [index: string]: HookCallback[] } = {};
+
+let isRunning = 0;
+
+export const runHooks = (event: string, data: any): boolean => {
+    if (!hooks[event]) { return true; }
+
+    isRunning++;
+    const interrupted = hooks[event].every(callback => {
+        if (callback(data) === false) {
+            return false;
+        } else {
+            return true;
+        }
+    });
+
+    isRunning--;
+    return !interrupted;
 };
 
-window.pluginCreateHook = function() {}; // stub for compatibility
 
-window.addHook = function(event, callback) {
-  if (typeof callback !== 'function') {
-    throw new Error('Callback must be a function.');
-  }
-
-  if (!_hooks[event]) {
-    _hooks[event] = [callback];
-  } else {
-    _hooks[event].push(callback);
-  }
+export const addHook = (event: string, callback: HookCallback) => {
+    if (!hooks[event]) {
+        hooks[event] = [callback];
+    } else {
+        hooks[event].push(callback);
+    }
 };
 
 // callback must the SAME function to be unregistered.
-window.removeHook = function(event, callback) {
-  if (typeof callback !== 'function') {
-    throw new Error('Callback must be a function.');
-  }
-
-  var listeners = _hooks[event];
-  if (listeners) {
-    var index = listeners.indexOf(callback);
-    if (index === -1) {
-      log.warn("Callback wasn't registered for this event.");
-    } else {
-      if (isRunning) {
-        listeners[index] = $.noop;
-        _hooks[event] = listeners = listeners.slice();
-      }
-      listeners.splice(index, 1);
+export const removeHook = (event: string, callback: HookCallback) => {
+    let listeners = hooks[event];
+    if (listeners) {
+        const index = listeners.indexOf(callback);
+        if (index === -1) {
+            log.warn("Callback wasn't registered for this event.");
+        } else {
+            if (isRunning) {
+                listeners[index] = () => {/* noop */ };
+                hooks[event] = listeners = listeners.slice();
+            }
+            listeners.splice(index, 1);
+        }
     }
-  }
 };

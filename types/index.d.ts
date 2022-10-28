@@ -31,9 +31,8 @@ declare global {
     function pushPortalGuidPositionCache(guid: PortalGUID, latE6: number, lngE6: number): void;
     function show(paneID: string): void;
     function isSmartphone(): boolean;
-
-    function addHook(event: string, callback: (data: any) => void);
-    function runHooks(event: string, data: any): void;
+    function zoomToAndShowPortal(guid: PortalGUID, pos: L.LatLng): void;
+    function selectPortalByLatLng(pos: L.LatLng): void;
 
     interface Window {
         isApp: boolean | undefined;

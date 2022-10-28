@@ -1,4 +1,5 @@
 /* global android, app -- eslint */
+import { addHook } from "./helper/hooks";
 
 var isApp = typeof app !== 'undefined' || typeof android !== 'undefined';
 window.isApp = isApp;
@@ -24,7 +25,7 @@ if (isApp) {
   };
 }
 
-function debounce (callback, time) { // https://gist.github.com/nmsdvid/8807205#gistcomment-2641356
+function debounce(callback, time) { // https://gist.github.com/nmsdvid/8807205#gistcomment-2641356
   var timeout;
   return function () {
     var context = this;
@@ -39,7 +40,7 @@ function debounce (callback, time) { // https://gist.github.com/nmsdvid/8807205#
   };
 }
 
-function extendLayerChooser () {
+function extendLayerChooser() {
   if (app.setLayers) {
     // hook some additional code into the LayerControl so it's easy for the mobile app to interface with it
     window.LayerChooser.include({
@@ -101,7 +102,7 @@ window.runOnAppBeforeBoot = function () {
 
   // add iitc hooks ************************************************************
   if (app.switchToPane) {
-    window.addHook('paneChanged', function (name) { // https://stackoverflow.com/a/59158952/2520247
+    addHook('paneChanged', function (name) { // https://stackoverflow.com/a/59158952/2520247
       app.switchToPane(name);
     });
   }
@@ -156,7 +157,7 @@ window.runOnAppAfterBoot = function () {
     };
 
     window.map.on('moveend', setAppPermalink);
-    window.addHook('portalSelected', setAppPermalink);
+    addHook('portalSelected', setAppPermalink);
   }
 
   // hide layer chooser if booted with the iitcm app

@@ -2,6 +2,7 @@ import * as L from "leaflet";
 import { DEFAULT_ZOOM, FACTION, FACTION_COLORS } from "../constants";
 import { TileData } from "./map_data_request";
 import { Log, LogApp } from "../helper/log_apps";
+import { runHooks } from "../helper/hooks";
 const log = Log(LogApp.Map);
 
 
@@ -216,7 +217,7 @@ export class Render {
             window.ornaments.removePortal(portal);
             this.removePortalFromMapLayer(portal);
             delete window.portals[guid];
-            window.runHooks("portalRemoved", { portal, data: portal.options.data });
+            runHooks("portalRemoved", { portal, data: portal.options.data });
         }
     }
 
@@ -225,7 +226,7 @@ export class Render {
         if (link) {
             linksFactionLayers[link.options.team].removeLayer(link);
             delete window.links[guid];
-            window.runHooks("linkRemoved", { link, data: link.options.data });
+            runHooks("linkRemoved", { link, data: link.options.data });
         }
     }
 
@@ -235,7 +236,7 @@ export class Render {
         if (field) {
             fieldsFactionLayers[field.options.team].removeLayer(field);
             delete window.fields[guid];
-            window.runHooks("fieldRemoved", { field, data: field.options.data });
+            runHooks("fieldRemoved", { field, data: field.options.data });
         }
     }
 
@@ -344,7 +345,7 @@ export class Render {
             }
         });
 
-        window.runHooks("portalAdded", { portal: marker, previousData });
+        runHooks("portalAdded", { portal: marker, previousData });
 
         window.portals[ent[0]] = marker;
 
