@@ -46,8 +46,7 @@ export class SearchDialog {
         dialog({
             title: "Search",
             html,
-            resizable: true,
-            id: "theonlysearchdialog" // TODO move search logic here to support multiple dialogs
+            resizable: true
         })
     }
 }
