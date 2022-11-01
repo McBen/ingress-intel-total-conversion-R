@@ -9,6 +9,7 @@ import { checkCookieLaw } from "./ui/dialogs/cookielaw";
 import { setupMenu } from "./ui/menu/menu";
 import { updateGameScore } from "./ui/gamescore";
 import { setupDataTileParameters } from "./map/map_data_calc_tools";
+import { setupMap } from "./map/map";
 import { IITC } from "./IITC";
 
 const log = anylogger("Boot");
@@ -211,7 +212,7 @@ function boot() {
   window.extractFromStock();
   setupDataTileParameters();
   require("./map/idle.ts"); // or idle.reset()
-  window.setupMap();
+  setupMap();
   window.setupOMS();
   window.ornaments.setup();
   layerChooser._lastPriority = 1000; // plugins overlays have priority >1000

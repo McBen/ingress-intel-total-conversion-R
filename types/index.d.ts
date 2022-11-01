@@ -16,6 +16,7 @@ type TileID = string;
 // TODO remove old interface
 // OLD IITC interface ... these should be replaced
 declare global {
+
     function load(name: string): any;
     function dialog(options: any): JQuery;
     function formatPasscodeLong(a: any): any;
@@ -35,6 +36,12 @@ declare global {
     function selectPortalByLatLng(pos: L.LatLng): void;
 
     interface Window {
+
+        // Options for 3rd Party
+        RENDERER_PADDING: number | undefined;
+        PREFER_CANVAS: boolean | undefined;
+        mapOptions: L.MapOptions;
+
         isApp: boolean | undefined;
         plugin: any;
         bootPlugins: BootCallback[];
@@ -82,9 +89,9 @@ declare global {
         TILES_PER_EDGE?: number[]
     }
 
-    const portalsFactionLayers: L.LayerGroup[][];
-    const linksFactionLayers: L.LayerGroup[];
-    const fieldsFactionLayers: L.LayerGroup[];
+    let portalsFactionLayers: L.LayerGroup[][];
+    let linksFactionLayers: L.LayerGroup[];
+    let fieldsFactionLayers: L.LayerGroup[];
 
     /** guid of current selected portal */
     let selectedPortal: PortalGUID | null;

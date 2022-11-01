@@ -11,7 +11,8 @@ export const FACTION_CSS = ["none", "res", "enl"];
 export const COLORS_LVL = ["#000", "#FECE5A", "#FFA630", "#FF7315", "#E40000", "#FD2992", "#EB26CD", "#C124E0", "#9627F4"];
 
 /**
- * min zoom for intel map - should match that used by stock intel
+ * min zoom for intel map
+ * should match that used by stock intel
  */
 export const MIN_ZOOM = 3;
 /**

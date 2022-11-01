@@ -28,4 +28,9 @@ declare namespace L {
     export interface MarkerOptions {
         interactive?: boolean;
     }
+
+    export interface GridLayer {
+        googleMutant(options: any): TileLayer;
+    }
+
 }
