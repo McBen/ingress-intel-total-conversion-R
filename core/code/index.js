@@ -15,9 +15,7 @@ require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"portal_de
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"portal_highlighter.js\")!./portal_highlighter.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"portal_info.js\")!./portal_info.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"portal_marker.js\")!./portal_marker.js");
-require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"request_handling.js\")!./request_handling.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"sidebar.js\")!./sidebar.js");
-require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"send_request.js\")!./send_request.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"smartphone.js\")!./smartphone.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"utils_misc_old.js\")!./utils_misc_old.js");
 

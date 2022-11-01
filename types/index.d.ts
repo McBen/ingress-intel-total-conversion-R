@@ -20,7 +20,6 @@ declare global {
     function load(name: string): any;
     function dialog(options: any): JQuery;
     function formatPasscodeLong(a: any): any;
-    function postAjax(request: string, options: any, callbackA: any, callbackB?: any): any;
     function setupPlayerStat(): void;
     function useAppPanes(): boolean;
     function renderPortalDetails(guid: PortalGUID | null): void;
@@ -86,7 +85,8 @@ declare global {
 
     const niantic_params: {
         ZOOM_TO_LEVEL?: number[],
-        TILES_PER_EDGE?: number[]
+        TILES_PER_EDGE?: number[],
+        CURRENT_VERSION: string
     }
 
     let portalsFactionLayers: L.LayerGroup[][];
