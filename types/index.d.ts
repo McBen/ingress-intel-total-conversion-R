@@ -19,7 +19,7 @@ declare global {
     function load(name: string): any;
     function dialog(options: any): JQuery;
     function formatPasscodeLong(a: any): any;
-    function postAjax(request: string, options: any, callbackA: any, callbackB: any): any;
+    function postAjax(request: string, options: any, callbackA: any, callbackB?: any): any;
     function setupPlayerStat(): void;
     function useAppPanes(): boolean;
     function renderPortalDetails(guid: PortalGUID | null): void;

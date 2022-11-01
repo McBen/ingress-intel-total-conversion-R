@@ -7,6 +7,7 @@ localStorage.setItem('log', '*=debug'); // localStorage.setItem('log', '*=debug,
 import anylogger from "anylogger"
 import { checkCookieLaw } from "./ui/dialogs/cookielaw";
 import { setupMenu } from "./ui/menu/menu";
+import { updateGameScore } from "./ui/gamescore";
 import { setupDataTileParameters } from "./map/map_data_calc_tools";
 import { IITC } from "./IITC";
 
@@ -216,7 +217,7 @@ function boot() {
   layerChooser._lastPriority = 1000; // plugins overlays have priority >1000
   window.setupTooltips();
   window.chat.setup();
-  window.updateGameScore();
+  updateGameScore();
   window.portalDetail.setup();
   window.setupSidebar();
 
