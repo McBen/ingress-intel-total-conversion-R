@@ -56,12 +56,6 @@ const REFRESH_CLOSE = 300;  // refresh time to use for close views z>12 when not
 const REFRESH_FAR = 900;  // refresh time for far views z <= 12
 const FETCH_TO_REFRESH_FACTOR = 2;  // minimum refresh time is based on the time to complete a data fetch, times this value
 
-interface RequestStatus {
-    short: string,
-    long?: string,
-    progress?: number
-}
-
 
 interface RenderQueueEntry {
     id: TileID,
@@ -776,3 +770,6 @@ export class MapDataRequest {
         }
     }
 }
+
+
+export const mapDataRequest = new MapDataRequest();
