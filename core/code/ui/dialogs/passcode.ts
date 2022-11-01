@@ -96,12 +96,17 @@ export class PasscodeDialog {
         return section;
     }
 
-
     handleError(passcode: string, response: JQuery.jqXHR<any>): void {
+        const StatusText: { [index: number]: string } = {
+            429: "You have been rate-limited by the server. Wait a bit and try again.",
+            500: "Internal server error"
+        };
+
+
         let extra = "";
         if (response.status) {
-            extra = (window.REDEEM_STATUSES[response.status] || "The server indicated an error.") +
-                " (HTTP " + response.status + ")";
+            const errorText = StatusText[response.status] || "The server indicated an error.";
+            extra = errorText + " (HTTP " + response.status.toString() + ")";
         } else {
             extra = "Connection problem.";
         }

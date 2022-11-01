@@ -41,7 +41,6 @@ declare global {
         iitcLoaded: boolean;
         map: L.Map;
         layerChooser: L.Control.Layers;
-        REDEEM_STATUSES: { [key: number]: string };
 
         search: {
             setup: () => void
