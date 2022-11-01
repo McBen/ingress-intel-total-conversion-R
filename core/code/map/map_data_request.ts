@@ -7,7 +7,7 @@ import { clampLatLngBounds } from "../utils_misc";
 import { getDataZoomForMapZoom, getMapZoomTileParameters, latToTile, lngToTile, pointToTileId, tileToLat, tileToLng } from "./map_data_calc_tools";
 import { Log, LogApp } from "../helper/log_apps";
 import { idle } from "./idle";
-import { mapStatus, MapStatus } from "../ui/status";
+import { mapStatus } from "../ui/status";
 import { addHook, runHooks } from "../helper/hooks";
 const log = Log(LogApp.Map);
 
@@ -111,9 +111,7 @@ export class MapDataRequest {
     private refreshStartTime;
     private timerExpectedTimeoutTime: number;
     private timer: number | undefined;
-    private status: RequestStatus;
     private tileErrorCount: { [index: TileID]: number };
-    private cachedTileCount: number;
     private requestedTileCount: number;
     private successTileCount: number;
     private failedTileCount: number;
@@ -325,7 +323,6 @@ export class MapDataRequest {
         log.log(logMessage);
 
 
-        this.cachedTileCount = 0;
         this.requestedTileCount = 0;
         this.successTileCount = 0;
         this.failedTileCount = 0;
@@ -351,7 +348,6 @@ export class MapDataRequest {
                 if (this.cache.isFresh(tile_id)) {
                     // data is fresh in the cache - just render it
                     this.pushRenderQueue(tile_id, this.cache.get(tile_id), TileState.cache_fresh);
-                    this.cachedTileCount += 1;
                 } else {
 
                     // no fresh data
