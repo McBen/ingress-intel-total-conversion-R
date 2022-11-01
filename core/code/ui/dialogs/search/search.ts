@@ -116,8 +116,7 @@ export class Search {
 
 
     searchLocations = (query: Query) => {
-        // TODO: recognize 50°31'03.8"N 7°59'05.3"E and similar formats
-        const locations = query.term.match(/[+-]?\d+\.\d+,[+-]?\d+\.\d+/g);
+        const locations = query.term.match(/[+-]?\d+\.\d+[,\s]+[+-]?\d+\.\d+/g);
 
         if (!locations) return;
 
