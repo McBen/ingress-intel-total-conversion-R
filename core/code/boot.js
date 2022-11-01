@@ -3,7 +3,7 @@
 // created a basic framework. All of these functions should only ever
 // be run once.
 import "overlapping-marker-spiderfier-leaflet";
-localStorage.setItem('log', '*=debug'); // localStorage.setItem('log', '*=debug,-map_data_request,-map_data_render')
+localStorage.setItem('log', '*=debug,-Map'); // localStorage.setItem('log', '*=debug,-map_data_request,-map_data_render')
 import anylogger from "anylogger"
 import { IITC } from "./IITC";
 
