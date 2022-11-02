@@ -102,7 +102,6 @@ document.body.innerHTML = ''
 
 // CONFIG OPTIONS ////////////////////////////////////////////////////
 window.REFRESH = 30; // refresh view every 30s (base time)
-window.ON_MOVE_REFRESH = 2.5; // refresh time to use after a movement event
 window.MAX_IDLE_TIME = 15 * 60; // stop updating map after 15min idling
 window.HIDDEN_SCROLLBAR_ASSUMED_WIDTH = 20;
 window.SIDEBAR_WIDTH = 300;

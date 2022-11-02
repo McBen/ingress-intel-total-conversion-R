@@ -9,6 +9,7 @@ import { Log, LogApp } from "../helper/log_apps";
 import { idle } from "./idle";
 import { mapStatus } from "../ui/status";
 import { addHook, runHooks } from "../helper/hooks";
+import { postAjax } from "../helper/send_request";
 const log = Log(LogApp.Map);
 
 
@@ -238,7 +239,6 @@ export class MapDataRequest {
     updateStatus(): void {
         const allTiles = this.requestedTileCount;
         const loaded = this.failedTileCount + this.successTileCount + this.staleTileCount;
-        // const failed = this.failedRequestCount;
 
         mapStatus.update({
             total: allTiles,
@@ -475,7 +475,7 @@ export class MapDataRequest {
         this.activeRequestCount += 1;
 
         // NOTE: don't add the request with window.request.add, as we don't want the abort handling to apply to map data any more
-        window.postAjax("getEntities", data,
+        postAjax("getEntities", data,
             result => this.handleResponse(result as TileRequestResult, tiles),
             () => this.handleResponseError(tiles)
         );

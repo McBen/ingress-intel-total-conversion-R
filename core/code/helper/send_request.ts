@@ -6,14 +6,19 @@ import { SECONDS } from "./times";
  * limit on refresh time since previous refresh, limiting repeated move refresh rate
  */
 const MINIMUM_OVERRIDE_REFRESH = 10 * SECONDS;
+
 /**
  *  add 5 seconds per zoom level
  */
 const ZOOM_LEVEL_ADJ = 5 * SECONDS;
 
+/**
+ * refresh time to use after a movement event
+ */
+export const ON_MOVE_REFRESH = 2.5 * SECONDS;
+
 
 let latestFailedRequestTime: number | undefined;
-let failedRequestCount: number = 0;
 let blockOutOfDateRequests: boolean | undefined;
 
 /**
@@ -34,13 +39,11 @@ export const postAjax = (action: string, data: any,
 
     if (latestFailedRequestTime && latestFailedRequestTime < Date.now() - 120 * 1000) {
         // no errors in the last two minutes - clear the error count
-        failedRequestCount = 0;
         latestFailedRequestTime = undefined;
     }
 
     const onError = (jqXHR: JQuery.jqXHR, textStatus, errorThrown: string) => {
         requests.remove(jqXHR);
-        failedRequestCount++;
         latestFailedRequestTime = Date.now();
 
         // pass through to the user error func, if one exists
@@ -54,7 +57,6 @@ export const postAjax = (action: string, data: any,
 
         // the Niantic server can return a HTTP success, but the JSON response contains an error. handle that sensibly
         if (data && data.error && data.error === "out of date") {
-            failedRequestCount++;
             // let's call the error callback in thos case...
             if (errorCallback) {
                 errorCallback(jqXHR, textStatus, "data.error == 'out of date'");
@@ -68,7 +70,6 @@ export const postAjax = (action: string, data: any,
 
     // we set this flag when we want to block all requests due to having an out of date CURRENT_VERSION
     if (blockOutOfDateRequests) {
-        failedRequestCount++;
         latestFailedRequestTime = Date.now();
 
         // call the error callback, if one exists
@@ -119,10 +120,10 @@ const outOfDateUserPrompt = () => {
                         app.reloadIITC();
                     } else {*/
                     window.location.reload();
-                },
-                close: () => {
-                    blockOutOfDateRequests = undefined;
                 }
+            },
+            close: () => {
+                blockOutOfDateRequests = undefined;
             }
         });
     }

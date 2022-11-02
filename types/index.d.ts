@@ -46,7 +46,10 @@ declare global {
         bootPlugins: BootCallback[];
         iitcLoaded: boolean;
         map: L.Map;
-        layerChooser: L.Control.Layers;
+        layerChooser: LayerChooser;
+
+        urlPortalLL: [number, number];
+        urlPortal: PortalGUID;
 
         search: {
             setup: () => void
@@ -71,7 +74,6 @@ declare global {
             addPortal: (p: IITC.Portal) => void,
             removePortal: (p: IITC.Portal) => void
         }
-
     }
 
     const artifact: {

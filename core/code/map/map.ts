@@ -5,6 +5,8 @@ import { Log, LogApp } from "../helper/log_apps";
 import { getURLParam, readCookie, writeCookie } from "../utils_misc";
 import { player } from "../helper/player";
 import { idle } from "./idle";
+import { ON_MOVE_REFRESH, requests, startRefreshTimeout } from "../helper/send_request";
+import { GLOPT, IITCOptions } from "../helper/options";
 const log = Log(LogApp.Map);
 
 
@@ -24,11 +26,11 @@ export const setupMap = (): void => {
     // map update status handling & update map hooks
     // ensures order of calls
     window.map.on("movestart", () => {
-        window.requests.abort();
-        window.startRefreshTimeout(-1);
+        requests.abort();
+        startRefreshTimeout(-1);
     });
     window.map.on("moveend", () => {
-        window.startRefreshTimeout(window.ON_MOVE_REFRESH * 1000);
+        startRefreshTimeout(ON_MOVE_REFRESH);
     });
 
     // set a 'moveend' handler for the map to clear idle state. e.g. after mobile 'my location' is used.
@@ -36,7 +38,7 @@ export const setupMap = (): void => {
     window.map.on("moveend", () => idle.reset());
 
     idle.addResumeFunction(() => {
-        window.startRefreshTimeout(window.ON_MOVE_REFRESH * 1000);
+        startRefreshTimeout(ON_MOVE_REFRESH);
     });
 
     // create the map data requester
@@ -45,13 +47,15 @@ export const setupMap = (): void => {
     // start the refresh process with a small timeout, so the first data request happens quickly
     // (the code originally called the request function directly, and triggered a normal delay for the next refresh.
     //  however, the moveend/zoomend gets triggered on map load, causing a duplicate refresh. this helps prevent that
-    window.startRefreshTimeout(window.ON_MOVE_REFRESH * 1000);
+    startRefreshTimeout(ON_MOVE_REFRESH);
 
     // adds a base layer to the map. done separately from the above,
     // so that plugins that add base layers can be the default
     addHook("iitcLoaded", () => {
-        const stored = layerChooser.getLayer(layerChooser.lastBaseLayerName);
-        window.map.addLayer(stored || baseLayers["CartoDB Dark Matter"]);
+
+        const lastBaseMap = IITCOptions.getSafe(GLOPT.BASE_MAP_LAYER, "CartoDB Dark Matter");
+        window.map.addLayer(window.layerChooser.getLayer(lastBaseMap) as L.Layer);
+
 
         // (setting an initial position, before a base layer is added, causes issues with leaflet) // todo check
         let pos = getPosition();
@@ -59,7 +63,7 @@ export const setupMap = (): void => {
             pos = { center: [0, 0], zoom: 1 };
             window.map.locate({ setView: true });
         }
-        window.map.setView(pos.center, pos.zoom);
+        window.map.setView(pos.center, pos.zoom, { reset: true } as L.ZoomPanOptions); // undocumented Leaflet Option
 
         // read here ONCE, so the URL is only evaluated one time after the
         // necessary data has been loaded.
@@ -86,7 +90,7 @@ const createMap = (): void => {
         // proper initial position is now delayed until all plugins are loaded and the base layer is set
         center: [0, 0],
         zoom: 1,
-        crs: L.CRS.S2,
+        crs: (L.CRS as any).S2,
         minZoom: MIN_ZOOM,
         markerZoomAnimation: false,
         bounceAtZoomLimits: false,
@@ -94,7 +98,7 @@ const createMap = (): void => {
         worldCopyJump: true,
     }, window.mapOptions) as L.MapOptions);
 
-    const max_lat = map.options.crs.projection.MAX_LATITUDE;
+    const max_lat = (map.options.crs as any).projection.MAX_LATITUDE;
     map.setMaxBounds([[max_lat, 360], [-max_lat, -360]]);
 
     L.Renderer.mergeOptions({
@@ -110,7 +114,7 @@ const createMap = (): void => {
             .css({
                 "pointer-events": "none",
                 "margin": "0"
-            }).appendTo(map._controlCorners.bottomleft);
+            }).appendTo((map as any)._controlCorners.bottomleft);
     }
 
     map.attributionControl.setPrefix("");
@@ -123,8 +127,8 @@ const createLayers = () => {
     const baseLayers = createDefaultBaseMapLayers();
     const overlays = createDefaultOverlays();
 
-    window.layerChooser = new window.LayerChooser(baseLayers, overlays, { map: window.map })
-        .addTo(map);
+    window.layerChooser = new LayerChooser(Object.fromEntries(baseLayers), Object.fromEntries(overlays), { map: window.map } as any)
+        .addTo(window.map);
 
     if (!areAllLayerVisible(overlays)) {
         // as users often become confused if they accidentally switch a standard layer off, display a warning in this case
@@ -161,6 +165,14 @@ const areAllLayerVisible = (overlays: LayerList): boolean => {
 }
 
 
+interface S2Projection extends L.Projection {
+    R: number;
+}
+
+interface SphericalMercatorS2 extends L.Projection {
+    S2: S2Projection;
+}
+
 const setupCRS = () => {
     // use the earth radius value from s2 geometry library
     // https://github.com/google/s2-geometry-library-java/blob/c28f287b996c0cedc5516a0426fbd49f6c9611ec/src/com/google/common/geometry/S2LatLng.java#L31
@@ -172,10 +184,10 @@ const setupCRS = () => {
     // (Yes, Leaflet is not consistent here, e.g. see https://github.com/Leaflet/Leaflet/pull/6928)
 
     // this affects LatLng.distanceTo(), which is currently used in most iitc plugins
-    L.CRS.Earth.R = EARTH_RADIUS_METERS;
+    (L.CRS.Earth as any).R = EARTH_RADIUS_METERS;
 
     // this affects Map.distance(), which is known to be used in draw-tools
-    const SphericalMercator = L.Projection.SphericalMercator;
+    const SphericalMercator = L.Projection.SphericalMercator as SphericalMercatorS2;
     SphericalMercator.S2 = L.extend({}, SphericalMercator, {
         R: EARTH_RADIUS_METERS,
         bounds: (() => {
@@ -184,7 +196,7 @@ const setupCRS = () => {
         })()
     });
 
-    L.CRS.S2 = L.extend({}, L.CRS.Earth, {
+    (L.CRS as any).S2 = L.extend({}, L.CRS.Earth, {
         code: "Ingress",
         projection: SphericalMercator.S2,
         transformation: (() => {
@@ -269,7 +281,7 @@ const createDefaultBaseMapLayers = (): LayerList => {
                 { featureType: "poi", stylers: [{ visibility: "off" }] },
                 { featureType: "transit", elementType: "all", stylers: [{ visibility: "off" }] },
                 { featureType: "road", elementType: "labels.icon", stylers: [{ invert_lightness: !0 }] }
-            ],
+            ]
         });
     baseLayers["Google Roads"] = googleMutant({ type: "roadmap" });
     const trafficMutant = googleMutant({ type: "roadmap" });

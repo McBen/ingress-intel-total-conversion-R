@@ -1,6 +1,8 @@
 require("autolink-js");
 window.chat = function () { };
 
+window.failedRequestCount = 0;
+
 //WORK IN PROGRESS - NOT YET USED!!
 window.chat.commTabs = [
 // channel: the COMM channel ('tab' parameter in server requests)
