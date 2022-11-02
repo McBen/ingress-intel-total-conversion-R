@@ -6,7 +6,8 @@ export enum LogApp {
     Map = "Map",
     Idle = "Idle",
     Dialog = "Dialog",
-    Events = "Events"
+    Events = "Events",
+    Score = "Score",
 }
 
 export const Log = (type: LogApp) => anylogger(type);
