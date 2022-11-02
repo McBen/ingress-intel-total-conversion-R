@@ -1,6 +1,5 @@
 import { DEFAULT_ZOOM, FACTION, FACTION_NAMES, MIN_ZOOM } from "../constants";
 import { addHook } from "../helper/hooks";
-import { mapDataRequest } from "./map_data_request";
 import { Log, LogApp } from "../helper/log_apps";
 import { getURLParam, readCookie, writeCookie } from "../utils_misc";
 import { player } from "../helper/player";
@@ -41,13 +40,6 @@ export const setupMap = (): void => {
         startRefreshTimeout(ON_MOVE_REFRESH);
     });
 
-    // create the map data requester
-    mapDataRequest.start();
-
-    // start the refresh process with a small timeout, so the first data request happens quickly
-    // (the code originally called the request function directly, and triggered a normal delay for the next refresh.
-    //  however, the moveend/zoomend gets triggered on map load, causing a duplicate refresh. this helps prevent that
-    startRefreshTimeout(ON_MOVE_REFRESH);
 
     // adds a base layer to the map. done separately from the above,
     // so that plugins that add base layers can be the default

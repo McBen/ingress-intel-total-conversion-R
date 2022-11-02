@@ -5,11 +5,11 @@ import { DataCache } from "./data_cache";
 import { RenderDebugTiles, TileState } from "./map_data_debug";
 import { clampLatLngBounds } from "../utils_misc";
 import { getDataZoomForMapZoom, getMapZoomTileParameters, latToTile, lngToTile, pointToTileId, tileToLat, tileToLng } from "./map_data_calc_tools";
-import { Log, LogApp } from "../helper/log_apps";
 import { idle } from "./idle";
 import { mapStatus } from "../ui/status";
 import { addHook, runHooks } from "../helper/hooks";
 import { postAjax } from "../helper/send_request";
+import { Log, LogApp } from "../helper/log_apps";
 const log = Log(LogApp.Map);
 
 
@@ -770,6 +770,3 @@ export class MapDataRequest {
         }
     }
 }
-
-
-export const mapDataRequest = new MapDataRequest();

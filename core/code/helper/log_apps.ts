@@ -2,6 +2,7 @@ import "ulog";
 import anylogger from "anylogger";
 
 export enum LogApp {
+    Main = "Main",
     Plugins = "Plugins",
     Map = "Map",
     Idle = "Idle",
