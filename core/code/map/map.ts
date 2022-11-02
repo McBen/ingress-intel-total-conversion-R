@@ -4,7 +4,7 @@ import { Log, LogApp } from "../helper/log_apps";
 import { getURLParam, readCookie, writeCookie } from "../utils_misc";
 import { player } from "../helper/player";
 import { idle } from "./idle";
-import { ON_MOVE_REFRESH, requests, startRefreshTimeout } from "../helper/send_request";
+import { ON_MOVE_REFRESH, requests } from "../helper/send_request";
 import { GLOPT, IITCOptions } from "../helper/options";
 const log = Log(LogApp.Map);
 
@@ -26,10 +26,10 @@ export const setupMap = (): void => {
     // ensures order of calls
     window.map.on("movestart", () => {
         requests.abort();
-        startRefreshTimeout(-1);
+        requests.startRefreshTimeout(-1);
     });
     window.map.on("moveend", () => {
-        startRefreshTimeout(ON_MOVE_REFRESH);
+        requests.startRefreshTimeout(ON_MOVE_REFRESH);
     });
 
     // set a 'moveend' handler for the map to clear idle state. e.g. after mobile 'my location' is used.
@@ -37,7 +37,7 @@ export const setupMap = (): void => {
     window.map.on("moveend", () => idle.reset());
 
     idle.addResumeFunction(() => {
-        startRefreshTimeout(ON_MOVE_REFRESH);
+        requests.startRefreshTimeout(ON_MOVE_REFRESH);
     });
 
 

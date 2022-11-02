@@ -7,9 +7,8 @@ import { PluginManager } from "./plugin/plugin_manager";
 import { checkCookieLaw } from "./ui/dialogs/cookielaw";
 import { updateGameScore } from "./ui/gamescore";
 import { setupMenu } from "./ui/menu/menu";
-
+import { ON_MOVE_REFRESH, requests } from "./helper/send_request";
 import { Log, LogApp } from "./helper/log_apps";
-import { ON_MOVE_REFRESH, startRefreshTimeout } from "./helper/send_request";
 const log = Log(LogApp.Main);
 
 
@@ -39,7 +38,7 @@ export class IITCMain {
 
         log.info("start requests");
         this.mapDataRequest.start();
-        startRefreshTimeout(ON_MOVE_REFRESH);
+        requests.startRefreshTimeout(ON_MOVE_REFRESH);
 
         /** fillme */
         setTimeout(() => this.onIdle(), 10);

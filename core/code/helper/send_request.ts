@@ -129,53 +129,48 @@ const outOfDateUserPrompt = () => {
     }
 }
 
-
-let refreshTimeout: number | undefined;
-
 /**
- * sets the timer for the next auto refresh. Ensures only one timeout
- * is queued. May be given 'override' in milliseconds if time should
- * not be guessed automatically. Especially useful if a little delay
- * is required, for example when zooming.
+ * TODO: check: only used for chat ?
  */
-// TODO move into requests
-export const startRefreshTimeout = (override: number) => {
-
-    if (refreshTimeout) clearTimeout(refreshTimeout);
-    if (override === -1) return;  // don't set a new timeout
-
-    let t = 0;
-    if (override) {
-        t = override;
-
-        // ensure override can't cause too fast a refresh if repeatedly used (e.g. lots of scrolling/zooming)
-        let timeSinceLastRefresh = Date.now() - requests.lastRefreshTime;
-        if (timeSinceLastRefresh < 0) timeSinceLastRefresh = 0;  // in case of clock adjustments
-        if (timeSinceLastRefresh < MINIMUM_OVERRIDE_REFRESH) {
-            t = (MINIMUM_OVERRIDE_REFRESH - timeSinceLastRefresh);
-        }
-    } else {
-        t = REFRESH * 1000;
-
-        const adj = ZOOM_LEVEL_ADJ * (18 - window.map.getZoom());
-        if (adj > 0) t += adj;
-    }
-
-    refreshTimeout = window.setTimeout(requests._callOnRefreshFunctions, t);
-    renderUpdateStatus();
-}
-
-
-
-// REQUEST HANDLING //////////////////////////////////////////////////
-// note: only meant for portal/links/fields request, everything else
-// does not count towards “loading”
 export class RequestQueue {
+
     private activeRequests: JQuery.jqXHR[] = [];
     private onRefreshFunctions: (() => void)[] = []
+    private refreshTimeout: number | undefined;
+    private lastRefreshTime: number = 0;
 
-    // time of last refresh
-    public lastRefreshTime: number = 0;
+
+
+    /**
+     * sets the timer for the next auto refresh. Ensures only one timeout
+     * is queued. May be given 'override' in milliseconds if time should
+     * not be guessed automatically. Especially useful if a little delay
+     * is required, for example when zooming.
+     */
+    startRefreshTimeout(override: number) {
+
+        if (this.refreshTimeout) clearTimeout(this.refreshTimeout);
+        if (override === -1) return;  // don't set a new timeout
+
+        let t = 0;
+        if (override) {
+            t = override;
+
+            // ensure override can't cause too fast a refresh if repeatedly used (e.g. lots of scrolling/zooming)
+            let timeSinceLastRefresh = Date.now() - this.lastRefreshTime;
+            if (timeSinceLastRefresh < 0) timeSinceLastRefresh = 0;  // in case of clock adjustments
+            if (timeSinceLastRefresh < MINIMUM_OVERRIDE_REFRESH) {
+                t = (MINIMUM_OVERRIDE_REFRESH - timeSinceLastRefresh);
+            }
+        } else {
+            t = REFRESH * 1000;
+
+            const adj = ZOOM_LEVEL_ADJ * (18 - window.map.getZoom());
+            if (adj > 0) t += adj;
+        }
+
+        this.refreshTimeout = window.setTimeout(() => this.callOnRefreshFunctions(), t);
+    }
 
     add(ajax: JQuery.jqXHR): void {
         this.activeRequests.push(ajax);
@@ -193,8 +188,8 @@ export class RequestQueue {
     }
 
 
-    _callOnRefreshFunctions() {
-        startRefreshTimeout(0);
+    callOnRefreshFunctions() {
+        this.startRefreshTimeout(0);
 
         if (idle.isIdle()) {
             return;
