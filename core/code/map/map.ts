@@ -127,7 +127,7 @@ const createLayers = () => {
     const baseLayers = createDefaultBaseMapLayers();
     const overlays = createDefaultOverlays();
 
-    window.layerChooser = new LayerChooser(Object.fromEntries(baseLayers), Object.fromEntries(overlays), { map: window.map } as any)
+    window.layerChooser = new LayerChooser(baseLayers as any, overlays as any, { map: window.map } as L.Control.LayersOptions)
         .addTo(window.map);
 
     if (!areAllLayerVisible(overlays)) {
@@ -145,7 +145,7 @@ const createLayers = () => {
                 if (!window.map.hasLayer(overlay)) {
                     window.map.addLayer(overlay);
                 }
-            };
+            }
             $("#portaldetails").html("");
         });
     }
