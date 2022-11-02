@@ -45,8 +45,11 @@ export const setupMap = (): void => {
     // so that plugins that add base layers can be the default
     addHook("iitcLoaded", () => {
 
-        const lastBaseMap = IITCOptions.getSafe(GLOPT.BASE_MAP_LAYER, "CartoDB Dark Matter");
-        window.map.addLayer(window.layerChooser.getLayer(lastBaseMap) as L.Layer);
+        const lastBaseMap: string = IITCOptions.get(GLOPT.BASE_MAP_LAYER);
+        const lastMap = lastBaseMap && window.layerChooser.getLayer(lastBaseMap);
+        const baselayer: L.Layer = lastMap ?? window.layerChooser.getLayer("CartoDB Dark Matter")
+        console.assert(baselayer, "baseLayer not found")
+        window.map.addLayer(baselayer);
 
 
         // (setting an initial position, before a base layer is added, causes issues with leaflet) // todo check
@@ -66,9 +69,9 @@ export const setupMap = (): void => {
         }
         window.urlPortal = getURLParam("pguid");
 
-        // todo check
-        // leaflet no longer ensures the base layer zoom is suitable for the map (a bug? feature change?), so do so here
-        window.map.on("baselayerchange", () => {
+        window.map.on("baselayerchange", event => {
+            IITCOptions.set(GLOPT.BASE_MAP_LAYER, event.name);
+            // leaflet no longer ensures the base layer zoom is suitable for the map (a bug? feature change?), so do so here
             window.map.setZoom(window.map.getZoom());
         });
     });
