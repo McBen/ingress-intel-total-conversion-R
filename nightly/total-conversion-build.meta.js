@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        IITC: Ingress intel map total conversion R
-// @version     1.0.0.20221028.115980
-// @description [2022-10-28-115806-dev] Total conversion for the ingress intel map - Refurbished.
+// @version     1.0.0.20221102.74580
+// @description [2022-11-02-074539-dev] Total conversion for the ingress intel map - Refurbished.
 // @homepage    https://iitc.app/
 // @match       https://intel.ingress.com/*
 // @id          ingress-intel-total-conversion@McBen
