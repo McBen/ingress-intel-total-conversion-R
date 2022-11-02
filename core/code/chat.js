@@ -1,3 +1,6 @@
+import { requests, startRefreshTimeout } from "./helper/send_request";
+import { idle } from "./map/idle";
+
 require("autolink-js");
 window.chat = function () { };
 
@@ -878,7 +881,7 @@ window.chat.setup = function() {
     if(scrollBottom(t) === 0) chat.requestAlerts(false);
   });
 
-  window.requests.addRefreshFunction(chat.request);
+  requests.addRefreshFunction(chat.request);
 
   var cls = PLAYER.team === 'RESISTANCE' ? 'res' : 'enl';
   $('#chatinput mark').addClass(cls);
@@ -901,7 +904,8 @@ window.chat.setupTime = function() {
     setTimeout(updateTime, (60 - d.getSeconds()) * 1000 + 1);
   };
   updateTime();
-  window.addResumeFunction(updateTime);
+
+  idle.addResumeFunction(updateTime);
 }
 
 
