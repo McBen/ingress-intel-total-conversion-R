@@ -4,6 +4,7 @@ import { HistoryChart } from "./history_chart";
 import { CP_COUNT, RegionScore, ServerResult } from "./region_score";
 import { dialog } from "../../dialog";
 import { player } from "../../../helper/player";
+import { postAjax } from "../../../helper/send_request";
 
 
 export class RegionScoreDialog {
@@ -58,7 +59,7 @@ export class RegionScoreDialog {
             });
         }
 
-        window.postAjax("getRegionScoreDetails", { latE6, lngE6 },
+        postAjax("getRegionScoreDetails", { latE6, lngE6 },
             data => this.onRequestSuccess(data),
             () => this.onRequestFailure());
     }

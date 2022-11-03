@@ -2,6 +2,7 @@ import { MINUTES } from "../helper/times";
 import { Log, LogApp } from "../helper/log_apps";
 import { idle } from "../map/idle";
 import { digits } from "../utils_misc";
+import { postAjax } from "../helper/send_request";
 const log = Log(LogApp.Score);
 
 
@@ -26,7 +27,7 @@ const RequestGameScore = () => {
         return;
     }
 
-    window.postAjax("getGameScore", {},
+    postAjax("getGameScore", {},
         (data: GameScoreResult) => {
             processGameScore(data);
             window.setTimeout(RequestGameScore, REFRESH_GAME_SCORE);

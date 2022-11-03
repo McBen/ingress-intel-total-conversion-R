@@ -5,10 +5,6 @@
 import "overlapping-marker-spiderfier-leaflet";
 localStorage.setItem('log', '*=debug'); // localStorage.setItem('log', '*=debug,-map_data_request,-map_data_render')
 import anylogger from "anylogger"
-import { checkCookieLaw } from "./ui/dialogs/cookielaw";
-import { setupMenu } from "./ui/menu/menu";
-import { updateGameScore } from "./ui/gamescore";
-import { setupDataTileParameters } from "./map/map_data_calc_tools";
 import { IITC } from "./IITC";
 
 const log = anylogger("Boot");
@@ -203,28 +199,19 @@ function boot() {
   window.runOnSmartphonesBeforeBoot();
   window.runOnAppBeforeBoot();
 
-  var loadPlugins = prepPluginsToLoad();
-  loadPlugins('boot');
-
   setupIngressMarkers();
-  checkCookieLaw();
   window.extractFromStock();
-  setupDataTileParameters();
-  require("./map/idle.ts"); // or idle.reset()
-  window.setupMap();
+
+  IITC.init();
+
   window.setupOMS();
   window.ornaments.setup();
   layerChooser._lastPriority = 1000; // plugins overlays have priority >1000
   window.setupTooltips();
   window.chat.setup();
-  updateGameScore();
   window.portalDetail.setup();
   window.setupSidebar();
 
-  setupMenu();
-
-  // loadPlugins();
-  IITC.init();
 
   window.runOnSmartphonesAfterBoot();
   window.runOnAppAfterBoot();

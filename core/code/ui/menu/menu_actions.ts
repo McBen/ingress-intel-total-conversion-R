@@ -35,9 +35,9 @@ export const initializeMenu = (iitcmenu: IITCMenu): void => {
     ]);
 
     const groupLayers = {
-        "Level": ["Level 1 Portals", "Level 2 Portals", "Level 3 Portals", "Level 4 Portals",
+        "Level": ["Unclaimed/Placeholder Portals", "Level 1 Portals", "Level 2 Portals", "Level 3 Portals", "Level 4 Portals",
             "Level 5 Portals", "Level 6 Portals", "Level 7 Portals", "Level 8 Portals"],
-        "Faction": ["Unclaimed/Placeholder Portals", "Resistance", "Enlightened"],
+        "Faction": ["Neutral", "Resistance", "Enlightened"],
         "Ornaments": ["Artifacts", "Beacons", "Frackers",
             "Ornament: Anomaly Portals", "Ornament: Battle Beacons",
             "Ornament: Battle Results", "Ornament: Scout Controller"],

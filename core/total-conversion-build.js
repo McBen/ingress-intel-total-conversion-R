@@ -102,9 +102,6 @@ document.body.innerHTML = ''
 
 // CONFIG OPTIONS ////////////////////////////////////////////////////
 window.REFRESH = 30; // refresh view every 30s (base time)
-window.ZOOM_LEVEL_ADJ = 5; // add 5 seconds per zoom level
-window.ON_MOVE_REFRESH = 2.5; // refresh time to use after a movement event
-window.MINIMUM_OVERRIDE_REFRESH = 10; // limit on refresh time since previous refresh, limiting repeated move refresh rate
 window.MAX_IDLE_TIME = 15 * 60; // stop updating map after 15min idling
 window.HIDDEN_SCROLLBAR_ASSUMED_WIDTH = 20;
 window.SIDEBAR_WIDTH = 300;
@@ -118,7 +115,6 @@ window.COLORS = ['#FF6600', '#0088FF', '#03DC03']; // none, res, enl
 window.COLORS_LVL = ['#000', '#FECE5A', '#FFA630', '#FF7315', '#E40000', '#FD2992', '#EB26CD', '#C124E0', '#9627F4'];
 window.COLORS_MOD = { VERY_RARE: '#b08cff', RARE: '#73a8ff', COMMON: '#8cffbf' };
 
-
 window.MOD_TYPE = { RES_SHIELD: 'Shield', MULTIHACK: 'Multi-hack', FORCE_AMP: 'Force Amp', HEATSINK: 'Heat Sink', TURRET: 'Turret', LINK_AMPLIFIER: 'Link Amp' };
 
 // circles around a selected portal that show from where you can hack
@@ -126,9 +122,6 @@ window.MOD_TYPE = { RES_SHIELD: 'Shield', MULTIHACK: 'Multi-hack', FORCE_AMP: 'F
 // from this portal)
 window.ACCESS_INDICATOR_COLOR = 'orange';
 window.RANGE_INDICATOR_COLOR = 'red';
-
-// min zoom for intel map - should match that used by stock intel
-window.MIN_ZOOM = 3;
 
 // used when zoom level is not specified explicitly (must contain all the portals)
 window.DEFAULT_ZOOM = 15;
@@ -172,7 +165,6 @@ window.urlPortalLL = null;
 window.selectedPortal = null;
 window.portalRangeIndicator = null;
 window.portalAccessIndicator = null;
-window.mapRunsUserAction = false;
 
 // var portalsLayers, linksLayer, fieldsLayer;
 global.portalsFactionLayers = undefined;

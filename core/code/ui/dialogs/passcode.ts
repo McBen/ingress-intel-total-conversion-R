@@ -1,5 +1,6 @@
 import { PlayerData } from "../../../../types/intel";
 import { COLORS_LVL } from "../../constants";
+import { postAjax } from "../../helper/send_request";
 import { escapeHtmlSpecialChars } from "../../utils_misc";
 
 
@@ -73,7 +74,7 @@ export class PasscodeDialog {
         this.getPasscodeSection(passcode).append("loading");
         $("#dialog-theonlyredeemdialog #redeem").val("");
 
-        window.postAjax(
+        postAjax(
             "redeemReward", { passcode },
             response => this.showResult(passcode, response as ResultData),
             response => this.handleError(passcode, response as JQuery.jqXHR<any>)

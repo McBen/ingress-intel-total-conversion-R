@@ -7,6 +7,7 @@ import * as CalcTools from "./map/map_data_calc_tools";
 import * as Hooks from "./helper/hooks";
 
 import { Log, LogApp } from "./helper/log_apps";
+import { postAjax } from "./helper/send_request";
 const log = Log(LogApp.Plugins);
 
 
@@ -34,6 +35,10 @@ globalThis.latToTile = CalcTools.latToTile;
 globalThis.tileToLng = CalcTools.tileToLng;
 globalThis.tileToLat = CalcTools.tileToLat;
 globalThis.pointToTileId = CalcTools.pointToTileId;
+
+// Request
+globalThis.postAjax = postAjax;
+
 
 // Hooks
 globalThis.pluginCreateHook = NOOP; // stub

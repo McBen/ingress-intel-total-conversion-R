@@ -5,10 +5,11 @@ import { DataCache } from "./data_cache";
 import { RenderDebugTiles, TileState } from "./map_data_debug";
 import { clampLatLngBounds } from "../utils_misc";
 import { getDataZoomForMapZoom, getMapZoomTileParameters, latToTile, lngToTile, pointToTileId, tileToLat, tileToLng } from "./map_data_calc_tools";
-import { Log, LogApp } from "../helper/log_apps";
 import { idle } from "./idle";
-import { mapStatus, MapStatus } from "../ui/status";
+import { mapStatus } from "../ui/status";
 import { addHook, runHooks } from "../helper/hooks";
+import { postAjax } from "../helper/send_request";
+import { Log, LogApp } from "../helper/log_apps";
 const log = Log(LogApp.Map);
 
 
@@ -55,12 +56,6 @@ const RENDER_PAUSE = window.isApp ? 0.2 : 0.1; // 200ms mobile, 100ms desktop
 const REFRESH_CLOSE = 300;  // refresh time to use for close views z>12 when not idle and not moving
 const REFRESH_FAR = 900;  // refresh time for far views z <= 12
 const FETCH_TO_REFRESH_FACTOR = 2;  // minimum refresh time is based on the time to complete a data fetch, times this value
-
-interface RequestStatus {
-    short: string,
-    long?: string,
-    progress?: number
-}
 
 
 interface RenderQueueEntry {
@@ -111,9 +106,7 @@ export class MapDataRequest {
     private refreshStartTime;
     private timerExpectedTimeoutTime: number;
     private timer: number | undefined;
-    private status: RequestStatus;
     private tileErrorCount: { [index: TileID]: number };
-    private cachedTileCount: number;
     private requestedTileCount: number;
     private successTileCount: number;
     private failedTileCount: number;
@@ -246,7 +239,6 @@ export class MapDataRequest {
     updateStatus(): void {
         const allTiles = this.requestedTileCount;
         const loaded = this.failedTileCount + this.successTileCount + this.staleTileCount;
-        // const failed = this.failedRequestCount;
 
         mapStatus.update({
             total: allTiles,
@@ -325,7 +317,6 @@ export class MapDataRequest {
         log.log(logMessage);
 
 
-        this.cachedTileCount = 0;
         this.requestedTileCount = 0;
         this.successTileCount = 0;
         this.failedTileCount = 0;
@@ -351,7 +342,6 @@ export class MapDataRequest {
                 if (this.cache.isFresh(tile_id)) {
                     // data is fresh in the cache - just render it
                     this.pushRenderQueue(tile_id, this.cache.get(tile_id), TileState.cache_fresh);
-                    this.cachedTileCount += 1;
                 } else {
 
                     // no fresh data
@@ -485,7 +475,7 @@ export class MapDataRequest {
         this.activeRequestCount += 1;
 
         // NOTE: don't add the request with window.request.add, as we don't want the abort handling to apply to map data any more
-        window.postAjax("getEntities", data,
+        postAjax("getEntities", data,
             result => this.handleResponse(result as TileRequestResult, tiles),
             () => this.handleResponseError(tiles)
         );
