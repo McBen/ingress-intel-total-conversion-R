@@ -7,9 +7,9 @@ import { clampLatLngBounds } from "../utils_misc";
 import { getDataZoomForMapZoom, getMapZoomTileParameters, latToTile, lngToTile, pointToTileId, tileToLat, tileToLng } from "./map_data_calc_tools";
 import { idle } from "./idle";
 import { mapStatus } from "../ui/status";
-import { addHook, runHooks } from "../helper/hooks";
 import { postAjax } from "../helper/send_request";
 import { Log, LogApp } from "../helper/log_apps";
+import { hooks } from "../helper/hooks";
 const log = Log(LogApp.Map);
 
 
@@ -142,7 +142,7 @@ export class MapDataRequest {
         this.idle = false;
 
         // add a portalDetailLoaded hook, so we can use the extended details to update portals on the map
-        addHook("portalDetailLoaded", data => {
+        hooks.on("portalDetailLoaded", data => {
             if (data.success) {
                 this.render.createPortalEntity(data.ent, "detailed");
             }
@@ -301,11 +301,11 @@ export class MapDataRequest {
         this.fetchedDataParams = { bounds: dataBounds, mapZoom, dataZoom };
 
 
-        runHooks("mapDataRefreshStart", { bounds, mapZoom, dataZoom, minPortalLevel: tiles.level, tileBounds: dataBounds });
+        hooks.trigger("mapDataRefreshStart", { bounds, mapZoom, dataZoom, minPortalLevel: tiles.level, tileBounds: dataBounds });
 
         this.render.startRenderPass(dataBounds);
 
-        runHooks("mapDataEntityInject", { callback: this.render.processGameEntities.bind(this.render) });
+        hooks.trigger("mapDataEntityInject", { callback: this.render.processGameEntities.bind(this.render) });
 
         // TODO special artifacts handling
         // this.render.processGameEntities(artifact.getArtifactEntities(), "summary");
@@ -375,7 +375,7 @@ export class MapDataRequest {
 
         // technically a request hasn't actually finished - however, displayed portal data has been refreshed
         // so as far as plugins are concerned, it should be treated as a finished request
-        runHooks("requestFinished", { success: true });
+        hooks.trigger("requestFinished", { success: true });
 
         log.log("done request preparation (cleared out-of-bounds and invalid for zoom, and rendered cached data)");
 
@@ -546,7 +546,7 @@ export class MapDataRequest {
                     this.debugTiles.setState(id, TileState.retrying);
                 });
 
-                runHooks("requestFinished", { success: false });
+                hooks.trigger("requestFinished", { success: false });
 
             } else {
                 tiles.forEach(id => {
@@ -554,7 +554,7 @@ export class MapDataRequest {
                     this.debugTiles.setState(id, TileState.request_fail);
                 });
 
-                runHooks("requestFinished", { success: false });
+                hooks.trigger("requestFinished", { success: false });
             }
             unaccountedTiles = [];
         } else {
@@ -596,7 +596,7 @@ export class MapDataRequest {
                 }
             }
 
-            runHooks("requestFinished", { success: true });
+            hooks.trigger("requestFinished", { success: true });
         }
 
         // set the queue delay based on any errors or timeouts
@@ -655,7 +655,7 @@ export class MapDataRequest {
             this.debugTiles.setState(id, TileState.request_fail);
         });
 
-        runHooks("requestFinished", { success: false });
+        hooks.trigger("requestFinished", { success: false });
 
         errorTiles.forEach(id => {
             delete this.requestedTiles[id];
@@ -758,7 +758,7 @@ export class MapDataRequest {
 
             log.log(`finished requesting data! (took ${duration} seconds to complete)`);
 
-            runHooks("mapDataRefreshEnd", {});
+            hooks.trigger("mapDataRefreshEnd", {});
 
 
             // refresh timer based on time to run this pass, with a minimum of REFRESH seconds

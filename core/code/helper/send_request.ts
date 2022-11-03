@@ -17,8 +17,10 @@ const ZOOM_LEVEL_ADJ = 5 * SECONDS;
  */
 export const ON_MOVE_REFRESH = 2.5 * SECONDS;
 
-
-let latestFailedRequestTime: number | undefined;
+/**
+ * don't request anymore data
+ * used if intel answers with out-of-date error (long time idle)
+ */
 let blockOutOfDateRequests: boolean | undefined;
 
 /**
@@ -37,14 +39,9 @@ export const postAjax = (action: string, data: any,
     successCallback: (data: any, status: any, xhr: JQuery.jqXHR) => void,
     errorCallback?: (xhr: JQuery.jqXHR | null, textStatus: any | undefined, errorText: string) => void): void => {
 
-    if (latestFailedRequestTime && latestFailedRequestTime < Date.now() - 120 * 1000) {
-        // no errors in the last two minutes - clear the error count
-        latestFailedRequestTime = undefined;
-    }
 
     const onError = (jqXHR: JQuery.jqXHR, textStatus, errorThrown: string) => {
         requests.remove(jqXHR);
-        latestFailedRequestTime = Date.now();
 
         // pass through to the user error func, if one exists
         if (errorCallback) {
@@ -70,7 +67,6 @@ export const postAjax = (action: string, data: any,
 
     // we set this flag when we want to block all requests due to having an out of date CURRENT_VERSION
     if (blockOutOfDateRequests) {
-        latestFailedRequestTime = Date.now();
 
         // call the error callback, if one exists
         if (errorCallback) {
@@ -129,6 +125,7 @@ const outOfDateUserPrompt = () => {
     }
 }
 
+
 /**
  * TODO: check: only used for chat ?
  */
@@ -138,7 +135,6 @@ export class RequestQueue {
     private onRefreshFunctions: (() => void)[] = []
     private refreshTimeout: number | undefined;
     private lastRefreshTime: number = 0;
-
 
 
     /**

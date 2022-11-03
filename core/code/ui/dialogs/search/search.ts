@@ -1,7 +1,7 @@
 import { FACTION, FACTION_COLORS } from "../../../constants";
 import { Query, QueryResult } from "./query";
 import * as geojson from "geojson";
-import { addHook } from "../../../helper/hooks";
+import { hooks } from "../../../helper/hooks";
 
 const NOMINATIM = "//nominatim.openstreetmap.org/search?format=json&polygon_geojson=1&q=";
 interface OpenStreetMapQueryResult {
@@ -44,9 +44,9 @@ export class Search {
     private lastSearch: Query | undefined;
 
     constructor() {
-        addHook("search", this.searchPortals);
-        addHook("search", this.searchLocations);
-        addHook("search", this.searchOpenStreetMap);
+        hooks.on("search", this.searchPortals);
+        hooks.on("search", this.searchLocations);
+        hooks.on("search", this.searchOpenStreetMap);
     }
 
 

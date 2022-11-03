@@ -1,5 +1,5 @@
 /* global android, app -- eslint */
-import { addHook } from "./helper/hooks";
+import { hooks } from "./helper/hooks";
 
 var isApp = typeof app !== 'undefined' || typeof android !== 'undefined';
 window.isApp = isApp;
@@ -102,7 +102,7 @@ window.runOnAppBeforeBoot = function () {
 
   // add iitc hooks ************************************************************
   if (app.switchToPane) {
-    addHook('paneChanged', function (name) { // https://stackoverflow.com/a/59158952/2520247
+    hooks.on('paneChanged', function (name) { // https://stackoverflow.com/a/59158952/2520247
       app.switchToPane(name);
     });
   }
@@ -157,7 +157,7 @@ window.runOnAppAfterBoot = function () {
     };
 
     window.map.on('moveend', setAppPermalink);
-    addHook('portalSelected', setAppPermalink);
+    hooks.on('portalSelected', setAppPermalink);
   }
 
   // hide layer chooser if booted with the iitcm app

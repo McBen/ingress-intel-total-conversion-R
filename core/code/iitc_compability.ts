@@ -8,6 +8,7 @@ import * as Hooks from "./helper/hooks";
 
 import { Log, LogApp } from "./helper/log_apps";
 import { postAjax } from "./helper/send_request";
+import { IITC } from "./IITC";
 const log = Log(LogApp.Plugins);
 
 
@@ -43,10 +44,9 @@ globalThis.postAjax = postAjax;
 // Hooks
 globalThis.pluginCreateHook = NOOP; // stub
 globalThis.VALID_HOOKS = []; // stub
-globalThis._hooks = Hooks.hooks;
-globalThis.runHooks = Hooks.runHooks;
-globalThis.addHook = Hooks.addHook;
-globalThis.removeHook = Hooks.removeHook;
+globalThis.runHooks = IITC.hooks.trigger.bind(IITC.hooks);
+globalThis.addHook = IITC.hooks.on.bind(IITC.hooks);
+globalThis.removeHook = IITC.hooks.off.bind(IITC.hooks);
 
 
 globalThis.renderUpdateStatus = NOOP; // stub

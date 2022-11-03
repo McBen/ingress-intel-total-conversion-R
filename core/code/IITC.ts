@@ -9,16 +9,27 @@ import { updateGameScore } from "./ui/gamescore";
 import { setupMenu } from "./ui/menu/menu";
 import { ON_MOVE_REFRESH, requests } from "./helper/send_request";
 import { Log, LogApp } from "./helper/log_apps";
+import { hooks, Hooks } from "./helper/hooks";
 const log = Log(LogApp.Main);
 
 
 export class IITCMain {
     readonly plugins: PluginManager;
+
     public mapDataRequest: MapDataRequest;
+
+    /**
+     * Hook interface
+     * (for 3rd party use)
+     */
+    public hooks: Hooks;
+
 
     constructor() {
         this.plugins = new PluginManager();
+        this.hooks = hooks;
     }
+
 
     init(): void {
         log.info("init: page setup");
