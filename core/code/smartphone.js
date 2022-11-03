@@ -1,4 +1,4 @@
-import { addHook } from "./helper/hooks";
+import { hooks } from "./helper/hooks";
 
 window.isSmartphone = function () {
   // this check is also used in main.js. Note it should not detect
@@ -50,7 +50,7 @@ window.runOnSmartphonesBeforeBoot = function () {
 
   $('#chatcontrols').append(smartphone.mapButton).append(smartphone.sideButton);
 
-  addHook('portalDetailsUpdated', function (data) {
+  hooks.on('portalDetailsUpdated', function (data) {
     var x = $('.imgpreview img').removeClass('hide');
 
     if (!x.length) {

@@ -2,7 +2,7 @@ import * as L from "leaflet";
 import { DEFAULT_ZOOM, FACTION, FACTION_COLORS } from "../constants";
 import { TileData } from "./map_data_request";
 import { Log, LogApp } from "../helper/log_apps";
-import { runHooks } from "../helper/hooks";
+import { hooks } from "../helper/hooks";
 const log = Log(LogApp.Map);
 
 
@@ -217,7 +217,7 @@ export class Render {
             window.ornaments.removePortal(portal);
             this.removePortalFromMapLayer(portal);
             delete window.portals[guid];
-            runHooks("portalRemoved", { portal, data: portal.options.data });
+            hooks.trigger("portalRemoved", { portal, data: portal.options.data });
         }
     }
 
@@ -226,7 +226,7 @@ export class Render {
         if (link) {
             linksFactionLayers[link.options.team].removeLayer(link);
             delete window.links[guid];
-            runHooks("linkRemoved", { link, data: link.options.data });
+            hooks.trigger("linkRemoved", { link, data: link.options.data });
         }
     }
 
@@ -236,7 +236,7 @@ export class Render {
         if (field) {
             fieldsFactionLayers[field.options.team].removeLayer(field);
             delete window.fields[guid];
-            runHooks("fieldRemoved", { field, data: field.options.data });
+            hooks.trigger("fieldRemoved", { field, data: field.options.data });
         }
     }
 
@@ -345,7 +345,7 @@ export class Render {
             }
         });
 
-        runHooks("portalAdded", { portal: marker, previousData });
+        hooks.trigger("portalAdded", { portal: marker, previousData });
 
         window.portals[ent[0]] = marker;
 
@@ -425,7 +425,7 @@ export class Render {
             data
         });
 
-        runHooks("fieldAdded", { field: poly });
+        hooks.trigger("fieldAdded", { field: poly });
 
         window.fields[ent[0]] = poly as IITC.Field;
 
@@ -490,7 +490,7 @@ export class Render {
             data
         });
 
-        runHooks("linkAdded", { link: poly });
+        hooks.trigger("linkAdded", { link: poly });
 
         window.links[ent[0]] = poly as IITC.Link;
 

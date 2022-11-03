@@ -1,11 +1,11 @@
 import { DEFAULT_ZOOM, FACTION, FACTION_NAMES, MIN_ZOOM } from "../constants";
-import { addHook } from "../helper/hooks";
 import { Log, LogApp } from "../helper/log_apps";
 import { getURLParam, readCookie, writeCookie } from "../utils_misc";
 import { player } from "../helper/player";
 import { idle } from "./idle";
 import { ON_MOVE_REFRESH, requests } from "../helper/send_request";
 import { GLOPT, IITCOptions } from "../helper/options";
+import { hooks } from "../helper/hooks";
 const log = Log(LogApp.Map);
 
 
@@ -43,7 +43,7 @@ export const setupMap = (): void => {
 
     // adds a base layer to the map. done separately from the above,
     // so that plugins that add base layers can be the default
-    addHook("iitcLoaded", () => {
+    hooks.on("iitcLoaded", () => {
 
         const lastBaseMap: string = IITCOptions.get(GLOPT.BASE_MAP_LAYER);
         const lastMap = lastBaseMap && window.layerChooser.getLayer(lastBaseMap);

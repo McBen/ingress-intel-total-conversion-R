@@ -1,6 +1,6 @@
 import * as L from "leaflet";
 import { DEFAULT_ZOOM } from "../../../constants";
-import { runHooks } from "../../../helper/hooks";
+import { hooks } from "../../../helper/hooks";
 
 export interface QueryResult {
     title: string;
@@ -52,7 +52,7 @@ export class Query {
             heightStyle: "content"
         });
 
-        runHooks("search", this);
+        hooks.trigger("search", this);
     }
 
     private getHeaderText(): string {

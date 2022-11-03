@@ -29,10 +29,10 @@ export class Idle {
         const wasIdle = this.isIdle();
         this.idleTime += IDLE_POLL_TIME;
 
-        // TODO: use Document.visibilityState -> https://developer.mozilla.org/en-US/docs/Web/API/Document/hidden
-        const hidden = (document.hidden || false);
+        const hidden = document.visibilityState === "hidden";
         if (hidden) {
-            this.idleTimeLimit = REFRESH; // set a small time limit before entering idle mode
+            // set a small time limit before entering idle mode
+            this.idleTimeLimit = REFRESH;
         }
         if (!wasIdle && this.isIdle()) {
             log.log("idlePoll: entering idle mode");
