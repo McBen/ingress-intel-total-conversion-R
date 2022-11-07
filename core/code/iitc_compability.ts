@@ -1,10 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 
 // Export functions for old IITC-Plugins
-import { alert, dialog } from "./ui/dialog";
+import { alert, dialog, DIALOGS } from "./ui/dialog";
 import { idle, IdleResumeCallback } from "./map/idle";
 import * as CalcTools from "./map/map_data_calc_tools";
-import * as Hooks from "./helper/hooks";
 
 import { Log, LogApp } from "./helper/log_apps";
 import { postAjax } from "./helper/send_request";
@@ -17,6 +16,7 @@ const NOOP = () => { /* */ };
 // DIALOG
 globalThis.alert = alert as any;
 globalThis.dialog = dialog;
+globalThis.DIALOGS = DIALOGS;
 
 
 // IDLE
@@ -39,7 +39,7 @@ globalThis.pointToTileId = CalcTools.pointToTileId;
 
 // Request
 globalThis.postAjax = postAjax;
-
+globalThis.request = IITC.mapDataRequest;
 
 // Hooks
 globalThis.pluginCreateHook = NOOP; // stub

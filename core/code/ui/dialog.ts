@@ -10,9 +10,11 @@ const log = Log(LogApp.Dialog);
  */
 let DIALOG_ID = 0;
 
-/* All onscreen dialogs, keyed by their ID.
+/**
+ * All onscreen dialogs, keyed by their ID.
+ * (old Mission plugin needs access to DIALOGS)
  */
-const DIALOGS = {};
+export const DIALOGS = {};
 
 /* The number of dialogs on screen.
  */
