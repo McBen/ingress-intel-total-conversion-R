@@ -8,7 +8,6 @@ require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"layerchoo
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"ornaments.js\")!./ornaments.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"panes.js\")!./panes.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"portal_data.js\")!./portal_data.js");
-require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"portal_detail.js\")!./portal_detail.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"portal_detail_display.js\")!./portal_detail_display.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"portal_detail_display_tools.js\")!./portal_detail_display_tools.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"portal_highlighter.js\")!./portal_highlighter.js");
