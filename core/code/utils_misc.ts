@@ -46,15 +46,10 @@ globalThis.readCookie = readCookie; // OLD EXPORT
 export const writeCookie = (name: string, value: string, forcedExpireTime?: number): void => {
 
     const DEFAULT_COOKIE_EXPIRE_DAYS = 365;
+    const time = (forcedExpireTime ?? DEFAULT_COOKIE_EXPIRE_DAYS) * 24 * 60 * 60 * 1000;
+    const expires = "; expires=" + new Date(Date.now() + time).toUTCString();
 
-    const acceptCookies = readCookie("_ncc") === "1";
-
-    if (acceptCookies) {
-        const time = (forcedExpireTime ?? DEFAULT_COOKIE_EXPIRE_DAYS) * 24 * 60 * 60 * 1000;
-        const expires = "; expires=" + new Date(Date.now() + time).toUTCString();
-
-        document.cookie = name + "=" + value + expires + "; path=/;SameSite=Strict";
-    }
+    document.cookie = name + "=" + value + expires + "; path=/;SameSite=Strict";
 }
 
 globalThis.writeCookie = writeCookie; // OLD EXPORT

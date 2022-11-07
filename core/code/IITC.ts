@@ -4,7 +4,6 @@ import { setupMap } from "./map/map";
 import { setupDataTileParameters } from "./map/map_data_calc_tools";
 import { MapDataRequest } from "./map/map_data_request";
 import { PluginManager } from "./plugin/plugin_manager";
-import { checkCookieLaw } from "./ui/dialogs/cookielaw";
 import { updateGameScore } from "./ui/gamescore";
 import { setupMenu } from "./ui/menu/menu";
 import { ON_MOVE_REFRESH, requests } from "./helper/send_request";
@@ -33,7 +32,6 @@ export class IITCMain {
 
     init(): void {
         log.info("init: page setup");
-        checkCookieLaw();
 
         setupDataTileParameters();
         setupMap();
