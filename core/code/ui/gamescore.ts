@@ -18,6 +18,7 @@ export const updateGameScore = () => {
     // else the ajax is not send (or the callback is never called)
     // the same is done original iitc code for another reason
     window.setTimeout(() => RequestGameScore(), 1);
+    RequestGameScore();
 }
 
 
