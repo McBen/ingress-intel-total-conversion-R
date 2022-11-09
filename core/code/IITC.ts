@@ -49,7 +49,6 @@ export class IITCMain {
         this.mapDataRequest.start();
         requests.startRefreshTimeout(ON_MOVE_REFRESH);
 
-        /** fillme */
         setTimeout(() => this.onIdle(), 10);
     }
 

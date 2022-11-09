@@ -39,7 +39,7 @@ globalThis.pointToTileId = CalcTools.pointToTileId;
 
 // Request
 globalThis.postAjax = postAjax;
-globalThis.request = IITC.mapDataRequest;
+globalThis.mapDataRequest = true; // will be updated in code
 
 // Hooks
 globalThis.pluginCreateHook = NOOP; // stub
