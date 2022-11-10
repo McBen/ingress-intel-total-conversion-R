@@ -46,7 +46,7 @@ export class PortalDetails {
                     if (data && data.error === "RETRY") return this.request(guid);
                     if (!data || data.error || !data.result) return reject();
 
-                    const portal = new PortalInfoDetailed(data.result);
+                    const portal = new PortalInfoDetailed(data.result as IITC.EntityPortalDetailed);
                     this.cache.store(guid, portal);
 
                     // TODO: move to hook handler
@@ -55,7 +55,7 @@ export class PortalDetails {
                     }
 
                     // NOTE: we dropped "details"
-                    const oldEntData = [guid, portal.timestamp, data.result];
+                    const oldEntData = [guid, portal.timestamp2, data.result];
                     hooks.trigger("portalDetailLoaded", { guid, success: true, portal: oldEntData });
                     resolve(portal);
                 },
@@ -70,4 +70,4 @@ export class PortalDetails {
     }
 }
 
-export const portalDetails = new PortalDetails();
+export const portalDetail = new PortalDetails();

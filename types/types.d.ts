@@ -194,63 +194,58 @@ declare namespace IITC {
         ]
     ]
 
-    type EntityPortal = EntityPortalBasic | EntityPortalOverview | EntityPortalDetailed;
-
-    type EntityPortalBasic = [
+    type EntityPortal = [
         guid: string,
         timestamp: number,
-        data: [
-            type: "p",
-            team: EntityTeam,
-            latE6: number,
-            lngE6: number,
-        ]
+        data: EntityPortalBasic | EntityPortalOverview | EntityPortalDetailed
+    ];
+
+    type EntityPortalBasic = [
+        type: "p",
+        team: EntityTeam,
+        latE6: number,
+        lngE6: number,
     ]
 
     type EntityPortalOverview = [
-        guid: string,
-        timestamp: number,
-        data: [
-            type: "p",
-            team: EntityTeam,
-            latE6: number,
-            lngE6: number,
-            level: number,
-            health: number,
-            resCount: number,
-            image: string,
-            title: string,
-            ornaments: [],
-            mission: boolean,
-            mission50plus: boolean,
-            artifactBrief: null | [],
-            timestamp: number
-        ]
+        type: "p",
+        team: EntityTeam,
+        latE6: number,
+        lngE6: number,
+        level: number,
+        health: number,
+        resCount: number,
+        image: string,
+        title: string,
+        ornaments: [],
+        mission: boolean,
+        mission50plus: boolean,
+        artifactBrief: null | [],
+        timestamp: number
     ]
 
     type EntityPortalDetailed = [
-        guid: string,
+        type: "p",
+        team: EntityTeam,
+        latE6: number,
+        lngE6: number,
+        level: number,
+        health: number,
+        resCount: number,
+        image: string,
+        title: string,
+        ornaments: [],
+        mission: boolean,
+        mission50plus: boolean,
+        artifactBrief: null | [],
         timestamp: number,
-        data: [
-            type: "p",
-            team: EntityTeam,
-            latE6: number,
-            lngE6: number,
-            level: number,
-            health: number,
-            resCount: number,
-            image: string,
-            title: string,
-            ornaments: [],
-            mission: boolean,
-            mission50plus: boolean,
-            artifactBrief: null | [],
-            timestamp: number,
-            mods: [null, null, null, null],
-            resonators: [],
-            owner: string,
-            artifactDetail: [],
-            history: number | undefined
-        ]
+        mods: [EntityPortalMod | null, EntityPortalMod | null, EntityPortalMod | null, EntityPortalMod | null],
+        resonators: EntityPortalReso[],
+        owner: string,
+        artifactDetail: [],
+        history: number | undefined
     ]
+
+    type EntityPortalMod = [owner: string, type: string, quality: string, stats: { [index: string]: number }];
+    type EntityPortalReso = [owner: string, level: number, energy: number];
 }

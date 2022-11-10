@@ -8,6 +8,7 @@ import * as CalcTools from "./map/map_data_calc_tools";
 import { Log, LogApp } from "./helper/log_apps";
 import { postAjax } from "./helper/send_request";
 import { IITC } from "./IITC";
+import { PortalInfoDetailed } from "./portal/portal_info";
 const log = Log(LogApp.Plugins);
 
 
@@ -48,6 +49,12 @@ globalThis.runHooks = IITC.hooks.trigger.bind(IITC.hooks);
 globalThis.addHook = IITC.hooks.on.bind(IITC.hooks);
 globalThis.removeHook = IITC.hooks.off.bind(IITC.hooks);
 
+// portalDetails
+globalThis.getPortalRange = (d: PortalInfoDetailed) => { console.assert(d instanceof PortalInfoDetailed, "wrong type"); return d.getPortalRange(); };
+globalThis.getLinkAmpRangeBoost = (d: PortalInfoDetailed) => d.getLinkAmpRangeBoost();
+globalThis.getPortalLevel = (d: PortalInfoDetailed) => d.getPortalLevel();
+globalThis.getPortalModsByType = (d: PortalInfoDetailed, type: string) => d.getPortalModsByType(type);
+globalThis.getMaxOutgoingLinks = (d: PortalInfoDetailed) => d.getMaxOutgoingLinks();
 
 globalThis.renderUpdateStatus = NOOP; // stub
 
