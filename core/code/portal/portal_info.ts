@@ -103,5 +103,7 @@ export class PortalRESO {
         this.owner = data[0];
         this.level = data[1];
         this.energy = data[2];
+
+        console.assert(typeof (this.level) === "number", "reso level is not number");
     }
 }

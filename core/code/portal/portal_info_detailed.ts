@@ -41,7 +41,6 @@ export class PortalInfoDetailed extends PortalInfo {
         this.history = data[18];
 
         console.assert(this.mods !== undefined, "mods are undefined");
-        console.assert(this.resonators.some(r => !r || typeof (r.level) === "number"), "reso level is not number");
     }
 
 
