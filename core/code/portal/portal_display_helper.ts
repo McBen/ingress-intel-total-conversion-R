@@ -242,3 +242,80 @@ const renderResonatorDetails = (slot: number, level: number, nrg: number, nick?:
     return [meter, nick];
 }
 
+
+const COLORS_MOD = { VERY_RARE: "#b08cff", RARE: "#73a8ff", COMMON: "#8cffbf" };
+
+// given portal details, returns html code to display mod details.
+export const getModDetails = (d: PortalInfoDetailed): string => {
+    const mods: string[] = [];
+    const modsTitle = [];
+    const modsColor = [];
+    d.mods.forEach(mod => {
+        let modName = "";
+        let modTooltip = "";
+        let modColor = "#000";
+
+        if (mod) {
+            // all mods seem to follow the same pattern for the data structure
+            // but let's try and make this robust enough to handle possible future differences
+
+            modName = mod.type || "(unknown mod)";
+
+            if (mod.rarity) {
+                modName = mod.rarity.capitalize().replace(/_/g, " ") + " " + modName;
+            }
+
+            modTooltip = modName + "\n";
+            if (mod.owner) {
+                modTooltip += "Installed by: " + mod.owner + "\n";
+            }
+
+            if (mod.stats) {
+                modTooltip += "Stats:";
+                for (const key in mod.stats) {
+                    if (!mod.stats.hasOwnProperty(key)) continue;
+
+                    const value = mod.stats[key];
+                    let valueStr = value.toString(); // display unmodified. correct for shield mitigation and multihack
+
+                    // if (key === 'REMOVAL_STICKINESS' && val == 0) continue;  // stat on all mods recently - unknown meaning, not displayed in stock client
+
+                    // special formatting for known mod stats, where the display of the raw value is less useful
+                    switch (key) {
+                        case "HACK_SPEED": { valueStr = `${value / 10000}%`; break; }
+                        case "HIT_BONUS": { valueStr = `${value / 10000}%`; break; }
+                        case "ATTACK_FREQUENCY": { valueStr = `${value / 1000}x`; break; }
+                        case "FORCE_AMPLIFIER": { valueStr = `${value / 1000}x`; break; }
+                        case "LINK_RANGE_MULTIPLIER": { valueStr = `${value / 1000}x`; break; }
+                        case "LINK_DEFENSE_BOOST": { valueStr = `${value / 1000}x`; break; }
+                        case "REMOVAL_STICKINESS": { if (value > 100) valueStr = `${value / 10000}%`; break; } // an educated guess
+                    }
+
+                    modTooltip += "\n+" + valueStr + " " + key.capitalize().replace(/_/g, " ");
+                }
+            }
+
+            if (mod.rarity) {
+                modColor = COLORS_MOD[mod.rarity];
+            } else {
+                modColor = "#fff";
+            }
+        }
+
+        mods.push(modName);
+        modsTitle.push(modTooltip);
+        modsColor.push(modColor);
+    });
+
+
+    let t = "";
+    for (let i = 0; i < mods.length; i++) {
+        t += "<span" + (modsTitle[i].length ? ' title="' + modsTitle[i] + '"' : "") + ' style="color:' + modsColor[i] + '">' + mods[i] + "</span>"
+    }
+    // and add blank entries if we have less than 4 mods (as the server no longer returns all mod slots, but just the filled ones)
+    for (let i = mods.length; i < 4; i++) {
+        t += '<span style="color:#000"></span>'
+    }
+
+    return t;
+}

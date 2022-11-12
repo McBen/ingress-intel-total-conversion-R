@@ -1,5 +1,5 @@
 import { portalDetail } from "./portal/portal_details_get";
-import { getPortalMiscDetails, getResonatorDetails } from "./portal/portal_display_helper"
+import { getPortalMiscDetails, getResonatorDetails, getModDetails } from "./portal/portal_display_helper"
 
 // PORTAL DETAILS MAIN ///////////////////////////////////////////////
 // main code block that renders the portal details in the sidebar and

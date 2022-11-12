@@ -60,18 +60,28 @@ export class PortalInfo extends PortalInfoBase {
 }
 
 
+export const enum PortalModStat {
+    "HACK_SPEED",
+    "HIT_BONUS",
+    "ATTACK_FREQUENCY",
+    "FORCE_AMPLIFIER",
+    "LINK_RANGE_MULTIPLIER",
+    "LINK_DEFENSE_BOOST",
+    "REMOVAL_STICKINESS"
+}
+
 export class PortalMOD {
 
     public owner: string;
     public type: string;
-    public qualitiy: string;
-    public stats: { [index: string]: number };
+    public rarity: string;
+    public stats: Record<PortalModStat | string, number>;
 
     constructor(data: IITC.EntityPortalMod) {
         this.owner = data[0];
         this.type = data[1];
-        this.qualitiy = data[2];
-        this.stats = data[3];
+        this.rarity = data[2];
+        this.stats = data[3] as Record<PortalModStat, number>;
     }
 }
 

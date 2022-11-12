@@ -101,6 +101,10 @@ declare global {
     let urlPortalLL: [number, number] | undefined;
 
     const script_info: ScriptInfo;
+
+    interface String {
+        capitalize(): string;
+    }
 }
 
 
