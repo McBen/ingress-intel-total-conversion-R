@@ -342,7 +342,7 @@ export class PortalInfoDetailed extends PortalInfo {
     } {
 
         // NOTE: the summary data reports unclaimed portals as level 1 - not zero as elsewhere in IITC
-        let level = this.getPortalLevel();
+        let level = this.level;
         if (level === 0) level = 1; // niantic returns neutral portals as level 1, not 0 as used throughout IITC elsewhere
 
         const resCount = this.resonators.length;
