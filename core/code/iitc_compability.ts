@@ -8,7 +8,7 @@ import * as CalcTools from "./map/map_data_calc_tools";
 import { Log, LogApp } from "./helper/log_apps";
 import { postAjax } from "./helper/send_request";
 import { IITC } from "./IITC";
-import { PortalInfoDetailed } from "./portal/portal_info";
+import { PortalInfoDetailed } from "./portal/portal_info_detailed";
 const log = Log(LogApp.Plugins);
 
 

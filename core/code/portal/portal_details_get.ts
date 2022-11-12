@@ -1,7 +1,7 @@
 import { hooks } from "../helper/hooks";
 import { postAjax } from "../helper/send_request";
 import { DataCache } from "../map/data_cache";
-import { PortalInfoDetailed } from "./portal_info";
+import { PortalInfoDetailed } from "./portal_info_detailed";
 
 
 /**

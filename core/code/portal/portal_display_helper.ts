@@ -1,7 +1,8 @@
 import { COLORS_LVL } from "../constants";
 import { player } from "../helper/player";
 import { digits, formatInterval, genFourColumnTable, prettyEnergy } from "../utils_misc";
-import { PortalInfoDetailed, PortalRESO, RESO_NRG } from "./portal_info";
+import { PortalRESO } from "./portal_info";
+import { PortalInfoDetailed, RESO_NRG } from "./portal_info_detailed";
 
 declare function getPortalLinks(guid: PortalGUID): { in: LinkGUID[], out: LinkGUID[] };
 declare function getPortalFieldsCount(guid: PortalGUID): number;
@@ -118,7 +119,7 @@ const getEnergyText = (d: PortalInfoDetailed): TextResult => {
 const getHackDetailsText = (d: PortalInfoDetailed): TextResult => {
     const hackDetails = d.getPortalHackDetails();
 
-    const shortHackInfo = hackDetails.hacks + " @ " + formatInterval(hackDetails.cooldown);
+    const shortHackInfo = `${hackDetails.hacks} @ ${formatInterval(hackDetails.cooldown)}`;
 
     const title = "Hacks available every 4 hours\n"
         + "Hack count:\t" + hackDetails.hacks + "\n"
