@@ -1,7 +1,7 @@
 import { COLORS_LVL } from "../constants";
 import { player } from "../helper/player";
 import { digits, formatInterval, genFourColumnTable, prettyEnergy } from "../utils_misc";
-import { PortalRESO } from "./portal_info";
+import { NoPortalMod, PortalRESO } from "./portal_info";
 import { PortalInfoDetailed, RESO_NRG } from "./portal_info_detailed";
 
 declare function getPortalLinks(guid: PortalGUID): { in: LinkGUID[], out: LinkGUID[] };
@@ -255,7 +255,7 @@ export const getModDetails = (d: PortalInfoDetailed): string => {
         let modTooltip = "";
         let modColor = "#000";
 
-        if (mod) {
+        if (mod !== NoPortalMod) {
             // all mods seem to follow the same pattern for the data structure
             // but let's try and make this robust enough to handle possible future differences
 
