@@ -56,7 +56,12 @@ export class PortalDetails {
 
                     // NOTE: we dropped "details"
                     const oldEntData = [guid, portal.timestamp2, data.result];
-                    hooks.trigger("portalDetailLoaded", { guid, success: true, portal: oldEntData });
+                    hooks.trigger("portalDetailLoaded", {
+                        guid, success: true,
+                        portal,
+                        /* for old plugins :*/ details: portal,
+                        /* for old plugins :*/ ent: oldEntData
+                    });
                     resolve(portal);
                 },
                 () => {

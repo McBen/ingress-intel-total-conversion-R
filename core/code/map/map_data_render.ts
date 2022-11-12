@@ -272,7 +272,7 @@ export class Render {
         this.createPortalEntity(ent, "core"); // placeholder
     }
 
-
+    // TODO. create by PortalInfo
     createPortalEntity(ent: IITC.EntityPortal, details: DecodePortalDetails): void { // details expected in decodeArray.portal
         this.seenPortalsGuid[ent[0]] = true;  // flag we've seen it
 
