@@ -300,17 +300,17 @@ const createDefaultOverlays = (): LayerList => {
     portalsFactionLayers = [];
     const portalsLayers: L.LayerGroup[] = [];
     for (let i = 0; i <= 8; i++) {
-        portalsFactionLayers[i] = [L.layerGroup(), L.layerGroup(), L.layerGroup()];
+        portalsFactionLayers[i] = [L.layerGroup(), L.layerGroup(), L.layerGroup(), L.layerGroup()];
         portalsLayers[i] = L.layerGroup();
         const name = (i === 0 ? "Unclaimed/Placeholder Portals" : `Level ${i} Portals`);
         addLayers[name] = portalsLayers[i];
     }
 
-    fieldsFactionLayers = [L.layerGroup(), L.layerGroup(), L.layerGroup()];
+    fieldsFactionLayers = [L.layerGroup(), L.layerGroup(), L.layerGroup(), L.layerGroup()];
     const fieldsLayer = L.layerGroup();
     addLayers["Fields"] = fieldsLayer;
 
-    linksFactionLayers = [L.layerGroup(), L.layerGroup(), L.layerGroup()];
+    linksFactionLayers = [L.layerGroup(), L.layerGroup(), L.layerGroup(), L.layerGroup()];
     const linksLayer = L.layerGroup();
     addLayers["Links"] = linksLayer;
 
@@ -318,7 +318,7 @@ const createDefaultOverlays = (): LayerList => {
     // these layers don't actually contain any data. instead, every time they're added/removed from the map,
     // the matching sub-layers within the above portals/fields/links are added/removed from their parent with
     // the below 'onoverlayadd/onoverlayremove' events
-    const factionLayers = [L.layerGroup(), L.layerGroup(), L.layerGroup()];
+    const factionLayers = [L.layerGroup(), L.layerGroup(), L.layerGroup(), L.layerGroup()];
     factionLayers.forEach((facLayer, facIndex) => {
         facLayer.on("add", () => {
             fieldsLayer.addLayer(fieldsFactionLayers[facIndex]);

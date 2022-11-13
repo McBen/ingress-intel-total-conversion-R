@@ -114,7 +114,7 @@ window.CHAT_REQUEST_SCROLL_TOP = 200;
 window.CHAT_SHRINKED = 60;
 
 window.COLOR_SELECTED_PORTAL = '#f0f';
-window.COLORS = ['#FF6600', '#0088FF', '#03DC03']; // none, res, enl
+window.COLORS = ['#FF6600', '#0088FF', '#03DC03', "#ff0028"]; // none, res, enl
 window.COLORS_LVL = ['#000', '#FECE5A', '#FFA630', '#FF7315', '#E40000', '#FD2992', '#EB26CD', '#C124E0', '#9627F4'];
 
 // circles around a selected portal that show from where you can hack
@@ -137,8 +137,9 @@ window.BASE_HACK_COOLDOWN = 300; // 5 mins - 300 seconds
 window.TEAM_NONE = 0;
 window.TEAM_RES = 1;
 window.TEAM_ENL = 2;
-window.TEAM_TO_CSS = ['none', 'res', 'enl'];
-window.TEAM_NAMES = ['Neutral', 'Resistance', 'Enlightened'];
+window.TEAM_MAC = 3;
+window.TEAM_TO_CSS = ['none', 'res', 'enl', 'mac'];
+window.TEAM_NAMES = ['Neutral', 'Resistance', 'Enlightened', 'Machina'];
 
 // STORAGE ///////////////////////////////////////////////////////////
 // global variables used for storage. Most likely READ ONLY. Proper

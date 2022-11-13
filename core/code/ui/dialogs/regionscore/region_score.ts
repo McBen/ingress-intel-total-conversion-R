@@ -77,7 +77,7 @@ export class RegionScore {
     }
 
 
-    getAvgScoreAtCP(faction: FACTION, cp_index: number): number {
+    getAvgScoreAtCP(faction: FACTION.RES | FACTION.ENL, cp_index: number): number {
         const index = faction === FACTION.RES ? 1 : 0;
 
         let score = 0;
@@ -99,7 +99,7 @@ export class RegionScore {
     }
 
 
-    private getScoreMedian(faction: FACTION): number {
+    private getScoreMedian(faction: FACTION.RES | FACTION.ENL): number {
         if (this.median[faction] < 0) {
             const index = faction === FACTION.RES ? 1 : 0;
             const values = this.checkpoints.map(cp => cp[index])

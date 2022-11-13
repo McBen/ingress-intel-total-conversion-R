@@ -1,8 +1,8 @@
 {
-  "name": "iitc-ce",
-  "description": "Ingress Intel Total Conversion (Community Edition)",
-  "homepage": "https://iitc.app/",
-  "repository": "https://github.com/IITC-CE/ingress-intel-total-conversion.git",
+  "name": "iitc-r",
+  "description": "Ingress Intel Total Conversion (Refurbished)",
+  "homepage": "https://github.com/McBen/ingress-intel-total-conversion-R",
+  "repository": "https://github.com/McBen/ingress-intel-total-conversion-R.git",
   "license": "ISC",
   "private": true,
   "scripts": {
