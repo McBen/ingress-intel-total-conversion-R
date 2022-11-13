@@ -167,7 +167,7 @@ declare namespace IITC {
     }
 
 
-    type EntityTeam = "R" | "E" | "N";
+    type EntityTeam = "R" | "E" | "N" | "M";
     type EntityData = EntityLink | EntityField | EntityPortal;
     type EntityLink = [
         guid: string,

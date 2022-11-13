@@ -23,6 +23,7 @@ export class PortalInfoBase {
         switch (team) {
             case "R": return FACTION.RES;
             case "E": return FACTION.ENL;
+            case "M": return FACTION.MAC;
             default:
             case "N": return FACTION.none;
         }

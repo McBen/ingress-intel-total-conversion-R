@@ -219,7 +219,7 @@ export class RegionScoreDialog {
 
         let result = '<table id="overview" title="">';
         for (let t = 0; t < 2; t++) {
-            const faction = order[t];
+            const faction = order[t] as (FACTION.RES | FACTION.ENL);
             const team = FACTION_NAMES[faction];
             const teamClass = FACTION_CSS[faction];
             const teamCol = FACTION_COLORS[faction];
@@ -240,7 +240,7 @@ export class RegionScoreDialog {
         const score_enl = this.regionScore.getAvgScoreAtCP(FACTION.ENL, CP_COUNT);
         const loosing_faction = score_res < score_enl ? FACTION.RES : FACTION.ENL;
 
-        var order = (loosing_faction === FACTION.ENL ? [FACTION.RES, FACTION.ENL] : [FACTION.ENL, FACTION.RES]);
+        const order = (loosing_faction === FACTION.ENL ? [FACTION.RES, FACTION.ENL] : [FACTION.ENL, FACTION.RES]);
 
         const percentToString = (score: number, total: number): string => {
             if (total === 0) return "50%";
@@ -265,8 +265,8 @@ export class RegionScoreDialog {
         const estimatedScore = (): string => {
             let res = "<hr>Estimated:\n";
             const total = score_res + score_enl;
-            for (var t = 0; t < 2; t++) {
-                const faction = order[t];
+            for (let t = 0; t < 2; t++) {
+                const faction = order[t] as (FACTION.RES | FACTION.ENL);
                 const score = this.regionScore.getAvgScoreAtCP(faction, CP_COUNT);
                 res += FACTION_NAMES[faction] + "\t" +
                     digits(score) + "\t" +
