@@ -4,11 +4,13 @@ export class Player {
 
     readonly team: FACTION;
     readonly level: number;
+    readonly name: string;
 
     constructor() {
         if (this.isLoggedIn()) {
             this.team = this.teamStr2Faction(PLAYER.team);
             this.level = PLAYER.verified_level;
+            this.name = PLAYER.nickname;
         }
     }
 

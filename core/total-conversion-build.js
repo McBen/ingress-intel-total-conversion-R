@@ -116,9 +116,6 @@ window.CHAT_SHRINKED = 60;
 window.COLOR_SELECTED_PORTAL = '#f0f';
 window.COLORS = ['#FF6600', '#0088FF', '#03DC03']; // none, res, enl
 window.COLORS_LVL = ['#000', '#FECE5A', '#FFA630', '#FF7315', '#E40000', '#FD2992', '#EB26CD', '#C124E0', '#9627F4'];
-window.COLORS_MOD = { VERY_RARE: '#b08cff', RARE: '#73a8ff', COMMON: '#8cffbf' };
-
-window.MOD_TYPE = { RES_SHIELD: 'Shield', MULTIHACK: 'Multi-hack', FORCE_AMP: 'Force Amp', HEATSINK: 'Heat Sink', TURRET: 'Turret', LINK_AMPLIFIER: 'Link Amp' };
 
 // circles around a selected portal that show from where you can hack
 // it and how far the portal reaches (i.e. how far links may be made
@@ -132,24 +129,9 @@ window.DEFAULT_ZOOM = 15;
 window.DEFAULT_PORTAL_IMG = '//commondatastorage.googleapis.com/ingress.com/img/default-portal-image.png';
 
 // INGRESS CONSTANTS /////////////////////////////////////////////////
-// http://decodeingress.me/2012/11/18/ingress-portal-levels-and-link-range/
-window.RESO_NRG = [0, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000];
 window.HACK_RANGE = 40; // in meters, max. distance from portal to be able to access it
-window.OCTANTS = ['E', 'NE', 'N', 'NW', 'W', 'SW', 'S', 'SE'];
-window.OCTANTS_ARROW = ['→', '↗', '↑', '↖', '←', '↙', '↓', '↘'];
-window.DESTROY_RESONATOR = 75; //AP for destroying portal
-window.DESTROY_LINK = 187; //AP for destroying link
-window.DESTROY_FIELD = 750; //AP for destroying field
-window.CAPTURE_PORTAL = 500; //AP for capturing a portal
-window.DEPLOY_RESONATOR = 125; //AP for deploying a resonator
-window.COMPLETION_BONUS = 250; //AP for deploying all resonators on portal
-window.UPGRADE_ANOTHERS_RESONATOR = 65; //AP for upgrading another's resonator
 window.MAX_PORTAL_LEVEL = 8;
-window.MAX_RESO_PER_PLAYER = [0, 8, 4, 4, 4, 2, 2, 1, 1];
 window.BASE_HACK_COOLDOWN = 300; // 5 mins - 300 seconds
-window.HACK_COOLDOWN_FRIENDLY = 3 * 60; // Temp change 1.10.22
-window.HACK_COOLDOWN_ENEMY = 5 * 60; // Temp change 1.10.22
-window.BASE_HACK_COUNT = 4;
 
 // OTHER MORE-OR-LESS CONSTANTS //////////////////////////////////////
 window.TEAM_NONE = 0;

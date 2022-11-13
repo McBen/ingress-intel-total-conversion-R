@@ -167,13 +167,14 @@ declare namespace IITC {
     }
 
 
+    type EntityTeam = "R" | "E" | "N";
     type EntityData = EntityLink | EntityField | EntityPortal;
     type EntityLink = [
         guid: string,
         timestamp: number,
         data: [
             type: "e",
-            team: string,
+            team: EntityTeam,
             oGuid: string,
             oLatE6: number,
             oLngE6: number,
@@ -188,7 +189,7 @@ declare namespace IITC {
         timestamp: number,
         data: [
             type: "r",
-            team: string,
+            team: EntityTeam,
             points: [guid: string, latE6: number, lngE6: number][],
         ]
     ]
@@ -196,12 +197,55 @@ declare namespace IITC {
     type EntityPortal = [
         guid: string,
         timestamp: number,
-        data: [
-            type: "p",
-            team: string,
-            latE6: number,
-            lngE6: number,
-        ]
+        data: EntityPortalBasic | EntityPortalOverview | EntityPortalDetailed
+    ];
+
+    type EntityPortalBasic = [
+        type: "p",
+        team: EntityTeam,
+        latE6: number,
+        lngE6: number,
     ]
 
+    type EntityPortalOverview = [
+        type: "p",
+        team: EntityTeam,
+        latE6: number,
+        lngE6: number,
+        level: number,
+        health: number,
+        resCount: number,
+        image: string,
+        title: string,
+        ornaments: [],
+        mission: boolean,
+        mission50plus: boolean,
+        artifactBrief: null | [],
+        timestamp: number
+    ]
+
+    type EntityPortalDetailed = [
+        type: "p",
+        team: EntityTeam,
+        latE6: number,
+        lngE6: number,
+        level: number,
+        health: number,
+        resCount: number,
+        image: string,
+        title: string,
+        ornaments: [],
+        mission: boolean,
+        mission50plus: boolean,
+        artifactBrief: null | [],
+        timestamp: number,
+        mods: [EntityPortalMod | null, EntityPortalMod | null, EntityPortalMod | null, EntityPortalMod | null],
+        resonators: EntityPortalReso[],
+        owner: string,
+        artifactDetail: [],
+        history: number | undefined
+    ]
+
+    type EntityPortalMod = [owner: string, type: string, quality: string, stats: { [index: string]: number }];
+    type EntityPortalReso = [owner: string, level: number, energy: number];
 }

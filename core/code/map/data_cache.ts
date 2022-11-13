@@ -1,10 +1,11 @@
 import * as L from "leaflet";
 import { SECONDS } from "../helper/times";
 
-interface CacheEntry {
+interface CacheEntry<T> {
     time: number,
     expire: number,
-    dataStr: string
+    size: number,
+    dataStr: T
 }
 
 
@@ -18,7 +19,7 @@ export class DataCache<T> {
     private REQUEST_CACHE_MAX_ITEMS = 1000;  // if more than this many entries, expire early
     private REQUEST_CACHE_MAX_CHARS = 20000000 / 2; // or more than this total size
 
-    private cache: Map<TileID, CacheEntry>;
+    private cache: Map<TileID, CacheEntry<T>>;
     private cacheCharSize: number;
     private interval: number | undefined;
 
@@ -44,17 +45,18 @@ export class DataCache<T> {
         freshTime = freshTime ?? this.REQUEST_CACHE_FRESH_AGE * 1000;
         const expire = time + freshTime;
 
-        const dataStr = JSON.stringify(data);
+        const dataStr = data;
+        const size = JSON.stringify(data).length;
 
-        this.cacheCharSize += dataStr.length;
-        this.cache.set(qk, { time, expire, dataStr });
+        this.cacheCharSize += size;
+        this.cache.set(qk, { time, expire, size, dataStr });
     }
 
 
     remove(qk: TileID): void {
         const entry = this.cache.get(qk);
         if (entry) {
-            this.cacheCharSize -= entry.dataStr.length;
+            this.cacheCharSize -= entry.size;
             this.cache.delete(qk);
         }
     }
@@ -63,7 +65,7 @@ export class DataCache<T> {
     get(qk: TileID): T | undefined {
         const entry = this.cache.get(qk);
         if (entry) {
-            return JSON.parse(entry.dataStr) as T;
+            return entry.dataStr;
         }
 
         return undefined;
@@ -109,7 +111,7 @@ export class DataCache<T> {
 
         this.cache.forEach((entry, qk) => {
             if (cacheSize > this.REQUEST_CACHE_MAX_ITEMS || this.cacheCharSize > this.REQUEST_CACHE_MAX_CHARS || entry.time < old) {
-                this.cacheCharSize -= entry.dataStr.length;
+                this.cacheCharSize -= entry.size;
                 this.cache.delete(qk);
                 cacheSize--;
             }

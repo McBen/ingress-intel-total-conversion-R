@@ -123,7 +123,7 @@ export const unixTimeToHHmm = (time) => {
 globalThis.unixTimeToHHmm = unixTimeToHHmm; // OLD EXPORT
 
 
-export const formatInterval = (seconds, maxTerms) => {
+export const formatInterval = (seconds: number, maxTerms?: number) => {
 
     const d = Math.floor(seconds / 86400);
     const h = Math.floor((seconds % 86400) / 3600);
@@ -246,7 +246,7 @@ export const uniqueArray = <T>(array: T[]): T[] => {
 globalThis.uniqueArray = uniqueArray; // OLD EXPORT
 
 
-type genFourEnty = [string, string, string | undefined] | undefined;
+type genFourEnty = [string, string, string?] | undefined;
 export const genFourColumnTable = (blocks: genFourEnty[]): string => {
     const lines = blocks.map((detail, index) => {
         if (!detail) return "";
