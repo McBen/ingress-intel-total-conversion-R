@@ -57,6 +57,11 @@ export class PortalInfo extends PortalInfoBase {
         this.mission50plus = data[11];
         this.artifactBrief = data[12];
         this.timestamp2 = data[13];
+
+        // fix team
+        if (data.team === 'N' && data.resCount > 0) {
+            data.team = 'M';
+        }
     }
 }
 

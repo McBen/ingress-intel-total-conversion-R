@@ -453,6 +453,10 @@ export class Render {
             dLngE6: ent[2][7]
         };
 
+        if (data.team === "N") {
+            data.team = "M";
+        }
+
         // create placeholder entities for link start and end points (before checking if the link itself already exists
         this.createPlaceholderPortalEntity(data.oGuid, data.oLatE6, data.oLngE6, data.team);
         this.createPlaceholderPortalEntity(data.dGuid, data.dLatE6, data.dLngE6, data.team);
