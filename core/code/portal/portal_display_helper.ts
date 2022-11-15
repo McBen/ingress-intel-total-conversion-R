@@ -1,4 +1,4 @@
-import { COLORS_LVL } from "../constants";
+import { COLORS_LVL, FACTION_COLORS, FACTION_CSS } from "../constants";
 import { player } from "../helper/player";
 import { digits, formatInterval, genFourColumnTable, prettyEnergy } from "../utils_misc";
 import { NoPortalMod, PortalRESO } from "./portal_info";
@@ -23,7 +23,7 @@ export const getPortalMiscDetails = (guid: PortalGUID, d: PortalInfoDetailed): s
     const linksText = ["links", `${links.outgoing} out / ${links.incoming} in`, title];
 
     const playername = d.owner
-        ? '<span class="nickname">' + d.owner + "</span>"
+        ? `<span class="nickname ${FACTION_CSS[d.team]}">${d.owner}</span>`
         : "-";
     const playerText = ["owner", playername];
 
