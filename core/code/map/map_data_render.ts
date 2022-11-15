@@ -12,6 +12,7 @@ const log = Log(LogApp.Map);
 export class Render {
 
     private portalMarkerScale: number;
+    private minLinkLength: number = 0;
 
     /**
      *  object - represents the set of all deleted game entity GUIDs seen in a render pass
@@ -455,6 +456,21 @@ export class Render {
 
         if (data.team === "N") {
             data.team = "M";
+        }
+
+        if (data.team === "M") {
+            const origin = L.latLng(data.oLatE6 * 1e-6, data.oLngE6 * 1e-6);
+            const destination = L.latLng(data.dLatE6 * 1e-6, data.dLngE6 * 1e-6);
+            const linkLength = origin.distanceTo(destination);
+            if (linkLength > this.minLinkLength) {
+                const href = window.makePermalink(origin, {
+                    fullURL: true,
+                    includeMapView: true
+                });
+
+                this.minLinkLength = linkLength;
+                console.log("!! New max link-length", linkLength, href);
+            }
         }
 
         // create placeholder entities for link start and end points (before checking if the link itself already exists
