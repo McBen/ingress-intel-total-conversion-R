@@ -8,7 +8,7 @@ export class PortalInfoBase {
 
     // readonly guid: PortalGUID;
     // readonly timestamp: number;
-    readonly team: FACTION;
+    public team: FACTION;
     readonly latE6: number;
     readonly lngE6: number;
 
@@ -59,8 +59,8 @@ export class PortalInfo extends PortalInfoBase {
         this.timestamp2 = data[13];
 
         // fix team
-        if (data.team === 'N' && data.resCount > 0) {
-            data.team = 'M';
+        if (this.team === FACTION.none && this.resCount > 0) {
+            this.team = FACTION.MAC;
         }
     }
 }
