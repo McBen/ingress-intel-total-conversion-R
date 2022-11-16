@@ -87,8 +87,8 @@ export const renderPortalDetails = (guid?: PortalGUID) => {
     const modDetails = details ? '<div class="mods">' + getModDetails(details) + "</div>" : "";
     const miscDetails = details ? getPortalMiscDetails(guid, details) : "";
     const resoDetails = details ? getResonatorDetails(details) : "";
+    const historyDetails = details ? getPortalHistoryDetails(details) : "";
     const statusDetails = details ? "" : '<div id="portalStatus">Loading details...</div>';
-    const historyDetails = getPortalHistoryDetails(details);
 
     const img = fixPortalImageUrl(details ? details.image : data.image);
     const title = (details && details.title) || (data && data.title) || "null";
@@ -178,8 +178,8 @@ const getPortalHistoryDetails = (d: PortalInfoDetailed): string => {
         return '<div id="historydetails" class="missing">History missing</div>';
     }
 
-    var classParts = {};
-    ["visited", "captured", "scoutControlled"].forEach(function (k) {
+    const classParts = {};
+    ["visited", "captured", "scoutControlled"].forEach(k => {
         classParts[k] = d.history[k] ? 'class="completed"' : "";
     });
 
