@@ -450,7 +450,34 @@ window.plugin.portalslist.onPaneChanged = function(pane) {
     $("#portalslist").remove()
 };
 
-var setup =  function() {
+
+// given counts of resonators, links and fields, calculate the available AP
+// doesn't take account AP for resonator upgrades or AP for adding mods
+window.portalApGainMaths = function (resCount, linkCount, fieldCount) {
+
+  var deployAp = (8 - resCount) * DEPLOY_RESONATOR;
+  if (resCount == 0) deployAp += CAPTURE_PORTAL;
+  if (resCount != 8) deployAp += COMPLETION_BONUS;
+  // there could also be AP for upgrading existing resonators, and for deploying mods - but we don't have data for that
+  var friendlyAp = deployAp;
+
+  var destroyResoAp = resCount * DESTROY_RESONATOR;
+  var destroyLinkAp = linkCount * DESTROY_LINK;
+  var destroyFieldAp = fieldCount * DESTROY_FIELD;
+  var captureAp = CAPTURE_PORTAL + 8 * DEPLOY_RESONATOR + COMPLETION_BONUS;
+  var destroyAp = destroyResoAp + destroyLinkAp + destroyFieldAp;
+  var enemyAp = destroyAp + captureAp;
+
+  return {
+    friendlyAp: friendlyAp,
+    enemyAp: enemyAp,
+    destroyAp: destroyAp,
+    destroyResoAp: destroyResoAp,
+    captureAp: captureAp
+  }
+}
+
+var setup = function () {
   if (window.useAppPanes()) {
     app.addPane("plugin-portalslist", "Portals list", "ic_action_paste");
     addHook("paneChanged", window.plugin.portalslist.onPaneChanged);
