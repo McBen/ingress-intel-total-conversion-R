@@ -322,8 +322,6 @@ export class Render {
             radius: 10
         };
 
-        window.pushPortalGuidPositionCache(ent[0], data.latE6, data.lngE6);
-
         const marker = createMarker(latlng, dataOptions);
 
         marker.on("click", event => {

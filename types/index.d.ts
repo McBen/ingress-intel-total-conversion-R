@@ -28,7 +28,6 @@ declare global {
     function portalMarkerScale(): number;
     function teamStringToId(faction: string): number;
     function createMarker(latlng: L.LatLng, data: IITC.PortalOptions): IITC.Portal;
-    function pushPortalGuidPositionCache(guid: PortalGUID, latE6: number, lngE6: number): void;
     function show(paneID: string): void;
     function isSmartphone(): boolean;
     function zoomToAndShowPortal(guid: PortalGUID, pos: L.LatLng): void;
