@@ -30,6 +30,17 @@ export class PortalInfoBase {
     }
 }
 
+// TODO: temporary, remove
+export const teamStr2Faction = (team: IITC.EntityTeam): FACTION => {
+    switch (team) {
+        case "R": return FACTION.RES;
+        case "E": return FACTION.ENL;
+        case "M": return FACTION.MAC;
+        default:
+        case "N": return FACTION.none;
+    }
+}
+
 
 export class PortalInfo extends PortalInfoBase {
 

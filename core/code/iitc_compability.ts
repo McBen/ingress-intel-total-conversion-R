@@ -10,6 +10,7 @@ import { Log, LogApp } from "./helper/log_apps";
 import { postAjax } from "./helper/send_request";
 import { IITC } from "./IITC";
 import { PortalInfoDetailed } from "./portal/portal_info_detailed";
+import { fixPortalImageUrl, renderPortalDetails } from "./portal/portal_display";
 const log = Log(LogApp.Plugins);
 
 
@@ -57,7 +58,12 @@ globalThis.getPortalLevel = (d: PortalInfoDetailed) => d.getPortalLevel();
 globalThis.getPortalModsByType = (d: PortalInfoDetailed, type: string) => d.getPortalModsByType(type);
 globalThis.getMaxOutgoingLinks = (d: PortalInfoDetailed) => d.getMaxOutgoingLinks();
 
+// portalDetails Display
+globalThis.fixPortalImageUrl = fixPortalImageUrl;
+globalThis.renderPortalDetails = renderPortalDetails;
+
 globalThis.renderUpdateStatus = NOOP; // stub
+
 
 // utils
 globalThis.makePermalink = utils.makePermalink;

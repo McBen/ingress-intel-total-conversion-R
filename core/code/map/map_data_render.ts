@@ -3,6 +3,7 @@ import { DEFAULT_ZOOM, FACTION, FACTION_COLORS } from "../constants";
 import { TileData } from "./map_data_request";
 import { Log, LogApp } from "../helper/log_apps";
 import { hooks } from "../helper/hooks";
+import { renderPortalDetails } from "../portal/portal_display";
 const log = Log(LogApp.Map);
 
 
@@ -108,7 +109,7 @@ export class Render {
 
                 if (guid === selectedPortal) {
                     // the rare case of the selected portal being deleted. clear the details tab and deselect it
-                    window.renderPortalDetails(null);
+                    renderPortalDetails();
                 }
                 this.deleteEntity(guid);
             }
@@ -326,16 +327,16 @@ export class Render {
 
         marker.on("click", event => {
             const portal = event.target as IITC.Portal;
-            window.renderPortalDetails(portal.options.guid);
+            renderPortalDetails(portal.options.guid);
         });
         marker.on("dblclick", event => {
             const portal = event.target as IITC.Portal;
-            window.renderPortalDetails(portal.options.guid);
+            renderPortalDetails(portal.options.guid);
             window.map.setView(portal.getLatLng(), DEFAULT_ZOOM);
         });
         marker.on("contextmenu", event => {
             const portal = event.target as IITC.Portal;
-            window.renderPortalDetails(portal.options.guid);
+            renderPortalDetails(portal.options.guid);
             if (window.isSmartphone()) {
                 window.show("info");
             } else if (!$("#scrollwrapper").is(":visible")) {
