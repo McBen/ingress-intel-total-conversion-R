@@ -1,5 +1,6 @@
 import { COLORS_LVL, FACTION_COLORS, FACTION_CSS } from "../constants";
 import { player } from "../helper/player";
+import { portalRangeIndicator } from "../map/portal_select";
 import { digits, formatInterval, genFourColumnTable, prettyEnergy } from "../utils_misc";
 import { NoPortalMod, PortalRESO } from "./portal_info";
 import { PortalInfoDetailed, RESO_NRG } from "./portal_info_detailed";
@@ -163,6 +164,15 @@ const getRangeText = (d: PortalInfoDetailed): TextResult => {
         title];
 }
 
+
+globalThis.rangeLinkClick = () => {
+    if (portalRangeIndicator) {
+        window.map.fitBounds(portalRangeIndicator.getBounds());
+    }
+    if (window.isSmartphone()) {
+        window.show("map");
+    }
+}
 
 
 export const getResonatorDetails = (d: PortalInfoDetailed): string => {

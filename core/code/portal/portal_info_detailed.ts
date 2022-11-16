@@ -336,8 +336,7 @@ export class PortalInfoDetailed extends PortalInfo {
         level: number, title: string,
         image: string, resCount: number,
         latE6: number, lngE6: number,
-        health: number, team: FACTION,
-        type: "portal"
+        health: number, team: FACTION
     } {
 
         // NOTE: the summary data reports unclaimed portals as level 1 - not zero as elsewhere in IITC
@@ -357,8 +356,7 @@ export class PortalInfoDetailed extends PortalInfo {
             latE6: this.latE6,
             health,
             team: this.team,
-            lngE6: this.lngE6,
-            type: "portal"
+            lngE6: this.lngE6
         };
     }
 

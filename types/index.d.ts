@@ -22,7 +22,6 @@ declare global {
     function formatPasscodeLong(a: any): any;
     function setupPlayerStat(): void;
     function useAppPanes(): boolean;
-    function renderPortalDetails(guid: PortalGUID | null): void;
     function renderUpdateStatus(): void;
     function resetHighlightedPortals(): void;
     function portalMarkerScale(): number;
@@ -32,6 +31,7 @@ declare global {
     function isSmartphone(): boolean;
     function zoomToAndShowPortal(guid: PortalGUID, pos: L.LatLng): void;
     function selectPortalByLatLng(pos: L.LatLng): void;
+    function setMarkerStyle(marker: IITC.Portal, selected: boolean): boolean;
 
 
     interface Window {

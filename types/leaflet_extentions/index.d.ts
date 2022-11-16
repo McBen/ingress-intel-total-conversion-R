@@ -20,6 +20,7 @@ declare namespace L {
 
     function geodesicPolyline(latlngs: L.LatLng[], options: L.PolylineOptions): GeodesicPolyline;
     function geodesicPolygon(latlngs: L.LatLng[], options: L.PolylineOptions): GeodesicPolygon;
+    function geodesicCircle(latlng: L.LatLng, radius: number, options: L.PolylineOptions): GeodesicCircle;
 
 
     export interface PolylineOptions {

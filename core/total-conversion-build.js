@@ -117,19 +117,11 @@ window.COLOR_SELECTED_PORTAL = '#f0f';
 window.COLORS = ['#FF6600', '#0088FF', '#03DC03', "#ff0028"]; // none, res, enl
 window.COLORS_LVL = ['#000', '#FECE5A', '#FFA630', '#FF7315', '#E40000', '#FD2992', '#EB26CD', '#C124E0', '#9627F4'];
 
-// circles around a selected portal that show from where you can hack
-// it and how far the portal reaches (i.e. how far links may be made
-// from this portal)
-window.ACCESS_INDICATOR_COLOR = 'orange';
-window.RANGE_INDICATOR_COLOR = 'red';
 
 // used when zoom level is not specified explicitly (must contain all the portals)
 window.DEFAULT_ZOOM = 15;
 
-window.DEFAULT_PORTAL_IMG = '//commondatastorage.googleapis.com/ingress.com/img/default-portal-image.png';
-
 // INGRESS CONSTANTS /////////////////////////////////////////////////
-window.HACK_RANGE = 40; // in meters, max. distance from portal to be able to access it
 window.MAX_PORTAL_LEVEL = 8;
 window.BASE_HACK_COOLDOWN = 300; // 5 mins - 300 seconds
 
