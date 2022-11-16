@@ -2,6 +2,7 @@ import { FACTION, FACTION_COLORS } from "../../../constants";
 import { Query, QueryResult } from "./query";
 import * as geojson from "geojson";
 import { hooks } from "../../../helper/hooks";
+import { renderPortalDetails } from "../../../portal/portal_display";
 
 const NOMINATIM = "//nominatim.openstreetmap.org/search?format=json&polygon_geojson=1&q=";
 interface OpenStreetMapQueryResult {
