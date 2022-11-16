@@ -154,32 +154,3 @@ window.pnpoly = function (polygon, point) {
 };
 
 
-
-// @function makePermalink(latlng?: LatLng, options?: Object): String
-// Makes the permalink for the portal with specified latlng, possibly including current map view.
-// Portal latlng can be omitted to create mapview-only permalink.
-// @option: includeMapView: Boolean = null
-// Use to add zoom level and latlng of current map center.
-// @option: fullURL: Boolean = null
-// Use to make absolute fully qualified URL (default: relative link).
-window.makePermalink = function (latlng, options) {
-  options = options || {};
-
-  function round(l) { // ensures that lat,lng are with same precision as in stock intel permalinks
-    return Math.floor(l * 1e6) / 1e6;
-  }
-  var args = [];
-  if (!latlng || options.includeMapView) {
-    var c = window.map.getCenter();
-    args.push(
-      "ll=" + [round(c.lat), round(c.lng)].join(","),
-      "z=" + window.map.getZoom()
-    );
-  }
-  if (latlng) {
-    if ("lat" in latlng) { latlng = [latlng.lat, latlng.lng]; }
-    args.push("pll=" + latlng.join(","));
-  }
-  var url = options.fullURL ? "@url_intel_base@" : "/";
-  return url + "?" + args.join("&");
-};

@@ -33,7 +33,6 @@ declare global {
     function isSmartphone(): boolean;
     function zoomToAndShowPortal(guid: PortalGUID, pos: L.LatLng): void;
     function selectPortalByLatLng(pos: L.LatLng): void;
-    function makePermalink(pos: L.LatLng, options?: any): string;
 
 
     interface Window {

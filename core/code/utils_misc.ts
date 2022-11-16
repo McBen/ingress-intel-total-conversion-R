@@ -19,7 +19,6 @@ export const getURLParam = (param: string): string => {
     return "";
 }
 
-globalThis.getURLParam = getURLParam; // OLD EXPORT
 
 
 /**
@@ -27,16 +26,16 @@ globalThis.getURLParam = getURLParam; // OLD EXPORT
  * http://stackoverflow.com/a/5639455/1684530 by cwolves
  */
 export const readCookie = (name: string): string => {
-    let C, i, c = document.cookie.split("; ");
+    let C;
+    const c = document.cookie.split("; ");
     const cookies = {};
-    for (i = c.length - 1; i >= 0; i--) {
+    for (let i = c.length - 1; i >= 0; i--) {
         C = c[i].split("=");
-        cookies[C[0]] = unescape(C[1]);
+        cookies[C[0]] = decodeURI(C[1]);
     }
     return cookies[name];
 }
 
-globalThis.readCookie = readCookie; // OLD EXPORT
 
 
 /**
@@ -52,14 +51,12 @@ export const writeCookie = (name: string, value: string, forcedExpireTime?: numb
     document.cookie = name + "=" + value + expires + "; path=/;SameSite=Strict";
 }
 
-globalThis.writeCookie = writeCookie; // OLD EXPORT
 
 
 export const eraseCookie = (name: string): void => {
     document.cookie = name + "=; expires=Thu, 1 Jan 1970 00:00:00 GMT; path=/";
 }
 
-globalThis.eraseCookie = eraseCookie; // OLD EXPORT
 
 
 /**
@@ -71,7 +68,6 @@ export const digits = (d: number | string): string => {
     // https://en.wikipedia.org/wiki/Space_(punctuation)#Table_of_spaces
     return d.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1&#8201;");
 }
-globalThis.digits = digits; // OLD EXPORT
 
 
 export const zeroPad = (num: number, pad: number): string => {
@@ -79,7 +75,6 @@ export const zeroPad = (num: number, pad: number): string => {
     const zeros = pad - numStr.length;
     return Array(zeros > 0 ? zeros + 1 : 0).join("0") + numStr;
 }
-globalThis.zeroPad = zeroPad; // OLD EXPORT
 
 
 /**
@@ -99,31 +94,30 @@ export const unixTimeToString = (time: string | number, full?: boolean): string 
         return date;
     }
 }
-globalThis.unixTimeToString = unixTimeToString; // OLD EXPORT
 
 
 // converts a javascript time to a precise date and time (optionally with millisecond precision)
 // formatted in ISO-style YYYY-MM-DD hh:mm:ss.mmm - but using local timezone
-export const unixTimeToDateTimeString = (time, millisecond) => {
+export const unixTimeToDateTimeString = (time: string | number, millisecond?: boolean): string | null => {
     if (!time) return null;
     const d = new Date(typeof time === "string" ? parseInt(time) : time);
     return d.getFullYear() + "-" + zeroPad(d.getMonth() + 1, 2) + "-" + zeroPad(d.getDate(), 2)
         + " " + zeroPad(d.getHours(), 2) + ":" + zeroPad(d.getMinutes(), 2) + ":" + zeroPad(d.getSeconds(), 2) + (millisecond ? "." + zeroPad(d.getMilliseconds(), 3) : "");
 }
-globalThis.unixTimeToDateTimeString = unixTimeToDateTimeString; // OLD EXPORT
 
 
-export const unixTimeToHHmm = (time) => {
+export const unixTimeToHHmm = (time: string | number): string | null => {
     if (!time) return null;
     const d = new Date(typeof time === "string" ? parseInt(time) : time);
-    let h = "" + d.getHours(); h = h.length === 1 ? "0" + h : h;
-    let s = "" + d.getMinutes(); s = s.length === 1 ? "0" + s : s;
+    let h = d.getHours().toString();
+    h = h.length === 1 ? "0" + h : h;
+    let s = d.getMinutes().toString();
+    s = s.length === 1 ? "0" + s : s;
     return h + ":" + s;
 }
-globalThis.unixTimeToHHmm = unixTimeToHHmm; // OLD EXPORT
 
 
-export const formatInterval = (seconds: number, maxTerms?: number) => {
+export const formatInterval = (seconds: number, maxTerms?: number): string => {
 
     const d = Math.floor(seconds / 86400);
     const h = Math.floor((seconds % 86400) / 3600);
@@ -134,13 +128,12 @@ export const formatInterval = (seconds: number, maxTerms?: number) => {
     if (d > 0) terms.push(d + "d");
     if (h > 0) terms.push(h + "h");
     if (m > 0) terms.push(m + "m");
-    if (s > 0 || terms.length == 0) terms.push(s + "s");
+    if (s > 0 || terms.length === 0) terms.push(s + "s");
 
     if (maxTerms) terms = terms.slice(0, maxTerms);
 
     return terms.join(" ");
 }
-globalThis.formatInterval = formatInterval; // OLD EXPORT
 
 
 export const showPortalPosLinks = (lat, lng, name) => {
@@ -157,13 +150,11 @@ export const showPortalPosLinks = (lat, lng, name) => {
         id: "poslinks"
     });
 }
-globalThis.showPortalPosLinks = showPortalPosLinks; // OLD EXPORT
 
 export const isTouchDevice = (): boolean => {
     return "ontouchstart" in window // works on most browsers
         || "onmsgesturechange" in window; // works on ie10
 }
-globalThis.isTouchDevice = isTouchDevice; // OLD EXPORT
 
 
 /**
@@ -174,7 +165,6 @@ export const scrollBottom = (element: string | JQuery): number => {
     if (typeof element === "string") element = $(element);
     return element.get(0).scrollHeight - element.innerHeight() - element.scrollTop();
 }
-globalThis.scrollBottom = scrollBottom; // OLD EXPORT
 
 
 /**
@@ -182,7 +172,7 @@ globalThis.scrollBottom = scrollBottom; // OLD EXPORT
  */
 export const convertTextToTableMagic = (text: string): string => {
     // check if it should be converted to a table
-    if (!text.match(/\t/)) return text.replace(/\n/g, "<br>");
+    if (!/\t/.test(text)) return text.replace(/\n/g, "<br>");
 
     const data = [];
     let columnCount = 0;
@@ -210,7 +200,6 @@ export const convertTextToTableMagic = (text: string): string => {
     table += "</table>";
     return table;
 }
-globalThis.convertTextToTableMagic = convertTextToTableMagic; // OLD EXPORT
 
 
 /**
@@ -220,7 +209,6 @@ globalThis.convertTextToTableMagic = convertTextToTableMagic; // OLD EXPORT
 export const escapeJavascriptString = (str: string): string => {
     return (str + "").replace(/[\\"']/g, "\\$&");
 }
-globalThis.escapeJavascriptString = escapeJavascriptString; // OLD EXPORT
 
 /**
  * escape special characters, such as tags
@@ -231,19 +219,16 @@ export const escapeHtmlSpecialChars = (str: string): string => {
     div.appendChild(text);
     return div.innerHTML;
 }
-globalThis.escapeHtmlSpecialChars = escapeHtmlSpecialChars; // OLD EXPORT
 
 
 export const prettyEnergy = (nrg: number): string => {
     return nrg > 1000 ? Math.round(nrg / 1000).toString() + " k" : nrg.toString();
 }
-globalThis.prettyEnergy = prettyEnergy; // OLD EXPORT
 
 
 export const uniqueArray = <T>(array: T[]): T[] => {
     return [...new Set(array)];
 }
-globalThis.uniqueArray = uniqueArray; // OLD EXPORT
 
 
 type genFourEnty = [string, string, string?] | undefined;
@@ -259,7 +244,6 @@ export const genFourColumnTable = (blocks: genFourEnty[]): string => {
     }).join("");
     return lines;
 }
-globalThis.genFourColumnTable = genFourColumnTable; // OLD EXPORT
 
 
 const clamp = (n: number, max: number, min: number): number => {
@@ -275,7 +259,6 @@ export const clampLatLng = (latlng: L.LatLng): [number, number] => {
         clamp(latlng.lng, 179.999999, -180)
     ];
 }
-globalThis.clampLatLng = clampLatLng; // OLD EXPORT
 
 
 export const clampLatLngBounds = (bounds: L.LatLngBounds): L.LatLngBounds => {
@@ -283,4 +266,34 @@ export const clampLatLngBounds = (bounds: L.LatLngBounds): L.LatLngBounds => {
     const NE = bounds.getNorthEast();
     return L.latLngBounds(clampLatLng(SW), clampLatLng(NE));
 }
-globalThis.clampLatLngBounds = clampLatLngBounds; // OLD EXPORT
+
+
+export interface makePermalinkOptions {
+    fullURL: boolean; /** Use to make absolute fully qualified URL (default: relative link). */
+    includeMapView: boolean;  /** Use to add zoom level and latlng of current map center. */
+}
+
+/**
+ * Makes the permalink for the portal with specified latlng, possibly including current map view.
+ * Portal latlng can be omitted to create mapview-only permalink.
+ */
+export const makePermalink = (latlng?: L.LatLng, options?: Partial<makePermalinkOptions>): string => {
+    options = options || {};
+
+    const args = [];
+    if (!latlng || options.includeMapView) {
+        const round = (l: number): number => { // ensures that lat,lng are with same precision as in stock intel permalinks
+            return Math.floor(l * 1e6) * 1e-6;
+        };
+        const center = window.map.getCenter();
+        args.push(
+            "ll=" + [round(center.lat), round(center.lng)].join(","),
+            "z=" + window.map.getZoom().toFixed(0)
+        );
+    }
+    if (latlng) {
+        args.push(`pll=${latlng.lat},${latlng.lng}`);
+    }
+    const url = options.fullURL ? document.baseURI : "/";
+    return url + "?" + args.join("&");
+};

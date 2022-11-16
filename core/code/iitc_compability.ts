@@ -4,6 +4,7 @@
 import { alert, dialog, DIALOGS } from "./ui/dialog";
 import { idle, IdleResumeCallback } from "./map/idle";
 import * as CalcTools from "./map/map_data_calc_tools";
+import * as utils from "./utils_misc";
 
 import { Log, LogApp } from "./helper/log_apps";
 import { postAjax } from "./helper/send_request";
@@ -57,5 +58,30 @@ globalThis.getPortalModsByType = (d: PortalInfoDetailed, type: string) => d.getP
 globalThis.getMaxOutgoingLinks = (d: PortalInfoDetailed) => d.getMaxOutgoingLinks();
 
 globalThis.renderUpdateStatus = NOOP; // stub
+
+// utils
+globalThis.makePermalink = utils.makePermalink;
+globalThis.clampLatLngBounds = utils.clampLatLngBounds;
+globalThis.clampLatLng = utils.clampLatLng;
+globalThis.genFourColumnTable = utils.genFourColumnTable;
+globalThis.uniqueArray = utils.uniqueArray;
+globalThis.prettyEnergy = utils.prettyEnergy;
+globalThis.escapeHtmlSpecialChars = utils.escapeHtmlSpecialChars;
+globalThis.escapeJavascriptString = utils.escapeJavascriptString;
+globalThis.convertTextToTableMagic = utils.convertTextToTableMagic;
+globalThis.scrollBottom = utils.scrollBottom;
+globalThis.writeCookie = utils.writeCookie;
+globalThis.eraseCookie = utils.eraseCookie;
+globalThis.digits = utils.digits;
+globalThis.zeroPad = utils.zeroPad;
+globalThis.unixTimeToString = utils.unixTimeToString;
+globalThis.unixTimeToDateTimeString = utils.unixTimeToDateTimeString;
+globalThis.unixTimeToHHmm = utils.unixTimeToHHmm;
+globalThis.formatInterval = utils.formatInterval;
+globalThis.showPortalPosLinks = utils.showPortalPosLinks;
+globalThis.isTouchDevice = utils.isTouchDevice;
+globalThis.getURLParam = utils.getURLParam;
+globalThis.readCookie = utils.readCookie;
+
 
 log.info("IITC Compabiltiy layer loaded");
