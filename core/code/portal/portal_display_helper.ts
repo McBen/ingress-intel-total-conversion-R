@@ -327,5 +327,5 @@ export const getModDetails = (d: PortalInfoDetailed): string => {
         t += '<span style="color:#000"></span>'
     }
 
-    return t;
+    return '<div class="mods">' + t + "</div>";
 }

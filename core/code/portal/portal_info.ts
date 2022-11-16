@@ -18,6 +18,10 @@ export class PortalInfoBase {
         this.lngE6 = data[3];
     }
 
+    getLocation(): L.LatLng {
+        return L.latLng(this.latE6 * 1e-6, this.lngE6 * 1e-6)
+    }
+
 
     private teamStr2Faction(team: IITC.EntityTeam): FACTION {
         switch (team) {

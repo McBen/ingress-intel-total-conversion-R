@@ -64,50 +64,90 @@ export const renderPortalDetails = (guid?: PortalGUID) => {
         return;
     }
 
-    const portal = window.portals[guid];
     const details = portalDetail.get(guid);
-
-    // fallback if no details is loaded
-    // TODO: use PortalInfo ?
-    let data = {
-        level: portal.options.data.level,
-        title: portal.options.data.title,
-        image: portal.options.data.image,
-        resCount: portal.options.data.resCount,
-        latE6: portal.options.data.latE6,
-        lngE6: portal.options.data.lngE6,
-        health: portal.options.data.health,
-        team: teamStr2Faction(portal.options.data.team as IITC.EntityTeam)
-    }
-
     if (details) {
-        data = details.getPortalSummaryData();
+        renderPortalFullDetails(guid, details);
+    } else {
+        const portal = window.portals[guid];
+        renderLowDetails(portal);
     }
+}
 
-    const modDetails = details ? '<div class="mods">' + getModDetails(details) + "</div>" : "";
-    const miscDetails = details ? getPortalMiscDetails(guid, details) : "";
-    const resoDetails = details ? getResonatorDetails(details) : "";
-    const historyDetails = details ? getPortalHistoryDetails(details) : "";
-    const statusDetails = details ? "" : '<div id="portalStatus">Loading details...</div>';
 
-    const img = fixPortalImageUrl(details ? details.image : data.image);
-    const title = (details && details.title) || (data && data.title) || "null";
+const renderLowDetails = (portal: IITC.Portal): void => {
 
-    const lat = data.latE6 * 1e-6;
-    const lng = data.lngE6 * 1e-6;
+    const pdata = portal.options.data;
+    const title = (pdata && pdata.title) || "...";
+    const location = L.latLng(pdata.latE6 * 1e-6, pdata.lngE6 * 1e-6);
+    const team = teamStr2Faction(pdata.team as IITC.EntityTeam);
+    const level = team === FACTION.none ? 0 : pdata.level;
 
-    const imgTitle = title + "\n\nClick to show full image.";
+    renderDetailTemplate({
+        guid: portal.options.guid,
+        team,
+        title,
+        location,
+        img: pdata.image,
+        level,
+        levelDetail: `Level ${level}`,
+        others: [
+            $("<div>", { id: "portalStatus", text: "Loading details..." }),
+            $("<div>", { class: "linkdetails" })
+        ]
+    });
 
-    const levelInt = data.team === FACTION.none ? 0 : data.level;
-    const levelDetails = getLevelDetails(levelInt, details);
+}
 
+
+const renderPortalFullDetails = (guid: PortalGUID, details: PortalInfoDetailed): void => {
+
+    const modDetails = getModDetails(details);
+    const miscDetails = getPortalMiscDetails(guid, details);
+    const resoDetails = getResonatorDetails(details);
+    const historyDetails = getPortalHistoryDetails(details);
+
+    const level = details.team === FACTION.none ? 0 : details.level;
+
+    renderDetailTemplate({
+        guid,
+        team: details.team,
+        title: details.title,
+        location: details.getLocation(),
+        img: details.image,
+        level,
+        levelDetail: getLevelDetails(level, details),
+        others: [
+            modDetails,
+            miscDetails,
+            resoDetails,
+            $("<div>", { class: "linkdetails" }),
+            historyDetails
+        ]
+    });
+
+    hooks.trigger("portalDetailsUpdated", { guid, portal: window.portals[guid], portalDetails: details, portalData: details.getPortalSummaryData() });
+}
+
+
+interface TemplateDetails {
+    team: FACTION,
+    title: string,
+    guid: PortalGUID,
+    location: L.LatLng,
+    img: string,
+    level: number,
+    levelDetail: string,
+    others: (string | JQuery)[]
+}
+
+const renderDetailTemplate = (options: TemplateDetails): void => {
 
     $("#portaldetails")
         .html("") // to ensure it's clear
-        .attr("class", FACTION_CSS[data.team])
+        .attr("class", FACTION_CSS[options.team])
         .append(
             $("<h3>", { class: "title" })
-                .text(title)
+                .text(options.title)
                 .prepend(
                     $('<svg><use xlink:href="#ic_place_24px"/><title>Click to move to portal</title></svg>')
                         .attr({
@@ -115,7 +155,7 @@ export const renderPortalDetails = (guid?: PortalGUID) => {
                             style: "float: left"
                         })
                         .on("click", () => {
-                            zoomToAndShowPortal(guid, L.latLng(data.latE6 * 1e-6, data.lngE6 + 1e-6));
+                            zoomToAndShowPortal(options.guid, options.location);
                             if (isSmartphone()) { show("map"); }
                         })),
 
@@ -125,37 +165,25 @@ export const renderPortalDetails = (guid?: PortalGUID) => {
                 accesskey: "w"
             }).text("X")
                 .on("click", () => {
-                    renderPortalDetails(null);
+                    renderPortalDetails();
                     if (isSmartphone()) { show("map"); }
                 }),
 
-            // help cursor via ".imgpreview img"
             $("<div>")
                 .attr({
                     class: "imgpreview",
-                    title: imgTitle,
-                    style: 'background-image: url("' + img + '")'
+                    title: options.title + "\n\nClick to show full image.",
+                    style: 'background-image: url("' + fixPortalImageUrl(options.img) + '")'
                 })
                 .append(
-                    $("<span>", { id: "level", title: levelDetails, text: levelInt }),
-                    $("<img>", { class: "hide", src: img })
+                    $("<span>", { id: "level", title: options.levelDetail, text: options.level }),
+                    $("<img>", { class: "hide", src: options.img })
                 ),
 
-            modDetails,
-            miscDetails,
-            resoDetails,
-            statusDetails,
-            $("<div>", { class: "linkdetails" }),
-            historyDetails
+            ...options.others
         );
 
-    renderPortalUrl(lat, lng, title);
-
-    // only run the hooks when we have a portalDetails object - most plugins rely on the extended data
-    // TODO? another hook to call always, for any plugins that can work with less data?
-    if (details) {
-        hooks.trigger("portalDetailsUpdated", { guid, portal, portalDetails: details, portalData: data });
-    }
+    renderPortalUrl(options.location.lat, options.location.lng, options.title);
 }
 
 
