@@ -177,7 +177,7 @@ const renderDetailTemplate = (options: TemplateDetails): void => {
                 })
                 .append(
                     $("<span>", { id: "level", title: options.levelDetail, text: options.level }),
-                    $("<img>", { class: "hide", src: options.img })
+                    $("<img>", { class: "hide", src: fixPortalImageUrl(options.img) })
                 ),
 
             ...options.others
