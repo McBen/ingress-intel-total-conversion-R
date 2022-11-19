@@ -9,11 +9,11 @@ import { RegionScoreDialog } from "../dialogs/regionscore/dialog";
 
 export const initializeMenu = (iitcmenu: IITCMenu): void => {
 
+    iitcmenu.addEntry({ name: "Command\\Passcode", onClick: () => { new PasscodeDialog(); } });
     iitcmenu.addEntry({ name: "View\\Search", onClick: () => { new SearchDialog(); } });
     iitcmenu.addEntry({ name: "View\\Region Score", onClick: () => showRegionScore() });
     iitcmenu.addEntry({ name: "Layer" });
-    iitcmenu.addEntry({ name: "Command\\Passcode", onClick: () => { new PasscodeDialog(); } });
-    iitcmenu.addEntry({ name: "Draw\\DrawTools Options" }); // TODO: Draw
+    // iitcmenu.addEntry({ name: "Draw\\DrawTools Options" }); // TODO: Draw
     iitcmenu.addEntry({ name: "Misc" });
 
     iitcmenu.addEntry({ name: "View\\Go to current location", onClick: panToLocation, isEnabled: isGettingLocation });
