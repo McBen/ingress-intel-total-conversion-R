@@ -1,4 +1,5 @@
 import { idle } from "../map/idle";
+import { dialog } from "../ui/dialog";
 import { readCookie } from "../utils_misc";
 import { SECONDS } from "./times";
 
@@ -118,7 +119,7 @@ const outOfDateUserPrompt = () => {
                     window.location.reload();
                 }
             },
-            close: () => {
+            closeCallback: () => {
                 blockOutOfDateRequests = undefined;
             }
         });

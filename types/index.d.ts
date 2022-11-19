@@ -18,7 +18,6 @@ type TileID = string;
 declare global {
 
     function load(name: string): any;
-    function dialog(options: any): JQuery;
     function formatPasscodeLong(a: any): any;
     function setupPlayerStat(): void;
     function useAppPanes(): boolean;

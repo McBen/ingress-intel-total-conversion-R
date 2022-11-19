@@ -2,6 +2,7 @@ import { PlayerData } from "../../../../types/intel";
 import { COLORS_LVL } from "../../constants";
 import { postAjax } from "../../helper/send_request";
 import { escapeHtmlSpecialChars } from "../../utils_misc";
+import { dialog } from "../dialog";
 
 
 interface ResultData {

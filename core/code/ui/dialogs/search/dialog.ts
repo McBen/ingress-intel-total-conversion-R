@@ -1,4 +1,5 @@
 import { MILLISECONDS } from "../../../helper/times";
+import { dialog } from "../../dialog";
 import { search } from "./search";
 
 const SEARCH_DELAY = 500 * MILLISECONDS;

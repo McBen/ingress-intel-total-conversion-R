@@ -1,4 +1,5 @@
 import { MIN_ZOOM } from "../constants";
+import { dialog } from "../ui/dialog";
 
 
 export interface TileParameters {
