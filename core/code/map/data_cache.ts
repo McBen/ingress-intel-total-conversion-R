@@ -115,7 +115,7 @@ export class DataCache<T> {
     runExpire() {
         const old = Date.now() - this.REQUEST_CACHE_MAX_AGE * 1000;
 
-        let cacheSize = Object.keys(this.cache).length;
+        let cacheSize = this.cache.size;
 
         this.cache.forEach((entry, qk) => {
             if (cacheSize > this.REQUEST_CACHE_MAX_ITEMS || this.cacheCharSize > this.REQUEST_CACHE_MAX_CHARS || entry.time < old) {
