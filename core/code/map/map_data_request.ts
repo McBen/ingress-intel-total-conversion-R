@@ -770,6 +770,12 @@ export class MapDataRequest {
         }
     }
 
+
+    // debug only
+    getCache(): DataCache<TileData> {
+        return this.cache;
+    }
+
     // iitc compability
     getRender(): Render {
         return this.render;

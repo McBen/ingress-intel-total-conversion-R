@@ -5,6 +5,8 @@ import { GLOPT, IITCOptions } from "../../helper/options";
 import { toast } from "../toast";
 import { aboutIITC } from "../dialogs/about";
 import { RegionScoreDialog } from "../dialogs/regionscore/dialog";
+import { CacheDebug } from "../dialogs/debug/cache_hits";
+import { IITC } from "../../IITC";
 
 
 export const initializeMenu = (iitcmenu: IITCMenu): void => {
@@ -13,7 +15,7 @@ export const initializeMenu = (iitcmenu: IITCMenu): void => {
     iitcmenu.addEntry({ name: "View\\Search", onClick: () => { new SearchDialog(); } });
     iitcmenu.addEntry({ name: "View\\Region Score", onClick: () => showRegionScore() });
     iitcmenu.addEntry({ name: "Layer" });
-    // iitcmenu.addEntry({ name: "Draw\\DrawTools Options" }); // TODO: Draw
+    iitcmenu.addEntry({ name: "Debug\\Tile cache", onClick: () => new CacheDebug(IITC.mapDataRequest.getCache()).show() });
     iitcmenu.addEntry({ name: "Misc" });
 
     iitcmenu.addEntry({ name: "View\\Go to current location", onClick: panToLocation, isEnabled: isGettingLocation });

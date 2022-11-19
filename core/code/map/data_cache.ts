@@ -22,6 +22,8 @@ export class DataCache<T> {
     private cache: Map<TileID, CacheEntry<T>>;
     private cacheCharSize: number;
     private interval: number | undefined;
+    private cacheHit: number;
+    private cacheMiss: number;
 
 
     constructor() {
@@ -34,6 +36,8 @@ export class DataCache<T> {
 
         this.cacheCharSize = 0;
         this.cache = new Map();
+        this.cacheHit = 0;
+        this.cacheMiss = 0;
     }
 
 
@@ -84,7 +88,11 @@ export class DataCache<T> {
         const entry = this.cache.get(qk);
         if (entry) {
             const now = Date.now();
-            return entry.expire >= now;
+            if (entry.expire >= now) {
+                this.cacheHit++;
+                return true;
+            }
+            this.cacheMiss++;
         }
 
         return false;
@@ -116,5 +124,20 @@ export class DataCache<T> {
                 cacheSize--;
             }
         });
+    }
+
+    getStatistic(): {
+        items: number, itemsMax: number
+        memory: number, memoryMax: number,
+        hits: number, miss: number
+    } {
+        return {
+            items: this.cache.size,
+            itemsMax: this.REQUEST_CACHE_MAX_ITEMS,
+            memory: this.cacheCharSize,
+            memoryMax: this.REQUEST_CACHE_MAX_CHARS,
+            hits: this.cacheHit,
+            miss: this.cacheMiss
+        }
     }
 }
