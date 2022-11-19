@@ -49,6 +49,11 @@ export class IITCMain {
         this.mapDataRequest.start();
         requests.startRefreshTimeout(ON_MOVE_REFRESH);
 
+        if (globalThis.iitcCompabilityInit) {
+            log.info("init: finalize compability layer");
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+            globalThis.iitcCompabilityInit();
+        }
         setTimeout(() => this.onIdle(), 10);
     }
 

@@ -42,7 +42,10 @@ globalThis.pointToTileId = CalcTools.pointToTileId;
 
 // Request
 globalThis.postAjax = postAjax;
-globalThis.mapDataRequest = true; // will be updated in code
+// globalThis.mapDataRequest
+
+// Render
+// globalThis.Render
 
 // Hooks
 globalThis.pluginCreateHook = NOOP; // stub
@@ -89,5 +92,13 @@ globalThis.isTouchDevice = utils.isTouchDevice;
 globalThis.getURLParam = utils.getURLParam;
 globalThis.readCookie = utils.readCookie;
 
+
+globalThis.iitcCompabilityInit = () => {
+    // these variables are only available after boot
+    globalThis.mapDataRequest = IITC.mapDataRequest;
+    globalThis.Render = {
+        prototype: IITC.mapDataRequest.getRender() // used in Drone Helper
+    }
+}
 
 log.info("IITC Compabiltiy layer loaded");

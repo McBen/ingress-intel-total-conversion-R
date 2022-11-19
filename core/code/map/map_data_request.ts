@@ -147,11 +147,6 @@ export class MapDataRequest {
                 this.render.createPortalEntity(data.ent, "detailed");
             }
         });
-
-        // backward compability layer - iitc-compability.ts is loaded before this
-        if (globalThis.mapDataRequest) {
-            globalThis.mapDataRequest = this;
-        }
     }
 
 
@@ -773,5 +768,10 @@ export class MapDataRequest {
 
             this.updateStatus();
         }
+    }
+
+    // iitc compability
+    getRender(): Render {
+        return this.render;
     }
 }
