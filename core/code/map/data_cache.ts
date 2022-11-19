@@ -41,16 +41,14 @@ export class DataCache<T> {
     }
 
 
-    store(qk: TileID, data: T, freshTime?: number): void {
+    store(qk: TileID, data: T): void {
         this.remove(qk);
 
         const time = Date.now();
-
-        freshTime = freshTime ?? this.REQUEST_CACHE_FRESH_AGE * 1000;
-        const expire = time + freshTime;
+        const expire = time + this.REQUEST_CACHE_FRESH_AGE;
 
         const dataStr = data;
-        const size = JSON.stringify(data).length;
+        const size = JSON.stringify(data).length; // guess memory size
 
         this.cacheCharSize += size;
         this.cache.set(qk, { time, expire, size, dataStr });
