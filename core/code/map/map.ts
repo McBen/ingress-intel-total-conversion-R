@@ -278,7 +278,16 @@ const createDefaultBaseMapLayers = (): LayerList => {
                 { featureType: "road", elementType: "labels.icon", stylers: [{ invert_lightness: !0 }] }
             ]
         });
-    baseLayers["Google Roads"] = googleMutant({ type: "roadmap" });
+    baseLayers["Google Roads"] = googleMutant({
+        type: "roadmap",
+        styles: [
+            { featureType: "poi.business", stylers: [{ visibility: "off" }] },
+            { featureType: "poi.government", stylers: [{ visibility: "off" }] },
+            { featureType: "poi.school", stylers: [{ visibility: "off" }] },
+            { featureType: "poi.sports_complex", elementType: "labels", stylers: [{ visibility: "off" }] }
+        ]
+    });
+
     const trafficMutant = googleMutant({ type: "roadmap" });
     // FIXME
     // @ts-ignore
