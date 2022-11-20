@@ -1,5 +1,5 @@
 import { DataCache } from "../../../map/data_cache";
-import { digits } from "../../../utils_misc";
+import { digits, formatInterval } from "../../../utils_misc";
 import { dialog } from "../../dialog";
 
 export class CacheDebug {
@@ -17,7 +17,9 @@ export class CacheDebug {
         const html = $("<div>").append(
             $("<div>", { id: "items", text: "" }),
             $("<div>", { id: "memory", text: "" }),
-            $("<div>", { id: "hits", text: "" })
+            $("<div>", { id: "hits", text: "" }),
+            $("<div>", { id: "old", text: "" }),
+            $("<div>", { id: "sizes", text: "" })
         )
 
         this.dialog = dialog({
@@ -36,7 +38,9 @@ export class CacheDebug {
 
         $("#items", this.dialog).html(this.formatText(status.items, status.itemsMax));
         $("#memory", this.dialog).html(this.formatText(status.memory, status.memoryMax));
-        $("#hits", this.dialog).html(`hits: ${status.hits} miss: ${status.miss} `)
+        $("#hits", this.dialog).html(`hits: ${status.hits} old: ${status.isOld} miss: ${status.miss} `)
+        $("#old", this.dialog).html(`oldest: ${formatInterval(Math.floor(status.oldest / 1000))}`)
+        $("#sizes", this.dialog).html(`sizes: ${status.itemSizeMin} to  ${status.itemSizeMax}; mean: ${Math.floor(status.memory / status.items)} `)
     }
 
     private formatText(current: number, max: number): string {

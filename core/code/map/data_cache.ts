@@ -24,6 +24,9 @@ export class DataCache<T> {
     private interval: number | undefined;
     private cacheHit: number;
     private cacheMiss: number;
+    private cacheNotFound: number;
+    private itemSizeMin: number;
+    private itemSizeMax: number;
 
 
     constructor() {
@@ -38,6 +41,9 @@ export class DataCache<T> {
         this.cache = new Map();
         this.cacheHit = 0;
         this.cacheMiss = 0;
+        this.cacheNotFound = 0;
+        this.itemSizeMin = Infinity;
+        this.itemSizeMax = 1;
     }
 
 
@@ -49,6 +55,9 @@ export class DataCache<T> {
 
         const dataStr = data;
         const size = JSON.stringify(data).length; // guess memory size
+
+        if (this.itemSizeMin > size) this.itemSizeMin = size;
+        if (this.itemSizeMax < size) this.itemSizeMax = size;
 
         this.cacheCharSize += size;
         this.cache.set(qk, { time, expire, size, dataStr });
@@ -91,6 +100,8 @@ export class DataCache<T> {
                 return true;
             }
             this.cacheMiss++;
+        } else {
+            this.cacheNotFound++;
         }
 
         return false;
@@ -127,15 +138,24 @@ export class DataCache<T> {
     getStatistic(): {
         items: number, itemsMax: number
         memory: number, memoryMax: number,
-        hits: number, miss: number
+        hits: number, isOld: number, miss: number,
+        oldest: number,
+        itemSizeMin: number, itemSizeMax: number
     } {
+        const first = this.cache.entries().next();
+        const oldest = Date.now() - first.value[1].time;
+
         return {
             items: this.cache.size,
             itemsMax: this.REQUEST_CACHE_MAX_ITEMS,
             memory: this.cacheCharSize,
             memoryMax: this.REQUEST_CACHE_MAX_CHARS,
             hits: this.cacheHit,
-            miss: this.cacheMiss
+            isOld: this.cacheMiss,
+            miss: this.cacheNotFound,
+            oldest,
+            itemSizeMin: this.itemSizeMin,
+            itemSizeMax: this.itemSizeMax
         }
     }
 }
