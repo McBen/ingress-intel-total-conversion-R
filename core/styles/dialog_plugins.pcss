@@ -1,0 +1,42 @@
+#dialog-plugins {
+
+    .container {
+        height: 100%;
+    }
+
+    .head {
+        height: 3em;
+    }
+
+    #pluginlist {
+        height: calc(100% - 3em);
+        overflow: scroll;
+    }
+
+    .card {
+        padding-bottom: 5px;
+
+        .title {
+            display: inline-block;
+            font-size: large;
+            font-weight: bold;
+            margin-left: 0.5em;
+            margin-right:0.7em;
+        }
+
+        .description {
+            white-space: nowrap;
+            overflow: hidden;
+            margin-left: 2em;
+        }
+
+        .error {
+            color: #ff6565;
+            background: black;
+            font-weight: bold;
+            margin-left: 2em;
+            padding-left: 2em; 
+            padding-right: 2em; 
+        }
+    }
+    }

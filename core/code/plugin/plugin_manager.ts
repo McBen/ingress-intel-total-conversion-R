@@ -51,6 +51,10 @@ export class PluginManager {
             .map(p => p.name);
     }
 
+    getAllPlugins(): Plugin[] {
+        return this.plugins;
+    }
+
 
     activatePlugin(plugin: Plugin): void {
         this.options.set(plugin.name, true);
