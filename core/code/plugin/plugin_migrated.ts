@@ -9,6 +9,7 @@ const log = anylogger(LogApp.Plugins);
 export class PluginMigrated extends Plugin {
 
     private setup: () => void;
+    private wasDeactivated: boolean | undefined;
 
     constructor(iitcPlugin: BootCallback) {
         super();
@@ -34,6 +35,12 @@ export class PluginMigrated extends Plugin {
 
 
     activate(): void {
+        if (this.wasDeactivated) {
+            // prevent multiple init calls if user re-activate plugin
+            this.wasDeactivated = undefined;
+            return;
+        }
+
         require("../iitc_compability");
 
         log.info("Starting Plugin", this.name);
@@ -43,6 +50,7 @@ export class PluginMigrated extends Plugin {
 
 
     deactivate(): void {
-        this.error = "need reload to deactive plugin";
+        this.error = "need reload to deactivate plugin";
+        this.wasDeactivated = true;
     }
 }
