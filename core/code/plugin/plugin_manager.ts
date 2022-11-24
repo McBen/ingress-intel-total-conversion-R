@@ -34,7 +34,7 @@ export class PluginManager {
 
     initialize(): void {
         this.plugins.forEach(plugin => {
-            if (this.options.getSafe(plugin.name, true)) {
+            if (this.options.getSafe(plugin.name, !plugin.defaultInactive)) {
                 plugin.enable(this);
             }
         })
@@ -51,4 +51,18 @@ export class PluginManager {
             .map(p => p.name);
     }
 
+
+    activatePlugin(plugin: Plugin): void {
+        this.options.set(plugin.name, true);
+        if (!plugin.isActive()) {
+            plugin.enable(this);
+        }
+    }
+
+    deactivatePlugin(plugin: Plugin): void {
+        this.options.set(plugin.name, false);
+        if (plugin.isActive()) {
+            plugin.disable(this);
+        }
+    }
 }

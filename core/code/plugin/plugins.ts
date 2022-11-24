@@ -7,6 +7,7 @@ export class Plugin {
     public description: string;
     public tags?: string[];
     public requires?: string[];
+    public defaultInactive?: boolean;
 
     public error?: string;
     private activated: number = 0;
