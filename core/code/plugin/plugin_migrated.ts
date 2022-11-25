@@ -36,6 +36,8 @@ export class PluginMigrated extends Plugin {
 
 
     activate(): void {
+        this.error = undefined;
+
         if (this.wasDeactivated) {
             // prevent multiple init calls if user re-activate plugin
             this.wasDeactivated = undefined;
@@ -46,7 +48,6 @@ export class PluginMigrated extends Plugin {
 
         log.info("Starting Plugin", this.name);
         this.setup();
-        this.error = undefined;
     }
 
 

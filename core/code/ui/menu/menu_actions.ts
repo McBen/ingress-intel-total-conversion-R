@@ -7,6 +7,7 @@ import { aboutIITC } from "../dialogs/about";
 import { RegionScoreDialog } from "../dialogs/regionscore/dialog";
 import { CacheDebug } from "../dialogs/debug/cache_hits";
 import { IITC } from "../../IITC";
+import { PluginDialog } from "../dialogs/plugins";
 
 
 export const initializeMenu = (iitcmenu: IITCMenu): void => {
@@ -25,8 +26,11 @@ export const initializeMenu = (iitcmenu: IITCMenu): void => {
         hasCheckbox: true,
         isChecked: () => IITCOptions.getSafe(GLOPT.SHOW_ZOOM_BUTTONS, true)
     });
+    // iitcmenu.addSeparator("View");
+    iitcmenu.addEntry({ name: "View\\Plugins", onClick: () => new PluginDialog().show() });
 
     iitcmenu.addEntry({ name: "?\\About", onClick: () => aboutIITC() });
+
 
 
     const migratePlugins = new Map<string, string>([

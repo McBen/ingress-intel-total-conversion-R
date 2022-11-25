@@ -208,6 +208,7 @@
                     "mod": false
                 }
             }
-        ]
+        ],
+        "unicorn/switch-case-braces": "off"
     }
 }

@@ -3,6 +3,7 @@
 @import "styles/backgrounds.pcss";
 @import "styles/chat.pcss";
 @import "styles/dialog.pcss";
+@import "styles/dialog_plugins.pcss";
 @import "styles/sidebar.pcss";
 @import "styles/artifact.pcss";
 @import "styles/redeem.pcss";
