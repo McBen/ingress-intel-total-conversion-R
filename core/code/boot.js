@@ -237,14 +237,8 @@ require("leaflet.gridlayer.googlemutant");
 require("../external/L.Geodesic.js"); // TODO move to dependencies
 require("../external/oms.min.js"); // TODO move to dependencies
 
-// L.CanvasIconLayer = (function (module) { // FIXME: 
-require("../external/rbush.min.js"); // TODO move to dependencies
 L.CanvasIconLayer = require("../external/leaflet.canvas-markers.js")(L); // TODO move to dependencies
-// }
 
-
-// require("../external/jquery-3.6.0.min.js"); // TODO move to dependencies
-// require("../external/jquery-ui-1.12.1.min.js"); // TODO move to dependencies
 require("../external/taphold.js"); // TODO move to dependencies
 require("../external/jquery.qrcode.min.js"); // TODO move to dependencies
 
