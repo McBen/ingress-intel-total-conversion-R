@@ -18,6 +18,7 @@ export class PluginMigrated extends Plugin {
         this.name = "old-iitc-plugin";
         this.version = "unknown";
         this.description = "";
+        this.author = "unknown";
 
         if (iitcPlugin.info) {
             this.name = iitcPlugin.info.pluginId || this.name;

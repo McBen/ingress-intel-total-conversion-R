@@ -5,6 +5,7 @@ export class Plugin {
     public name: string;
     public version: string;
     public description: string;
+    public author: string;
     public tags?: string[];
     public requires?: string[];
     public defaultInactive?: boolean;
