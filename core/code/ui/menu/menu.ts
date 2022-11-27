@@ -34,16 +34,21 @@ export class IITCMenu extends MenuDialog {
 
     private isActive: boolean;
 
+
     constructor() {
         super();
 
         this.root.attr("class", "iitcbar top");
-    }
 
-    getBaseMenuElement(): JQuery {
-        return this.root;
-    }
+        initializeMenu(this);
 
+        const menu = $("<div>", { class: "iitcontainer iitcmenu" }).append(
+            this.root,
+            $("<span>", { class: "iitcbaredge topright" })
+        );
+
+        $("body").append(menu);
+    }
 
     protected createMenuEntry(name: string, options: Partial<MenuDefinition>): JQuery {
         const element = $("<div>", { class: "titlemenuitem", id: options.id }).html(this.menutext(name));
@@ -130,7 +135,7 @@ export class IITCMenu extends MenuDialog {
 
     migrateToolbox(mapping: Map<string, string>): void {
 
-        $("#toolbox").children().each((inddex, element) => {
+        $("#toolbox").children().each((_, element) => {
             const name = $(element).text();
 
             let newname = mapping.get(name);
@@ -145,6 +150,8 @@ export class IITCMenu extends MenuDialog {
                 }
             })
         });
+
+        $("#toolbox").empty();
     }
 
     migrateLayers(layerGroups: LayerGroups): void {
@@ -222,19 +229,4 @@ export class IITCMenu extends MenuDialog {
             });
         }
     }
-}
-
-
-export const setupMenu = (): void => {
-
-    const iitcmenu = new IITCMenu();
-
-    initializeMenu(iitcmenu);
-
-    const menu = $("<div>", { class: "iitcontainer iitcmenu" }).append(
-        iitcmenu.getBaseMenuElement(),
-        $("<span>", { class: "iitcbaredge topright" })
-    );
-
-    $("body").append(menu);
 }

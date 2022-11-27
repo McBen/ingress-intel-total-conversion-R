@@ -12,6 +12,22 @@ import { PluginDialog } from "../dialogs/plugins";
 
 export const initializeMenu = (iitcmenu: IITCMenu): void => {
 
+    setupMenu(iitcmenu);
+
+    setTimeout(() => {
+        migrate(iitcmenu);
+        $("#portal_highlight_select").hide();
+    }, 200);
+
+    $("#toolbox").hide();
+    $(".leaflet-control-layers").hide();
+    $("#portal_highlight_select").hide();
+
+    updateZoomButtons();
+}
+
+
+export const setupMenu = (iitcmenu: IITCMenu): void => {
     iitcmenu.addEntry({ name: "Command\\Passcode", onClick: () => { new PasscodeDialog(); } });
     iitcmenu.addEntry({ name: "View\\Search", onClick: () => { new SearchDialog(); } });
     iitcmenu.addEntry({ name: "View\\Region Score", onClick: () => showRegionScore() });
@@ -30,8 +46,10 @@ export const initializeMenu = (iitcmenu: IITCMenu): void => {
     iitcmenu.addEntry({ name: "View\\Plugins", onClick: () => new PluginDialog().show() });
 
     iitcmenu.addEntry({ name: "?\\About", onClick: () => aboutIITC() });
+}
 
 
+export const migrate = (iitcmenu: IITCMenu): void => {
 
     const migratePlugins = new Map<string, string>([
         ["About IITC", ""],
@@ -50,20 +68,11 @@ export const initializeMenu = (iitcmenu: IITCMenu): void => {
         "Player Tracker": ["Player Tracker Resistance", "Player Tracker Enlightened"]
     };
 
-    setTimeout(() => {
-        iitcmenu.migrateToolbox(migratePlugins);
-        iitcmenu.migrateLayers(groupLayers);
-        iitcmenu.migrateHighlighters();
-
-        $("#portal_highlight_select").hide();
-    }, 200);
-
-    $("#toolbox").hide();
-    $(".leaflet-control-layers").hide();
-    $("#portal_highlight_select").hide();
-
-    updateZoomButtons();
+    iitcmenu.migrateToolbox(migratePlugins);
+    iitcmenu.migrateLayers(groupLayers);
+    iitcmenu.migrateHighlighters();
 }
+
 
 const toogleZoomButtons = (): void => {
     const old = IITCOptions.getSafe(GLOPT.SHOW_ZOOM_BUTTONS, true);

@@ -1,0 +1,115 @@
+import { Options } from "../helper/options";
+import { IITC } from "../IITC";
+import { Log, LogApp } from "../helper/log_apps";
+const log = Log(LogApp.Map);
+
+
+export interface LayerOptions {
+    default: boolean;
+}
+
+
+interface LayerEntity {
+    layer: L.Layer;
+    name: string;
+    isBaseLayer: boolean;
+    default?: boolean;
+}
+
+
+export class LayerManager {
+
+    private status: Options<string>;
+    private layers: LayerEntity[];
+
+    constructor() {
+        this.status = new Options("ingress.intelmap.layergroupdisplayed");
+        this.layers = [];
+    }
+
+
+    addBase(name: string, layer: L.Layer): void {
+        console.assert(this.layers.every(l => l.name !== name), "layer name already used");
+
+        const entry: LayerEntity = {
+            layer,
+            name,
+            isBaseLayer: true
+        }
+        this.layers.push(entry);
+
+        const menuName = "layer\\Base Layer\\" + name;
+
+        IITC.menu.addEntry({
+            name: menuName,
+            onClick: () => {
+                this.showBase(entry);
+                return false;
+            },
+            isChecked: () => this.isVisible(entry),
+            hasCheckbox: true
+        });
+    }
+
+
+    addOverlay(name: string, layer: L.LayerGroup, options: Partial<LayerOptions> = {}): void {
+        console.assert(this.layers.every(l => l.name !== name), "layer name already used");
+
+        const entry: LayerEntity = {
+            layer,
+            name,
+            isBaseLayer: false,
+            default: options.default
+        }
+        this.layers.push(entry);
+
+        const menuName = "layer\\" + name;
+
+        IITC.menu.addEntry({
+            name: menuName,
+            onClick: () => {
+                if (this.isVisible(entry)) {
+                    this.hideOverlay(entry);
+                } else {
+                    this.showOverlay(entry);
+                }
+                return false;
+            },
+            isChecked: () => this.isVisible(entry),
+            hasCheckbox: true
+        });
+    }
+
+
+    private showBase(entity: LayerEntity): void {
+        this.layers
+            .filter(l => l.isBaseLayer)
+            .forEach(l => window.map.removeLayer(l.layer));
+
+        window.map.addLayer(entity.layer);
+    }
+
+    private showOverlay(entity: LayerEntity): void {
+        if (window.map.hasLayer(entity.layer)) return;
+        window.map.addLayer(entity.layer);
+        this.updateStatus(entity, true);
+    }
+
+    private hideOverlay(entity: LayerEntity): void {
+        if (!window.map.hasLayer(entity.layer)) return;
+        window.map.removeLayer(entity.layer);
+        this.updateStatus(entity, false);
+    }
+
+    private updateStatus(entity: LayerEntity, status: boolean): void {
+        if (status === !!entity.default) {
+            this.status.remove(entity.name);
+        } else {
+            this.status.set(entity.name, status);
+        }
+    }
+
+    private isVisible(entity: LayerEntity): boolean {
+        return window.map.hasLayer(entity.layer);
+    }
+}

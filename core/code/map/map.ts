@@ -6,6 +6,7 @@ import { idle } from "./idle";
 import { ON_MOVE_REFRESH, requests } from "../helper/send_request";
 import { GLOPT, IITCOptions } from "../helper/options";
 import { hooks } from "../helper/hooks";
+import { IITC } from "../IITC";
 const log = Log(LogApp.Map);
 
 
@@ -255,8 +256,8 @@ const createDefaultBaseMapLayers = (): LayerList => {
     const attribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
         '&copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
     const cartoUrl = "https://{s}.basemaps.cartocdn.com/{theme}/{z}/{x}/{y}.png";
-    baseLayers["CartoDB Dark Matter"] = L.tileLayer(cartoUrl, { attribution, theme: "dark_all" } as L.TileLayerOptions);
-    baseLayers["CartoDB Positron"] = L.tileLayer(cartoUrl, { attribution, theme: "light_all" } as L.TileLayerOptions);
+    IITC.layers.addBase("CartoDB Dark Matter", L.tileLayer(cartoUrl, { attribution, theme: "dark_all" } as L.TileLayerOptions));
+    IITC.layers.addBase("CartoDB Positron", L.tileLayer(cartoUrl, { attribution, theme: "light_all" } as L.TileLayerOptions));
 
     // Google Maps - including ingress default (using the stock-intel API-key)
     const googleMutant = (L.gridLayer as any).googleMutant as (options: any) => L.GridLayer; // FIXME: temp workaround
