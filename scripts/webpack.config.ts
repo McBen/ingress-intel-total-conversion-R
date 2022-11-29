@@ -55,6 +55,7 @@ const config: webpack.Configuration = {
       "$": "jquery",
       "jQuery": "jquery",
       "window.jQuery": "jquery",
+      "L": "leaflet"
     }),
     new WebpackUserscript({
       headers: generateHeader,
