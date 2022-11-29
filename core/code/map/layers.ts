@@ -1,7 +1,6 @@
 import { Options } from "../helper/options";
 import { IITC } from "../IITC";
-import { Log, LogApp } from "../helper/log_apps";
-const log = Log(LogApp.Map);
+import * as L from "leaflet";
 
 
 export interface LayerOptions {
@@ -15,6 +14,14 @@ interface LayerEntity {
     isBaseLayer: boolean;
     default?: boolean;
 }
+
+const groupOldLayers = {
+    "Ornaments": ["Artifacts", "Beacons", "Frackers",
+        "Ornament: Anomaly Portals", "Ornament: Battle Beacons",
+        "Ornament: Battle Results", "Ornament: Scout Controller"],
+    "Player Tracker": ["Player Tracker Resistance", "Player Tracker Enlightened"]
+};
+
 
 
 export class LayerManager {
@@ -51,15 +58,17 @@ export class LayerManager {
         });
     }
 
-
-    addOverlay(name: string, layer: L.LayerGroup, options: Partial<LayerOptions> = {}): void {
+    addOverlay(name: string, layer: L.Layer, options: Partial<LayerOptions> = {}): void {
         console.assert(this.layers.every(l => l.name !== name), "layer name already used");
+
+        name = this.renameOldLayer(name);
+        const showLayer = (options.default === undefined ? true : options.default);
 
         const entry: LayerEntity = {
             layer,
             name,
             isBaseLayer: false,
-            default: options.default
+            default: showLayer
         }
         this.layers.push(entry);
 
@@ -78,6 +87,28 @@ export class LayerManager {
             isChecked: () => this.isVisible(entry),
             hasCheckbox: true
         });
+    }
+
+    private renameOldLayer(name: string): string {
+        // eslint-disable-next-line guard-for-in
+        for (const group in groupOldLayers) {
+            const names = groupOldLayers[group] as string[];
+            if (names.includes(name)) {
+                return group + "\\" + name;
+            }
+        }
+
+        return name;
+    }
+
+
+    showBaseMap(name: string): void {
+        let layer = this.layers.find(l => l.name === name);
+        if (!layer) layer = this.layers.find(l => l.name === "Google Roads");
+        if (!layer) layer = this.layers.find(l => l.isBaseLayer);
+        if (!layer) throw new Error("no base map layer available");
+
+        this.showBase(layer);
     }
 
 
@@ -112,4 +143,17 @@ export class LayerManager {
     private isVisible(entity: LayerEntity): boolean {
         return window.map.hasLayer(entity.layer);
     }
+
+    areAllDefaultLayerVisible(): boolean {
+        return this.layers.every(l => l.isBaseLayer || this.isVisible(l));
+    }
+
+    showAllDefaultLayers(): void {
+        this.layers.forEach(l => {
+            if (l.isBaseLayer || this.isVisible(l)) return;
+
+            this.showOverlay(l);
+        })
+    }
+
 }

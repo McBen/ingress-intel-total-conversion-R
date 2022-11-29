@@ -25,7 +25,7 @@ window.artifact.setup = function() {
   setTimeout (artifact.requestData, 1);
 
   artifact._layer = new L.LayerGroup();
-  window.layerChooser.addOverlay(artifact._layer, 'Artifacts');
+  IITC.menu.addOverlay('Artifacts', artifact._layer,);
 
   $('<a>')
     .html('Artifacts')

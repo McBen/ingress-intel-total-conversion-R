@@ -40,29 +40,6 @@ function debounce(callback, time) { // https://gist.github.com/nmsdvid/8807205#g
   };
 }
 
-function extendLayerChooser() {
-  if (app.setLayers) {
-    // hook some additional code into the LayerControl so it's easy for the mobile app to interface with it
-    window.LayerChooser.include({
-      _setAppLayers: debounce(function () {
-        var l = this.getLayers();
-        app.setLayers(JSON.stringify(l.baseLayers), JSON.stringify(l.overlayLayers));
-      }, 1000),
-
-      setLabel: (function (setLabel) {
-        return function () {
-          this._setAppLayers();
-          return setLabel.apply(this, arguments);
-        };
-      })(window.LayerChooser.prototype.setLabel),
-
-      _update: function () {
-        this._setAppLayers();
-        return L.Control.Layers.prototype._update.apply(this, arguments);
-      }
-    });
-  }
-}
 
 window.runOnAppBeforeBoot = function () {
   if (!isApp) { return; }
@@ -70,8 +47,6 @@ window.runOnAppBeforeBoot = function () {
   if (app.showZoom) {
     window.mapOptions.zoomControl = app.showZoom();
   }
-
-  extendLayerChooser();
 
   // add jquery listeners ******************************************************
   if (app.dialogOpened && app.dialogFocused) {

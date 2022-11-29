@@ -206,7 +206,6 @@ function boot() {
 
   window.setupOMS();
   window.ornaments.setup();
-  layerChooser._lastPriority = 1000; // plugins overlays have priority >1000
   window.setupTooltips();
   window.chat.setup();
   window.setupSidebar();

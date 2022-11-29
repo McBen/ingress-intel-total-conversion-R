@@ -36,18 +36,15 @@ export class IITCMain {
 
         log.info("init: UI");
         this.menu = new IITCMenu();
-
         setupMap();
+        this.menu.initMenu();
 
         log.info("init: data requests");
         idle.reset()
         this.mapDataRequest = new MapDataRequest();
-
-        log.info("start requests");
         this.mapDataRequest.start();
         requests.startRefreshTimeout(ON_MOVE_REFRESH);
         updateGameScore();
-
 
         if (globalThis.iitcCompabilityInit) {
             log.info("init: finalize compability layer");
