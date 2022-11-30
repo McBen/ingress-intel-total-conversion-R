@@ -82,11 +82,15 @@ export class LayerManager {
                 } else {
                     this.showOverlay(entry);
                 }
-                return false;
+                return true;
             },
             isChecked: () => this.isVisible(entry),
             hasCheckbox: true
         });
+
+        if (this.status.getSafe(name, showLayer)) {
+            this.showOverlay(entry);
+        }
     }
 
     private renameOldLayer(name: string): string {
