@@ -19,7 +19,8 @@ const groupOldLayers = {
     "Ornaments": ["Artifacts", "Beacons", "Frackers",
         "Ornament: Anomaly Portals", "Ornament: Battle Beacons",
         "Ornament: Battle Results", "Ornament: Scout Controller"],
-    "Player Tracker": ["Player Tracker Resistance", "Player Tracker Enlightened"]
+    "Player Tracker": ["Player Tracker Resistance", "Player Tracker Enlightened"],
+    "Drone": ["Drone View", "Drone Route", "Drone Coverage"]
 };
 
 
