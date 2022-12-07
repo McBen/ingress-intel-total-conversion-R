@@ -4,19 +4,10 @@ import { dialog } from "./ui/dialog";
 /**
  * retrieves parameter from the URL?query=string.
  */
-export const getURLParam = (param: string): string => {
-    const items = window.location.search.substr(1).split("&");
-
-    for (let i = 0; i < items.length; i++) {
-        const item = items[i].split("=");
-
-        if (item[0] == param) {
-            const val = item.length == 1 ? "" : decodeURIComponent(item[1].replace(/\+/g, " "));
-            return val;
-        }
-    }
-
-    return "";
+export const getURLParam = (parameter: string): string => {
+    const queryString = window.location.search;
+    const urlParameters = new URLSearchParams(queryString);
+    return urlParameters.get(parameter) || "";
 }
 
 
