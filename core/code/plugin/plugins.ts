@@ -1,4 +1,6 @@
 import { PluginManager } from "./plugin_manager";
+import { Log, LogApp } from "../helper/log_apps";
+const log = Log(LogApp.Plugins);
 
 export class Plugin {
 
@@ -16,6 +18,8 @@ export class Plugin {
 
     enable(manager: PluginManager): boolean {
         if (!this.activateRequirements(manager)) return false;
+
+        log.info("Start", this.name);
 
         /* RELEASE-START */
         try {
@@ -37,6 +41,8 @@ export class Plugin {
         this.activated--;
         if (this.activated <= 0) {
             this.deactivateRequirements(manager);
+
+            log.info("Stop", this.name);
             this.deactivate();
         }
     }

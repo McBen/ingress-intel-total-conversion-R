@@ -1,9 +1,5 @@
 import { Plugin } from "./plugins";
-import anylogger from "anylogger"
 import { BootCallback } from "../../../types";
-import { LogApp } from "../helper/log_apps";
-
-const log = anylogger(LogApp.Plugins);
 
 
 export class PluginMigrated extends Plugin {
@@ -45,8 +41,6 @@ export class PluginMigrated extends Plugin {
         }
 
         require("../iitc_compability");
-
-        log.info("Starting Plugin", this.name);
         this.setup();
     }
 
