@@ -109,10 +109,14 @@ export class LayerManager {
 
 
     removeOverlay(layer: L.Layer): void {
-        const entry = this.layers.find(l => L.stamp(l.layer) === L.stamp(layer));
-        if (!entry) return;
+        const entryIndex = this.layers.findIndex(l => L.stamp(l.layer) === L.stamp(layer));
+        if (entryIndex < 0) {
+            log.warn("overlay not found");
+            return;
+        }
 
         IITC.menu.removeEntry(L.stamp(layer).toString());
+        this.layers.splice(entryIndex, 1);
     }
 
 
