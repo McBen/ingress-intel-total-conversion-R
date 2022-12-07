@@ -8,6 +8,7 @@ export interface MenuEntry {
     isEnabled?: () => boolean,
     isChecked?: () => boolean,
     subMenu?: MenuDialog;
+    id?: string;
 }
 
 
@@ -70,6 +71,8 @@ export class MenuDialog {
     }
 
     protected addEntryDirectly(name: string, options: Partial<MenuDefinition>): MenuEntry {
+        console.assert(!options.id || !this.entries.some(l => l.id === options.id), "Menu-ID already used", options.id);
+
         const element = this.createMenuEntry(name, options);
 
         const entry: MenuEntry = {
@@ -78,7 +81,8 @@ export class MenuDialog {
             hasCheckbox: options.hasCheckbox,
             isEnabled: options.isEnabled,
             isChecked: options.isChecked,
-            element
+            element,
+            id: options.id
         }
         entry.element.on("mouseenter", () => this.showSubmenu(entry));
 
@@ -87,6 +91,25 @@ export class MenuDialog {
 
         return entry;
     }
+
+    removeEntry(id: string): boolean {
+        const entryIndex = this.entries.findIndex(l => l.id === id);
+        if (entryIndex >= 0) {
+            this.entries[entryIndex].element.remove();
+            this.entries.splice(entryIndex, 1);
+            return true;
+        }
+
+        const foundInSub = this.entries.some(sub => {
+            if (sub.subMenu) {
+                return sub.subMenu.removeEntry(id);
+            }
+            return false;
+        });
+
+        return foundInSub;
+    }
+
 
     protected createMenuEntry(name: string, options: Partial<MenuDefinition>): JQuery {
         const element = $("<div>", { class: "menuitem", id: options.id, text: name });

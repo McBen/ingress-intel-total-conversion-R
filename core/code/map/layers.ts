@@ -76,6 +76,7 @@ export class LayerManager {
 
         IITC.menu.addEntry({
             name: menuName,
+            id: L.stamp(layer).toString(),
             onClick: () => {
                 if (this.isVisible(entry)) {
                     this.hideOverlay(entry);
@@ -103,6 +104,14 @@ export class LayerManager {
         }
 
         return name;
+    }
+
+
+    removeOverlay(layer: L.Layer): void {
+        const entry = this.layers.find(l => L.stamp(l.layer) === L.stamp(layer));
+        if (!entry) return;
+
+        IITC.menu.removeEntry(L.stamp(layer).toString());
     }
 
 
