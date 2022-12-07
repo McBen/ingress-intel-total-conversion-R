@@ -1,6 +1,6 @@
 import { dialog } from "../dialog";
 import { IITC } from "../../IITC";
-import { Plugin } from "../../plugin/plugins";
+import { Plugin } from "../../plugin/plugin_base";
 
 import { Log, LogApp } from "../../helper/log_apps";
 const log = Log(LogApp.Dialog);

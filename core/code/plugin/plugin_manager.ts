@@ -1,6 +1,7 @@
-import { Plugin } from "./plugins";
+import { Plugin } from "./plugin_base";
 import { Options } from "../helper/options";
 import { PluginMigrated } from "./plugin_migrated";
+import { registerPlugins } from "./plugins";
 
 export class PluginManager {
 
@@ -21,7 +22,7 @@ export class PluginManager {
     }
 
 
-    private add(plugin: Plugin): void {
+    add(plugin: Plugin): void {
         const basename = plugin.name;
         let index = 0;
         while (this.getPlugin(plugin.name)) {
@@ -33,6 +34,9 @@ export class PluginManager {
 
 
     initialize(): void {
+
+        registerPlugins(this);
+
         this.plugins.forEach(plugin => {
             if (this.options.getSafe(plugin.name, !plugin.defaultInactive)) {
                 plugin.enable(this);

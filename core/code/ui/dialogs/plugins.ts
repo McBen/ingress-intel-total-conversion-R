@@ -1,5 +1,5 @@
 import { IITC } from "../../IITC";
-import { Plugin } from "../../plugin/plugins";
+import { Plugin } from "../../plugin/plugin_base";
 import { PluginMigrated } from "../../plugin/plugin_migrated";
 import { dialog } from "../dialog";
 

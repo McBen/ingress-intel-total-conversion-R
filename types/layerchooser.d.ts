@@ -98,17 +98,4 @@ declare global {
         showLayer(id: number, show: boolean): boolean;
     }
 
-    const layerChooser: LayerChooser;
-
-    /**
-     * @deprecated: use `layerChooser.addOverlay` directly
-     */
-    function addLayerGroup(name: string, layerGroup: L.LayerGroup<any>, defaultDisplay: boolean): void;
-
-    /**
-     * @deprecated: use `layerChooser.removeLayer` directly
-     * our method differs from inherited (https://leafletjs.com/reference.html#control-layers-removelayer),
-     * as (by default) layer is removed from the map as well, see description for more details.
-     */
-    function removeLayerGroup(layerGroup: L.LayerGroup<any>): void;
 }

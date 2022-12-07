@@ -5,6 +5,7 @@ import { alert, dialog, DIALOGS } from "./ui/dialog";
 import { idle, IdleResumeCallback } from "./map/idle";
 import * as CalcTools from "./map/map_data_calc_tools";
 import * as utils from "./utils_misc";
+import * as L from "leaflet";
 
 import { Log, LogApp } from "./helper/log_apps";
 import { postAjax } from "./helper/send_request";
@@ -42,10 +43,26 @@ globalThis.pointToTileId = CalcTools.pointToTileId;
 
 // Request
 globalThis.postAjax = postAjax;
-// globalThis.mapDataRequest
+// globalThis.mapDataRequest .. init below
 
 // Render
-// globalThis.Render
+// globalThis.Render .. init below
+
+// layerChooser
+// globalThis.layerChooser .. init below
+
+/**
+ * @deprecated even in IITC-CE it is deprecated
+ */
+globalThis.addLayerGroup = (name: string, layerGroup: L.LayerGroup<any>, defaultDisplay: boolean): void => {
+    IITC.layers.addOverlay(name, layerGroup, { default: defaultDisplay });
+};
+/**
+ * @deprecated even in IITC-CE it is deprecated
+ */
+globalThis.removeLayerGroup = (layerGroup: L.LayerGroup<any>): void => {
+    IITC.layers.removeOverlay(layerGroup);
+};
 
 // Hooks
 globalThis.pluginCreateHook = NOOP; // stub
@@ -92,12 +109,16 @@ globalThis.isTouchDevice = utils.isTouchDevice;
 globalThis.getURLParam = utils.getURLParam;
 globalThis.readCookie = utils.readCookie;
 
-
 globalThis.iitcCompabilityInit = () => {
     // these variables are only available after boot
     globalThis.mapDataRequest = IITC.mapDataRequest;
     globalThis.Render = {
         prototype: IITC.mapDataRequest.getRender() // used in Drone Helper
+    }
+
+    globalThis.layerChooser = {
+        addOverlay: (layer: L.Layer, name: string, options = {}) => IITC.layers.addOverlay(name, layer, options),
+        removeLayer: (layer: L.Layer, _options = {}) => IITC.layers.removeOverlay(layer)
     }
 }
 

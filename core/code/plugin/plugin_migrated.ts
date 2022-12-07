@@ -1,4 +1,4 @@
-import { Plugin } from "./plugins";
+import { Plugin } from "./plugin_base";
 import { BootCallback } from "../../../types";
 
 

@@ -1,4 +1,5 @@
 // ORNAMENTS ///////////////////////////////////////////////////////
+const { IITC } = require("./IITC");
 
 // Added as part of the Ingress #Helios in 2014, ornaments
 // are additional image overlays for portals.
@@ -60,8 +61,8 @@ window.ornaments = {
     this.layers['Ornaments'] = window.ornaments.layerGroup();
     this.layers['Excluded ornaments'] = window.ornaments.layerGroup(); // to keep excluded ornaments in an own layer
 
-    window.layerChooser.addOverlay(this.layers['Ornaments'], 'Ornaments');
-    window.layerChooser.addOverlay(this.layers['Excluded ornaments'], 'Excluded ornaments', { default: false });
+    IITC.layers.addOverlay('Ornaments', this.layers['Ornaments'],);
+    IITC.layers.addOverlay('Excluded ornaments', this.layers['Excluded ornaments'], { default: false });
 
     $('<a>', {
       text: 'Ornaments Opt',
@@ -74,7 +75,7 @@ window.ornaments = {
   },
   createLayer: function (layerID) {
     window.ornaments.layers[layerID] = window.ornaments.layerGroup();
-    window.layerChooser.addOverlay(window.ornaments.layers[layerID], layerID);
+    IITC.layersaddOverlay(layerID, window.ornaments.layers[layerID]);
   },
 
   addPortal: function (portal) {

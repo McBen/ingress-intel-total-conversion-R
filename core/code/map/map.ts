@@ -1,11 +1,13 @@
 import { DEFAULT_ZOOM, FACTION, FACTION_NAMES, MIN_ZOOM } from "../constants";
-import { Log, LogApp } from "../helper/log_apps";
 import { getURLParam, readCookie, writeCookie } from "../utils_misc";
 import { player } from "../helper/player";
 import { idle } from "./idle";
 import { ON_MOVE_REFRESH, requests } from "../helper/send_request";
 import { GLOPT, IITCOptions } from "../helper/options";
 import { hooks } from "../helper/hooks";
+import { IITC } from "../IITC";
+import * as L from "leaflet";
+import { Log, LogApp } from "../helper/log_apps";
 const log = Log(LogApp.Map);
 
 
@@ -44,13 +46,7 @@ export const setupMap = (): void => {
     // adds a base layer to the map. done separately from the above,
     // so that plugins that add base layers can be the default
     hooks.on("iitcLoaded", () => {
-
-        const lastBaseMap: string = IITCOptions.get(GLOPT.BASE_MAP_LAYER);
-        const lastMap = lastBaseMap && window.layerChooser.getLayer(lastBaseMap);
-        const baselayer: L.Layer = lastMap ?? window.layerChooser.getLayer("CartoDB Dark Matter")
-        console.assert(baselayer, "baseLayer not found")
-        window.map.addLayer(baselayer);
-
+        IITC.layers.showBaseMap(IITCOptions.get(GLOPT.BASE_MAP_LAYER))
 
         // (setting an initial position, before a base layer is added, causes issues with leaflet) // todo check
         let pos = getPosition();
@@ -119,13 +115,12 @@ const createMap = (): void => {
 
 
 const createLayers = () => {
-    const baseLayers = createDefaultBaseMapLayers();
-    const overlays = createDefaultOverlays();
+    createDefaultBaseMapLayers();
+    IITC.menu.addSeparator("layer");
+    createDefaultOverlays();
 
-    window.layerChooser = new LayerChooser(baseLayers as any, overlays as any, { map: window.map } as L.Control.LayersOptions)
-        .addTo(window.map);
 
-    if (!areAllLayerVisible(overlays)) {
+    if (!IITC.layers.areAllDefaultLayerVisible()) {
         // as users often become confused if they accidentally switch a standard layer off, display a warning in this case
         $("#portaldetails")
             .html('<div class="layer_off_warning">'
@@ -133,30 +128,10 @@ const createLayers = () => {
                 + '<a id="enable_standard_layers">Enable standard layers</a>'
                 + "</div>");
         $("#enable_standard_layers").on("click", () => {
-
-            // eslint-disable-next-line guard-for-in
-            for (const name in overlays) {
-                const overlay: L.Layer = overlays[name];
-                if (!window.map.hasLayer(overlay)) {
-                    window.map.addLayer(overlay);
-                }
-            }
+            IITC.layers.showAllDefaultLayers();
             $("#portaldetails").html("");
         });
     }
-}
-
-
-const areAllLayerVisible = (overlays: LayerList): boolean => {
-    // eslint-disable-next-line guard-for-in
-    for (const name in overlays) {
-        const layer: L.Layer = overlays[name];
-        if (!window.map.hasLayer(layer)) {
-            return false;
-        }
-    }
-
-    return true;
 }
 
 
@@ -245,40 +220,41 @@ const getPosition = (): NormalizedPosition | undefined => {
     }
 }
 
-type LayerList = Map<string, L.Layer>;
 
-const createDefaultBaseMapLayers = (): LayerList => {
-    const baseLayers: LayerList = new Map();
+
+const createDefaultBaseMapLayers = (): void => {
 
     // cartodb has some nice tiles too - both dark and light subtle maps - http://cartodb.com/basemaps/
     // (not available over https though - not on the right domain name anyway)
     const attribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
         '&copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
     const cartoUrl = "https://{s}.basemaps.cartocdn.com/{theme}/{z}/{x}/{y}.png";
-    baseLayers["CartoDB Dark Matter"] = L.tileLayer(cartoUrl, { attribution, theme: "dark_all" } as L.TileLayerOptions);
-    baseLayers["CartoDB Positron"] = L.tileLayer(cartoUrl, { attribution, theme: "light_all" } as L.TileLayerOptions);
+    IITC.layers.addBase("CartoDB Dark Matter", L.tileLayer(cartoUrl, { attribution, theme: "dark_all" } as L.TileLayerOptions));
+    IITC.layers.addBase("CartoDB Positron", L.tileLayer(cartoUrl, { attribution, theme: "light_all" } as L.TileLayerOptions));
 
     // Google Maps - including ingress default (using the stock-intel API-key)
     const googleMutant = (L.gridLayer as any).googleMutant as (options: any) => L.GridLayer; // FIXME: temp workaround
-    baseLayers["Google Default Ingress Map"] = googleMutant(
-        {
-            type: "roadmap",
-            backgroundColor: "#0e3d4e",
-            styles: [
-                {
-                    featureType: "all", elementType: "all",
-                    stylers: [{ visibility: "on" }, { hue: "#131c1c" }, { saturation: "-50" }, { invert_lightness: true }]
-                },
-                {
-                    featureType: "water", elementType: "all",
-                    stylers: [{ visibility: "on" }, { hue: "#005eff" }, { invert_lightness: true }]
-                },
-                { featureType: "poi", stylers: [{ visibility: "off" }] },
-                { featureType: "transit", elementType: "all", stylers: [{ visibility: "off" }] },
-                { featureType: "road", elementType: "labels.icon", stylers: [{ invert_lightness: !0 }] }
-            ]
-        });
-    baseLayers["Google Roads"] = googleMutant({
+
+    const gmapsOptionsIngress = {
+        type: "roadmap",
+        backgroundColor: "#0e3d4e",
+        styles: [
+            {
+                featureType: "all", elementType: "all",
+                stylers: [{ visibility: "on" }, { hue: "#131c1c" }, { saturation: "-50" }, { invert_lightness: true }]
+            },
+            {
+                featureType: "water", elementType: "all",
+                stylers: [{ visibility: "on" }, { hue: "#005eff" }, { invert_lightness: true }]
+            },
+            { featureType: "poi", stylers: [{ visibility: "off" }] },
+            { featureType: "transit", elementType: "all", stylers: [{ visibility: "off" }] },
+            { featureType: "road", elementType: "labels.icon", stylers: [{ invert_lightness: !0 }] }
+        ]
+    };
+    IITC.layers.addBase("Google Default Ingress Map", googleMutant(gmapsOptionsIngress));
+
+    const gmapsOptions = {
         type: "roadmap",
         styles: [
             { featureType: "poi.business", stylers: [{ visibility: "off" }] },
@@ -286,25 +262,23 @@ const createDefaultBaseMapLayers = (): LayerList => {
             { featureType: "poi.school", stylers: [{ visibility: "off" }] },
             { featureType: "poi.sports_complex", elementType: "labels", stylers: [{ visibility: "off" }] }
         ]
-    });
+    }
+    IITC.layers.addBase("Google Roads", googleMutant(gmapsOptions));
 
     const trafficMutant = googleMutant({ type: "roadmap" });
     // FIXME
     // @ts-ignore
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     trafficMutant.addGoogleLayer("TrafficLayer");
-    baseLayers["Google Roads + Traffic"] = trafficMutant;
-    baseLayers["Google Satellite"] = googleMutant({ type: "satellite" });
-    baseLayers["Google Hybrid"] = googleMutant({ type: "hybrid" });
-    baseLayers["Google Terrain"] = googleMutant({ type: "terrain" });
 
-    return baseLayers;
+    IITC.layers.addBase("Google Roads + Traffic", trafficMutant);
+    IITC.layers.addBase("Google Satellite", googleMutant({ type: "satellite" }));
+    IITC.layers.addBase("Google Hybrid", googleMutant({ type: "hybrid" }));
+    IITC.layers.addBase("Google Terrain", googleMutant({ type: "terrain" }));
 }
 
 
-const createDefaultOverlays = (): LayerList => {
-
-    const addLayers: LayerList = new Map();
+const createDefaultOverlays = (): void => {
 
     portalsFactionLayers = [];
     const portalsLayers: L.LayerGroup[] = [];
@@ -312,48 +286,41 @@ const createDefaultOverlays = (): LayerList => {
         portalsFactionLayers[i] = [L.layerGroup(), L.layerGroup(), L.layerGroup(), L.layerGroup()];
         portalsLayers[i] = L.layerGroup();
         const name = (i === 0 ? "Unclaimed/Placeholder Portals" : `Level ${i} Portals`);
-        addLayers[name] = portalsLayers[i];
+        IITC.layers.addOverlay("Faction\\" + name, portalsLayers[i]);
     }
 
     fieldsFactionLayers = [L.layerGroup(), L.layerGroup(), L.layerGroup(), L.layerGroup()];
     const fieldsLayer = L.layerGroup();
-    addLayers["Fields"] = fieldsLayer;
+    IITC.layers.addOverlay("Fields", fieldsLayer);
 
     linksFactionLayers = [L.layerGroup(), L.layerGroup(), L.layerGroup(), L.layerGroup()];
     const linksLayer = L.layerGroup();
-    addLayers["Links"] = linksLayer;
+    IITC.layers.addOverlay("Links", linksLayer);
+
 
     // faction-specific layers
     // these layers don't actually contain any data. instead, every time they're added/removed from the map,
-    // the matching sub-layers within the above portals/fields/links are added/removed from their parent with
-    // the below 'onoverlayadd/onoverlayremove' events
-    const factionLayers = [L.layerGroup(), L.layerGroup(), L.layerGroup(), L.layerGroup()];
-    factionLayers.forEach((facLayer, facIndex) => {
+    // the matching sub-layers within the above portals/fields/links are added/removed from their parent
+    const factions = [FACTION.none, ...player.preferedTeamOrder(), FACTION.MAC];
+    factions.forEach(faction => {
+        const facLayer = L.layerGroup();
         facLayer.on("add", () => {
-            fieldsLayer.addLayer(fieldsFactionLayers[facIndex]);
-            linksLayer.addLayer(linksFactionLayers[facIndex]);
+            fieldsLayer.addLayer(fieldsFactionLayers[faction]);
+            linksLayer.addLayer(linksFactionLayers[faction]);
             portalsLayers.forEach((portals, lvl) => {
-                portals.addLayer(portalsFactionLayers[lvl][facIndex]);
+                portals.addLayer(portalsFactionLayers[lvl][faction]);
             });
         });
         facLayer.on("remove", () => {
-            fieldsLayer.removeLayer(fieldsFactionLayers[facIndex]);
-            linksLayer.removeLayer(linksFactionLayers[facIndex]);
+            fieldsLayer.removeLayer(fieldsFactionLayers[faction]);
+            linksLayer.removeLayer(linksFactionLayers[faction]);
             portalsLayers.forEach((portals, lvl) => {
-                portals.removeLayer(portalsFactionLayers[lvl][facIndex]);
+                portals.removeLayer(portalsFactionLayers[lvl][faction]);
             });
         });
-        addLayers[FACTION_NAMES[facIndex]] = facLayer;
+        IITC.layers.addOverlay("Faction\\" + FACTION_NAMES[faction], facLayer);
     });
 
-    // to avoid any favouritism, we'll put the player's own faction layer first
-    if (!player.isTeam(FACTION.RES)) {
-        const name_res = FACTION_NAMES[FACTION.RES];
-        delete addLayers[name_res];
-        addLayers[name_res] = factionLayers[FACTION.RES];
-    }
-
-    return addLayers;
 }
 
 // to be extended in app.js (or by plugins: `setup.priority = 'boot';`)

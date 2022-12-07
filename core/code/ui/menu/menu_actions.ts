@@ -12,6 +12,20 @@ import { PluginDialog } from "../dialogs/plugins";
 
 export const initializeMenu = (iitcmenu: IITCMenu): void => {
 
+    setTimeout(() => {
+        migrate(iitcmenu);
+        $("#portal_highlight_select").hide();
+    }, 200);
+
+    $("#toolbox").hide();
+    $(".leaflet-control-layers").hide();
+    $("#portal_highlight_select").hide();
+
+    updateZoomButtons();
+}
+
+
+export const setupMenu = (iitcmenu: IITCMenu): void => {
     iitcmenu.addEntry({ name: "Command\\Passcode", onClick: () => { new PasscodeDialog(); } });
     iitcmenu.addEntry({ name: "View\\Search", onClick: () => { new SearchDialog(); } });
     iitcmenu.addEntry({ name: "View\\Region Score", onClick: () => showRegionScore() });
@@ -30,8 +44,10 @@ export const initializeMenu = (iitcmenu: IITCMenu): void => {
     iitcmenu.addEntry({ name: "View\\Plugins", onClick: () => new PluginDialog().show() });
 
     iitcmenu.addEntry({ name: "?\\About", onClick: () => aboutIITC() });
+}
 
 
+export const migrate = (iitcmenu: IITCMenu): void => {
 
     const migratePlugins = new Map<string, string>([
         ["About IITC", ""],
@@ -40,30 +56,10 @@ export const initializeMenu = (iitcmenu: IITCMenu): void => {
         ["Missions in view", "View\\Missions in view"]
     ]);
 
-    const groupLayers = {
-        "Level": ["Unclaimed/Placeholder Portals", "Level 1 Portals", "Level 2 Portals", "Level 3 Portals", "Level 4 Portals",
-            "Level 5 Portals", "Level 6 Portals", "Level 7 Portals", "Level 8 Portals"],
-        "Faction": ["Neutral", "Resistance", "Enlightened", "Machina"],
-        "Ornaments": ["Artifacts", "Beacons", "Frackers",
-            "Ornament: Anomaly Portals", "Ornament: Battle Beacons",
-            "Ornament: Battle Results", "Ornament: Scout Controller"],
-        "Player Tracker": ["Player Tracker Resistance", "Player Tracker Enlightened"]
-    };
-
-    setTimeout(() => {
-        iitcmenu.migrateToolbox(migratePlugins);
-        iitcmenu.migrateLayers(groupLayers);
-        iitcmenu.migrateHighlighters();
-
-        $("#portal_highlight_select").hide();
-    }, 200);
-
-    $("#toolbox").hide();
-    $(".leaflet-control-layers").hide();
-    $("#portal_highlight_select").hide();
-
-    updateZoomButtons();
+    iitcmenu.migrateToolbox(migratePlugins);
+    iitcmenu.migrateHighlighters();
 }
+
 
 const toogleZoomButtons = (): void => {
     const old = IITCOptions.getSafe(GLOPT.SHOW_ZOOM_BUTTONS, true);

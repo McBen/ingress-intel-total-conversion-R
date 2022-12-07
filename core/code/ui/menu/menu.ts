@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import { initializeMenu } from "./menu_actions";
+import { initializeMenu, setupMenu } from "./menu_actions";
 import { MenuDialog, MenuEntry } from "./menu_dialog";
 
 
@@ -34,16 +34,23 @@ export class IITCMenu extends MenuDialog {
 
     private isActive: boolean;
 
+
     constructor() {
         super();
 
         this.root.attr("class", "iitcbar top");
+        const menu = $("<div>", { class: "iitcontainer iitcmenu" }).append(
+            this.root,
+            $("<span>", { class: "iitcbaredge topright" })
+        );
+        $("body").append(menu);
+
+        setupMenu(this);
     }
 
-    getBaseMenuElement(): JQuery {
-        return this.root;
+    initMenu(): void {
+        initializeMenu(this);
     }
-
 
     protected createMenuEntry(name: string, options: Partial<MenuDefinition>): JQuery {
         const element = $("<div>", { class: "titlemenuitem", id: options.id }).html(this.menutext(name));
@@ -130,7 +137,7 @@ export class IITCMenu extends MenuDialog {
 
     migrateToolbox(mapping: Map<string, string>): void {
 
-        $("#toolbox").children().each((inddex, element) => {
+        $("#toolbox").children().each((_, element) => {
             const name = $(element).text();
 
             let newname = mapping.get(name);
@@ -145,68 +152,8 @@ export class IITCMenu extends MenuDialog {
                 }
             })
         });
-    }
 
-    migrateLayers(layerGroups: LayerGroups): void {
-        this.migrateBaseLayers();
-        this.addSeparator("layer");
-        this.migrateOverlayLayers(layerGroups);
-    }
-
-    private migrateBaseLayers(): void {
-        const layers = layerChooser.getLayers();
-
-        layers.baseLayers.forEach(bl => {
-            this.addEntry({
-                name: "layer\\Base Layer\\" + bl.name,
-                onClick: () => {
-                    layerChooser.showLayer(bl.layerId, true);
-                    return false;
-                },
-                isChecked: () => this.isLayerVisible(bl.layerId),
-                hasCheckbox: true
-            })
-        })
-    }
-
-
-    private migrateOverlayLayers(layerGroups: LayerGroups): void {
-        const processed: string[] = [];
-        const layers = layerChooser.getLayers();
-
-        // eslint-disable-next-line guard-for-in
-        for (const group in layerGroups) {
-            layerGroups[group].forEach(name => {
-                const layer = layers.overlayLayers.find(f => f.name === name);
-                if (layer) {
-                    this.addOverlayLayer(group + "\\", layer);
-                    processed.push(name);
-                }
-            })
-        }
-
-        layers.overlayLayers.forEach(ol => {
-            if (!processed.includes(ol.name)) {
-                this.addOverlayLayer("", ol);
-            }
-        })
-    }
-
-    private addOverlayLayer(basename: string, ol: LayerInfo): void {
-        this.addEntry({
-            name: "layer\\" + basename + ol.name,
-            onClick: () => {
-                (window.layerChooser as any).showLayer(ol.layerId, !this.isLayerVisible(ol.layerId));
-                return true;
-            },
-            isChecked: () => this.isLayerVisible(ol.layerId),
-            hasCheckbox: true
-        })
-    }
-
-    isLayerVisible(id: number): boolean {
-        // eslint-disable-next-line no-underscore-dangle
-        return window.map.hasLayer((window.layerChooser as any)._layers[id].layer);
+        $("#toolbox").empty();
     }
 
     migrateHighlighters(): void {
@@ -222,19 +169,4 @@ export class IITCMenu extends MenuDialog {
             });
         }
     }
-}
-
-
-export const setupMenu = (): void => {
-
-    const iitcmenu = new IITCMenu();
-
-    initializeMenu(iitcmenu);
-
-    const menu = $("<div>", { class: "iitcontainer iitcmenu" }).append(
-        iitcmenu.getBaseMenuElement(),
-        $("<span>", { class: "iitcbaredge topright" })
-    );
-
-    $("body").append(menu);
 }

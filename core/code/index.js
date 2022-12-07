@@ -4,7 +4,6 @@ require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"chat.js\"
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"entity_decode.js\")!./entity_decode.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"entity_info.js\")!./entity_info.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"extract_niantic_parameters.js\")!./extract_niantic_parameters.js");
-require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"layerchooser.js\")!./layerchooser.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"ornaments.js\")!./ornaments.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"panes.js\")!./panes.js");
 require("imports-loader?imports=ulog&additionalCode=const%20log=ulog(\"portal_data.js\")!./portal_data.js");
