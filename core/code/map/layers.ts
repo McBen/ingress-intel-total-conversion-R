@@ -1,6 +1,8 @@
 import { Options } from "../helper/options";
 import { IITC } from "../IITC";
 import * as L from "leaflet";
+import { Log, LogApp } from "../helper/log_apps";
+const log = Log(LogApp.Map);
 
 
 export interface LayerOptions {
@@ -50,6 +52,7 @@ export class LayerManager {
 
         IITC.menu.addEntry({
             name: menuName,
+            id: L.stamp(layer).toString(),
             onClick: () => {
                 this.showBase(entry);
                 return false;
@@ -58,6 +61,20 @@ export class LayerManager {
             hasCheckbox: true
         });
     }
+
+
+    removeBase(name: string): L.Layer {
+        const entryIndex = this.layers.findIndex(l => l.name === name);
+        if (entryIndex < 0) {
+            log.warn("layer not found", name);
+            return;
+        }
+
+        const layer = this.layers[entryIndex].layer;
+        IITC.menu.removeEntry(L.stamp(layer).toString());
+        this.layers.splice(entryIndex, 1);
+    }
+
 
     addOverlay(name: string, layer: L.Layer, options: Partial<LayerOptions> = {}): void {
         console.assert(this.layers.every(l => l.name !== name), "layer name already used");
@@ -94,6 +111,7 @@ export class LayerManager {
             this.showOverlay(entry);
         }
     }
+
 
     private renameOldLayer(name: string): string {
         // eslint-disable-next-line guard-for-in
