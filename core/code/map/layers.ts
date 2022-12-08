@@ -164,18 +164,21 @@ export class LayerManager {
             .forEach(l => window.map.removeLayer(l.layer));
 
         window.map.addLayer(entity.layer);
+        window.map.fire("baselayerchange", { name: entity.name });
     }
 
     private showOverlay(entity: LayerEntity): void {
         if (window.map.hasLayer(entity.layer)) return;
         window.map.addLayer(entity.layer);
         this.updateStatus(entity, true);
+        window.map.fire("overlayadd", { name: entity.name });
     }
 
     private hideOverlay(entity: LayerEntity): void {
         if (!window.map.hasLayer(entity.layer)) return;
         window.map.removeLayer(entity.layer);
         this.updateStatus(entity, false);
+        window.map.fire("overlayremove", { name: entity.name });
     }
 
     private updateStatus(entity: LayerEntity, status: boolean): void {
