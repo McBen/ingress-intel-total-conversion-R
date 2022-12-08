@@ -57,7 +57,7 @@ export class LayerManager {
                 this.showBase(entry);
                 return false;
             },
-            isChecked: () => this.isVisible(entry),
+            isChecked: () => this.isVisible(entry.layer),
             hasCheckbox: true
         });
     }
@@ -70,9 +70,15 @@ export class LayerManager {
             return;
         }
 
+
         const layer = this.layers[entryIndex].layer;
         IITC.menu.removeEntry(L.stamp(layer).toString());
         this.layers.splice(entryIndex, 1);
+
+        if (this.isVisible(layer)) {
+            layer.remove();
+            this.showBaseMap("");
+        }
     }
 
 
@@ -94,16 +100,16 @@ export class LayerManager {
 
         IITC.menu.addEntry({
             name: menuName,
-            id: L.stamp(layer).toString(),
+            id: L.stamp(entry.layer).toString(),
             onClick: () => {
-                if (this.isVisible(entry)) {
+                if (this.isVisible(entry.layer)) {
                     this.hideOverlay(entry);
                 } else {
                     this.showOverlay(entry);
                 }
                 return true;
             },
-            isChecked: () => this.isVisible(entry),
+            isChecked: () => this.isVisible(entry.layer),
             hasCheckbox: true
         });
 
@@ -135,6 +141,10 @@ export class LayerManager {
 
         IITC.menu.removeEntry(L.stamp(layer).toString());
         this.layers.splice(entryIndex, 1);
+
+        if (this.isVisible(layer)) {
+            layer.remove();
+        }
     }
 
 
@@ -176,17 +186,17 @@ export class LayerManager {
         }
     }
 
-    private isVisible(entity: LayerEntity): boolean {
-        return window.map.hasLayer(entity.layer);
+    private isVisible(layer: L.Layer): boolean {
+        return window.map.hasLayer(layer);
     }
 
     areAllDefaultLayerVisible(): boolean {
-        return this.layers.every(l => l.isBaseLayer || this.isVisible(l));
+        return this.layers.every(l => l.isBaseLayer || this.isVisible(l.layer));
     }
 
     showAllDefaultLayers(): void {
         this.layers.forEach(l => {
-            if (l.isBaseLayer || this.isVisible(l)) return;
+            if (l.isBaseLayer || this.isVisible(l.layer)) return;
 
             this.showOverlay(l);
         })
