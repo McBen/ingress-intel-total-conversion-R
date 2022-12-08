@@ -43,11 +43,18 @@ export const setupMap = (): void => {
     });
 
 
-    // adds a base layer to the map. done separately from the above,
-    // so that plugins that add base layers can be the default
     hooks.on("iitcLoaded", () => {
-        IITC.layers.showBaseMap(IITCOptions.get(GLOPT.BASE_MAP_LAYER))
+        IITC.layers.showBaseMap(IITCOptions.get(GLOPT.BASE_MAP_LAYER));
 
+        window.map.on("baselayerchange", event => {
+            IITCOptions.set(GLOPT.BASE_MAP_LAYER, event.name);
+            // leaflet no longer ensures the base layer zoom is suitable for the map (a bug? feature change?), so do so here
+            window.map.setZoom(window.map.getZoom());
+        });
+    });
+
+
+    hooks.on("iitcLoaded", () => {
         // (setting an initial position, before a base layer is added, causes issues with leaflet) // todo check
         let pos = getPosition();
         if (!pos) {
@@ -64,12 +71,6 @@ export const setupMap = (): void => {
             window.urlPortalLL = normLL(pllSplit[0], pllSplit[1]).center;
         }
         window.urlPortal = getURLParam("pguid");
-
-        window.map.on("baselayerchange", event => {
-            IITCOptions.set(GLOPT.BASE_MAP_LAYER, event.name);
-            // leaflet no longer ensures the base layer zoom is suitable for the map (a bug? feature change?), so do so here
-            window.map.setZoom(window.map.getZoom());
-        });
     });
 };
 
