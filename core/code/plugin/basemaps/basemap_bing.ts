@@ -19,7 +19,7 @@ export class PluginBingMaps extends Plugin {
     public tags: ["map", "tiles", "baselayer", "microsoft"];
     public defaultInactive = true;
 
-    private apiKey = "ArR2hTa2C9cRQZT-RmgrDkfvh3PwEVRl0gB34OO4wJI7vQNElg3DDWvbo5lfUs3p";
+    private apiKey = "Ajt5lr3kR35OADGQqFzptNJA3tXzXYpZoCOSnY1JgGf4tEyWBErROgnuK5V9vYEE";
 
     private sets = {
         Road: {
