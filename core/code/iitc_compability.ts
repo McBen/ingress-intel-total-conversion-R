@@ -47,6 +47,7 @@ globalThis.postAjax = postAjax;
 
 // Render
 // globalThis.Render .. init below
+globalThis.isLayerGroupDisplayed = (name: string, defaultState: boolean) => IITC.layers.isLayerKnown(name) ? IITC.layers.isLayerVisible(name) : defaultState;
 
 // layerChooser
 // globalThis.layerChooser .. init below

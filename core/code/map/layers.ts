@@ -205,4 +205,16 @@ export class LayerManager {
         })
     }
 
+
+    isLayerVisible(name: string): boolean {
+        const layer = this.layers.find(l => l.name === name);
+        if (!layer) return false;
+        return this.isVisible(layer.layer);
+    }
+
+
+    isLayerKnown(name: string): boolean {
+        return this.layers.some(l => l.name === name);
+    }
+
 }
