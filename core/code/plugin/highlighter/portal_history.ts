@@ -47,9 +47,7 @@ export class PluginHighlightPortalHistory extends Plugin {
 
     visited = (portal: IITC.Portal) => {
         const history = portal.options.data.history;
-        if (!history) {
-            return;
-        }
+        if (history === undefined) return;
 
         if (was(history, HISTORY.captured)) {
             portal.setStyle(styles.marked);
@@ -60,9 +58,7 @@ export class PluginHighlightPortalHistory extends Plugin {
 
     NotVisited = (portal: IITC.Portal) => {
         const history = portal.options.data.history;
-        if (!history) {
-            return;
-        }
+        if (history === undefined) return;
 
         if (!was(history, HISTORY.visited)) {
             portal.setStyle(styles.marked);
@@ -73,9 +69,7 @@ export class PluginHighlightPortalHistory extends Plugin {
 
     scoutControlled = (portal: IITC.Portal) => {
         const history = portal.options.data.history;
-        if (!history) {
-            return;
-        }
+        if (history === undefined) return;
 
         if (was(history, HISTORY.scoutControlled)) {
             portal.setStyle(styles.marked);
@@ -85,9 +79,7 @@ export class PluginHighlightPortalHistory extends Plugin {
 
     notScoutControlled = (portal: IITC.Portal) => {
         const history = portal.options.data.history;
-        if (!history) {
-            return;
-        }
+        if (history === undefined) return;
 
         if (!was(history, HISTORY.scoutControlled)) {
             portal.setStyle(styles.marked);
