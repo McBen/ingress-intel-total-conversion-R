@@ -1,5 +1,6 @@
 // PORTAL MARKER //////////////////////////////////////////////
 // code to create and update a portal marker
+import { IITC } from "./IITC";
 
 
 window.portalMarkerScale = function() {
@@ -18,7 +19,7 @@ window.createMarker = function(latlng, data) {
 
   var marker = L.circleMarker(latlng, options);
 
-  highlightPortal(marker);
+  IITC.highlighter.highlightPortal(marker);
 
   return marker;
 }
@@ -32,7 +33,7 @@ window.setMarkerStyle = function(marker, selected) {
 
   // FIXME? it's inefficient to set the marker style (above), then do it again inside the highlighter
   // the highlighter API would need to be changed for this to be improved though. will it be too slow?
-  highlightPortal(marker);
+  IITC.highlighter.highlightPortal(marker);
 
   if (selected) {
     marker.setStyle ({color: COLOR_SELECTED_PORTAL});

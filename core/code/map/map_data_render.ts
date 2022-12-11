@@ -4,6 +4,7 @@ import { TileData } from "./map_data_request";
 import { Log, LogApp } from "../helper/log_apps";
 import { hooks } from "../helper/hooks";
 import { renderPortalDetails } from "../portal/portal_display";
+import { IITC } from "../IITC";
 const log = Log(LogApp.Map);
 
 
@@ -509,7 +510,7 @@ export class Render {
 
             // NOTE: we're not calling this because it resets highlights - we're calling it as it
             // resets the style (inc size) of all portal markers, applying the new scale
-            resetHighlightedPortals();
+            IITC.highlighter.resetPortals();
         }
     }
 

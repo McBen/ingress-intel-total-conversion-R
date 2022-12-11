@@ -85,6 +85,11 @@ globalThis.renderPortalDetails = renderPortalDetails;
 
 globalThis.renderUpdateStatus = NOOP; // stub
 
+// highlighter
+globalThis.addPortalHighlighter = (name: string, highlit: (data: any) => void) => {
+    IITC.highlighter.add({ name, highlight: (p: IITC.Portal) => highlit({ data: p }) });
+};
+
 
 // utils
 globalThis.makePermalink = utils.makePermalink;

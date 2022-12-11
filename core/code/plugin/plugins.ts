@@ -3,6 +3,7 @@ import { PluginBingMaps } from "./basemaps/basemap_bing";
 import { PluginBlankMaps } from "./basemaps/basemap_blank";
 import { PluginGrayGoolgleMap } from "./basemaps/basemap_google_gray";
 import { PluginOSM } from "./basemaps/basemap_openstreetmap";
+import { PluginHighlightPortalHistory } from "./highlighter/portal_history";
 import { PluginManager } from "./plugin_manager";
 
 export const registerPlugins = (manager: PluginManager): void => {
@@ -13,4 +14,8 @@ export const registerPlugins = (manager: PluginManager): void => {
     manager.add(new PluginBlankMaps());
     manager.add(new PluginOSM());
     manager.add(new PluginGrayGoolgleMap());
+
+    // Highlighters
+    manager.add(new PluginHighlightPortalHistory());
+
 }
