@@ -10,6 +10,7 @@ import { ON_MOVE_REFRESH, requests } from "./helper/send_request";
 import { Log, LogApp } from "./helper/log_apps";
 import { hooks, Hooks } from "./helper/hooks";
 import { LayerManager } from "./map/layers";
+import { Highlighters } from "./portal/highlighters";
 const log = Log(LogApp.Main);
 
 
@@ -20,12 +21,14 @@ export class IITCMain {
     public hooks: Hooks;
     public menu: IITCMenu;
     public layers: LayerManager;
+    public highlighter: Highlighters;
 
 
     constructor() {
         this.plugins = new PluginManager();
         this.hooks = hooks;
         this.layers = new LayerManager();
+        this.highlighter = new Highlighters();
     }
 
 

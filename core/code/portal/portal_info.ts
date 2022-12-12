@@ -3,6 +3,11 @@
 /* eslint-disable max-classes-per-file */
 import { FACTION } from "../constants";
 
+export const enum HISTORY {
+    visited = 1,
+    captured = 2,
+    scoutControlled = 4,
+}
 
 export class PortalInfoBase {
 

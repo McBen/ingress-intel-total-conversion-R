@@ -22,7 +22,6 @@ declare global {
     function setupPlayerStat(): void;
     function useAppPanes(): boolean;
     function renderUpdateStatus(): void;
-    function resetHighlightedPortals(): void;
     function portalMarkerScale(): number;
     function teamStringToId(faction: string): number;
     function createMarker(latlng: L.LatLng, data: IITC.PortalOptions): IITC.Portal;

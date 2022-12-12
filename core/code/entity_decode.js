@@ -62,15 +62,6 @@ function parseArtifactDetail(arr) {
   };
 }
 
-function parseHistoryDetail(bitarray) {
-  return {
-    _raw: bitarray,
-    visited:  !!(bitarray & 1),
-    captured: !!(bitarray & 2),
-    scoutControlled:  !!(bitarray & 4),
-  };
-}
-
 
 //there's also a 'placeholder' portal - generated from the data in links/fields. only has team/lat/lng
 
@@ -113,7 +104,7 @@ function detailsPortalData(a) {
 
 function extendedPortalData(a) {
   return {
-    history: parseHistoryDetail(a[DETAILED_PORTAL_DATA_LENGTH] || 0),
+    history: a[DETAILED_PORTAL_DATA_LENGTH] || 0
   }
 }
 
