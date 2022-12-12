@@ -1,6 +1,6 @@
 import path from "path";
 import webpack from "webpack";
-import WebpackUserscript from "webpack-userscript";
+import WebpackGMBanner from "./webpack.gmaddon.banner";
 import { environment, generateHeader } from "./build-settings";
 import { DIST_PATH, EXTERNAL_PATH, IMAGES_PATH, SRC_PATH } from "./paths";
 
@@ -57,9 +57,7 @@ const config: webpack.Configuration = {
       "window.jQuery": "jquery",
       "L": "leaflet"
     }),
-    new WebpackUserscript({
-      headers: generateHeader,
-    }),
+    new WebpackGMBanner(generateHeader()),
   ],
 };
 
