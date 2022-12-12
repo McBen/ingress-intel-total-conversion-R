@@ -6,6 +6,9 @@ import { PluginGrayGoolgleMap } from "./basemaps/basemap_google_gray";
 import { PluginKartverketMaps } from "./basemaps/basemap_kartverket";
 import { PluginOSM } from "./basemaps/basemap_openstreetmap";
 import { PluginStamenMaps } from "./basemaps/basemap_stamen";
+import { PluginHighlightInactive } from "./highlighter/forgotten";
+import { PluginHighlightMissingReso } from "./highlighter/missing_resonators";
+import { PluginHighlightNeedRecharge } from "./highlighter/needs_recharge";
 import { PluginHighlightPortalHistory } from "./highlighter/portal_history";
 import { PluginManager } from "./plugin_manager";
 
@@ -23,5 +26,9 @@ export const registerPlugins = (manager: PluginManager): void => {
 
     // Highlighters
     manager.add(new PluginHighlightPortalHistory());
+    manager.add(new PluginHighlightInactive());
+    manager.add(new PluginHighlightNeedRecharge());
+    manager.add(new PluginHighlightMissingReso());
+
 
 }
