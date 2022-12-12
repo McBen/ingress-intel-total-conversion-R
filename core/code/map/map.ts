@@ -234,7 +234,7 @@ const createDefaultBaseMapLayers = (): void => {
     IITC.layers.addBase("CartoDB Positron", L.tileLayer(cartoUrl, { attribution, theme: "light_all" } as L.TileLayerOptions));
 
     // Google Maps - including ingress default (using the stock-intel API-key)
-    const googleMutant = (L.gridLayer as any).googleMutant as (options: any) => L.GridLayer; // FIXME: temp workaround
+    const googleMutant = (L.gridLayer as any).googleMutant as (options: any) => L.GridLayer; // FIXME: GoogleMutant defintion looks wrong
 
     const gmapsOptionsIngress = {
         type: "roadmap",
