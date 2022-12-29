@@ -22,14 +22,11 @@ declare global {
     function setupPlayerStat(): void;
     function useAppPanes(): boolean;
     function renderUpdateStatus(): void;
-    function portalMarkerScale(): number;
     function teamStringToId(faction: string): number;
-    function createMarker(latlng: L.LatLng, data: IITC.PortalOptions): IITC.Portal;
     function show(paneID: string): void;
     function isSmartphone(): boolean;
     function zoomToAndShowPortal(guid: PortalGUID, pos: L.LatLng): void;
     function selectPortalByLatLng(pos: L.LatLng): void;
-    function setMarkerStyle(marker: IITC.Portal, selected: boolean): boolean;
 
 
     interface Window {

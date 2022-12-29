@@ -5,6 +5,7 @@ import { Log, LogApp } from "../helper/log_apps";
 import { hooks } from "../helper/hooks";
 import { renderPortalDetails } from "../portal/portal_display";
 import { IITC } from "../IITC";
+import { createMarker, portalMarkerScale } from "./portal_marker";
 const log = Log(LogApp.Map);
 
 
