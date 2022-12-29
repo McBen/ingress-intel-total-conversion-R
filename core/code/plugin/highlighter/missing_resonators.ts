@@ -37,7 +37,3 @@ export class PluginHighlightMissingReso extends Plugin {
         IITC.highlighter.remove(this.menuName);
     }
 }
-
-
-
-

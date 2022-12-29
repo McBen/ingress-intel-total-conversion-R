@@ -1,5 +1,6 @@
 import { hooks } from "../helper/hooks";
 import { portalDetail } from "../portal/portal_details_get";
+import { setMarkerStyle } from "./portal_marker";
 
 // circles around a selected portal that show from where you can hack
 // it and how far the portal reaches (i.e. how far links may be made

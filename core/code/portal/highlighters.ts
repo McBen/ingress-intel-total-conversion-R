@@ -1,4 +1,5 @@
 import { IITC } from "../IITC";
+import { setMarkerStyle } from "../map/portal_marker";
 
 const STORE_KEY = "portal_highlighter";
 
