@@ -138,7 +138,13 @@ export class IITCMenu extends MenuDialog {
     migrateToolbox(mapping: Map<string, string>): void {
 
         $("#toolbox").children().each((_, element) => {
-            const name = $(element).text();
+            const $element = $(element);
+
+            // prevent double migration
+            const isHidden = $(element).css("display") === "none" || $(element).css("visibility") === "hidden";
+            if (isHidden) return;
+
+            const name = $element.text();
 
             let newname = mapping.get(name);
             if (newname === "") return;
@@ -147,14 +153,15 @@ export class IITCMenu extends MenuDialog {
             this.addEntry({
                 name: newname,
                 onClick: () => {
-                    $(element).trigger("click");
+                    $element.trigger("click");
                     return;
                 }
-            })
-        });
+            });
 
-        $("#toolbox").empty();
+            $element.hide();
+        });
     }
+
 
     migrateHighlighters(): void {
         if (!_highlighters) return;
