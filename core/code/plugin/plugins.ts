@@ -7,7 +7,7 @@ import { PluginKartverketMaps } from "./basemaps/basemap_kartverket";
 import { PluginOSM } from "./basemaps/basemap_openstreetmap";
 import { PluginStamenMaps } from "./basemaps/basemap_stamen";
 import { PluginHighlightInactive } from "./highlighter/forgotten";
-import { PluginHidePortalOwnership } from "./highlighter/highlight-hide-team";
+import { PluginHidePortalOwnership } from "./highlighter/highlight_hide_team";
 import { PluginHighlightMissingReso } from "./highlighter/missing_resonators";
 import { PluginHighlightNeedRecharge } from "./highlighter/needs_recharge";
 import { PluginHighlightPortalHistory } from "./highlighter/portal_history";
