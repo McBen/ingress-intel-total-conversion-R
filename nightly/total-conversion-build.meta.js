@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name            IITC: Ingress intel map total conversion R
 // @id              ingress-intel-total-conversion@McBen
-// @version         1.0.0.20221212.153679
+// @version         1.0.0.20221229.142130
 // @updateURL       https://mcben.github.io/ingress-intel-total-conversion-R/nightly/total-conversion-build.meta.js
 // @downloadURL     https://mcben.github.io/ingress-intel-total-conversion-R/nightly/total-conversion-build.user.js
-// @description     [2022-12-12-153678-dev] Total conversion for the ingress intel map - Refurbished.
+// @description     [2022-12-29-142129-dev] Total conversion for the ingress intel map - Refurbished.
 // @match           https://intel.ingress.com/*
 // @match           https://intel-x.ingress.com/*
 // @grant           none
