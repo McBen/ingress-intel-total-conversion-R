@@ -57,7 +57,6 @@ export const migrate = (iitcmenu: IITCMenu): void => {
     ]);
 
     iitcmenu.migrateToolbox(migratePlugins);
-    iitcmenu.migrateHighlighters();
 }
 
 

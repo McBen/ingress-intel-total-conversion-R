@@ -161,19 +161,4 @@ export class IITCMenu extends MenuDialog {
             $element.hide();
         });
     }
-
-
-    migrateHighlighters(): void {
-        if (!_highlighters) return;
-
-        // eslint-disable-next-line guard-for-in
-        for (const hil in _highlighters) {
-            this.addEntry({
-                name: "View\\Hightlight\\" + hil,
-                onClick: () => changePortalHighlights(_current_highlighter === hil ? undefined : hil),
-                hasCheckbox: true,
-                isChecked: () => (_current_highlighter === hil)
-            });
-        }
-    }
 }
