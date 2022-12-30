@@ -11,6 +11,7 @@ import { PluginHidePortalOwnership } from "./highlighter/highlight_hide_team";
 import { PluginHighlightHighLevel } from "./highlighter/highlight_high_level";
 import { PluginHighlightLevelColor } from "./highlighter/highlight_level_color";
 import { PluginHightlightMyLevel } from "./highlighter/highlight_portals_my_level";
+import { PluginHightlightWeakness } from "./highlighter/highlight_weakness";
 import { PluginHighlightMissingReso } from "./highlighter/missing_resonators";
 import { PluginHighlightNeedRecharge } from "./highlighter/needs_recharge";
 import { PluginHighlightPortalHistory } from "./highlighter/portal_history";
@@ -37,4 +38,5 @@ export const registerPlugins = (manager: PluginManager): void => {
     manager.add(new PluginHighlightHighLevel());
     manager.add(new PluginHighlightLevelColor());
     manager.add(new PluginHightlightMyLevel());
+    manager.add(new PluginHightlightWeakness());
 }
