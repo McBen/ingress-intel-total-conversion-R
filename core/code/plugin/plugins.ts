@@ -8,6 +8,7 @@ import { PluginOSM } from "./basemaps/basemap_openstreetmap";
 import { PluginStamenMaps } from "./basemaps/basemap_stamen";
 import { PluginHighlightInactive } from "./highlighter/forgotten";
 import { PluginHidePortalOwnership } from "./highlighter/highlight_hide_team";
+import { PluginHighlightHighLevel } from "./highlighter/highlight_high_level";
 import { PluginHighlightMissingReso } from "./highlighter/missing_resonators";
 import { PluginHighlightNeedRecharge } from "./highlighter/needs_recharge";
 import { PluginHighlightPortalHistory } from "./highlighter/portal_history";
@@ -31,6 +32,5 @@ export const registerPlugins = (manager: PluginManager): void => {
     manager.add(new PluginHighlightNeedRecharge());
     manager.add(new PluginHighlightMissingReso());
     manager.add(new PluginHidePortalOwnership());
-
-
+    manager.add(new PluginHighlightHighLevel());
 }
