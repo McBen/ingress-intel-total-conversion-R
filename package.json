@@ -12,6 +12,7 @@
     "start": "node ./scripts/fileserver.js"
   },
   "dependencies": {
+    "anylogger": "^1.0.11",
     "autolink-js": "^1.0.2",
     "jquery": "^3.4.1",
     "jquery-ui": "^1.12.1",
@@ -29,7 +30,6 @@
     "@types/leaflet": "^1.8.0",
     "@types/node": "^18.0.3",
     "@types/webpack": "^5.28.0",
-    "@types/webpack-merge": "^5.0.0",
     "@typescript-eslint/eslint-plugin": "^5.39.0",
     "@typescript-eslint/parser": "^5.39.0",
     "babel-plugin-syntax-dynamic-import": "^6.18.0",
