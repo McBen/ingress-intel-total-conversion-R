@@ -16,7 +16,7 @@
     "autolink-js": "^1.0.2",
     "jquery": "^3.4.1",
     "jquery-ui": "^1.12.1",
-    "leaflet": "~1.8",
+    "leaflet": "^1.9.3",
     "leaflet-plugins": "^3.4.0",
     "leaflet.gridlayer.googlemutant": "^0.13.5",
     "overlapping-marker-spiderfier-leaflet": "^0.2.7",
