@@ -1,5 +1,5 @@
 import { DataCache } from "../../../map/data_cache";
-import { digits, formatInterval } from "../../../utils_misc";
+import { digits, formatInterval } from "../../../helper/utils_misc";
 import { dialog } from "../../dialog";
 
 export class CacheDebug {

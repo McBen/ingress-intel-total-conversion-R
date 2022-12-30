@@ -1,4 +1,4 @@
-import { convertTextToTableMagic } from "../utils_misc";
+import { convertTextToTableMagic } from "../helper/utils_misc";
 
 import { Log, LogApp } from "../helper/log_apps";
 const log = Log(LogApp.Dialog);

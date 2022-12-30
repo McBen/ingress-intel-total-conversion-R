@@ -1,6 +1,6 @@
 import { FACTION, FACTION_CSS } from "../constants";
 import { hooks } from "../helper/hooks";
-import { makePermalink, showPortalPosLinks } from "../utils_misc";
+import { makePermalink, showPortalPosLinks } from "../helper/utils_misc";
 import { portalDetail } from "./portal_details_get";
 import { getPortalMiscDetails, getResonatorDetails, getModDetails } from "./portal_display_helper"
 import { teamStr2Faction } from "./portal_info";

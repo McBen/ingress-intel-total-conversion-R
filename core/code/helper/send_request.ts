@@ -1,6 +1,6 @@
 import { idle } from "../map/idle";
 import { dialog } from "../ui/dialog";
-import { readCookie } from "../utils_misc";
+import { readCookie } from "./utils_misc";
 import { SECONDS } from "./times";
 
 /**

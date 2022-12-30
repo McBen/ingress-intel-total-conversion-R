@@ -3,7 +3,7 @@ import { SECONDS } from "../helper/times";
 import { Render } from "./map_data_render";
 import { DataCache } from "./data_cache";
 import { RenderDebugTiles, TileState } from "./map_data_debug";
-import { clampLatLngBounds } from "../utils_misc";
+import { clampLatLngBounds } from "../helper/utils_misc";
 import { getDataZoomForMapZoom, getMapZoomTileParameters, latToTile, lngToTile, pointToTileId, tileToLat, tileToLng } from "./map_data_calc_tools";
 import { idle } from "./idle";
 import { mapStatus } from "../ui/status";

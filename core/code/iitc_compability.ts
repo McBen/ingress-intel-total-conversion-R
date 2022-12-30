@@ -4,7 +4,7 @@
 import { alert, dialog, DIALOGS } from "./ui/dialog";
 import { idle, IdleResumeCallback } from "./map/idle";
 import * as CalcTools from "./map/map_data_calc_tools";
-import * as utils from "./utils_misc";
+import * as utils from "./helper/utils_misc";
 import * as L from "leaflet";
 
 import { Log, LogApp } from "./helper/log_apps";

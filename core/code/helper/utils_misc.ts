@@ -1,5 +1,5 @@
 import L from "leaflet";
-import { dialog } from "./ui/dialog";
+import { dialog } from "../ui/dialog";
 
 /**
  * retrieves parameter from the URL?query=string.

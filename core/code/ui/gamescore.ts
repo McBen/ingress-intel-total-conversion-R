@@ -1,7 +1,7 @@
 import { MINUTES } from "../helper/times";
 import { Log, LogApp } from "../helper/log_apps";
 import { idle } from "../map/idle";
-import { digits } from "../utils_misc";
+import { digits } from "../helper/utils_misc";
 import { postAjax } from "../helper/send_request";
 const log = Log(LogApp.Score);
 

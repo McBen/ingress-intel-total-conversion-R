@@ -1,5 +1,5 @@
 import { FACTION, FACTION_COLORS, FACTION_CSS, FACTION_NAMES } from "../../../constants";
-import { convertTextToTableMagic, digits } from "../../../utils_misc";
+import { convertTextToTableMagic, digits } from "../../../helper/utils_misc";
 import { HistoryChart } from "./history_chart";
 import { CP_COUNT, RegionScore, ServerResult } from "./region_score";
 import { dialog } from "../../dialog";

@@ -1,5 +1,5 @@
 import { DEFAULT_ZOOM, FACTION, FACTION_NAMES, MIN_ZOOM } from "../constants";
-import { getURLParam, readCookie, writeCookie } from "../utils_misc";
+import { getURLParam, readCookie, writeCookie } from "../helper/utils_misc";
 import { player } from "../helper/player";
 import { idle } from "./idle";
 import { ON_MOVE_REFRESH, requests } from "../helper/send_request";
