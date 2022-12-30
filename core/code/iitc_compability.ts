@@ -13,6 +13,7 @@ import { IITC } from "./IITC";
 import { PortalInfoDetailed } from "./portal/portal_info_detailed";
 import { fixPortalImageUrl, renderPortalDetails } from "./portal/portal_display";
 import { createMarker, portalMarkerScale, setMarkerStyle } from "./map/portal_marker";
+import { getPortalFields, getPortalFieldsCount, getPortalLinks } from "./helper/portal_data";
 const log = Log(LogApp.Plugins);
 
 
@@ -46,6 +47,11 @@ globalThis.pointToTileId = CalcTools.pointToTileId;
 globalThis.portalMarkerScale = portalMarkerScale;
 globalThis.createMarker = createMarker;
 globalThis.setMarkerStyle = setMarkerStyle;
+
+// Portal_Data
+globalThis.getPortalLinks = getPortalLinks;
+globalThis.getPortalFields = getPortalFields;
+globalThis.getPortalFieldsCount = getPortalFieldsCount;
 
 // Request
 globalThis.postAjax = postAjax;

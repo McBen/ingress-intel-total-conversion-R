@@ -1,12 +1,10 @@
-import { COLORS_LVL, FACTION_COLORS, FACTION_CSS } from "../constants";
+import { COLORS_LVL, FACTION_CSS } from "../constants";
 import { player } from "../helper/player";
 import { portalRangeIndicator } from "../map/portal_select";
-import { digits, formatInterval, genFourColumnTable, prettyEnergy } from "../utils_misc";
+import { digits, formatInterval, genFourColumnTable, prettyEnergy } from "../helper/utils_misc";
 import { NoPortalMod, PortalRESO } from "./portal_info";
 import { PortalInfoDetailed, RESO_NRG } from "./portal_info_detailed";
-
-declare function getPortalLinks(guid: PortalGUID): { in: LinkGUID[], out: LinkGUID[] };
-declare function getPortalFieldsCount(guid: PortalGUID): number;
+import { getPortalFieldsCount, getPortalLinks } from "../helper/portal_data";
 
 
 export const getPortalMiscDetails = (guid: PortalGUID, d: PortalInfoDetailed): string => {
