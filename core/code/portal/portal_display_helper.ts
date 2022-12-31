@@ -1,10 +1,11 @@
 import { COLORS_LVL, FACTION_CSS } from "../constants";
 import { player } from "../helper/player";
 import { portalRangeIndicator } from "../map/portal_select";
-import { digits, formatInterval, genFourColumnTable, prettyEnergy } from "../helper/utils_misc";
+import { digits, genFourColumnTable, prettyEnergy } from "../helper/utils_misc";
 import { NoPortalMod, PortalRESO } from "./portal_info";
 import { PortalInfoDetailed, RESO_NRG } from "./portal_info_detailed";
 import { getPortalFieldsCount, getPortalLinks } from "../helper/portal_data";
+import { formatInterval } from "../helper/times";
 
 
 export const getPortalMiscDetails = (guid: PortalGUID, d: PortalInfoDetailed): string => {
