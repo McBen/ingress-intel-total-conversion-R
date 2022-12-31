@@ -1,9 +1,8 @@
 import { FACTION } from "../../constants";
-import { IITC } from "../../IITC";
-import { Plugin } from "../plugin_base";
+import { PluginHighlight } from "./highligh_plugin_base";
 
 
-export class PluginHighlightWeakness extends Plugin {
+export class PluginHighlightWeakness extends PluginHighlight {
 
     public name = "Highlight portal weakness";
     public version = "0.8.0";
@@ -12,10 +11,10 @@ export class PluginHighlightWeakness extends Plugin {
     public author = "vita10gy";
     public tags: ["portal", "highlight", "weakness", "recharge"];
     public defaultInactive = true;
-    private menuName = "Portal Weakness";
+    protected menuName = "Portal Weakness";
 
 
-    weaknessHighlight = (portal: IITC.Portal): void => {
+    highlight(portal: IITC.Portal): void {
         const res_count = portal.options.data.resCount;
         const health = portal.options.data.health;
 
@@ -29,7 +28,7 @@ export class PluginHighlightWeakness extends Plugin {
 
                 // Hole per missing resonator
                 if (res_count < 8) {
-                    const dash = new Array((8 - res_count) + 1).join("1,4,") + "100,0";
+                    const dash = "1,4,".repeat(8 - res_count) + "100,0";
                     style.dashArray = dash;
                 }
 
@@ -38,12 +37,4 @@ export class PluginHighlightWeakness extends Plugin {
         }
     }
 
-
-    activate(): void {
-        IITC.highlighter.add({ name: this.menuName, highlight: this.weaknessHighlight });
-    }
-
-    deactivate(): void {
-        IITC.highlighter.remove(this.menuName);
-    }
 }

@@ -1,9 +1,8 @@
 import { FACTION } from "../../constants";
-import { IITC } from "../../IITC";
-import { Plugin } from "../plugin_base";
+import { PluginHighlight } from "./highligh_plugin_base";
 
 
-export class PluginHighlightNeedRecharge extends Plugin {
+export class PluginHighlightNeedRecharge extends PluginHighlight {
 
     public name = "Highlight portals that need recharging";
     public version = "0.2.0";
@@ -14,7 +13,7 @@ export class PluginHighlightNeedRecharge extends Plugin {
     public tags: ["portal", "highlight", "recharge"];
     public defaultInactive = true;
 
-    private menuName = "Needs Recharge (Health)";
+    protected menuName = "Needs Recharge (Health)";
 
 
     public conditions = [85, 70, 60, 45, 30, 15, 0];
@@ -28,24 +27,14 @@ export class PluginHighlightNeedRecharge extends Plugin {
         cond0: { fillColor: "magenta", fillOpacity: 1.0 }
     };
 
-    needsRecharge = (portal: IITC.Portal): void => {
+    highlight(portal: IITC.Portal): void {
         const health = portal.options.data.health;
 
         if (health !== undefined && portal.options.team !== FACTION.none && health < 100) {
             const cond = this.conditions.find(c => c < health);
-            const style = this.styles[`cond${cond}`];
+            const style = this.styles[`cond${cond}`] as L.CircleMarkerOptions;
+            console.assert(style, "plugin_rechage: not matching style defs");
             portal.setStyle(style);
         }
     }
-
-    activate(): void {
-        IITC.highlighter.add({ name: this.menuName, highlight: this.needsRecharge });
-    }
-
-    deactivate(): void {
-        IITC.highlighter.remove(this.menuName);
-    }
 }
-
-
-

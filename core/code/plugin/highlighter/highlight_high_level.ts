@@ -1,8 +1,8 @@
 import { IITC } from "../../IITC";
-import { Plugin } from "../plugin_base";
+import { PluginHighlight } from "./highligh_plugin_base";
 
 
-export class PluginHighlightHighLevel extends Plugin {
+export class PluginHighlightHighLevel extends PluginHighlight {
 
     public name = "Highlight high level portals";
     public version = "0.2.0";
@@ -10,7 +10,7 @@ export class PluginHighlightHighLevel extends Plugin {
     public author = "jonatkins";
     public tags: ["portal", "highlight", "level"];
     public defaultInactive = true;
-    private menuName = "Higher Level Portals";
+    protected menuName = "Higher Level Portals";
 
 
     private styles = {
@@ -28,7 +28,7 @@ export class PluginHighlightHighLevel extends Plugin {
         }
     };
 
-    highlightHighLevel = (portal: IITC.Portal): void => {
+    highlight(portal: IITC.Portal): void {
         const portal_level = portal.options.data.level;
         if (portal_level === undefined) return;
 
@@ -37,14 +37,5 @@ export class PluginHighlightHighLevel extends Plugin {
         if (newStyle) {
             portal.setStyle(newStyle);
         }
-    }
-
-
-    activate(): void {
-        IITC.highlighter.add({ name: this.menuName, highlight: this.highlightHighLevel });
-    }
-
-    deactivate(): void {
-        IITC.highlighter.remove(this.menuName);
     }
 }

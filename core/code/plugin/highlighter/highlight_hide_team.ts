@@ -1,10 +1,9 @@
 import { FACTION } from "../../constants";
-import { IITC } from "../../IITC";
 import { getMarkerStyleOptions } from "../../map/portal_marker";
-import { Plugin } from "../plugin_base";
+import { PluginHighlight } from "./highligh_plugin_base";
 
 
-export class PluginHidePortalOwnership extends Plugin {
+export class PluginHidePortalOwnership extends PluginHighlight {
 
     public name = "Hide portal ownership";
     public version = "0.2.0";
@@ -12,21 +11,10 @@ export class PluginHidePortalOwnership extends Plugin {
     public author = "vita10gy";
     public tags: ["portal", "highlight", "neutral", "nocolor", "owner"];
     public defaultInactive = true;
-    private menuName = "Hide portal ownership";
+    protected menuName = "Hide portal ownership";
 
-
-    hideOwnership = (portal: IITC.Portal): void => {
+    highlight(portal: IITC.Portal): void {
         const portalStyle = getMarkerStyleOptions({ team: FACTION.none, level: 0 } as IITC.PortalOptions);
         portal.setStyle(portalStyle);
     }
-
-
-    activate(): void {
-        IITC.highlighter.add({ name: this.menuName, highlight: this.hideOwnership });
-    }
-
-    deactivate(): void {
-        IITC.highlighter.remove(this.menuName);
-    }
 }
-

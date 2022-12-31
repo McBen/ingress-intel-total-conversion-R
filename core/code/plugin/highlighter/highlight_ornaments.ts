@@ -1,8 +1,7 @@
-import { IITC } from "../../IITC";
-import { Plugin } from "../plugin_base";
+import { PluginHighlight } from "./highligh_plugin_base";
 
 
-export class PluginHighlightOrnaments extends Plugin {
+export class PluginHighlightOrnaments extends PluginHighlight {
 
     public name = "Highlight portals with ornaments";
     public version = "0.2.0";
@@ -10,10 +9,10 @@ export class PluginHighlightOrnaments extends Plugin {
     public author = "jonatkins";
     public tags: ["portal", "highlight", "ornanaments"];
     public defaultInactive = true;
-    private menuName = "Ornaments (anomaly portals)";
+    protected menuName = "Ornaments (anomaly portals)";
 
 
-    ornamentshighlight = (portal: IITC.Portal): void => {
+    highlight(portal: IITC.Portal): void {
         const d = portal.options.data;
         if (d.ornaments && d.ornaments.length > 0) {
 
@@ -23,14 +22,5 @@ export class PluginHighlightOrnaments extends Plugin {
             };
             portal.setStyle(style);
         }
-    }
-
-
-    activate(): void {
-        IITC.highlighter.add({ name: this.menuName, highlight: this.ornamentshighlight });
-    }
-
-    deactivate(): void {
-        IITC.highlighter.remove(this.menuName);
     }
 }

@@ -1,9 +1,8 @@
 import { DAYS } from "../../helper/times";
-import { IITC } from "../../IITC";
-import { Plugin } from "../plugin_base";
+import { PluginHighlight } from "./highligh_plugin_base";
 
 
-export class PluginHighlightInactive extends Plugin {
+export class PluginHighlightInactive extends PluginHighlight {
 
     public name = "Highlight inactive portals";
     public version = "0.2.0";
@@ -14,10 +13,10 @@ export class PluginHighlightInactive extends Plugin {
     public author = "jonatkins";
     public tags: ["portal", "highlight", "inactive", "unclaimed"];
     public defaultInactive = true;
-    private menuName = "Inactive Portals";
+    protected menuName = "Inactive Portals";
 
 
-    inactivePortals = (portal: IITC.Portal): void => {
+    highlight(portal: IITC.Portal): void {
         if (portal.options.timestamp > 0) {
             const daysUnmodified = (Date.now() - portal.options.timestamp) / DAYS;
             if (daysUnmodified >= 7) {
@@ -28,13 +27,5 @@ export class PluginHighlightInactive extends Plugin {
                 portal.setStyle(style);
             }
         }
-    }
-
-    activate(): void {
-        IITC.highlighter.add({ name: this.menuName, highlight: this.inactivePortals });
-    }
-
-    deactivate(): void {
-        IITC.highlighter.remove(this.menuName);
     }
 }
