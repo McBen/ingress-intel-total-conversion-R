@@ -6,16 +6,7 @@ import { PluginGrayGoolgleMap } from "./basemaps/basemap_google_gray";
 import { PluginKartverketMaps } from "./basemaps/basemap_kartverket";
 import { PluginOSM } from "./basemaps/basemap_openstreetmap";
 import { PluginStamenMaps } from "./basemaps/basemap_stamen";
-import { PluginHighlightInactive } from "./highlighter/forgotten";
-import { PluginHidePortalOwnership } from "./highlighter/hide_team";
-import { PluginHighlightHighLevel } from "./highlighter/high_level";
-import { PluginHighlightLevelColor } from "./highlighter/level_color";
-import { PluginHighlightOrnaments } from "./highlighter/ornaments";
-import { PluginHighlightMyLevel } from "./highlighter/portals_my_level";
-import { PluginHighlightWeakness } from "./highlighter/weakness";
-import { PluginHighlightMissingReso } from "./highlighter/missing_resonators";
-import { PluginHighlightNeedRecharge } from "./highlighter/needs_recharge";
-import { PluginHighlightPortalHistory } from "./highlighter/portal_history";
+import { register as registerHighlighters } from "./highlighter/_all";
 import { PluginManager } from "./plugin_manager";
 
 export const registerPlugins = (manager: PluginManager): void => {
@@ -31,14 +22,5 @@ export const registerPlugins = (manager: PluginManager): void => {
     manager.add(new PluginStamenMaps());
 
     // Highlighters
-    manager.add(new PluginHighlightPortalHistory());
-    manager.add(new PluginHighlightInactive());
-    manager.add(new PluginHighlightNeedRecharge());
-    manager.add(new PluginHighlightMissingReso());
-    manager.add(new PluginHidePortalOwnership());
-    manager.add(new PluginHighlightHighLevel());
-    manager.add(new PluginHighlightLevelColor());
-    manager.add(new PluginHighlightMyLevel());
-    manager.add(new PluginHighlightWeakness());
-    manager.add(new PluginHighlightOrnaments());
+    registerHighlighters(manager);
 }

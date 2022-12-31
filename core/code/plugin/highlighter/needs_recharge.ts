@@ -1,5 +1,5 @@
 import { FACTION } from "../../constants";
-import { PluginHighlight } from "./highligher_base";
+import { PluginHighlight } from "./_base";
 
 
 export class PluginHighlightNeedRecharge extends PluginHighlight {

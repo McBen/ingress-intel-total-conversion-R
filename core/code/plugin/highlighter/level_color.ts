@@ -1,5 +1,5 @@
 import { COLORS_LVL } from "../../constants";
-import { PluginHighlight } from "./highligher_base";
+import { PluginHighlight } from "./_base";
 
 
 export class PluginHighlightLevelColor extends PluginHighlight {

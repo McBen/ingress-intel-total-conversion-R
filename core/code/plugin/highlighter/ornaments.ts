@@ -1,4 +1,4 @@
-import { PluginHighlight } from "./highligher_base";
+import { PluginHighlight } from "./_base";
 
 
 export class PluginHighlightOrnaments extends PluginHighlight {

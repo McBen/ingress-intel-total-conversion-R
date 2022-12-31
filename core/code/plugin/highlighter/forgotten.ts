@@ -1,5 +1,5 @@
 import { DAYS } from "../../helper/times";
-import { PluginHighlight } from "./highligher_base";
+import { PluginHighlight } from "./_base";
 
 
 export class PluginHighlightInactive extends PluginHighlight {
