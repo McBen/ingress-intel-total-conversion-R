@@ -5,6 +5,7 @@ import { CP_COUNT, RegionScore, ServerResult } from "./region_score";
 import { dialog } from "../../dialog";
 import { player } from "../../../helper/player";
 import { postAjax } from "../../../helper/send_request";
+import { formatDayHours, formatHours, formatMinutes } from "../../../helper/times";
 
 
 export class RegionScoreDialog {
@@ -137,7 +138,7 @@ export class RegionScoreDialog {
                 const enl_str = score_now ? "\nEnl:\t" + formatScore(0, score_now, score_last) : "";
                 const res_str = score_now ? "\nRes:\t" + formatScore(1, score_now, score_last) : "";
 
-                const time = that.formatDayHours(that.regionScore.getCheckpointEnd(cp));
+                const time = formatDayHours(that.regionScore.getCheckpointEnd(cp));
                 tooltip = `CP:\t${cp}\t-\t${time}\n<hr>${enl_str}${res_str}`;
             }
 
@@ -182,7 +183,7 @@ export class RegionScoreDialog {
 
             table += "<tr>" +
                 "<td>" + cp.toFixed(0) + "</td>" +
-                "<td>" + this.formatDayHours(this.regionScore.getCheckpointEnd(cp)) + "</td>" +
+                "<td>" + formatDayHours(this.regionScore.getCheckpointEnd(cp)) + "</td>" +
                 order(
                     "<td" + class_e + ">" + digits(score[0]) + "</td>",
                     "<td" + class_r + ">" + digits(score[1]) + "</td>"
@@ -295,8 +296,8 @@ export class RegionScoreDialog {
         const endcp = this.regionScore.getCycleEnd();
 
         return '<div class="checkpoint_timers"><table><tr>' +
-            "<td>Next CP at: " + this.formatHours(nextcp) + ' (in <span id="cycletimer"></span>)</td>' +
-            "<td>Cycle ends: " + this.formatDayHours(endcp) + "</td>" +
+            "<td>Next CP at: " + formatHours(nextcp) + ' (in <span id="cycletimer"></span>)</td>' +
+            "<td>Cycle ends: " + formatDayHours(endcp) + "</td>" +
             "</tr></table></div>";
     }
 
@@ -316,31 +317,7 @@ export class RegionScoreDialog {
 
     onTimer = (): void => {
         const d = this.regionScore.getCheckpointEnd(this.regionScore.getLastCP() + 1).getTime() - (Date.now());
-        $("#cycletimer", this.mainDialog).html(this.formatMinutes(Math.max(0, Math.floor(d / 1000))));
-    }
-
-    formatMinutes(sec: number): string {
-        const hours = Math.floor(sec / 3600);
-        const minutes = Math.floor((sec % 3600) / 60);
-        sec = sec % 60;
-
-        let time = hours.toString() + ":";
-        time += this.zeroPad(minutes);
-        time += ":";
-        time += this.zeroPad(sec);
-        return time;
-    }
-
-    formatHours(time: Date): string {
-        return this.zeroPad(time.getHours()) + ":00";
-    }
-    formatDayHours(time: Date): string {
-        return `${this.zeroPad(time.getDate())}.${this.zeroPad(time.getMonth() + 1)} ${this.zeroPad(time.getHours())}:00`;
-    }
-
-    private zeroPad(value: number): string {
-        if (value < 10) return `0${value}`;
-        else return value.toString();
+        $("#cycletimer", this.mainDialog).html(formatMinutes(Math.max(0, Math.floor(d / 1000))));
     }
 
 }

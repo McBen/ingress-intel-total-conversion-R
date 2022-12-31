@@ -61,10 +61,10 @@ export const digits = (d: number | string): string => {
 }
 
 
-export const zeroPad = (num: number, pad: number): string => {
+export const zeroPad = (num: number, pad: number = 2): string => {
     const numStr = num.toString();
-    const zeros = pad - numStr.length;
-    return Array(zeros > 0 ? zeros + 1 : 0).join("0") + numStr;
+    const zeros = Math.max(0, pad - numStr.length);
+    return "0".repeat(zeros) + numStr;
 }
 
 
@@ -77,8 +77,8 @@ export const unixTimeToString = (time: string | number, full?: boolean): string 
     const d = new Date(typeof time === "string" ? parseInt(time) : time);
 
     const timeStr = d.toLocaleTimeString();
-    const date = `${d.getFullYear()}-${zeroPad(d.getMonth() + 1, 2)}-${zeroPad(d.getDate(), 2)}`;
-    if (typeof full !== "undefined" && full) return date + " " + timeStr;
+    const date = `${d.getFullYear()}-${zeroPad(d.getMonth() + 1)}-${zeroPad(d.getDate())}`;
+    if (full !== undefined && full) return date + " " + timeStr;
     if (d.toDateString() === new Date().toDateString()) {
         return timeStr;
     } else {
@@ -92,8 +92,9 @@ export const unixTimeToString = (time: string | number, full?: boolean): string 
 export const unixTimeToDateTimeString = (time: string | number, millisecond?: boolean): string | null => {
     if (!time) return null;
     const d = new Date(typeof time === "string" ? parseInt(time) : time);
-    return d.getFullYear() + "-" + zeroPad(d.getMonth() + 1, 2) + "-" + zeroPad(d.getDate(), 2)
-        + " " + zeroPad(d.getHours(), 2) + ":" + zeroPad(d.getMinutes(), 2) + ":" + zeroPad(d.getSeconds(), 2) + (millisecond ? "." + zeroPad(d.getMilliseconds(), 3) : "");
+    return d.getFullYear() + "-" + zeroPad(d.getMonth() + 1) + "-" + zeroPad(d.getDate())
+        + " "
+        + zeroPad(d.getHours()) + ":" + zeroPad(d.getMinutes()) + ":" + zeroPad(d.getSeconds()) + (millisecond ? "." + zeroPad(d.getMilliseconds(), 3) : "");
 }
 
 
@@ -127,14 +128,16 @@ export const formatInterval = (seconds: number, maxTerms?: number): string => {
 }
 
 
-export const showPortalPosLinks = (lat, lng, name) => {
+export const showPortalPosLinks = (lat: number, lng: number, name: string) => {
+    const lat_str = lat.toString();
+    const lng_str = lng.toString();
     const encoded_name = encodeURIComponent(name);
     const qrcode = '<div id="qrcode"></div>';
-    const script = "<script>$('#qrcode').qrcode({text:'GEO:" + lat + "," + lng + "'});</script>";
-    const gmaps = '<a href="https://maps.google.com/maps?ll=' + lat + "," + lng + "&q=" + lat + "," + lng + "%20(" + encoded_name + ')">Google Maps</a>';
-    const bingmaps = '<a href="https://www.bing.com/maps/?v=2&cp=' + lat + "~" + lng + "&lvl=16&sp=Point." + lat + "_" + lng + "_" + encoded_name + '___">Bing Maps</a>';
-    const osm = '<a href="https://www.openstreetmap.org/?mlat=' + lat + "&mlon=" + lng + '&zoom=16">OpenStreetMap</a>';
-    const latLng = "<span>" + lat + "," + lng + "</span>";
+    const script = "<script>$('#qrcode').qrcode({text:'GEO:" + lat_str + "," + lng_str + "'});</script>";
+    const gmaps = '<a href="https://maps.google.com/maps?ll=' + lat_str + "," + lng_str + "&q=" + lat_str + "," + lng_str + "%20(" + encoded_name + ')">Google Maps</a>';
+    const bingmaps = '<a href="https://www.bing.com/maps/?v=2&cp=' + lat_str + "~" + lng_str + "&lvl=16&sp=Point." + lat_str + "_" + lng_str + "_" + encoded_name + '___">Bing Maps</a>';
+    const osm = '<a href="https://www.openstreetmap.org/?mlat=' + lat_str + "&mlon=" + lng_str + '&zoom=16">OpenStreetMap</a>';
+    const latLng = "<span>" + lat_str + "," + lng_str + "</span>";
     dialog({
         html: '<div style="text-align: center;">' + qrcode + script + gmaps + "; " + bingmaps + "; " + osm + "<br />" + latLng + "</div>",
         title: name,
