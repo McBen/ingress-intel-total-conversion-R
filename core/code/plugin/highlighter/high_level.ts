@@ -1,5 +1,5 @@
 import { IITC } from "../../IITC";
-import { PluginHighlight } from "./highligh_plugin_base";
+import { PluginHighlight } from "./highligher_base";
 
 
 export class PluginHighlightHighLevel extends PluginHighlight {

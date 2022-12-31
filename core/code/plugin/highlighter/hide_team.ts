@@ -1,6 +1,6 @@
 import { FACTION } from "../../constants";
 import { getMarkerStyleOptions } from "../../map/portal_marker";
-import { PluginHighlight } from "./highligh_plugin_base";
+import { PluginHighlight } from "./highligher_base";
 
 
 export class PluginHidePortalOwnership extends PluginHighlight {

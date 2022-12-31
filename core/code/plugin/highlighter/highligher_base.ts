@@ -14,3 +14,5 @@ export abstract class PluginHighlight extends Plugin {
         IITC.highlighter.remove(this.menuName);
     }
 }
+
+
