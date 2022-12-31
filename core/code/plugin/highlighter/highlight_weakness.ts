@@ -3,7 +3,7 @@ import { IITC } from "../../IITC";
 import { Plugin } from "../plugin_base";
 
 
-export class PluginHightlightWeakness extends Plugin {
+export class PluginHighlightWeakness extends Plugin {
 
     public name = "Highlight portal weakness";
     public version = "0.8.0";

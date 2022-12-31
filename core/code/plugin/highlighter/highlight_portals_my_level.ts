@@ -5,7 +5,7 @@ import { Plugin } from "../plugin_base";
 import { player } from "../../helper/player";
 
 
-export class PluginHightlightMyLevel extends Plugin {
+export class PluginHighlightMyLevel extends Plugin {
 
     public name = "Highlight portals by my level";
     public version = "0.2.0";
