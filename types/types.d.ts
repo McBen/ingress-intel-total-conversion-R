@@ -38,7 +38,7 @@ declare namespace IITC {
         team: string;
         timestamp: number;
         title: string;
-        history: number;
+        history: number | undefined;
     }
 
     type Ornaments =
