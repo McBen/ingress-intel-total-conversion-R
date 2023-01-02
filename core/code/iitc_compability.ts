@@ -15,6 +15,7 @@ import { PortalInfoDetailed } from "./portal/portal_info_detailed";
 import { fixPortalImageUrl, renderPortalDetails } from "./portal/portal_display";
 import { createMarker, portalMarkerScale, setMarkerStyle } from "./map/portal_marker";
 import { getPortalFields, getPortalFieldsCount, getPortalLinks } from "./helper/portal_data";
+import { portalDetail } from "./portal/portal_details_get";
 const log = Log(LogApp.Plugins);
 
 
@@ -91,6 +92,9 @@ globalThis.getLinkAmpRangeBoost = (d: PortalInfoDetailed) => d.getLinkAmpRangeBo
 globalThis.getPortalLevel = (d: PortalInfoDetailed) => d.getPortalLevel();
 globalThis.getPortalModsByType = (d: PortalInfoDetailed, type: string) => d.getPortalModsByType(type);
 globalThis.getMaxOutgoingLinks = (d: PortalInfoDetailed) => d.getMaxOutgoingLinks();
+
+globalThis.portalDetail = portalDetail;
+
 
 // portalDetails Display
 globalThis.fixPortalImageUrl = fixPortalImageUrl;
