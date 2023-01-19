@@ -12,14 +12,14 @@ interface CacheEntry<T> {
 /**
  * cache for map data tiles
  */
-export class DataCache<T> {
+export class DataCache<ID, T> {
     private REQUEST_CACHE_FRESH_AGE = 3 * MINUTES;  // if younger than this, use data in the cache rather than fetching from the server
     private REQUEST_CACHE_MAX_AGE = 5 * MINUTES;  // maximum cache age. entries are deleted from the cache after this time
 
     private REQUEST_CACHE_MAX_ITEMS = 1000;  // if more than this many entries, expire early
     private REQUEST_CACHE_MAX_CHARS = 20000000 / 2; // or more than this total size
 
-    private cache: Map<TileID, CacheEntry<T>>;
+    private cache: Map<ID, CacheEntry<T>>;
     private cacheCharSize: number;
     private interval: number | undefined;
     private cacheHit: number;
@@ -47,7 +47,7 @@ export class DataCache<T> {
     }
 
 
-    store(qk: TileID, data: T): void {
+    store(qk: ID, data: T): void {
         this.remove(qk);
 
         const time = Date.now();
@@ -64,7 +64,7 @@ export class DataCache<T> {
     }
 
 
-    remove(qk: TileID): void {
+    remove(qk: ID): void {
         const entry = this.cache.get(qk);
         if (entry) {
             this.cacheCharSize -= entry.size;
@@ -73,7 +73,7 @@ export class DataCache<T> {
     }
 
 
-    get(qk: TileID): T | undefined {
+    get(qk: ID): T | undefined {
         const entry = this.cache.get(qk);
         if (entry) {
             return entry.dataStr;
@@ -82,7 +82,7 @@ export class DataCache<T> {
         return undefined;
     }
 
-    getTime(qk: TileID): number {
+    getTime(qk: ID): number {
         const entry = this.cache.get(qk);
         if (entry) {
             return entry.time;
@@ -91,7 +91,7 @@ export class DataCache<T> {
         return 0;
     }
 
-    isFresh(qk: TileID): boolean {
+    isFresh(qk: ID): boolean {
         const entry = this.cache.get(qk);
         if (entry) {
             const now = Date.now();
@@ -107,9 +107,9 @@ export class DataCache<T> {
         return false;
     }
 
-    startExpireInterval(period: number): void {
+    startExpireInterval(period_in_seconds: number): void {
         if (this.interval === undefined) {
-            this.interval = window.setInterval(() => this.runExpire(), period * SECONDS);
+            this.interval = window.setInterval(() => this.runExpire(), period_in_seconds * SECONDS);
         }
     }
 

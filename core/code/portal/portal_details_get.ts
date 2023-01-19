@@ -9,7 +9,7 @@ import { PortalInfoDetailed } from "./portal_info_detailed";
  * code to retrieve the portal detail data from the servers
  */
 export class PortalDetails {
-    private cache: DataCache<PortalInfoDetailed>;
+    private cache: DataCache<PortalGUID, PortalInfoDetailed>;
     private requestQueue: Map<PortalGUID, Promise<PortalInfoDetailed>>;
 
     constructor() {

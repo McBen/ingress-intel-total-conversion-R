@@ -88,7 +88,7 @@ export interface TileData {
  */
 export class MapDataRequest {
 
-    private cache: DataCache<TileData>;
+    private cache: DataCache<TileID, TileData>;
     private render: Render;
     private debugTiles: RenderDebugTiles;
 
