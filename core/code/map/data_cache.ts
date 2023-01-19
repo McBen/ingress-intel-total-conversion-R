@@ -1,5 +1,5 @@
 import * as L from "leaflet";
-import { SECONDS } from "../helper/times";
+import { MINUTES, SECONDS } from "../helper/times";
 
 interface CacheEntry<T> {
     time: number,
@@ -13,8 +13,8 @@ interface CacheEntry<T> {
  * cache for map data tiles
  */
 export class DataCache<T> {
-    private REQUEST_CACHE_FRESH_AGE = 3 * 60;  // if younger than this, use data in the cache rather than fetching from the server
-    private REQUEST_CACHE_MAX_AGE = 5 * 60;  // maximum cache age. entries are deleted from the cache after this time
+    private REQUEST_CACHE_FRESH_AGE = 3 * MINUTES;  // if younger than this, use data in the cache rather than fetching from the server
+    private REQUEST_CACHE_MAX_AGE = 5 * MINUTES;  // maximum cache age. entries are deleted from the cache after this time
 
     private REQUEST_CACHE_MAX_ITEMS = 1000;  // if more than this many entries, expire early
     private REQUEST_CACHE_MAX_CHARS = 20000000 / 2; // or more than this total size
@@ -122,7 +122,7 @@ export class DataCache<T> {
 
 
     runExpire() {
-        const old = Date.now() - this.REQUEST_CACHE_MAX_AGE * 1000;
+        const old = Date.now() - this.REQUEST_CACHE_MAX_AGE;
 
         let cacheSize = this.cache.size;
 
