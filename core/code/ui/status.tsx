@@ -1,3 +1,4 @@
+import { render } from "solid-js/web";
 import { getDataZoomForMapZoom, getMapZoomTileParameters, TileParameters } from "../map/map_data_calc_tools";
 
 export interface MapStatus {
@@ -6,12 +7,31 @@ export interface MapStatus {
     failed: number;
 }
 
+const EdgeBottomLeft = () => {
+    return <span class="iitcbaredge bottomleft"></span>
+}
+
+const MapStatsBar = () => {
+    return <div id="mapstatus" class="iitcbar bottom">
+        <div class="progress loaded"></div>
+        <div class="progress loaderror"></div>
+        <span class="zoomdetails"></span>
+    </div>
+
+}
+
+const StatusBar = () => {
+    return <div class="iitcontainer statusbar">
+        <EdgeBottomLeft></EdgeBottomLeft>
+        <MapStatsBar></MapStatsBar>
+    </div>;
+}
+
+
 
 export class MapStatusBar {
 
-    private updateDelay: number | undefined;
     private status: MapStatus;
-
 
     constructor() {
         this.createControl();
@@ -20,28 +40,8 @@ export class MapStatusBar {
 
 
     createControl(): void {
-        $("<div>", { class: "iitcontainer statusbar" }).append(
-            $("<span>", { class: "iitcbaredge bottomleft" }),
-            $("<div>", { id: "mapstatus", class: "iitcbar bottom" }).append(
-                $("<div>", { class: "progress loaded" }),
-                $("<div>", { class: "progress loaderror" }),
-                $("<span>", { class: "zoomdetails" })
-            )
-        ).appendTo($("body"));
+        render(() => <StatusBar />, document.body);
     }
-
-
-    updateDelayed = (status?: Partial<MapStatus>): void => {
-        this.storeStatus(status);
-
-        if (!this.updateDelay) {
-            this.updateDelay = window.setTimeout(() => {
-                this.updateDelay = undefined;
-                this.update()
-            }, 0);
-        }
-    }
-
 
     update(status?: Partial<MapStatus>): void {
         this.storeStatus(status);
@@ -76,7 +76,7 @@ export class MapStatusBar {
     }
 
 
-    getZoomDetails(): string {
+    private getZoomDetails(): string {
         const tileParameters = this.getDataZoomTileParameters();
 
         if (tileParameters.hasPortals) {
