@@ -772,7 +772,7 @@ export class MapDataRequest {
 
 
     // debug only
-    getCache(): DataCache<TileData> {
+    getCache(): DataCache<TileID, TileData> {
         return this.cache;
     }
 

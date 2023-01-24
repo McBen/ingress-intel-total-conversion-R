@@ -6,10 +6,10 @@ import { formatInterval } from "../../../helper/times";
 export class CacheDebug {
 
     private dialog: JQuery;
-    private cache: DataCache<any>;
+    private cache: DataCache<any, any>;
     private updateTimer: number;
 
-    constructor(cache: DataCache<any>) {
+    constructor(cache: DataCache<any, any>) {
         this.cache = cache;
     }
 
