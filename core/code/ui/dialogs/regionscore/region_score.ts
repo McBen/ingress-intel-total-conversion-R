@@ -113,7 +113,7 @@ export class RegionScore {
     private findMedian(values: number[]): number {
         if (values.length === 0) return 0;
 
-        values = values.sort();
+        values = values.sort((a, b) => a - b);
         const mid = Math.floor((values.length - 1) / 2);
         return values[mid];
     }
