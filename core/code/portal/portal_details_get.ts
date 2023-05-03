@@ -32,7 +32,9 @@ export class PortalDetails {
     request(guid: PortalGUID): Promise<PortalInfoDetailed> {
         if (!this.requestQueue.has(guid)) {
 
-            this.requestQueue.set(guid, this.doRequest(guid));
+            const newRequest = this.doRequest(guid).finally(() => { this.requestQueue.delete(guid); })
+            this.requestQueue.set(guid, newRequest);
+            return newRequest;
         }
 
         return this.requestQueue.get(guid);
