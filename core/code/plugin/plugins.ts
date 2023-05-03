@@ -7,6 +7,7 @@ import { PluginKartverketMaps } from "./basemaps/basemap_kartverket";
 import { PluginOSM } from "./basemaps/basemap_openstreetmap";
 import { PluginStamenMaps } from "./basemaps/basemap_stamen";
 import { register as registerHighlighters } from "./highlighter/_all";
+import { PluginPortalLevelNumbers } from "./portal_level_numbers";
 import { PluginManager } from "./plugin_manager";
 
 export const registerPlugins = (manager: PluginManager): void => {
@@ -20,6 +21,7 @@ export const registerPlugins = (manager: PluginManager): void => {
     manager.add(new PluginGaodeMap());
     manager.add(new PluginKartverketMaps());
     manager.add(new PluginStamenMaps());
+    manager.add(new PluginPortalLevelNumbers());
 
     // Highlighters
     registerHighlighters(manager);
