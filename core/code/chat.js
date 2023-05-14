@@ -365,6 +365,12 @@ window.chat.updateOldNewHash = function (newData, storageHash, isOlderMsgs, isAs
   }
 };
 
+function team2id(team) {
+  if (team === 'RESISTANCE') return TEAM_RES;
+  if (team === 'ENLIGHTENED') return TEAM_ENL;
+  return TEAM_NONE;
+}
+
 window.chat.parseMsgData = function (data) {
   var categories = data[2].plext.categories;
   var isPublic = (categories & 1) === 1;
@@ -374,7 +380,7 @@ window.chat.parseMsgData = function (data) {
   var msgToPlayer = msgAlert && (isPublic || isSecure);
 
   var time = data[1];
-  var team = data[2].plext.team === 'RESISTANCE' ? TEAM_RES : TEAM_ENL;
+  var team = team2id(data[2].plext.team);
   var auto = data[2].plext.plextType !== 'PLAYER_GENERATED';
   var systemNarrowcast = data[2].plext.plextType === 'SYSTEM_NARROWCAST';
 
@@ -389,7 +395,7 @@ window.chat.parseMsgData = function (data) {
 
       case 'PLAYER': // automatically generated messages
         nick = ent[1].plain;
-        team = ent[1].team === 'RESISTANCE' ? TEAM_RES : TEAM_ENL;
+        team = team2id(ent[1].team);
         break;
 
       default:
@@ -554,7 +560,7 @@ window.chat.renderMsgRow = function (data) {
   var timeCell = chat.renderTimeCell(data.time, timeClass);
 
   var nickClasses = ['nickname'];
-  if (data.player.team === TEAM_ENL || data.player.team === TEAM_RES) {
+  if (TEAM_TO_CSS[data.player.team]) {
     nickClasses.push(TEAM_TO_CSS[data.player.team]);
   }
   // highlight things said/done by the player in a unique colour
