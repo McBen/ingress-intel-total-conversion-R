@@ -9,6 +9,7 @@ import { PluginStamenMaps } from "./basemaps/basemap_stamen";
 import { register as registerHighlighters } from "./highlighter/_all";
 import { PluginPortalLevelNumbers } from "./portal_level_numbers";
 import { PluginManager } from "./plugin_manager";
+import { PlayerTracker } from "./tracker/player_activity_tracker";
 
 export const registerPlugins = (manager: PluginManager): void => {
 
@@ -22,6 +23,7 @@ export const registerPlugins = (manager: PluginManager): void => {
     manager.add(new PluginKartverketMaps());
     manager.add(new PluginStamenMaps());
     manager.add(new PluginPortalLevelNumbers());
+    manager.add(new PlayerTracker());
 
     // Highlighters
     registerHighlighters(manager);

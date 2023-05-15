@@ -26,3 +26,13 @@ export const DEFAULT_ZOOM = 15;
 //  Constants the use might want to change
 // globalThis.MAX_IDLE_TIME = 15 * 60; // stop updating map after 15min idling
 // globalThis.REFRESH = 30; // refresh view every 30s (base time)
+
+
+export const teamStr2Faction = (name: "ENLIGHTENED" | "RESISTANCE" | "NEUTRAL" | "ALIENS"): FACTION => {
+    switch (name) {
+        case "RESISTANCE": return FACTION.RES;
+        case "ENLIGHTENED": return FACTION.ENL;
+        case "ALIENS": return FACTION.ENL;
+        default: return FACTION.none;
+    }
+}
