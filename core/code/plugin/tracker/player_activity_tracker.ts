@@ -57,8 +57,6 @@ export class PlayerTracker extends Plugin {
     public tags: ["player", "agent", "track", "stalk", "where"];
     public defaultInactive = false;
 
-    // TODO: check incompatible plugins (iitc-ce/me stock)
-
     public stored: Map<string, Player>;
 
     private drawnTracesEnl: L.LayerGroup;

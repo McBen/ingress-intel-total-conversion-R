@@ -2,6 +2,9 @@ import { Plugin } from "./plugin_base";
 import { Options } from "../helper/options";
 import { PluginMigrated } from "./plugin_migrated";
 import { registerPlugins } from "./plugins";
+import { Log, LogApp } from "../helper/log_apps";
+const log = Log(LogApp.Plugins);
+
 
 export class PluginManager {
 
@@ -16,7 +19,12 @@ export class PluginManager {
     migrateOld(): void {
         window.bootPlugins.forEach(bootPlugin => {
             const plugin = new PluginMigrated(bootPlugin);
-            this.add(plugin);
+            if (plugin.isCompatible()) {
+                this.add(plugin);
+            } else {
+                // alternative: we can simply deaktivate it as default
+                log.info(`Skip plugin: ${plugin.name} ${plugin.version}`);
+            }
         });
         window.bootPlugins = [];
     }

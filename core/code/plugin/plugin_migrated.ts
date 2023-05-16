@@ -2,6 +2,9 @@ import { Plugin } from "./plugin_base";
 import { BootCallback } from "../../../types";
 
 
+const oldStockPlugins = new Set(["Player tracker"]);
+
+
 export class PluginMigrated extends Plugin {
 
     private setup: () => void;
@@ -30,6 +33,9 @@ export class PluginMigrated extends Plugin {
         this.name = this.name.replace(/^IITC[\s-]+plugin:\s+/i, "");
     }
 
+    isCompatible(): boolean {
+        return !oldStockPlugins.has(this.name);
+    }
 
     activate(): void {
         this.error = undefined;
@@ -40,6 +46,7 @@ export class PluginMigrated extends Plugin {
             return;
         }
 
+        // eslint-disable-next-line unicorn/prefer-module
         require("../iitc_compability");
         this.setup();
     }
@@ -49,4 +56,5 @@ export class PluginMigrated extends Plugin {
         this.error = "need reload to deactivate plugin";
         this.wasDeactivated = true;
     }
+
 }
