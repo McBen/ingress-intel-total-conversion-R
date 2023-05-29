@@ -479,8 +479,8 @@ export class Render {
 
         const team = teamStringToId(ent[2][1]);
         const latlngs = [
-            L.latLng(data.oLatE6 * 1e-6, data.oLngE6 * 1e-6),
-            L.latLng(data.dLatE6 * 1e-6, data.dLngE6 * 1e-6)
+            L.latLng(data.oLatE6 / 1e6, data.oLngE6 / 1e6),
+            L.latLng(data.dLatE6 / 1e6, data.dLngE6 / 1e6)
         ];
         const poly = L.geodesicPolyline(latlngs, <IITC.LinkOptions>{
             color: FACTION_COLORS[team],

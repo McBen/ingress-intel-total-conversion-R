@@ -208,7 +208,7 @@ export const makePermalink = (latlng?: L.LatLng, options?: Partial<makePermalink
     const args = [];
     if (!latlng || options.includeMapView) {
         const round = (l: number): number => { // ensures that lat,lng are with same precision as in stock intel permalinks
-            return Math.floor(l * 1e6) * 1e-6;
+            return Math.floor(l * 1e6) / 1e6;
         };
         const center = window.map.getCenter();
         args.push(

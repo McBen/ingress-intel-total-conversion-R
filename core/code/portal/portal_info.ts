@@ -24,7 +24,7 @@ export class PortalInfoBase {
     }
 
     getLocation(): L.LatLng {
-        return L.latLng(this.latE6 * 1e-6, this.lngE6 * 1e-6)
+        return L.latLng(this.latE6 / 1e6, this.lngE6 / 1e6)
     }
 
 

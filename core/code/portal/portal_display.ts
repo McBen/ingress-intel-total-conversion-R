@@ -78,7 +78,7 @@ const renderLowDetails = (portal: IITC.Portal): void => {
 
     const pdata = portal.options.data;
     const title = (pdata && pdata.title) || "...";
-    const location = L.latLng(pdata.latE6 * 1e-6, pdata.lngE6 * 1e-6);
+    const location = L.latLng(pdata.latE6 / 1e6, pdata.lngE6 / 1e6);
     const team = teamStr2Faction(pdata.team as IITC.EntityTeam);
     const level = team === FACTION.none ? 0 : pdata.level;
 

@@ -205,7 +205,7 @@ export class PlayerTracker extends Plugin {
                     case "PORTAL":
                         // link messages are “player linked X to Y” and the player is at
                         // X.
-                        latLng = latLng ?? L.latLng(markup[1].latE6 * 1e-6, markup[1].lngE6 * 1e-6);
+                        latLng = latLng ?? L.latLng(markup[1].latE6 / 1e6, markup[1].lngE6 / 1e6);
 
                         name = name ?? markup[1].name;
                         address = address ?? markup[1].address;

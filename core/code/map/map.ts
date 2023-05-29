@@ -203,7 +203,7 @@ const getPosition = (): NormalizedPosition | undefined => {
     const lngE6 = getURLParam("lngE6");
     if (latE6 && lngE6) {
         log.log("mappos: reading email URL params");
-        return normLL(parseInt(latE6) * 1e-6, parseInt(lngE6) * 1e-6, zoom);
+        return normLL(parseInt(latE6) / 1e6, parseInt(lngE6) / 1e6, zoom);
     }
 
     const ll = getURLParam("ll") || getURLParam("pll");
