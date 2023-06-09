@@ -103,8 +103,17 @@ globalThis.renderPortalDetails = renderPortalDetails;
 globalThis.renderUpdateStatus = NOOP; // stub
 
 // highlighter
-globalThis.addPortalHighlighter = (name: string, highlit: (data: any) => void) => {
-    IITC.highlighter.add({ name, highlight: (p: IITC.Portal) => highlit({ data: p }) });
+type HighLighterFct = (data: { portal: IITC.Portal }) => void;
+interface HighLighterNew {
+    highlight: HighLighterFct;
+    setSelected: (activate: boolean) => void;
+}
+type HighLighter = HighLighterFct | HighLighterNew;
+
+globalThis.addPortalHighlighter = (name: string, hl: HighLighter) => {
+    const fct = (hl as HighLighterNew).highlight ?? (hl as HighLighterFct);
+    // FIXME:support new format
+    IITC.highlighter.add({ name, highlight: (p: IITC.Portal) => fct({ portal: p }) });
 };
 
 
