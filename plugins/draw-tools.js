@@ -83,7 +83,7 @@ window.plugin.drawTools.addDrawControl = function () {
   // Add Confirm request to Delete-All command
   var original = L.EditToolbar.Delete.prototype.removeAllLayers;
   L.EditToolbar.Delete.prototype.removeAllLayers = function () {
-    if (confirm('Ary you sure?')) {
+    if (confirm('Are you sure?')) {
       original.call(this);
     }
   };
