@@ -16,6 +16,7 @@ import { fixPortalImageUrl, renderPortalDetails } from "./portal/portal_display"
 import { createMarker, portalMarkerScale, setMarkerStyle } from "./map/portal_marker";
 import { getPortalFields, getPortalFieldsCount, getPortalLinks } from "./helper/portal_data";
 import { portalDetail } from "./portal/portal_details_get";
+import { Highlighter } from "./portal/highlighters";
 const log = Log(LogApp.Plugins);
 
 
@@ -106,14 +107,25 @@ globalThis.renderUpdateStatus = NOOP; // stub
 type HighLighterFct = (data: { portal: IITC.Portal }) => void;
 interface HighLighterNew {
     highlight: HighLighterFct;
-    setSelected: (activate: boolean) => void;
+    setSelected?: (activate: boolean) => void;
 }
-type HighLighter = HighLighterFct | HighLighterNew;
 
-globalThis.addPortalHighlighter = (name: string, hl: HighLighter) => {
-    const fct = (hl as HighLighterNew).highlight ?? (hl as HighLighterFct);
-    // FIXME:support new format
-    IITC.highlighter.add({ name, highlight: (p: IITC.Portal) => fct({ portal: p }) });
+globalThis.addPortalHighlighter = (name: string, hl: HighLighterFct | HighLighterNew) => {
+
+    if ((hl as HighLighterNew).highlight) {
+        const highlight: Highlighter = {
+            name,
+            highlight: (p: IITC.Portal) => (hl as HighLighterNew).highlight.call(hl, { portal: p }),
+            setSelected: (hl as HighLighterNew).setSelected.bind(hl)
+        };
+        IITC.highlighter.add(highlight);
+    } else {
+        const fct = hl as HighLighterFct;
+        IITC.highlighter.add({
+            name,
+            highlight: (p: IITC.Portal) => fct({ portal: p })
+        });
+    }
 };
 
 

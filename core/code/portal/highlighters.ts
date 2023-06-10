@@ -6,6 +6,7 @@ const STORE_KEY = "portal_highlighter";
 export interface Highlighter {
     name: string;
     highlight: (portal: IITC.Portal) => void;
+    setSelected?: (_activate: boolean) => void;
 }
 
 const NoHighlight = {
@@ -29,7 +30,7 @@ export class Highlighters {
         this.all.push(highlighter);
 
         if (highlighter.name === localStorage.getItem(STORE_KEY)) {
-            this.current = highlighter;
+            this.changeHighlighter(highlighter.name);
         }
 
         IITC.menu.addEntry({
@@ -51,7 +52,10 @@ export class Highlighters {
     }
 
     changeHighlighter(name?: string): void {
+
+        if (this.current.setSelected) this.current.setSelected(false);
         this.current = this.all.find(h => h.name === name) || NoHighlight;
+        if (this.current.setSelected) this.current.setSelected(true);
 
         this.resetPortals();
         localStorage.setItem(STORE_KEY, this.current.name);

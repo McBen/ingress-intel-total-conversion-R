@@ -20,16 +20,6 @@ export type MenuDefinition = {
 export type LayerGroups = { [id: string]: string[] };
 
 
-declare global {
-    interface Highlighter {
-        hightlight: (portal: any) => void;
-    }
-    let _highlighters: { [name: string]: Highlighter } | null;
-    let _current_highlighter: string | undefined;
-    function changePortalHighlights(name: string | undefined): void;
-}
-
-
 export class IITCMenu extends MenuDialog {
 
     private isActive: boolean;
