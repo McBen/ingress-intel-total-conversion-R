@@ -261,18 +261,18 @@ export class Render {
             ]
         ];
 
-        // placeholder portals don't have a useful timestamp value - so the standard code that checks for updated
-        // portal details doesn't apply
-        // so, check that the basic details are valid and delete the existing portal if out of date
+        // check basic details are valid and delete the existing portal if out of date
         if (guid in window.portals) {
             const p = window.portals[guid];
-            if (team !== p.options.data.team || latE6 !== p.options.data.latE6 || lngE6 !== p.options.data.lngE6) {
-                // team or location have changed - delete existing portal
-                this.deletePortalEntity(guid);
-            }
+            this.seenPortalsGuid[guid] = true;
+
+            if (team === p.options.data.team) return;
+
+            // if team has changed replace existing portal
+            this.deletePortalEntity(guid);
         }
 
-        this.createPortalEntity(ent, "core"); // placeholder
+        this.createPortalEntity(ent, "core");
     }
 
     // TODO. create by PortalInfo
