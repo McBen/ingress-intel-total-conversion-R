@@ -84,7 +84,7 @@
   }
 
   var polyOptions = {
-    segmentsCoeff: 5000
+    segmentsCoeff: 1000
   };
 
   var PolyMixin = {
