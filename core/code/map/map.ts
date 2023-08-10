@@ -87,7 +87,13 @@ const createMap = (): void => {
         markerZoomAnimation: false,
         bounceAtZoomLimits: false,
         maxBoundsViscosity: 0.7,
-        worldCopyJump: true,
+        // worldCopyJump: true,
+        rotate: true,
+        rotateControl: {
+            closeOnZeroBearing: false
+            // position: 'bottomleft',
+        },
+        bearing: 30
     }, window.mapOptions) as L.MapOptions);
 
     const max_lat = (map.options.crs as any).projection.MAX_LATITUDE;

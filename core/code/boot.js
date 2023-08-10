@@ -233,6 +233,7 @@ window.L_NO_TOUCH = navigator.maxTouchPoints === 0; // prevent mobile style on d
 require("leaflet");
 require("leaflet/dist/leaflet.css");
 require("leaflet.gridlayer.googlemutant");
+require("leaflet-rotate");
 
 require("../external/L.Geodesic.js"); // TODO move to dependencies
 require("../external/oms.min.js"); // TODO move to dependencies

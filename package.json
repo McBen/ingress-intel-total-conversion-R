@@ -18,6 +18,7 @@
     "jquery-ui": "^1.12.1",
     "leaflet": "^1.9.3",
     "leaflet-plugins": "^3.4.0",
+    "leaflet-rotate": "^0.2.8",
     "leaflet.gridlayer.googlemutant": "^0.13.5",
     "overlapping-marker-spiderfier-leaflet": "^0.2.7",
     "rbush": "^3.0.1",

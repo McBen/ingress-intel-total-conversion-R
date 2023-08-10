@@ -2426,6 +2426,11 @@ leaflet-plugins@^3.4.0:
   resolved "https://registry.yarnpkg.com/leaflet-plugins/-/leaflet-plugins-3.4.0.tgz#72435a07098c1b850eca01f525fe54a93a2ff3f4"
   integrity sha512-CjsQKaW545tNY4JVm4v3WhbFcUa2QzWQQzEysQ0eY/ThYYMqIL5DnQNgcHCvAFZtEwlj7MlTtI7BFuKiNuqyJA==
 
+leaflet-rotate@^0.2.8:
+  version "0.2.8"
+  resolved "https://registry.yarnpkg.com/leaflet-rotate/-/leaflet-rotate-0.2.8.tgz#41a2e6c33857af93944d1337a06c6c90cd6d9ba0"
+  integrity sha512-BHtkn35DuJ377yBNn/7XVuV0oIfwJtmqv/wFQ0Lvh7QuVCAD2wfCK0/m9oA3k/LVOnJG8VEGyf3Duf/wTVzeKQ==
+
 leaflet.gridlayer.googlemutant@^0.13.5:
   version "0.13.5"
   resolved "https://registry.yarnpkg.com/leaflet.gridlayer.googlemutant/-/leaflet.gridlayer.googlemutant-0.13.5.tgz#7182c26f479e726bff8b85a7ebf9d3f44dd3ea57"
