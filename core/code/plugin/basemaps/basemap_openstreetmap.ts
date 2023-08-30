@@ -22,8 +22,8 @@ export class PluginOSM extends Plugin {
             maxZoom: 21
         };
 
-        const OSM = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-        const OSMHum = "https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png";
+        const OSM = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
+        const OSMHum = "https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png";
 
         IITC.layers.addBase("OpenStreetMap", new L.TileLayer(OSM, osmOpt));
         IITC.layers.addBase("Humanitarian", new L.TileLayer(OSMHum, osmOpt));
