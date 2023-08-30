@@ -66,3 +66,4 @@ export class IITCMain {
 
 
 export const IITC = new IITCMain();
+global.IITC = IITC;

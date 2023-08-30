@@ -15,7 +15,7 @@ const NoHighlight = {
 
 
 export class Highlighters {
-    private all: Highlighter[]
+    public all: Highlighter[]; // NB: public for backcompatibility
     private current: Highlighter;
 
     constructor() {
