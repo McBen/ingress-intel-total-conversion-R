@@ -472,11 +472,10 @@ window.chat.renderPortal = function (portal) {
 };
 
 window.chat.renderFactionEnt = function (faction) {
-  var name = faction.team === 'ENLIGHTENED' ? 'Enlightened' : 'Resistance';
-  var spanClass = faction.team === 'ENLIGHTENED' ? TEAM_TO_CSS[TEAM_ENL] : TEAM_TO_CSS[TEAM_RES];
-  return $('<div>').html($('<span>')
-    .attr('class', spanClass)
-    .text(name)).html();
+    var teamId = window.teamStringToId(faction.team);
+    var name = window.TEAM_NAMES[teamId];
+    var spanClass = window.TEAM_TO_CSS[teamId];
+    return $("<div>").html($("<span>").attr("class", spanClass).text(name)).html();
 };
 
 window.chat.renderPlayer = function (player, at, sender) {
