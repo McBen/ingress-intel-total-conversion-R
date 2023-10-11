@@ -24,9 +24,11 @@ export class PluginOSM extends Plugin {
 
         const OSM = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
         const OSMHum = "https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png";
+        const OSMCycle = "https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png";
 
         IITC.layers.addBase("OpenStreetMap", new L.TileLayer(OSM, osmOpt));
         IITC.layers.addBase("Humanitarian", new L.TileLayer(OSMHum, osmOpt));
+        IITC.layers.addBase("CyclOSM", new L.TileLayer(OSMCycle, osmOpt));
     }
 
     deactivate(): void {
