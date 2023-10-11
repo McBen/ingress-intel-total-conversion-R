@@ -447,7 +447,15 @@ window.chat.writeDataToHash = function (newData, storageHash, isPublicChannel, i
 //
 
 window.chat.renderText = function (text) {
-  return $('<div>').text(text.plain).html().autoLink();
+    if (text.team) {
+        var teamId = window.teamStringToId(text.team);
+        if (teamId === TEAM_NONE) teamId = TEAM_MAC;
+        var spanClass = window.TEAM_TO_CSS[teamId];
+        return $("<div>")
+            .append($("<span>", { class: spanClass, text: text.plain }))
+            .html();
+    }
+    return $("<div>").text(text.plain).html().autoLink();
 };
 
 // Override portal names that are used over and over, such as 'US Post Office'
@@ -513,13 +521,9 @@ window.chat.renderMarkupEntity = function (ent) {
 };
 
 window.chat.renderMarkup = function (markup) {
-  var msg = '';
-  markup.forEach(function (ent, ind) {
-    switch (ent[0]) {
-      case 'SENDER':
-      case 'SECURE':
-        // skip as already handled
-        break;
+
+    transformMessage(markup);
+
 
       case 'PLAYER': // automatically generated messages
         if (ind > 0) msg += chat.renderMarkupEntity(ent); // don’t repeat nick directly
@@ -533,6 +537,30 @@ window.chat.renderMarkup = function (markup) {
   });
   return msg;
 };
+
+function transformMessage(markup) {
+    // "Agent "<player>"" destroyed the "<Faction>" Link "
+    if (markup.length > 4) {
+        if (markup[3][0] === "FACTION" && markup[4][0] === "TEXT" && (markup[4][1].plain === " Link " || markup[4][1].plain === " Control Field @")) {
+            markup[4][1].team = markup[3][1].team;
+            markup.splice(3, 1);
+        }
+    }
+
+    // skip <faction> agent <player>
+    if (markup.length > 1) {
+        if (markup[0][0] === "TEXT" && markup[0][1].plain === "Agent " && markup[1][0] === "PLAYER") {
+            markup.splice(0, 2);
+        }
+    }
+
+    // skip agent <player>
+    if (markup.length > 2) {
+        if (markup[0][0] === "FACTION" && markup[1][0] === "TEXT" && markup[1][1].plain === " agent " && markup[2][0] === "PLAYER") {
+            markup.splice(0, 3);
+        }
+    }
+}
 
 window.chat.renderTimeCell = function (time, classNames) {
   var ta = unixTimeToHHmm(time);
