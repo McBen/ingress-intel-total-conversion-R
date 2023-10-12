@@ -445,7 +445,6 @@ window.chat.writeDataToHash = function (newData, storageHash, isPublicChannel, i
 //
 // Rendering primitive for markup, chat cells (td) and chat row (tr)
 //
-
 window.chat.renderText = function (text) {
     if (text.team) {
         var teamId = window.teamStringToId(text.team);
@@ -539,7 +538,7 @@ window.chat.renderMarkup = function (markup) {
 };
 
 function transformMessage(markup) {
-    // "Agent "<player>"" destroyed the "<Faction>" Link "
+    // "Agent "<player>"" destroyed the "<faction>" Link "
     if (markup.length > 4) {
         if (markup[3][0] === "FACTION" && markup[4][0] === "TEXT" && (markup[4][1].plain === " Link " || markup[4][1].plain === " Control Field @")) {
             markup[4][1].team = markup[3][1].team;
@@ -547,14 +546,14 @@ function transformMessage(markup) {
         }
     }
 
-    // skip <faction> agent <player>
+    // skip "<faction> agent <player>"
     if (markup.length > 1) {
         if (markup[0][0] === "TEXT" && markup[0][1].plain === "Agent " && markup[1][0] === "PLAYER") {
             markup.splice(0, 2);
         }
     }
 
-    // skip agent <player>
+    // skip "agent <player>""
     if (markup.length > 2) {
         if (markup[0][0] === "FACTION" && markup[1][0] === "TEXT" && markup[1][1].plain === " agent " && markup[2][0] === "PLAYER") {
             markup.splice(0, 3);
