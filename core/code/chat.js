@@ -520,21 +520,28 @@ window.chat.renderMarkupEntity = function (ent) {
 };
 
 window.chat.renderMarkup = function (markup) {
+    var msg = "";
 
     transformMessage(markup);
 
+    markup.forEach(function (ent, ind) {
+        switch (ent[0]) {
+            case "SENDER":
+            case "SECURE":
+                // skip as already handled
+                break;
 
-      case 'PLAYER': // automatically generated messages
-        if (ind > 0) msg += chat.renderMarkupEntity(ent); // don’t repeat nick directly
-        break;
+            case "PLAYER": // automatically generated messages
+                if (ind > 0) msg += chat.renderMarkupEntity(ent); // don’t repeat nick directly
+                break;
 
-      default:
-        // add other enitities whatever the type
-        msg += chat.renderMarkupEntity(ent);
-        break;
-    }
-  });
-  return msg;
+            default:
+                // add other enitities whatever the type
+                msg += chat.renderMarkupEntity(ent);
+                break;
+        }
+    });
+    return msg;
 };
 
 function transformMessage(markup) {
