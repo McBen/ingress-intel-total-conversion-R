@@ -140,17 +140,6 @@ export class PlayerTracker extends Plugin {
         if (window.map.getZoom() < PLAYER_TRACKER_MIN_ZOOM) {
             this.drawnTracesEnl.clearLayers();
             this.drawnTracesRes.clearLayers();
-
-            // TODO: disable menu item (with tooltip text)
-            // ctrl.addClass('disabled').attr('title', 'Zoom in to show those.');
-            // note: zoomListener is also called at init time to set up things, so we only need to do this in here
-            // TODO: convert CHAT
-            // window.chat.backgroundChannelData('plugin.playerTracker', 'all', false);   //disable this plugin's interest in 'all' COMM
-        } else {
-            // TODO: re-enable menu item (with tooltip text)
-            // note: zoomListener is also called at init time to set up things, so we only need to do this in here
-            // TODO: convert CHAT
-            // window.chat.backgroundChannelData('plugin.playerTracker', 'all', true);    //enable this plugin's interest in 'all' COMM
         }
     }
 
@@ -175,36 +164,41 @@ export class PlayerTracker extends Plugin {
     private processNewData(data: Intel.ChatCallback) {
         const limit = this.getLimit();
 
+        // Destroy link and field messages depend on where the link or
+        // field was originally created. Therefore it’s not clear which
+        // portal the player is at, so ignore it.
+        const ignoreMessages = new Set([
+            " destroyed the ", "Your Link ",
+            " destroyed the Link ", " destroyed a Control Field @" // old messages
+        ]);
+
         data.result.forEach(chat => {
             // skip old data
             if (chat[1] < limit) return;
 
             // find player and portal information
             let plrname: string;
+            let plrteam: FACTION;
             let latLng: L.LatLng;
             let address: string;
             let name: string;
             let skipThisMessage = false;
 
+
             chat[2].plext.markup.every(markup => {
                 switch (markup[0]) {
                     case "TEXT":
-                        // Destroy link and field messages depend on where the link or
-                        // field was originally created. Therefore it’s not clear which
-                        // portal the player is at, so ignore it.
-                        if (markup[1].plain.includes("destroyed the Link")
-                            || markup[1].plain.includes("destroyed a Control Field")
-                            || markup[1].plain.includes("Your Link")) {
+                        if (ignoreMessages.has(markup[1].plain)) {
                             skipThisMessage = true;
                             return false;
                         }
                         break;
                     case "PLAYER":
                         plrname = markup[1].plain;
+                        plrteam = teamStr2Faction(markup[1].team);
                         break;
                     case "PORTAL":
-                        // link messages are “player linked X to Y” and the player is at
-                        // X.
+                        // link messages are “player linked X to Y” and the player is at X.
                         latLng = latLng ?? L.latLng(markup[1].latE6 / 1e6, markup[1].lngE6 / 1e6);
 
                         name = name ?? markup[1].name;
@@ -215,7 +209,7 @@ export class PlayerTracker extends Plugin {
             });
 
             // skip unusable events
-            if (!plrname || !latLng || skipThisMessage || chat[2].plext.team === "NEUTRAL") return;
+            if (skipThisMessage || !latLng || !plrname || ![FACTION.ENL, FACTION.RES].includes(plrteam)) return;
 
             const newEvent: Action = {
                 latlngs: [latLng],
@@ -229,7 +223,7 @@ export class PlayerTracker extends Plugin {
             // short-path if this is a new player
             if (!playerData || playerData.actions.length === 0) {
                 this.stored.set(plrname, {
-                    team: teamStr2Faction(chat[2].plext.team),
+                    team: plrteam,
                     actions: [newEvent]
                 });
                 return;
