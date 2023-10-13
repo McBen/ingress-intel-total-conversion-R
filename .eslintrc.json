@@ -7,8 +7,6 @@
     },
     "extends": [
         "eslint:recommended",
-        // "plugin:prettier/recommended", // FIXME: gives me unresolveable "Delete CR" errors on Win32
-        "prettier",
         "plugin:@typescript-eslint/recommended",
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
         "plugin:unicorn/recommended"
@@ -20,7 +18,6 @@
         "sourceType": "module"
     },
     "plugins": [
-        "prettier",
         "@typescript-eslint",
         "prefer-arrow",
         "import",
