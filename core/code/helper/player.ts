@@ -1,4 +1,4 @@
-import { FACTION } from "../constants";
+import { FACTION, teamStr2Faction } from "../constants";
 
 export class Player {
 
@@ -8,17 +8,11 @@ export class Player {
 
     constructor() {
         if (this.isLoggedIn()) {
-            this.team = this.teamStr2Faction(PLAYER.team);
+            this.team = teamStr2Faction(PLAYER.team);
             this.level = PLAYER.verified_level;
             this.name = PLAYER.nickname;
         }
     }
-
-    private teamStr2Faction(name: "ENLIGHTENED" | "RESISTANCE"): FACTION {
-        if (name === "RESISTANCE") return FACTION.RES;
-        return FACTION.ENL;
-    }
-
 
     isLoggedIn(): boolean {
         return PLAYER && !!PLAYER.nickname;
