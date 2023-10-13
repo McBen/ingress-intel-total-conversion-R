@@ -11,6 +11,7 @@ import { Log, LogApp } from "./helper/log_apps";
 import { hooks, Hooks } from "./helper/hooks";
 import { LayerManager } from "./map/layers";
 import { Highlighters } from "./portal/highlighters";
+import { Chat } from "./chat/chat";
 const log = Log(LogApp.Main);
 
 
@@ -22,6 +23,7 @@ export class IITCMain {
     public menu: IITCMenu;
     public layers: LayerManager;
     public highlighter: Highlighters;
+    public chat: Chat;
 
 
     constructor() {
@@ -41,6 +43,9 @@ export class IITCMain {
         this.menu = new IITCMenu();
         setupMap();
         this.menu.initMenu();
+
+        this.chat = new Chat();
+        this.chat.init();
 
         log.info("init: data requests");
         idle.reset()

@@ -117,9 +117,7 @@ window.MAX_IDLE_TIME = 15 * 60; // stop updating map after 15min idling
 window.HIDDEN_SCROLLBAR_ASSUMED_WIDTH = 20;
 window.SIDEBAR_WIDTH = 300;
 
-// how many pixels to the top before requesting new data
-window.CHAT_REQUEST_SCROLL_TOP = 200;
-window.CHAT_SHRINKED = 60;
+window.CHAT_SHRINKED = 60; // pure styling
 
 window.COLORS = ['#FF6600', '#0088FF', '#03DC03', "#ff0028"]; // none, res, enl
 window.COLORS_LVL = ['#000', '#FECE5A', '#FFA630', '#FF7315', '#E40000', '#FD2992', '#EB26CD', '#C124E0', '#9627F4'];
