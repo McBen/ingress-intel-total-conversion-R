@@ -205,8 +205,10 @@ function boot() {
 
   IITC.init();
 
-    window.setupTooltips();
-    window.setupSidebar();
+  window.setupOMS();
+  window.ornaments.setup();
+  window.setupTooltips();
+  window.setupSidebar();
 
   window.runOnSmartphonesAfterBoot();
   window.runOnAppAfterBoot();
