@@ -165,5 +165,10 @@ globalThis.iitcCompabilityInit = () => {
         removeLayer: (layer: L.Layer, _options = {}) => IITC.layers.removeOverlay(layer)
     }
 }
+globalThis.chat = {
+    backgroundChannelData: (id: string, channel: string, _wtf: boolean) => IITC.chat.monitorData(id, channel) {
+}
+
+
 
 log.info("IITC Compabiltiy layer loaded");

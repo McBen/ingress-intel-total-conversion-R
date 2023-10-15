@@ -4,19 +4,25 @@ declare namespace Intel {
     }
 
     type ChatLine = [guid: string, time: number, plext: PlextContainer];
-    type MarkUp = (MarkUpPortal | MarkUpPlayer | MarkUpText | MarkUpFaction)[];
+    type MarkUp = (MarkUpPortal | MarkUpPlayer | MarkUpText | MarkUpFaction | MarkUpSender | MarkUpReceiver | MarkUpSecure)[];
     type TeamStr = "RESISTANCE" | "ENLIGHTENED" | "NEUTRAL"; // TODO CHECK if "NEUTRAL" is valid
 
     interface PlextContainer {
         plext: {
-            plextType: "SYSTEM_BROADCAST";
+            plextType: "SYSTEM_BROADCAST" | "PLAYER_GENERATED" | "SYSTEM_NARROWCAST";
             markup: MarkUp;
             team: TeamStr;
             text: string;
+            categories: number;
         };
     }
 
+
+    type MarkUpSecure = ["SECURE"];
+
     type MarkUpPlayer = ["PLAYER", MarkUpPlayerType];
+    type MarkUpSender = ["SENDER", MarkUpPlayerType];
+    type MarkUpReceiver = ["AT_PLAYER", MarkUpPlayerType];
     interface MarkUpPlayerType {
         team: TeamStr;
         plain: string;

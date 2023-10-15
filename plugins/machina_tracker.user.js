@@ -8,7 +8,7 @@
 /* global plugin,L,addHook */
 
 // ensure plugin framework is there, even if iitc is not yet loaded
-if (typeof window.plugin !== 'function') window.plugin = function () {};
+if (typeof window.plugin !== 'function') window.plugin = function () { };
 
 // PLUGIN START ////////////////////////////////////////////////////////
 window.MACHINA_TRACKER_MAX_TIME = 8 * 60 * 60 * 1000;
@@ -16,7 +16,7 @@ window.MACHINA_TRACKER_MIN_ZOOM = 9;
 window.MACHINA_TRACKER_MIN_OPACITY = 0.3;
 
 // use own namespace for plugin
-window.plugin.machinaTracker = function () {};
+window.plugin.machinaTracker = function () { };
 
 window.plugin.machinaTracker.setup = function () {
   var iconImage =
@@ -47,11 +47,11 @@ window.plugin.machinaTracker.zoomListener = function () {
     plugin.machinaTracker.drawnTraces.clearLayers();
     ctrl.addClass('disabled').attr('title', 'Zoom in to show those.');
     // note: zoomListener is also called at init time to set up things, so we only need to do this in here
-    window.chat.backgroundChannelData('plugin.machinaTracker', 'all', false); // disable this plugin's interest in 'all' COMM
+    //    window.chat.backgroundChannelData('plugin.machinaTracker', 'all', false); // disable this plugin's interest in 'all' COMM
   } else {
     ctrl.removeClass('disabled').attr('title', '');
     // note: zoomListener is also called at init time to set up things, so we only need to do this in here
-    window.chat.backgroundChannelData('plugin.machinaTracker', 'all', true); // enable this plugin's interest in 'all' COMM
+    //    window.chat.backgroundChannelData('plugin.machinaTracker', 'all', true); // enable this plugin's interest in 'all' COMM
   }
 };
 
