@@ -77,37 +77,22 @@ document.head.innerHTML = ''
   + '<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:100,100italic,300,300italic,400,400italic,500,500italic,700,700italic&subset=latin,cyrillic-ext,greek-ext,greek,vietnamese,latin-ext,cyrillic"/>';
 
 // remove body element entirely to remove event listeners
-document.body = document.createElement('body');
-document.body.innerHTML = ''
-  + '<div id="map">Loading, please wait</div>'
-  + '<div id="chatcontrols" style="display:none">'
-  + '<a accesskey="0" title="[0]"><span class="toggle"></span></a>'
-  + '<a accesskey="1" title="[1]">all</a>'
-  + '<a accesskey="2" title="[2]" class="active">faction</a>'
-  + '<a accesskey="3" title="[3]">alerts</a>'
-  + '</div>'
-  + '<div id="chat" style="display:none">'
-  + '  <div id="chatfaction"></div>'
-  + '  <div id="chatall"></div>'
-  + '  <div id="chatalerts"></div>'
-  + '</div>'
-  + '<form id="chatinput" style="display:none"><table><tr>'
-  + '  <td><time></time></td>'
-  + '  <td><mark>tell faction:</mark></td>'
-  + '  <td><input id="chattext" type="text" maxlength="256" accesskey="c" title="[c]" /></td>'
-  + '</tr></table></form>'
-  + '<a id="sidebartoggle" accesskey="i" title="Toggle sidebar [i]"><span class="toggle close"></span></a>'
-  + '<div id="scrollwrapper">' // enable scrolling for small screens
-  + '  <div id="sidebar" style="display: none">'
-  + '    <div id="playerstat">t</div>'
-  + '    <div id="gamestat">&nbsp;loading global control stats</div>'
-  + '    <div id="portaldetails"></div>'
-  + '    <div id="toolbox"></div>'
-  + '  </div>'
-  + '</div>'
+document.body = document.createElement("body");
+document.body.innerHTML =
+  "" +
+  '<div id="map">Loading, please wait</div>' +
+  '<a id="sidebartoggle" accesskey="i" title="Toggle sidebar [i]"><span class="toggle close"></span></a>' +
+  '<div id="scrollwrapper">' + // enable scrolling for small screens
+  '  <div id="sidebar" style="display: none">' +
+  '    <div id="playerstat">t</div>' +
+  '    <div id="gamestat">&nbsp;loading global control stats</div>' +
+  '    <div id="portaldetails"></div>' +
+  '    <div id="toolbox"></div>' +
+  "  </div>" +
+  "</div>" +
   // avoid error by stock JS
-  + '<div id="play_button"></div>'
-  + '<div id="header"><div id="nav"></div></div>';
+  '<div id="play_button"></div>' +
+  '<div id="header"><div id="nav"></div></div>';
 
 // CONFIG OPTIONS ////////////////////////////////////////////////////
 window.REFRESH = 30; // refresh view every 30s (base time)

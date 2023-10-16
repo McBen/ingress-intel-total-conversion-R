@@ -70,12 +70,7 @@ export class Chat {
             new ChatChannelAlert() // TAB.alerts
         ];
 
-        const lastTab = IITCOptions.getSafe(GLOPT.CHAT_TAB, TAB.all);
-        if (lastTab) {
-            this.chooseTab(lastTab);
-        }
-
-
+        this.createHTML();
         $("#chatcontrols, #chat, #chatinput").show();
 
         $("#chatcontrols a:first").on("click", () => this.toggle());
@@ -85,14 +80,17 @@ export class Chat {
 
         $("#chatinput").on("click", () => $("#chatinput input").focus());
 
-
-        this.setupTime();
-        this.setupPosting();
-
         $("#chatfaction").on("scroll", (event: JQuery.ScrollEvent) => this.onScroll(event, this.channels[TAB.faction]));
         $("#chatall").on("scroll", (event: JQuery.ScrollEvent) => this.onScroll(event, this.channels[TAB.all]));
         $("#chatalerts").on("scroll", (event: JQuery.ScrollEvent) => this.onScroll(event, this.channels[TAB.alerts]));
 
+        const lastTab: TAB = IITCOptions.getSafe(GLOPT.CHAT_TAB, TAB.all);
+        if (lastTab) {
+            this.chooseTab(lastTab);
+        }
+
+        this.setupTime();
+        this.setupPosting();
         requests.addRefreshFunction(this.request);
 
         $("#chatinput mark").addClass(FACTION_CSS[PLAYER.team]);
@@ -100,6 +98,28 @@ export class Chat {
         $(document).on("click", ".nickname", (event: JQuery.ClickEvent) => {
             return this.nicknameClicked(event, $(event.target).text());
         });
+    }
+
+
+    private createHTML() {
+        $("body").append(
+            '<div id="chatcontrols" style="display:none">'
+            + '<a accesskey="0" title="[0]"><span class="toggle"></span></a>'
+            + '<a accesskey="1" title="[1]">all</a>'
+            + '<a accesskey="2" title="[2]" class="active">faction</a>'
+            + '<a accesskey="3" title="[3]">alerts</a>'
+            + '</div>'
+            + '<div id="chat" style="display:none">'
+            + '  <div id="chatfaction"></div>'
+            + '  <div id="chatall"></div>'
+            + '  <div id="chatalerts"></div>'
+            + '</div>'
+            + '<form id="chatinput" style="display:none"><table><tr>'
+            + '  <td><time></time></td>'
+            + '  <td><mark>tell faction:</mark></td>'
+            + '  <td><input id="chattext" type="text" maxlength="256" accesskey="c" title="[c]" /></td>'
+            + '</tr></table></form>'
+        );
     }
 
     monitorData(id: string, channel: string) {
