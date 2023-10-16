@@ -128,7 +128,7 @@ const outOfDateUserPrompt = () => {
 
 
 /**
- * TODO: check: only used for chat ?
+ * only used for chat
  */
 export class RequestQueue {
 

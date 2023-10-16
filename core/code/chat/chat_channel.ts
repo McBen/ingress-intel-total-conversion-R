@@ -1,6 +1,6 @@
 /* eslint-disable no-bitwise */
 import { IITC } from "../IITC";
-import { postAjax } from "../helper/send_request";
+import { postAjax, requests } from "../helper/send_request";
 import { clampLatLngBounds, escapeHtmlSpecialChars } from "../helper/utils_misc";
 import { makePermalink, scrollBottom } from "../helper/utils_misc";
 import { idle } from "../map/idle";
@@ -8,6 +8,7 @@ import { FACTION, FACTION_COLORS, FACTION_CSS, FACTION_NAMES, teamStr2Faction } 
 import { player as PLAYER } from "../helper/player";
 import { unixTimeToDateTimeString, unixTimeToHHmm } from "../helper/times";
 import { Log, LogApp } from "../helper/log_apps";
+import { ChatTab } from "./chat_tab";
 export const log = Log(LogApp.Chat);
 
 // eslint-disable-next-line unicorn/prefer-module
@@ -58,7 +59,7 @@ interface CacheData {
 }
 
 
-export abstract class ChatChannel {
+export abstract class ChatChannel extends ChatTab {
     abstract name: string;
     abstract hookMessage: string;
 
@@ -78,14 +79,14 @@ export abstract class ChatChannel {
     private newestGUID?: ChatGUID;
 
     constructor() {
+        super();
+
         this.requestRunning = false;
         this.needsClearing = false;
         this.watchers = new Set();
 
         this.clearData();
     }
-
-    abstract initInput(mark: JQuery, input: JQuery);
 
     private clearData(): void {
         this.data = new Map();
@@ -107,6 +108,14 @@ export abstract class ChatChannel {
 
     isWatched(): boolean {
         return this.watchers.size > 0;
+    }
+
+    show() {
+        super.show();
+
+        requests.startRefreshTimeout(0.1 * 1000);
+
+        this.render(false);
     }
 
 
@@ -496,10 +505,6 @@ export abstract class ChatChannel {
     }
 
 
-    private renderDivider(text) {
-        return '<tr class="divider"><td><hr></td><td>' + text + "</td><td><hr></td></tr>";
-    }
-
     // renders data from the data-hash to the element defined by the given
     // ID. Set 3rd argument to true if it is likely that old data has been
     // added. Latter is only required for scrolling.
@@ -558,3 +563,4 @@ export abstract class ChatChannel {
         }
     }
 }
+

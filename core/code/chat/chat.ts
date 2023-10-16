@@ -1,5 +1,3 @@
-
-/* eslint-disable max-classes-per-file */
 import { IITC } from "../IITC";
 import { postAjax, requests } from "../helper/send_request";
 import { scrollBottom, uniqueArray } from "../helper/utils_misc";
@@ -9,6 +7,7 @@ import { player as PLAYER } from "../helper/player";
 import { ChatChannel } from "./chat_channel";
 import { Log, LogApp } from "../helper/log_apps";
 import { GLOPT, IITCOptions } from "../helper/options";
+import { ChatChannelAlert, ChatChannelAll, ChatChannelFaction } from "./channels";
 export const log = Log(LogApp.Chat);
 
 
@@ -19,74 +18,6 @@ const enum TAB {
     all = 0,
     faction = 1,
     alerts = 2
-}
-
-
-class ChatChannelAll extends ChatChannel {
-    public name = "all";
-    public hookMessage = "publicChatDataAvailable";
-
-    initInput(mark: JQuery, input: JQuery) {
-        input.css("cssText", "color: #f66 !important");
-        mark.css("cssText", "color: #f66 !important");
-        mark.text("broadcast:");
-    }
-}
-
-
-class ChatChannelFaction extends ChatChannel {
-    public name = "faction";
-    public hookMessage = "factionChatDataAvailable";
-
-    initInput(mark: JQuery, input: JQuery) {
-        input.css("color", "");
-        mark.css("color", "");
-        mark.text("tell faction:");
-    }
-}
-
-
-class ChatChannelAlert extends ChatChannel {
-    public name = "alert";
-    public hookMessage = "alertsChatDataAvailable";
-
-    initInput(mark: JQuery, input: JQuery) {
-        mark.css("cssText", "color: #bbb !important");
-        input.css("cssText", "color: #bbb !important");
-        mark.text("tell Jarvis:");
-    }
-}
-
-export abstract class ChatTab {
-    abstract name;
-    abstract initInput(mark: JQuery, input: JQuery);
-
-    createTab(index: number): void {
-        const keyShortCut = index.toString();
-        const tab = $("<a>", {
-            id: this.name,
-            title: "[" + keyShortCut + "]", accesskey: keyShortCut,
-            text: this.name,
-            class: "chatloggertab",
-            click: () => this.show()
-        });
-        $("#chatcontrols").append(tab);
-
-        $("#chat").append(
-            $("<div>", { id: this.name, style: "display:none" }).append(
-                $("<table>")
-            )
-        )
-    }
-
-    getTabControl(): JQuery {
-        return $("#chatcontrols #" + this.name);
-    }
-
-    show(): void {
-        /* ... */
-    }
-
 }
 
 
@@ -101,6 +32,8 @@ export class Chat {
             new ChatChannelFaction(), // TAB.daction
             new ChatChannelAlert() // TAB.alerts
         ];
+
+        this.channels.forEach((channel, index) => channel.createTab(index));
 
         this.createHTML();
         $("#chatcontrols, #chat, #chatinput").show();
@@ -137,14 +70,8 @@ export class Chat {
         $("body").append(
             '<div id="chatcontrols" style="display:none">'
             + '<a accesskey="0" title="[0]"><span class="toggle"></span></a>'
-            + '<a accesskey="1" title="[1]">all</a>'
-            + '<a accesskey="2" title="[2]" class="active">faction</a>'
-            + '<a accesskey="3" title="[3]">alerts</a>'
             + '</div>'
             + '<div id="chat" style="display:none">'
-            + '  <div id="chatfaction"></div>'
-            + '  <div id="chatall"></div>'
-            + '  <div id="chatalerts"></div>'
             + '</div>'
             + '<form id="chatinput" style="display:none"><table><tr>'
             + '  <td><time></time></td>'
