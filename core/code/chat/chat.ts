@@ -57,6 +57,38 @@ class ChatChannelAlert extends ChatChannel {
     }
 }
 
+export abstract class ChatTab {
+    abstract name;
+    abstract initInput(mark: JQuery, input: JQuery);
+
+    createTab(index: number): void {
+        const keyShortCut = index.toString();
+        const tab = $("<a>", {
+            id: this.name,
+            title: "[" + keyShortCut + "]", accesskey: keyShortCut,
+            text: this.name,
+            class: "chatloggertab",
+            click: () => this.show()
+        });
+        $("#chatcontrols").append(tab);
+
+        $("#chat").append(
+            $("<div>", { id: this.name, style: "display:none" }).append(
+                $("<table>")
+            )
+        )
+    }
+
+    getTabControl(): JQuery {
+        return $("#chatcontrols #" + this.name);
+    }
+
+    show(): void {
+        /* ... */
+    }
+
+}
+
 
 export class Chat {
 
@@ -324,7 +356,7 @@ export class Chat {
         this.channels.forEach((ch, index) => {
             if (ch.isWatched() || (index as TAB) === channel) {
                 this.channels[channel].request(false);
-            };
+            }
         })
     }
 
