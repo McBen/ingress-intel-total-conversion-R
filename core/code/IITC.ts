@@ -6,7 +6,7 @@ import { MapDataRequest } from "./map/map_data_request";
 import { PluginManager } from "./plugin/plugin_manager";
 import { updateGameScore } from "./ui/gamescore";
 import { IITCMenu } from "./ui/menu/menu";
-import { ON_MOVE_REFRESH, requests } from "./helper/send_request";
+import { ON_MOVE_REFRESH, requests } from "./chat/requests";
 import { Log, LogApp } from "./helper/log_apps";
 import { hooks, Hooks } from "./helper/hooks";
 import { LayerManager } from "./map/layers";

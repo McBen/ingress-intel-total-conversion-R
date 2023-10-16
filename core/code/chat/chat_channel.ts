@@ -1,6 +1,7 @@
 /* eslint-disable no-bitwise */
 import { IITC } from "../IITC";
-import { postAjax, requests } from "../helper/send_request";
+import { postAjax } from "../helper/send_request";
+import { requests } from "./requests";
 import { clampLatLngBounds, escapeHtmlSpecialChars } from "../helper/utils_misc";
 import { makePermalink, scrollBottom } from "../helper/utils_misc";
 import { idle } from "../map/idle";

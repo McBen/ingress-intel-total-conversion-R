@@ -1,5 +1,6 @@
 import { IITC } from "../IITC";
-import { postAjax, requests } from "../helper/send_request";
+import { postAjax } from "../helper/send_request";
+import { requests } from "./requests";
 import { scrollBottom, uniqueArray } from "../helper/utils_misc";
 import { idle } from "../map/idle";
 import { FACTION_CSS } from "../constants";
