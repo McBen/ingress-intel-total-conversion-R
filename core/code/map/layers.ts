@@ -83,7 +83,7 @@ export class LayerManager {
 
 
     addOverlay(name: string, layer: L.Layer, options: Partial<LayerOptions> = {}): void {
-        console.assert(this.layers.every(l => l.name !== name), "layer name already used");
+        console.assert(this.layers.every(l => l.name !== name), "layer name already used: " + name);
 
         name = this.renameOldLayer(name);
         const showLayer = (options.default === undefined ? true : options.default);
