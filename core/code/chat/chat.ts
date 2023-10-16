@@ -102,8 +102,13 @@ export class Chat {
         });
     }
 
-    monitorData(id, chanel: TAB) {
-        this.channels[chanel].monitorData(id);
+    monitorData(id: string, channel: string) {
+        let tab = TAB.all;
+        if (channel === "faction") tab = TAB.faction;
+        else if (channel === "alerts") tab = TAB.alerts;
+        else if (channel !== "all") log.error("unknown chat to watch: " + channel);
+
+        this.channels[tab].watchChannel(id);
     }
 
     private onScroll(event: JQuery.ScrollEvent, channel: ChatChannel): void {
@@ -177,12 +182,20 @@ export class Chat {
 
         $("#chat > div").hide();
 
-        const elm = $("#chat" + tab);
+        const elm = $("#chat" + this.tabToName(tab));
         elm.show();
 
         const channel = this.channels[tab];
         channel.initInput(mark, input);
         channel.render(false);
+    }
+
+    private tabToName(tab: TAB): string {
+        switch (tab) {
+            case TAB.faction: return "faction";
+            case TAB.all: return "all";
+            case TAB.alerts: return "alerts";
+        }
     }
 
 
@@ -287,7 +300,12 @@ export class Chat {
 
     request = (): void => {
         const channel = this.getActive();
-        this.channels[channel].request(false);
+
+        this.channels.forEach((ch, index) => {
+            if (ch.isWatched() || (index as TAB) === channel) {
+                this.channels[channel].request(false);
+            };
+        })
     }
 
 

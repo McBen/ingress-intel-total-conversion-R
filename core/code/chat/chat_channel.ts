@@ -39,6 +39,19 @@ interface MessageInfo {
     markup: Intel.MarkUp;
 }
 
+interface PostDataInfo {
+    minLatE6: number;
+    minLngE6: number;
+    maxLatE6: number;
+    maxLngE6: number;
+    minTimestampMs: number;
+    maxTimestampMs: number;
+    tab: string;
+    plextContinuationGuid?: ChatGUID;
+    ascendingTimestampOrder: boolean
+}
+
+
 interface CacheData {
     html: string;
     info: MessageInfo;
@@ -51,6 +64,7 @@ export abstract class ChatChannel {
 
     private requestRunning;
     private oldBoundingBox: L.LatLngBounds;
+    public watchers: Set<string>;
 
     private needsClearing: boolean;
     private needsScrollTop: boolean;
@@ -66,6 +80,7 @@ export abstract class ChatChannel {
     constructor() {
         this.requestRunning = false;
         this.needsClearing = false;
+        this.watchers = new Set();
 
         this.clearData();
     }
@@ -82,8 +97,16 @@ export abstract class ChatChannel {
     }
 
 
-    monitorData(_id) {
-        // window.chat.backgroundChannelData('plugin.machinaTracker', 'all', false); // disable this plugin's interest in 'all' COMM
+    watchChannel(id: string) {
+        this.watchers.add(id);
+    }
+
+    unwatchChannel(id: string) {
+        this.watchers.delete(id);
+    }
+
+    isWatched(): boolean {
+        return this.watchers.size > 0;
     }
 
 
@@ -103,7 +126,7 @@ export abstract class ChatChannel {
         );
     }
 
-    handleData(data: Intel.ChatCallback, olderMsgs, ascendingTimestampOrder) {
+    handleData(data: Intel.ChatCallback, olderMsgs: boolean, ascendingTimestampOrder: boolean) {
         this.requestRunning = false;
         $("#chatcontrols a:contains('" + this.name + "')").removeClass("loading");
 
@@ -134,7 +157,7 @@ export abstract class ChatChannel {
     }
 
 
-    private genPostData(getOlderMsgs: boolean) {
+    private genPostData(getOlderMsgs: boolean): PostDataInfo {
         const b = clampLatLngBounds(window.map.getBounds());
 
         // set a current bounding box if none set so far
@@ -174,7 +197,7 @@ export abstract class ChatChannel {
         } else {
             // ask for newer chat
             const min = this.newestTimestamp;
-            // the initial request will have both timestamp values set to -1, 
+            // the initial request will have both timestamp values set to -1,
             // thus we receive the newest 50. After that, we will only receive
             // messages with a timestamp greater or equal to min above.
             // After resuming from idle, there might be more new messages than
@@ -195,7 +218,7 @@ export abstract class ChatChannel {
     }
 
 
-    private writeDataToHash(newData: Intel.ChatCallback, isOlderMsgs, isAscendingOrder) {
+    private writeDataToHash(newData: Intel.ChatCallback, isOlderMsgs: boolean, isAscendingOrder: boolean) {
         this.updateOldNewHash(newData, isOlderMsgs, isAscendingOrder);
 
         newData.result.forEach(json => {
@@ -214,7 +237,7 @@ export abstract class ChatChannel {
         });
     }
 
-    private updateOldNewHash(newData: Intel.ChatCallback, isOlderMsgs, isAscendingOrder) {
+    private updateOldNewHash(newData: Intel.ChatCallback, isOlderMsgs: boolean, isAscendingOrder: boolean) {
         // track oldest + newest timestamps/GUID
         if (newData.result.length > 0) {
             let first = {
@@ -257,16 +280,16 @@ export abstract class ChatChannel {
 
         const markup = data[2].plext.markup;
 
-        const player = { nick: "", team: FACTION.none };
+        const player = { name: "", team: FACTION.none };
         markup.forEach(ent => {
             switch (ent[0]) {
                 case "SENDER": // user generated messages
-                    player.nick = ent[1].plain.replace(/: $/, ""); // cut “: ” at end
+                    player.name = ent[1].plain.replace(/: $/, ""); // cut “: ” at end
                     player.team = team;
                     break;
 
                 case "PLAYER": // automatically generated messages
-                    player.nick = ent[1].plain;
+                    player.name = ent[1].plain;
                     player.team = teamStr2Faction(ent[1].team);
                     break;
 
@@ -480,32 +503,23 @@ export abstract class ChatChannel {
     // renders data from the data-hash to the element defined by the given
     // ID. Set 3rd argument to true if it is likely that old data has been
     // added. Latter is only required for scrolling.
-    private renderData(data, element, likelyWereOldMsgs, sortedGuids) {
+    private renderData(data: Map<ChatGUID, CacheData>, element: string, likelyWereOldMsgs: boolean, sortedGuids: ChatGUID[]) {
         const elm = $("#" + element);
         if (elm.is(":hidden")) {
             return;
         }
 
-        // if sortedGuids is not specified (legacy), sort old to new
-        // (disregarding server order)
-        let vals = sortedGuids;
-        if (vals === undefined) {
-            vals = $.map(data, function (v, k) { return [[v[0], k]]; });
-            vals = vals.sort(function (a, b) { return a[0] - b[0]; });
-            vals = vals.map(function (v) { return v[1]; });
-        }
-
         // render to string with date separators inserted
         let msgs = "";
-        let prevTime = null;
-        vals.forEach(guid => {
-            const msg = data[guid];
-            const nextTime = new Date(msg[0]).toLocaleDateString();
-            if (prevTime && prevTime !== nextTime) {
+        let previousTime;
+        sortedGuids.forEach(guid => {
+            const message = data.get(guid);
+            const nextTime = new Date(message.info.time).toLocaleDateString();
+            if (previousTime && previousTime !== nextTime) {
                 msgs += this.renderDivider(nextTime);
             }
-            msgs += msg[2];
-            prevTime = nextTime;
+            msgs += message.html;
+            previousTime = nextTime;
         });
 
         const firstRender = elm.is(":empty");
@@ -526,7 +540,7 @@ export abstract class ChatChannel {
     }
 
     // contains the logic to keep the correct scroll position.
-    private keepScrollPosition(box: JQuery, scrollBefore, isOldMsgs) {
+    private keepScrollPosition(box: JQuery, scrollBefore: number, isOldMsgs: boolean) {
         // If scrolled down completely, keep it that way so new messages can
         // be seen easily. If scrolled up, only need to fix scroll position
         // when old messages are added. New messages added at the bottom don’t

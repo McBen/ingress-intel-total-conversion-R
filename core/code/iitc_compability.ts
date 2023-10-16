@@ -166,7 +166,7 @@ globalThis.iitcCompabilityInit = () => {
     }
 }
 globalThis.chat = {
-    backgroundChannelData: (id: string, channel: string, _wtf: boolean) => IITC.chat.monitorData(id, channel) {
+    backgroundChannelData: (id: string, channel: string, _wtf: boolean) => IITC.chat.monitorData(id, channel)
 }
 
 
