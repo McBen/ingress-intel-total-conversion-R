@@ -25,8 +25,14 @@ const enum TAB {
 export class Chat {
 
     private channels: ChatChannel[] = [];
+    private active?: ChatChannel;
+
 
     init(): void {
+        this.createHTML();
+        if (isSmartphone()) {
+            $("#chatcontrols, #chat, #chatinput").hide();
+        }
 
         this.channels = [
             new ChatChannelAll(), // TAB.all
@@ -36,14 +42,7 @@ export class Chat {
 
         this.channels.forEach((channel, index) => channel.createTab(index));
 
-        this.createHTML();
-        $("#chatcontrols, #chat, #chatinput").show();
-
         $("#chatcontrols a:first").on("click", () => this.toggle());
-        $("#chatcontrols a:contains('all')").on("click", () => this.chooseTab(TAB.all));
-        $("#chatcontrols a:contains('faction')").on("click", () => this.chooseTab(TAB.faction));
-        $("#chatcontrols a:contains('alerts')").on("click", () => this.chooseTab(TAB.alerts));
-
         $("#chatinput").on("click", () => $("#chatinput input").focus());
 
         $("#chatfaction").on("scroll", (event: JQuery.ScrollEvent) => this.onScroll(event, this.channels[TAB.faction]));
@@ -69,18 +68,41 @@ export class Chat {
 
     private createHTML() {
         $("body").append(
-            '<div id="chatcontrols" style="display:none">'
-            + '<a accesskey="0" title="[0]"><span class="toggle"></span></a>'
-            + '</div>'
-            + '<div id="chat" style="display:none">'
-            + '</div>'
-            + '<form id="chatinput" style="display:none"><table><tr>'
-            + '  <td><time></time></td>'
-            + '  <td><mark>tell faction:</mark></td>'
-            + '  <td><input id="chattext" type="text" maxlength="256" accesskey="c" title="[c]" /></td>'
-            + '</tr></table></form>'
+            $("<div>", { id: "chatcontrols" }).append(
+                $("<a>", {
+                    accesskey: "0", title: "[0]",
+                    click: () => this.toggle()
+                }).append($("<span>", { class: "toggle" }))
+            ),
+            $("<div>", { id: "chat" }),
+            $("<form>", { id: "chatinput" }).append(
+                $("<table>").append($("<tr>").append(
+                    $("<td>").append($("<time>")),
+                    $("<td>").append($("<mark>", { text: "tell faction" })),
+                    $("<td>").append($("<input>", {
+                        id: "chattext", type: "text", maxlength: "256", accesskey: "c", title: "[c]"
+                    }))
+                )))
         );
     }
+
+
+    chooseTab(name: string) {
+        const channel = this.channels.find(ch => ch.name === name);
+        if (!channel) {
+            log.error("chat channel not found: " + name);
+            return;
+        }
+
+        if (this.active === channel) return;
+
+        IITCOptions.set(GLOPT.CHAT_TAB, name);
+        if (this.active) this.active.hide();
+
+        this.active = channel;
+        this.active.show();
+    }
+
 
     monitorData(id: string, channel: string) {
         let tab = TAB.all;
@@ -90,6 +112,7 @@ export class Chat {
 
         this.channels[tab].watchChannel(id);
     }
+
 
     private onScroll(event: JQuery.ScrollEvent, channel: ChatChannel): void {
         const t = $(event.target);
@@ -141,34 +164,6 @@ export class Chat {
         });
     }
 
-
-    private chooseTab(tab: TAB) {
-        if (tab !== TAB.all && tab !== TAB.faction && tab !== TAB.alerts) {
-            log.warn(`chat tab "${tab as string}" requested - but only "all", "faction" and "alerts" are valid`);
-            tab = TAB.all;
-        }
-
-        IITCOptions.set(GLOPT.CHAT_TAB, tab);
-        const oldTab = this.getActive();
-
-        const mark = $("#chatinput mark");
-        const input = $("#chatinput input");
-
-        $("#chatcontrols .active").removeClass("active");
-        $("#chatcontrols a:contains('" + tab + "')").addClass("active");
-
-        // only chat uses the refresh timer stuff, so a perfect way of forcing an early refresh after a tab change
-        if (tab !== oldTab) requests.startRefreshTimeout(0.1 * 1000);
-
-        $("#chat > div").hide();
-
-        const elm = $("#chat" + this.tabToName(tab));
-        elm.show();
-
-        const channel = this.channels[tab];
-        channel.initInput(mark, input);
-        channel.render(false);
-    }
 
     private tabToName(tab: TAB): string {
         switch (tab) {
