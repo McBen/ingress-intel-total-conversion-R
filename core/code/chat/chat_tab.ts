@@ -1,4 +1,5 @@
 import { IITC } from "../IITC";
+import { scrollBottom } from "../helper/utils_misc";
 
 
 export abstract class ChatTab {
@@ -49,37 +50,23 @@ export abstract class ChatTab {
     }
 
 
+    appendRows(row: string[]): void {
+        const scrollBefore = scrollBottom(this.table);
+
+        this.table.append(row.join(""));
+
+        if (scrollBefore < 1) {
+            this.table.scrollTop(this.table.scrollTop()! + (scrollBottom(this.table) - scrollBefore));
+        }
+    }
+
+
+    prependRows(row: string[]): void {
+        this.table.prepend(row.join(""));
+    }
+
+
     renderDivider(text) {
         return '<tr class="divider"><td><hr></td><td>' + text + "</td><td><hr></td></tr>";
     }
-
-
-
-    private addRow(row: string): void {
-        if (this.delayedLines.length === 0 && window.chat.getActive() === "RESWUE") {
-            window.setTimeout(() => this.addDelayedRows(), CHAT_ADD_DELAY);
-        }
-        this.delayedLines.push(row);
-    }
-
-
-    private addDelayedRows(): void {
-        const elm = $("#chatlog");
-        const scrollBefore = window.scrollBottom(elm);
-
-        $("table", elm).append($(this.delayedLines.join("")));
-        this.currentLines += this.delayedLines.length;
-        this.delayedLines = [];
-
-        if (this.currentLines > MAX_LINES) {
-            const lines = $("#chatlog table tr");
-            lines.slice(0, REMOVE_LINES).remove();
-            this.currentLines = lines.length;
-        }
-
-        if (scrollBefore < 1) {
-            elm.scrollTop(elm.scrollTop()! + (window.scrollBottom(elm) - scrollBefore));
-        }
-    }
-
 }

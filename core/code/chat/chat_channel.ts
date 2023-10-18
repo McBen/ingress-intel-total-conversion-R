@@ -3,13 +3,14 @@ import { IITC } from "../IITC";
 import { postAjax } from "../helper/send_request";
 import { requests } from "./requests";
 import { clampLatLngBounds, escapeHtmlSpecialChars } from "../helper/utils_misc";
-import { makePermalink, scrollBottom } from "../helper/utils_misc";
+import { scrollBottom } from "../helper/utils_misc";
 import { idle } from "../map/idle";
-import { FACTION, FACTION_COLORS, FACTION_CSS, FACTION_NAMES, teamStr2Faction } from "../constants";
+import { FACTION, FACTION_CSS, teamStr2Faction } from "../constants";
 import { player as PLAYER } from "../helper/player";
 import { unixTimeToDateTimeString, unixTimeToHHmm } from "../helper/times";
 import { Log, LogApp } from "../helper/log_apps";
 import { ChatTab } from "./chat_tab";
+import { renderMarkup } from "./render_markup";
 export const log = Log(LogApp.Chat);
 
 // eslint-disable-next-line unicorn/prefer-module
@@ -38,7 +39,7 @@ interface MessageInfo {
         name: string;
         team: FACTION
     },
-    markup: Intel.MarkUp;
+    markup: Intel.MarkUp[];
 }
 
 interface PostDataInfo {
@@ -325,136 +326,87 @@ export abstract class ChatChannel extends ChatTab {
     }
 
 
-    private renderMarkup(markup: Intel.MarkUp) {
-        let message = "";
+    // contains the logic to keep the correct scroll position.
+    private keepScrollPosition(box: JQuery, scrollBefore: number, isOldMsgs: boolean) {
+        // If scrolled down completely, keep it that way so new messages can
+        // be seen easily. If scrolled up, only need to fix scroll position
+        // when old messages are added. New messages added at the bottom don’t
+        // change the view and enabling this would make the chat scroll down
+        // for every added message, even if the user wants to read old stuff.
 
-        this.transformMessage(markup);
+        if (box.is(":hidden") && !isOldMsgs) {
+            this.needsScrollTop = true;
+            return;
+        }
 
-        markup.forEach((ent, ind) => {
-            switch (ent[0]) {
-                case "SENDER":
-                case "SECURE":
-                    // skip as already handled
-                    break;
+        if (scrollBefore === 0 || isOldMsgs) {
+            this.ignoreNextScroll = true;
+            box.scrollTop(box.scrollTop() + (scrollBottom(box) - scrollBefore));
+        }
+    }
 
-                case "PLAYER": // automatically generated messages
-                    if (ind > 0) message += this.renderMarkupEntity(ent); // don’t repeat nick directly
-                    break;
+    private renderMsgRow(data: MessageInfo) {
+        const timeClass = (data.messageToPlayer) ? "pl_nudge_date" : "";
+        const timeCell = this.renderTimeCell(data.time, timeClass);
 
-                default:
-                    // add other enitities whatever the type
-                    message += this.renderMarkupEntity(ent);
-                    break;
+        const nickClasses = ["nickname"];
+        if (FACTION_CSS[data.player.team]) {
+            nickClasses.push(FACTION_CSS[data.player.team]);
+        }
+        // highlight things said/done by the player in a unique colour
+        // (similar to @player mentions from others in the chat text itself)
+        if (data.player.name === PLAYER.name) {
+            nickClasses.push("pl_nudge_me");
+        }
+        const nickCell = this.renderNickCell(data.player.name, nickClasses.join(" "));
+
+        const message = renderMarkup(data.markup);
+        const messageClass = data.narrowcast ? "system_narrowcast" : "";
+        const messageCell = this.renderMsgCell(message, messageClass);
+
+        let className = "";
+        if (!data.auto && data.public) {
+            className = "public";
+        } else if (!data.auto && data.secure) {
+            className = "faction";
+        }
+        return '<tr data-guid="' + data.guid + '" class="' + className + '">' + timeCell + nickCell + messageCell + "</tr>";
+    }
+
+
+    // renders data from the data-hash to the element defined by the given
+    // ID. Set 3rd argument to true if it is likely that old data has been
+    // added. Latter is only required for scrolling.
+    private renderData(data: Map<ChatGUID, CacheData>, element: string, likelyWereOldMsgs: boolean, sortedGuids: ChatGUID[]) {
+
+        // render to string with date separators inserted
+        let msgs = "";
+        let previousTime;
+        sortedGuids.forEach(guid => {
+            const message = data.get(guid);
+            const nextTime = new Date(message.info.time).toLocaleDateString();
+            if (previousTime && previousTime !== nextTime) {
+                msgs += this.renderDivider(nextTime);
             }
+            msgs += message.html;
+            previousTime = nextTime;
         });
-        return message;
-    }
 
+        const firstRender = this.table.is(":empty");
+        const scrollBefore = scrollBottom(this.table);
+        this.table.empty().append(msgs);
 
-    private transformMessage(markup: Intel.MarkUp) {
-        // "Agent "<player>"" destroyed the "<faction>" Link "
-        if (markup.length > 4) {
-            if (markup[3][0] === "FACTION" && markup[4][0] === "TEXT" && (markup[4][1].plain === " Link " || markup[4][1].plain === " Control Field @")) {
-                (markup[4][1] as any).team = markup[3][1].team;
-                markup.splice(3, 1);
-            }
+        if (firstRender) {
+            this.needsScrollTop = true;
+        } else {
+            this.keepScrollPosition(this.table, scrollBefore, likelyWereOldMsgs);
         }
 
-        // skip "<faction> agent <player>"
-        if (markup.length > 1) {
-            if (markup[0][0] === "TEXT" && markup[0][1].plain === "Agent " && markup[1][0] === "PLAYER") {
-                markup.splice(0, 2);
-            }
+        if (this.needsScrollTop) {
+            this.ignoreNextScroll = true;
+            this.table.scrollTop(999999);
+            this.needsScrollTop = false;
         }
-
-        // skip "agent <player>""
-        if (markup.length > 2) {
-            if (markup[0][0] === "FACTION" && markup[1][0] === "TEXT" && markup[1][1].plain === " agent " && markup[2][0] === "PLAYER") {
-                markup.splice(0, 3);
-            }
-        }
-    }
-
-
-    private renderMarkupEntity(ent) {
-        switch (ent[0]) {
-            case "TEXT":
-                return this.renderText(ent[1] as Intel.MarkUpTextType);
-            case "PORTAL":
-                return this.renderPortal(ent[1] as Intel.MarkUpPortalType);
-            case "FACTION":
-                return this.renderFactionEnt(ent[1] as Intel.MarkUpFactionType);
-            case "SENDER":
-                return this.renderPlayer(ent[1] as Intel.MarkUpPlayerType, false, true);
-            case "PLAYER":
-                return this.renderPlayer(ent[1] as Intel.MarkUpPlayerType);
-            case "AT_PLAYER":
-                return this.renderPlayer(ent[1] as Intel.MarkUpPlayerType, true);
-            default:
-        }
-        return $("<div>").text(ent[0] + ":<" + ent[1].plain + ">").html();
-    }
-
-    //
-    // Rendering primitive for markup, chat cells (td) and chat row (tr)
-    //
-    private renderText(text: Intel.MarkUpTextType) {
-        if ((text as any).team) {
-            let teamId = teamStr2Faction((text as any).team as Intel.TeamStr);
-            if (teamId === FACTION.none) teamId = FACTION.MAC;
-            const spanClass = FACTION_COLORS[teamId];
-            return $("<div>")
-                .append($("<span>", { class: spanClass, text: text.plain }))
-                .html();
-        }
-
-        return $("<div>").text(text.plain).html().autoLink();
-    }
-
-    // Override portal names that are used over and over, such as 'US Post Office'
-    private getChatPortalName(markup: Intel.MarkUpPortalType): string {
-        let name = markup.name;
-        if (name === "US Post Office") {
-            const address = markup.address.split(",");
-            name = "USPS: " + address[0];
-        }
-        return name;
-    }
-
-    private renderPortal(portal: Intel.MarkUpPortalType) {
-        const lat = portal.latE6 / 1e6;
-        const lng = portal.lngE6 / 1e6;
-        const perma = makePermalink(L.latLng(lat, lng));
-        const js = "window.selectPortalByLatLng(" + lat + ", " + lng + ");return false";
-        return '<a onclick="' + js + '"'
-            + ' title="' + portal.address + '"'
-            + ' href="' + perma + '" class="help">'
-            + this.getChatPortalName(portal)
-            + "</a>";
-    }
-
-    private renderFactionEnt(faction: Intel.MarkUpFactionType) {
-        const teamId = teamStr2Faction(faction.team);
-        const name = FACTION_NAMES[teamId];
-        const spanClass = FACTION_COLORS[teamId];
-        return $("<div>").append($("<span>", { class: spanClass, text: name })).html();
-    }
-
-    private renderPlayer(player: Intel.MarkUpPlayerType, at: boolean = false, sender: boolean = false) {
-        let name = player.plain;
-        if (sender) {
-            name = player.plain.replace(/: $/, "");
-        } else if (at) {
-            name = player.plain.replace(/^@/, "");
-        }
-        const thisToPlayer = name === PLAYER.name;
-        const spanClass = thisToPlayer ? "pl_nudge_me" : (player.team + " pl_nudge_player");
-        return $("<div>").append(
-            $("<span>", {
-                class: spanClass,
-                click: (event: JQuery.ClickEvent) => IITC.chat.nicknameClicked(event, name),
-                text: (at ? "@" : "") + name
-            })).html();
     }
 
 
@@ -477,91 +429,5 @@ export abstract class ChatChannel extends ChatTab {
     }
 
 
-    private renderMsgRow(data: MessageInfo) {
-        const timeClass = (data.messageToPlayer) ? "pl_nudge_date" : "";
-        const timeCell = this.renderTimeCell(data.time, timeClass);
-
-        const nickClasses = ["nickname"];
-        if (FACTION_CSS[data.player.team]) {
-            nickClasses.push(FACTION_CSS[data.player.team]);
-        }
-        // highlight things said/done by the player in a unique colour
-        // (similar to @player mentions from others in the chat text itself)
-        if (data.player.name === PLAYER.name) {
-            nickClasses.push("pl_nudge_me");
-        }
-        const nickCell = this.renderNickCell(data.player.name, nickClasses.join(" "));
-
-        const message = this.renderMarkup(data.markup);
-        const messageClass = data.narrowcast ? "system_narrowcast" : "";
-        const messageCell = this.renderMsgCell(message, messageClass);
-
-        let className = "";
-        if (!data.auto && data.public) {
-            className = "public";
-        } else if (!data.auto && data.secure) {
-            className = "faction";
-        }
-        return '<tr data-guid="' + data.guid + '" class="' + className + '">' + timeCell + nickCell + messageCell + "</tr>";
-    }
-
-
-    // renders data from the data-hash to the element defined by the given
-    // ID. Set 3rd argument to true if it is likely that old data has been
-    // added. Latter is only required for scrolling.
-    private renderData(data: Map<ChatGUID, CacheData>, element: string, likelyWereOldMsgs: boolean, sortedGuids: ChatGUID[]) {
-        const elm = $("#" + element);
-        if (elm.is(":hidden")) {
-            return;
-        }
-
-        // render to string with date separators inserted
-        let msgs = "";
-        let previousTime;
-        sortedGuids.forEach(guid => {
-            const message = data.get(guid);
-            const nextTime = new Date(message.info.time).toLocaleDateString();
-            if (previousTime && previousTime !== nextTime) {
-                msgs += this.renderDivider(nextTime);
-            }
-            msgs += message.html;
-            previousTime = nextTime;
-        });
-
-        const firstRender = elm.is(":empty");
-        const scrollBefore = scrollBottom(elm);
-        elm.html("<table>" + msgs + "</table>");
-
-        if (firstRender) {
-            this.needsScrollTop = true;
-        } else {
-            this.keepScrollPosition(elm, scrollBefore, likelyWereOldMsgs);
-        }
-
-        if (this.needsScrollTop) {
-            this.ignoreNextScroll = true;
-            elm.scrollTop(999999);
-            this.needsScrollTop = false;
-        }
-    }
-
-    // contains the logic to keep the correct scroll position.
-    private keepScrollPosition(box: JQuery, scrollBefore: number, isOldMsgs: boolean) {
-        // If scrolled down completely, keep it that way so new messages can
-        // be seen easily. If scrolled up, only need to fix scroll position
-        // when old messages are added. New messages added at the bottom don’t
-        // change the view and enabling this would make the chat scroll down
-        // for every added message, even if the user wants to read old stuff.
-
-        if (box.is(":hidden") && !isOldMsgs) {
-            this.needsScrollTop = true;
-            return;
-        }
-
-        if (scrollBefore === 0 || isOldMsgs) {
-            this.ignoreNextScroll = true;
-            box.scrollTop(box.scrollTop() + (scrollBottom(box) - scrollBefore));
-        }
-    }
 }
 
