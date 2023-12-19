@@ -210,6 +210,7 @@ export class PlayerTracker extends Plugin {
 
             // skip unusable events
             if (skipThisMessage || !latLng || !plrname || ![FACTION.ENL, FACTION.RES].includes(plrteam)) return;
+            if (plrname === "NiaSection14") return;
 
             const newEvent: Action = {
                 latlngs: [latLng],
