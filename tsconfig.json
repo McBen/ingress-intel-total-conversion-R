@@ -21,7 +21,7 @@
     }
   },
   "include": [
-    "types/*.d.ts",
-    "core/**/*.ts"
+    "types/*",
+    "core/**/*"
   ]
 }
