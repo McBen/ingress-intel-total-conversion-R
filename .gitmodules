@@ -1,0 +1,4 @@
+[submodule "assets/images/portal/ingress-items"]
+	path = assets/images/portal/ingress-items
+	url = git@github.com:ameba64/ingress-items.git
+	branch = main

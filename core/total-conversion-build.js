@@ -105,6 +105,7 @@ document.body.innerHTML = ''
   + '    <div id="toolbox"></div>'
   + '  </div>'
   + '</div>'
+  + '<div id="scrollwrapper2"></div>' // enable scrolling for small screens
   // avoid error by stock JS
   + '<div id="play_button"></div>'
   + '<div id="header"><div id="nav"></div></div>';

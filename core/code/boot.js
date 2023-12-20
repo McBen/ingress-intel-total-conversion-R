@@ -2,11 +2,13 @@
 // these functions set up specific areas after the boot function
 // created a basic framework. All of these functions should only ever
 // be run once.
-import "overlapping-marker-spiderfier-leaflet";
+import "overlapping-marker-spiderfier-leaflet"; //  ( TODO replace by https://www.npmjs.com/package/ts-overlapping-marker-spiderfier ?)
+
 localStorage.setItem('log', '*=debug');
 // localStorage.setItem('log', '*=debug;Map=warn');
 import anylogger from "anylogger"
 import { IITC } from "./IITC";
+import { setupSidebar } from "./ui/sidebar.tsx";
 
 const log = anylogger("Boot");
 
@@ -120,78 +122,6 @@ window.registerMarkerForOMS = function (marker) {
 };
 
 // BOOTING ///////////////////////////////////////////////////////////
-
-function prepPluginsToLoad() {
-
-  var priorities = {
-    lowest: 100,
-    low: 75,
-    normal: 50,
-    high: 25,
-    highest: 0,
-    boot: -100
-  };
-
-  function getPriority(data) {
-    var v = data && data.priority || 'normal';
-    var prio = v in priorities ? priorities[v] : v;
-    if (typeof prio !== 'number') {
-      log.warn('wrong plugin priority specified: ', v);
-      prio = priorities.normal;
-    }
-    return prio;
-  }
-
-  if (!script_info.script) {
-    log.warn('GM_info is not provided (improper userscript manager?)'); // IITC-Mobile for iOS
-  }
-
-  // executes setup function of plugin
-  // and collects info for About IITC
-  function safeSetup(setup) {
-    if (typeof setup !== 'function') {
-      log.warn('plugin must provide setup function');
-      return;
-    }
-    var info = setup.info;
-    if (typeof info !== 'object') {
-      log.warn('plugin does not have proper wrapper:', { function: setup, info: setup.info, source: setup.toString() });
-      info = {};
-    }
-    try {
-      setup.call(this);
-    } catch (err) {
-      var name = info.script && info.script.name || info.pluginId;
-      log.error('error starting plugin: ' + name,
-        '\n' + err,
-        '\nsetup: ', setup
-      );
-      info.error = err;
-    }
-    pluginsInfo.push(info);
-  }
-
-  if (window.bootPlugins) { // sort plugins by priority
-    bootPlugins.sort(function (a, b) {
-      return getPriority(a) - getPriority(b);
-    });
-  } else {
-    window.bootPlugins = [];
-  }
-
-  var pluginsInfo = []; // for About IITC
-  bootPlugins.info = pluginsInfo;
-
-  // loader function returned
-  // if called with parameter then load plugins with priorities up to specified
-  return function (prio) {
-    while (bootPlugins[0]) {
-      if (prio && getPriority(bootPlugins[0]) > priorities[prio]) { break; }
-      safeSetup(bootPlugins.shift());
-    }
-  };
-}
-
 function boot() {
   log.log('loading done, booting. Built: ' + '@build_date@');
   if (window.deviceID) {
@@ -210,6 +140,7 @@ function boot() {
   window.setupTooltips();
   window.chat.setup();
   window.setupSidebar();
+  setupSidebar();
 
 
   window.runOnSmartphonesAfterBoot();
@@ -235,7 +166,7 @@ require("leaflet/dist/leaflet.css");
 require("leaflet.gridlayer.googlemutant");
 
 require("../external/L.Geodesic.js"); // TODO move to dependencies
-require("../external/oms.min.js"); // TODO move to dependencies
+require("../external/oms.min.js"); // TODO obsolete? see top line?
 
 L.CanvasIconLayer = require("../external/leaflet.canvas-markers.js")(L); // TODO move to dependencies
 
