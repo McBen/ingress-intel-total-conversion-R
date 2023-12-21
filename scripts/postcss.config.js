@@ -6,7 +6,9 @@ module.exports = {
         require('cssnano')({ preset: 'default' }),
         require('postcss-image-inliner')({
             strict: true,
+            maxFileSize: 0,
             assetPaths: [
+                './assets/',
                 './core/', './core/external/',
                 './plugins/', './plugins/external'
             ]

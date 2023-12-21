@@ -1,7 +1,7 @@
 import { IITC } from "../../IITC";
 import { Plugin } from "../plugin_base";
-import blankWhiteImg from "./images/map/basemap-blank-tile-white.png";
-import blankBlackImg from "./images/map/basemap-blank-tile-black.png";
+import blankWhiteImg from "images/map/basemap-blank-tile-white.png";
+import blankBlackImg from "images/map/basemap-blank-tile-black.png";
 
 
 export class PluginBlankMaps extends Plugin {

@@ -14,7 +14,7 @@ const config: webpack.Configuration = {
   resolve: {
     alias: {
       "jquery-ui-static": path.join(__dirname, "node_modules", "jquery-ui"),
-      "./images": IMAGES_PATH
+      "images": IMAGES_PATH
     },
     // Add `.ts` and `.tsx` as a resolvable extension.
     extensions: [".ts", ".tsx", ".js"],
