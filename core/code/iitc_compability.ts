@@ -162,7 +162,9 @@ globalThis.iitcCompabilityInit = () => {
 
     globalThis.layerChooser = {
         addOverlay: (layer: L.Layer, name: string, options = {}) => IITC.layers.addOverlay(name, layer, options),
-        removeLayer: (layer: L.Layer, _options = {}) => IITC.layers.removeOverlay(layer)
+        removeLayer: (layer: L.Layer, _options = {}) => IITC.layers.removeOverlay(layer),
+
+        addBaseLayer: (layer: L.Layer, name: string) => IITC.layers.addBase(name, layer)
     }
 }
 
