@@ -9,6 +9,7 @@
   "scripts": {
     "autobuild": "concurrently --kill-others \"yarn build --watch\" \"yarn start\"",
     "build": "webpack",
+    "build:prod": "NODE_ENV=production webpack",
     "start": "node ./scripts/fileserver.js"
   },
   "dependencies": {
