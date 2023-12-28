@@ -17,7 +17,7 @@ const config: webpack.Configuration = {
       "images": IMAGES_PATH
     },
     // Add `.ts` and `.tsx` as a resolvable extension.
-    extensions: [".ts", ".tsx", ".js"],
+    extensions: [".ts", ".tsx", ".js", ".jsx"],
   },
   module: {
     rules: [
@@ -30,6 +30,16 @@ const config: webpack.Configuration = {
         include: [SRC_PATH],
         exclude: [/node_modules/, EXTERNAL_PATH],
       },
+      {
+        test: /\.jsx?$/,
+        use: [
+          { loader: 'babel-loader', 
+            options: { // here it won't load .babelrc.json ?!?
+              "presets": ["@babel/env","solid"],
+            }
+          }
+        ],
+      },      
       {
         test: /\.p?css$/,
         use: [

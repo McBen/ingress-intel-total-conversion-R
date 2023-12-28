@@ -1,6 +1,6 @@
 {
   "presets": [
-    ["@babel/env",{"targets": {"node": "6.5"}}],
+    ["@babel/env",{"targets": "> 0.15%, not dead"}],
     "@babel/preset-typescript", 
     "solid"
   ],
