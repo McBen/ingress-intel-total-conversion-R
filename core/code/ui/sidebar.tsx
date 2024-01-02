@@ -2,7 +2,7 @@ import { Component, For, Match, Show, Switch, createMemo, createSignal } from "s
 import { render } from "solid-js/web";
 import { PortalInfoDetailed, RESO_NRG } from "../portal/portal_info_detailed";
 
-import { FACTION } from "../constants";
+import { COLORS_LVL, FACTION } from "../constants";
 import { fixPortalImageUrl } from "../portal/portal_display";
 import * as Icons from "./components/icon";
 import { PortalRESO } from "../portal/portal_info";
@@ -157,18 +157,40 @@ const PortalResonators: Component<{ resonators: PortalRESO[] }> = p => {
 }
 
 const PortalResonator: Component<{ info: PortalRESO }> = p => {
-    const energy = createMemo<number>(() => p.info.energy / RESO_NRG[p.info.level] * 100);
+    const energy = createMemo<number>(() => p.info ? (p.info.energy / RESO_NRG[p.info.level] * 100) : 0);
 
     return <div class="resonator">
         <Show when={p.info} >
-            <div class="meter-level">{p.info.level}</div>
-            <div class="meter">{p.info.level}</div>
+            <HealthMeter level={p.info.level} percent={energy()}/>
+            <LevelNumber level={p.info.level} />
             <div>
                 <span class="resoenergy">{Math.round(energy())}%</span>
-                <span class="nickname">{p.info.owner}%</span>
+                <span class="nickname">{p.info.owner}</span>
             </div>
         </Show>
     </div >
+}
+
+const HealthMeter: Component<{ level: number, percent: number, classname?: string }> = (p) => {
+    return <div 
+        class= {"meter"+ (p.classname ? " "+p.classname : "")}
+        style= {{
+            background: COLORS_LVL[p.level || 0] + '32'
+        }}>
+            <div style= {{
+                height: p.percent.toString()+"%",
+                background: COLORS_LVL[p.level || 0]
+             }}
+            
+            ></div>
+        </div>
+}
+
+const LevelNumber: Component<{ level: number }> = (p) => {
+    return <div  class= "meter-level"
+        style={{ color: (p.level < 3 ? "#9900FF" : "#FFFFFF")}}
+        >{p.level }</div>
+
 }
 
 /*
@@ -188,21 +210,12 @@ renderResonatorSlot(slot: number | undefined, level: number, energy: number, own
         infoText += `\noctant:\t${OCTANTS[slot]} ${OCTANTS_ARROW[slot]}`;
     }
 
-    const levelNumber = $("<div>", { class: "meter-level", text: level })
-        .css({ color: (level < 3 ? "#9900FF" : "#FFFFFF") });
-
-    const healthMeter = $("<div>", { class: className }).css({ background: COLORS_LVL[level] + "32" }).append(
-        $("<div>").css({ height: fillGrade.toString() + "%", background: COLORS_LVL[level] })
-    );
-
-
     const stats = $("<div>", { class: "resostats" }).append(
         $("<span>", { class: "resoenergy", text: `${Math.round(fillGrade)}%` }),
         owner ? $("<span>", { class: "nickname", text: owner }) : "");
 
     return $("<div>", { class: "resonator", title: infoText }).append(
-        healthMeter,
-        levelNumber,
+        ...
         level > 0 ? stats : "");
 }
 */
