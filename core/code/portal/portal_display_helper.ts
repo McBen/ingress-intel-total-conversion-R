@@ -252,7 +252,7 @@ const renderResonatorDetails = (slot: number, level: number, nrg: number, nick?:
 }
 
 
-const COLORS_MOD = { VERY_RARE: "#b08cff", RARE: "#73a8ff", COMMON: "#8cffbf" };
+export const COLORS_MOD = { VERY_RARE: "#b08cff", RARE: "#73a8ff", COMMON: "#8cffbf" };
 
 // given portal details, returns html code to display mod details.
 export const getModDetails = (d: PortalInfoDetailed): string => {
