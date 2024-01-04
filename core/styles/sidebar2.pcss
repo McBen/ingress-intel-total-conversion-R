@@ -11,7 +11,7 @@
 
 
 #sidebar2 {
-  background-color: var(--iitc-bg-color-trans2);
+  background-color: var(--iitc-bg-color-trans);
   border-left: 1px solid var(--iitc-border-color_hi); 
   color: var(--iitc-text);
   backdrop-filter: blur(6px);
@@ -27,7 +27,7 @@
   max-height: 100%;
 
   &:hover, &:focus-within {
-      background-color: var(--iitc-bg-color-trans);
+      background-color: var(--iitc-bg-color);
   }
 }    
   
@@ -111,8 +111,9 @@
   .resodetails {
       margin-bottom: 0px;
       padding: 5px 14px;
-      display: block;
       overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
   }
   
   .resonator {
@@ -122,18 +123,18 @@
   }
   
   .left-column .resonator {
-      float: left;
+      /* float: left; */
   }
   
   .right-column .resonator {
-      float: right;
+      /* float: right; */ 
   }
   
   .meter {
       display: inline-block;
-      width: 8px;
-      height: 40px;
-      transform: rotate(180deg);
+      width: 60px;
+      height: 1em;
+      /* transform: rotate(180deg); */
       vertical-align: middle;
       background: #ffffff24;
       cursor: pointer;
@@ -141,7 +142,7 @@
   }
   
   .right-column .meter {
-      float: right;
+      /*float: right; */
   }
   
   .meter.north {

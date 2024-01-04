@@ -1,18 +1,21 @@
 /* eslint-disable unicorn/prefer-string-replace-all */
-import { Component, For, Match, Show, Switch, createMemo, createSignal } from "solid-js";
+import { Component, Match, Show, Switch, createMemo, createSignal } from "solid-js";
 import { render } from "solid-js/web";
-import { PortalInfoDetailed, RESO_NRG } from "../portal/portal_info_detailed";
+import { PortalInfoDetailed } from "../portal/portal_info_detailed";
 
-import { COLORS_LVL, FACTION, FACTION_COLORS, FACTION_CSS } from "../constants";
+import { FACTION, FACTION_CSS } from "../constants";
 import { fixPortalImageUrl } from "../portal/portal_display";
 import * as Icons from "./components/icon";
-import { NoPortalMod, PortalMOD, PortalRESO } from "../portal/portal_info";
-import { COLORS_MOD } from "../portal/portal_display_helper";
+import { dialog } from "./dialog";
+import { PortalMods } from "./portal/PortalMods";
+import { PortalResonators } from "./portal/PortalResonators";
+
 
 export const setupSidebar = () => {
     const wrapper = document.querySelector("#scrollwrapper2")!;
     render(() => <Sidebar />, wrapper);
 }
+
 
 export const [getPortalDetails, setPortalDetails] = createSignal<PortalInfoDetailed | undefined>();
 
@@ -26,7 +29,7 @@ const Sidebar = () => {
                     <PortalMods mods={getPortalDetails().mods} />
                     <PortalOwner details={getPortalDetails()} />
                     <PortalHealth details={getPortalDetails()} />
-                    <PortalResonators resonators={getPortalDetails().resonators} />
+                    <PortalResonators resonators={getPortalDetails().resonators} team={getPortalDetails().team} />
                 </Show>
             </div>
         </div>);
@@ -34,6 +37,7 @@ const Sidebar = () => {
     // <PortalMiscData prop="(guid, portalDetails)" />
     // < historyDetails prop="window.getPortalHistoryDetails(data)" />
 }
+
 
 const PortalTitle: Component<{ details: PortalInfoDetailed }> = p => {
 
@@ -62,7 +66,7 @@ const PortalOwner: Component<{ details: PortalInfoDetailed }> = p => {
 }
 
 
-const Agent: Component<{ nickname: string, faction?: FACTION }> = p => {
+export const Agent: Component<{ nickname: string, faction?: FACTION }> = p => {
     return <span
         class={p.faction ? FACTION_CSS[p.faction] : ""}>
         {p.nickname}</span>
@@ -71,29 +75,29 @@ const Agent: Component<{ nickname: string, faction?: FACTION }> = p => {
 
 const PortalImage: Component<{ details: PortalInfoDetailed }> = p => {
 
+    const src = createMemo( () => fixPortalImageUrl(p.details.image));
+    
     return <div
         class="imgpreview"
         title={`${p.details.title}\n\nClick to show full image.`}
         style={{
-            "background-image": `url(${fixPortalImageUrl(p.details.image)})`
-        }}>
-    </div>;
-
-    //     preview.on("click", () => {
-    //         dialog({
-    //             html: $("<img>", { src: img }),
-    //             title,
-    //             id: "iitc-portal-image",
-    //             width: "auto",
-    //             resizable: false
-    //         });
-    //     })
-    // 
+            "background-image": `url(${src()})`
+        }}
+        onClick={(e) => {
+            dialog({
+                html: $("<img>", { src: src() }),
+                title: p.details.title,
+                id: "iitc-portal-image",
+                width: "auto",
+                resizable: false
+            });
+    
+        }}/>;
 }
 
 
 const PortalCloseButton = () => {
-    // click: () => this.clearDetails()
+    // TODO: click: () => this.clearDetails()
     return <span class="close" title="Close [w]" accessKey="w">X</span>;
 }
 
@@ -139,127 +143,6 @@ const IconEnergy: Component<{ value: number }> = props => {
             <Match when={icon() < 11}><Icons.IconEnergy100 /></Match>
         </Switch>
     )
-}
-
-
-const PortalResonators: Component<{ resonators: PortalRESO[] }> = p => {
-
-    // octant=slot: 0=E, 1=NE, 2=N, 3=NW, 4=W, 5=SW, 6=S, SE=7
-    // resos in the display should be ordered like this:
-    //   N    NE         Since the view is displayed in rows, they
-    //  NW    E          need to be ordered like this: N NE NW E W SE SW S
-    //   W    SE         i.e. 2 1 3 0 4 7 5 6
-    //  SW    S
-
-    // if all 8 resonators are deployed, we know which is in which slot
-    // as of 2014-05-23 update, this is not true for portals with empty slots!
-
-    const order = createMemo(() =>
-        p.resonators.length === 8 ? [2, 1, 3, 0, 4, 7, 5, 6] : [0, 1, 2, 3, 4, 5, 6, 7]
-    );
-
-    return <div class="resodetails">
-        <For each={order()}>{(slot, index) =>
-            <PortalResonator info={p.resonators[slot]} class={(index() % 2 === 0) ? "left-column" : "right-column"} />
-        }</For>
-    </div>
-}
-
-
-const PortalResonator: Component<{ info: PortalRESO, class?: string }> = p => {
-    const energy = createMemo<number>(() => p.info ? (p.info.energy / RESO_NRG[p.info.level] * 100) : 0);
-
-    return <div class={"resonator" + (p.class ? " " + p.class : "")}>
-        <Show when={p.info} >
-            <HealthMeter level={p.info.level} percent={energy()} />
-            <LevelNumber level={p.info.level} />
-            <div class="resostats">
-                <span class="resoenergy">{Math.round(energy())}%</span>
-                <span class="nickname">{p.info.owner}</span>
-            </div>
-        </Show>
-    </div >
-}
-
-
-const HealthMeter: Component<{ level: number, percent: number, classname?: string }> = (p) => {
-    return <div
-        class={"meter" + (p.classname ? " " + p.classname : "")}
-        style={{
-            background: COLORS_LVL[p.level || 0] + '32'
-        }}>
-        <div style={{
-            height: p.percent.toString() + "%",
-            background: COLORS_LVL[p.level || 0]
-        }}
-
-        ></div>
-    </div>
-}
-
-const LevelNumber: Component<{ level: number }> = (p) => {
-    return <div class="meter-level"
-        style={{ color: (p.level < 3 ? "#9900FF" : "#FFFFFF") }}
-    >{p.level}</div>
-
-}
-
-const PortalMods: Component<{ mods: PortalMOD[] }> = p => {
-    return <div class="mods">
-        <For each={p.mods}>{mod =>
-            <PortalMod mod={mod} />
-        }</For>
-    </div>
-}
-
-const PortalMod: Component<{ mod: PortalMOD }> = p => {
-
-    const text = createMemo(() => {
-        let tooltip = p.mod.type || "(unknown mod)";
-        if (p.mod.rarity) {
-            tooltip = p.mod.rarity.capitalize().replace(/_/g, " ") + " " + tooltip;
-        }
-
-        tooltip += "\n";
-        if (p.mod.owner) {
-            tooltip += "Installed by: " + p.mod.owner + "\n";
-        }
-
-        if (p.mod.stats) {
-            tooltip += "Stats:";
-            for (const key in p.mod.stats) {
-                if (!Object.prototype.hasOwnProperty.call(p.mod.stats, key)) continue;
-
-                const value = p.mod.stats[key];
-                let valueStr = value.toString(); // display unmodified. correct for shield mitigation and multihack
-
-                // if (key === 'REMOVAL_STICKINESS' && val == 0) continue;  // stat on all mods recently - unknown meaning, not displayed in stock client
-
-                // special formatting for known mod stats, where the display of the raw value is less useful
-                switch (key) {
-                    case "HACK_SPEED": { valueStr = `${value / 10000}%`; break; }
-                    case "HIT_BONUS": { valueStr = `${value / 10000}%`; break; }
-                    case "ATTACK_FREQUENCY": { valueStr = `${value / 1000}x`; break; }
-                    case "FORCE_AMPLIFIER": { valueStr = `${value / 1000}x`; break; }
-                    case "LINK_RANGE_MULTIPLIER": { valueStr = `${value / 1000}x`; break; }
-                    case "LINK_DEFENSE_BOOST": { valueStr = `${value / 1000}x`; break; }
-                    case "REMOVAL_STICKINESS": { if (value > 100) valueStr = `${value / 10000}%`; break; } // an educated guess
-                }
-
-                tooltip += "\n+" + valueStr + " " + key.capitalize().replace(/_/g, " ");
-            }
-        }
-        return tooltip;
-    });
-
-
-    return <Show when={p.mod !== NoPortalMod} fallback={<span />} ><span
-        title={text()}
-        style={{
-            color: p.mod.rarity ? COLORS_MOD[p.mod.rarity] : "#fff"
-        }}>
-        {p.mod.type || "(unknown mod)"}</span>
-    </Show>
 }
 
 
