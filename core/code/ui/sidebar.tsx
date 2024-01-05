@@ -30,11 +30,11 @@ const Sidebar = () => {
                     <PortalOwner details={getPortalDetails()} />
                     <PortalHealth details={getPortalDetails()} />
                     <PortalResonators resonators={getPortalDetails().resonators} team={getPortalDetails().team} />
+                    <PortalMiscData details={getPortalDetails()} />
                 </Show>
             </div>
         </div>);
     //
-    // <PortalMiscData prop="(guid, portalDetails)" />
     // < historyDetails prop="window.getPortalHistoryDetails(data)" />
 }
 
@@ -172,3 +172,13 @@ const sharePortal = (guid: PortalGUID, e: Event) => {
     // import { showWebLinks } from "./plugins/PLink/Main";
 }
 
+
+const PortalMiscData: Component<{ details: PortalInfoDetailed }> = p => {   
+    return <div>
+        <Icons.FiShield /> 
+        <Icons.TbMoneybag />
+        <Icons.TbVectorTriangle />
+        <Icons.BiRegularTachometer />
+        <Icons.BiRegularRuler />
+    </div>;
+}
