@@ -111,7 +111,7 @@
   .resodetails {
       margin-bottom: 2px;
       margin-bottom: 2px;
-      padding: 5px 14px;
+      padding: 5px 6px;
       overflow: hidden;
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -121,32 +121,58 @@
   
   .resonator {
       display: block;
-      padding: 2px 0px;
+      padding: 1px 0px;
+
+      .agent {
+        width: 54%;
+        display: inline-block;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        height: 18px;
+        vertical-align: middle;
+        margin-left: 6px;
+      }
   }
-  
-  .left-column .resonator {
-      /* float: left; */
+
+  .resonator.left-column {
+    .agent {
+        text-align: right;
+        margin-left: 0;
+        margin-right: 6px;
+    }
   }
-  
-  .right-column .resonator {
-      /* float: right; */ 
-  }
-  
+
   .meter {
-      display: inline-block;
-      width: 60px;
-      height: 1em;
-      /* transform: rotate(180deg); */
-      vertical-align: middle;
-      background: #ffffff24;
-      cursor: pointer;
-      border: unset;
+        text-align: center;
+        display: inline-block;
+        width: 40%;
+        /* height: 1em; */
+        /* transform: rotate(180deg); */
+        vertical-align: middle;
+        cursor: pointer;
+        border: 1px solid rgba(255,255,255,.1);
+        position: relative;
+
+        .bar {
+            width: 70%;
+            background: rgb(150, 39, 244);
+            position: absolute;
+            height: 14px;
+            top: 1px;
+        }
+
+        .number {
+            position: absolute;
+            width: 100%;
+            height: 1em;
+            z-index: 2;
+            top:0;
+        }
   }
-  
-  .right-column .meter {
-      /*float: right; */
+  .left-column .meter .bar {
+        right: 0;
   }
-  
+
   .meter.north {
       overflow: hidden;
       &:before {
@@ -166,34 +192,8 @@
       text-align: center;
       box-sizing: border-box;
   }
-  
-  .right-column .meter-level {
-      float: right;
-  }
-  
-  .resostats {
-      display: inline-block;
-      color: white;
-      vertical-align: middle;
-      width: 100px;
-      height: 40px;
-  }
-  
-  .right-column .resostats {
-      text-align: right;
-      float: right;
-  }
-  
-  .resoenergy {
-      display: block;
-      font-size: 12px;
-  }
-  
-  .resostats .nickname {
-      display: block;
-      font-size: 14px;
-  }     
-  
+
+ 
   .mods span {
       background-size: cover;
       width: 53px;
@@ -278,4 +278,9 @@
           background-image: url("images/portal/ingress-items/boxed/boxed_turret_rare.svg");
       }
   }
+
+    .stats {
+        display: flex;
+        flex-wrap: wrap;
+    }
 }

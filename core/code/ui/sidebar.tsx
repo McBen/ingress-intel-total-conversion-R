@@ -9,6 +9,7 @@ import * as Icons from "./components/icon";
 import { dialog } from "./dialog";
 import { PortalMods } from "./portal/PortalMods";
 import { PortalResonators } from "./portal/PortalResonators";
+import { getPortalFieldsCount, getPortalLinks } from "../helper/portal_data";
 
 
 export const setupSidebar = () => {
@@ -28,7 +29,6 @@ const Sidebar = () => {
                     <PortalImage details={getPortalDetails()} />
                     <PortalMods mods={getPortalDetails().mods} />
                     <PortalOwner details={getPortalDetails()} />
-                    <PortalHealth details={getPortalDetails()} />
                     <PortalResonators resonators={getPortalDetails().resonators} team={getPortalDetails().team} />
                     <PortalMiscData details={getPortalDetails()} />
                 </Show>
@@ -75,24 +75,24 @@ export const Agent: Component<{ nickname: string, faction?: FACTION }> = p => {
 
 const PortalImage: Component<{ details: PortalInfoDetailed }> = p => {
 
-    const src = createMemo( () => fixPortalImageUrl(p.details.image));
-    
+    const source = createMemo(() => fixPortalImageUrl(p.details.image));
+
     return <div
         class="imgpreview"
         title={`${p.details.title}\n\nClick to show full image.`}
         style={{
-            "background-image": `url(${src()})`
+            "background-image": `url(${source()})`
         }}
-        onClick={(e) => {
+        onClick={() => {
             dialog({
-                html: $("<img>", { src: src() }),
+                html: $("<img>", { src: source() }),
                 title: p.details.title,
                 id: "iitc-portal-image",
                 width: "auto",
                 resizable: false
             });
-    
-        }}/>;
+
+        }} />;
 }
 
 
@@ -173,12 +173,92 @@ const sharePortal = (guid: PortalGUID, e: Event) => {
 }
 
 
-const PortalMiscData: Component<{ details: PortalInfoDetailed }> = p => {   
-    return <div>
-        <Icons.FiShield /> 
-        <Icons.TbMoneybag />
-        <Icons.TbVectorTriangle />
-        <Icons.BiRegularTachometer />
-        <Icons.BiRegularRuler />
+const PortalMiscData: Component<{ details: PortalInfoDetailed }> = p => {
+
+    const links = createMemo(() => {
+        const linkInfo = getPortalLinks(p.details.guid);
+        return { incoming: linkInfo.in.length, outgoing: linkInfo.out.length };
+    });
+    const fieldCount = createMemo(() => getPortalFieldsCount(p.details.guid));
+
+    const linkText = () => `${links().outgoing} out / ${links().incoming} in`;
+    const linkTitle = () => {
+        const maxOutgoing = p.details.getMaxOutgoingLinks();
+        return "Links\n" +
+            `at most ${maxOutgoing} outgoing links\n` +
+            `${links().outgoing} links out\n` +
+            `${links().incoming} links in\n` +
+            `(${links().outgoing + links().incoming} total)`
+    };
+
+
+    return <div class="stats">
+        <div><PortalHealth details={getPortalDetails()} /></div>
+        <div><Icons.FiShield /></div>
+        <div><Icons.TbMoneybag /></div>
+        <div><Icons.TbVectorTriangle /> <span title="Fields">{fieldCount()}</span></div>
+        <div><Icons.BiRegularTachometer /></div>
+        <div><Icons.BiRegularRuler /></div>
+        <div><span title={linkTitle()}>{linkText()}</span></div>
     </div>;
 }
+
+/*  
+      // collect some random data that’s not worth to put in an own method
+      var linkInfo = getPortalLinks(guid);
+      var maxOutgoing = getMaxOutgoingLinks(d);
+      var linkCount = linkInfo.in.length + linkInfo.out.length;
+      var links = {incoming: linkInfo.in.length, outgoing: linkInfo.out.length};
+  
+      var fieldCount = getPortalFieldsCount(guid);
+      var fieldsText = ['fields', fieldCount];
+  
+      var apGainText = getAttackApGainText(d,fieldCount,linkCount);
+  
+      var attackValues = getPortalAttackValues(d);
+  
+  
+      // collect and html-ify random data
+  
+      var randDetailsData = [
+        // these pieces of data are only relevant when the portal is captured
+        // maybe check if portal is captured and remove?
+        // But this makes the info panel look rather empty for unclaimed portals
+        playerText, getRangeText(d),
+        linksText, fieldsText,
+        getMitigationText(d,linkCount), getEnergyText(d),
+        // and these have some use, even for uncaptured portals
+        apGainText, getHackDetailsText(d),
+      ];
+  
+      if(attackValues.attack_frequency != 0)
+        randDetailsData.push([
+          '<span title="attack frequency" class="text-overflow-ellipsis">attack frequency</span>',
+          '×'+attackValues.attack_frequency]);
+      if(attackValues.hit_bonus != 0)
+        randDetailsData.push(['hit bonus', attackValues.hit_bonus+'%']);
+      if(attackValues.force_amplifier != 0)
+        randDetailsData.push([
+          '<span title="force amplifier" class="text-overflow-ellipsis">force amplifier</span>',
+          '×'+attackValues.force_amplifier]);
+  
+      randDetails = '<table id="randdetails">' + genFourColumnTable(randDetailsData) + '</table>';
+  
+  
+      // artifacts - tacked on after (but not as part of) the 'randdetails' table
+      // instead of using the existing columns....
+  
+      if (d.artifactBrief && d.artifactBrief.target && Object.keys(d.artifactBrief.target).length > 0) {
+        var targets = Object.keys(d.artifactBrief.target);
+        // currently (2015-07-10) we no longer know the team each target portal is for - so we'll just show the artifact type(s)
+         randDetails += '<div id="artifact_target">Target portal: '+targets.map(function(x) { return x.capitalize(); }).join(', ')+'</div>';
+      }
+  
+      // shards - taken directly from the portal details
+      if (d.artifactDetail) {
+        randDetails += '<div id="artifact_fragments">Shards: '+d.artifactDetail.displayName+' #'+d.artifactDetail.fragments.join(', ')+'</div>';
+      }
+  
+    }
+  
+*/

@@ -23,7 +23,7 @@ const PortalMod: Component<{ mod: PortalMOD; }> = p => {
         tooltip.push(name);
 
         if (p.mod.owner) {
-            tooltip.push(`Installed by: ${p.mod.owner}`);
+            tooltip.push(`by: ${p.mod.owner}`, "");
         }
 
         if (p.mod.stats) {

@@ -19,10 +19,10 @@ export const PortalResonators: Component<{ resonators: PortalRESO[], team: FACTI
     );
 
     return <div class="resodetails">
-        <For each={order()}>{(slot, index) => 
-            <PortalResonator 
+        <For each={order()}>{(slot, index) =>
+            <PortalResonator
                 left={(index() % 2 === 0)}
-                info={p.resonators[slot]} 
+                info={p.resonators[slot]}
                 team={p.team}
             />}
         </For>
@@ -33,42 +33,46 @@ export const PortalResonators: Component<{ resonators: PortalRESO[], team: FACTI
 const PortalResonator: Component<{ info: PortalRESO, team: FACTION, left: boolean }> = p => {
     const energy = createMemo<number>(() => p.info ? (p.info.energy / RESO_NRG[p.info.level] * 100) : 0);
 
-    return <div class={"resonator " + (p.left? "left-column" : "right-column")}>
-        <Show when={p.info}>
+    return <div class={"resonator " + (p.left ? "left-column" : "right-column")}>
+        <Show when={p.info} fallback={<HealthMeter level={0} percent={0} />} >
             <Switch >
                 <Match when={p.left} >
-                    <Agent nickname={p.info.owner} faction={p.team} />
+                    <div class="agent"><Agent nickname={p.info.owner} faction={p.team} /></div>
                     <HealthMeter level={p.info.level} percent={energy()} />
                 </Match>
                 <Match when={!p.left} >
                     <HealthMeter level={p.info.level} percent={energy()} />
-                    <Agent nickname={p.info.owner} faction={p.team} />
+                    <div class="agent"><Agent nickname={p.info.owner} faction={p.team} /></div>
                 </Match>
             </Switch>
         </Show>
     </div>;
 };
 
-const HealthMeter: Component<{ level: number, percent: number, classname?: string }> = (p) => {
+
+const HealthMeter: Component<{ level: number, percent: number, classname?: string }> = p => {
     return (
         <div
             class={"meter" + (p.classname ? " " + p.classname : "")}
             style={{
-                background: COLORS_LVL[p.level || 0] + '32'
+                background: COLORS_LVL[p.level || 0] + "32"
             }}>
-            <div style={{
-                width: p.percent.toString() + "%",
-                background: COLORS_LVL[p.level || 0]
-            }}>
-            {p.level}
-            </div>
+            <div class="bar"
+                style={{
+                    width: p.percent.toString() + "%",
+                    background: COLORS_LVL[p.level || 0]
+                }
+                } />
+            <Show when={p.level > 0}>
+                <div class="number">{p.level}</div>
+            </Show>
         </div>
     );
 }
 
 const LevelNumber: Component<{ level: number }> = (p) => {
     return (
-        <div 
+        <div
             class="meter-level"
             style={{ color: (p.level < 3 ? "#9900FF" : "#FFFFFF") }}
         >{p.level}</div>
