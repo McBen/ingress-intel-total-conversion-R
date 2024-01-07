@@ -34,18 +34,16 @@ const PortalResonator: Component<{ info: PortalRESO, team: FACTION, left: boolea
     const energy = createMemo<number>(() => p.info ? (p.info.energy / RESO_NRG[p.info.level] * 100) : 0);
 
     return <div class={"resonator " + (p.left ? "left-column" : "right-column")}>
-        <Show when={p.info} fallback={<HealthMeter level={0} percent={0} />} >
-            <Switch >
-                <Match when={p.left} >
-                    <div class="agent"><Agent nickname={p.info.owner} faction={p.team} /></div>
-                    <HealthMeter level={p.info.level} percent={energy()} />
-                </Match>
-                <Match when={!p.left} >
-                    <HealthMeter level={p.info.level} percent={energy()} />
-                    <div class="agent"><Agent nickname={p.info.owner} faction={p.team} /></div>
-                </Match>
-            </Switch>
-        </Show>
+        <Switch >
+            <Match when={p.left} >
+                <div class="agent"><Agent nickname={p.info?.owner} faction={p.team} /></div>
+                <HealthMeter level={p.info?.level} percent={energy()} />
+            </Match>
+            <Match when={!p.left} >
+                <HealthMeter level={p.info?.level} percent={energy()} />
+                <div class="agent"><Agent nickname={p.info?.owner} faction={p.team} /></div>
+            </Match>
+        </Switch>
     </div>;
 };
 

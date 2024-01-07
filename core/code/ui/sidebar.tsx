@@ -10,6 +10,9 @@ import { dialog } from "./dialog";
 import { PortalMods } from "./portal/PortalMods";
 import { PortalResonators } from "./portal/PortalResonators";
 import { getPortalFieldsCount, getPortalLinks } from "../helper/portal_data";
+import { digits } from "../helper/utils_misc";
+import { formatInterval } from "../helper/times";
+import { player } from "../helper/player";
 
 
 export const setupSidebar = () => {
@@ -173,8 +176,10 @@ const sharePortal = (guid: PortalGUID, e: Event) => {
 }
 
 
+// TODO: split function
 const PortalMiscData: Component<{ details: PortalInfoDetailed }> = p => {
 
+    // Links
     const links = createMemo(() => {
         const linkInfo = getPortalLinks(p.details.guid);
         return { incoming: linkInfo.in.length, outgoing: linkInfo.out.length };
@@ -191,74 +196,88 @@ const PortalMiscData: Component<{ details: PortalInfoDetailed }> = p => {
             `(${links().outgoing + links().incoming} total)`
     };
 
+    const range = createMemo(() => getRangeText(p.details));
+    const hack = createMemo(() => getHackDetailsText(p.details));
+    const migrate = createMemo(() => getMitigationText(p.details, links().incoming + links().outgoing));
+    const apGain = createMemo(() => getAttackApGainText(p.details, fieldCount(), links().incoming + links().outgoing));
 
     return <div class="stats">
-        <div><PortalHealth details={getPortalDetails()} /></div>
-        <div><Icons.FiShield /></div>
-        <div><Icons.TbMoneybag /></div>
-        <div><Icons.TbVectorTriangle /> <span title="Fields">{fieldCount()}</span></div>
-        <div><Icons.BiRegularTachometer /></div>
-        <div><Icons.BiRegularRuler /></div>
-        <div><span title={linkTitle()}>{linkText()}</span></div>
+        <div class="stat"><PortalHealth details={getPortalDetails()} /></div>
+        <div class="stat" title={migrate().title}><Icons.FiShield />{migrate().text}</div>
+        <div class="stat" title={apGain().title}><Icons.TbMoneybag />{apGain().text}</div>
+        <div class="stat" title="Fields"><Icons.TbVectorTriangle />{fieldCount()}</div>
+        <div class="stat" title={range().title}><Icons.BiRegularRuler />{range().text}</div>
+        <div class="stat" title={hack().title}><Icons.BiRegularTachometer />{hack().text}</div>
+        <div class="stat" title={linkTitle()}><Icons.SiLinktree />{linkText()}</div>
     </div>;
 }
 
-/*  
-      // collect some random data that’s not worth to put in an own method
-      var linkInfo = getPortalLinks(guid);
-      var maxOutgoing = getMaxOutgoingLinks(d);
-      var linkCount = linkInfo.in.length + linkInfo.out.length;
-      var links = {incoming: linkInfo.in.length, outgoing: linkInfo.out.length};
-  
-      var fieldCount = getPortalFieldsCount(guid);
-      var fieldsText = ['fields', fieldCount];
-  
-      var apGainText = getAttackApGainText(d,fieldCount,linkCount);
-  
-      var attackValues = getPortalAttackValues(d);
-  
-  
-      // collect and html-ify random data
-  
-      var randDetailsData = [
-        // these pieces of data are only relevant when the portal is captured
-        // maybe check if portal is captured and remove?
-        // But this makes the info panel look rather empty for unclaimed portals
-        playerText, getRangeText(d),
-        linksText, fieldsText,
-        getMitigationText(d,linkCount), getEnergyText(d),
-        // and these have some use, even for uncaptured portals
-        apGainText, getHackDetailsText(d),
-      ];
-  
-      if(attackValues.attack_frequency != 0)
-        randDetailsData.push([
-          '<span title="attack frequency" class="text-overflow-ellipsis">attack frequency</span>',
-          '×'+attackValues.attack_frequency]);
-      if(attackValues.hit_bonus != 0)
-        randDetailsData.push(['hit bonus', attackValues.hit_bonus+'%']);
-      if(attackValues.force_amplifier != 0)
-        randDetailsData.push([
-          '<span title="force amplifier" class="text-overflow-ellipsis">force amplifier</span>',
-          '×'+attackValues.force_amplifier]);
-  
-      randDetails = '<table id="randdetails">' + genFourColumnTable(randDetailsData) + '</table>';
-  
-  
-      // artifacts - tacked on after (but not as part of) the 'randdetails' table
-      // instead of using the existing columns....
-  
-      if (d.artifactBrief && d.artifactBrief.target && Object.keys(d.artifactBrief.target).length > 0) {
-        var targets = Object.keys(d.artifactBrief.target);
-        // currently (2015-07-10) we no longer know the team each target portal is for - so we'll just show the artifact type(s)
-         randDetails += '<div id="artifact_target">Target portal: '+targets.map(function(x) { return x.capitalize(); }).join(', ')+'</div>';
-      }
-  
-      // shards - taken directly from the portal details
-      if (d.artifactDetail) {
-        randDetails += '<div id="artifact_fragments">Shards: '+d.artifactDetail.displayName+' #'+d.artifactDetail.fragments.join(', ')+'</div>';
-      }
-  
+
+const getRangeText = (d: PortalInfoDetailed): { title: string, text: string } => {
+    const range = d.getPortalRange();
+    let title = `Range:\nBase:\t${digits(Math.floor(range.base))}m\nLink amp boost:\t×${range.boost}\nRange:\t${digits(Math.floor(range.range))}m`;
+
+    if (!range.isLinkable) title += "\nPortal is missing resonators,\nno new links can be made";
+
+    // TODO: add click handler
+    const text =
+        // '<a onclick="window.rangeLinkClick()"'+ (range.isLinkable ? "" : ' style="text-decoration:line-through;"')+ ">" +
+        (range.range > 1000
+            ? digits(Math.floor(range.range / 1000)) + " km"
+            : digits(Math.floor(range.range)) + " m")
+        ; // + "</a>",
+
+
+    return { title, text };
+}
+
+const getHackDetailsText = (d: PortalInfoDetailed): { title: string, text: string } => {
+    const hackDetails = d.getPortalHackDetails();
+
+    const text = `${hackDetails.hacks} @ ${formatInterval(hackDetails.cooldown)}`;
+
+    const title = "Hacks available every 4 hours\n"
+        + "Hack count:\t" + hackDetails.hacks + "\n"
+        + "Cooldown time:\t" + formatInterval(hackDetails.cooldown) + "\n"
+        + "Burnout time:\t" + formatInterval(hackDetails.burnout);
+
+    return { title, text };
+}
+
+
+const getMitigationText = (d: PortalInfoDetailed, linkCount: number): { title: string, text: string } => {
+    const mitigationDetails = d.getPortalMitigationDetails(linkCount);
+
+    let text = mitigationDetails.total.toString();
+    if (mitigationDetails.excess) text += ` (+${mitigationDetails.excess})`;
+
+    const title = `Total shielding:\t${mitigationDetails.shields + mitigationDetails.links}\n- active:\t` +
+        `${mitigationDetails.total}\n- excess:\t${mitigationDetails.excess}\nFrom\n- shields:\t${mitigationDetails.shields}\n`
+        + `- links:\t${mitigationDetails.links} (${mitigationDetails.linkDefenseBoost}x)`;
+
+    return { title, text };
+}
+
+
+const getAttackApGainText = (d: PortalInfoDetailed, fieldCount: number, linkCount: number): { title: string, text: string } => {
+    const breakdown = d.getAttackApGain(fieldCount, linkCount);
+    let totalGain = breakdown.enemyAp;
+
+
+    let title = "AP\n";
+
+    if (player.isTeam(d.team)) {
+        totalGain = breakdown.friendlyAp;
+        title += "Friendly AP:\t" + breakdown.friendlyAp + "\n";
+        title += "  Deploy " + breakdown.deployCount + ", ";
+        title += "Upgrade " + breakdown.upgradeCount + "\n";
+        title += "\n";
     }
-  
-*/
+    title += "Enemy AP:\t" + breakdown.enemyAp + "\n";
+    title += "  Destroy AP:\t" + breakdown.destroyAp + "\n";
+    title += "  Capture AP:\t" + breakdown.captureAp + "\n";
+
+    const text = digits(totalGain);
+
+    return { title, text };
+}

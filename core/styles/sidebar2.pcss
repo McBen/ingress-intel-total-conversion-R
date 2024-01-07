@@ -154,7 +154,6 @@
         position: relative;
 
         .bar {
-            width: 70%;
             background: rgb(150, 39, 244);
             position: absolute;
             height: 14px;
@@ -282,5 +281,16 @@
     .stats {
         display: flex;
         flex-wrap: wrap;
+
+        .stat {
+            min-width: 90px;
+            margin-left: 4px;
+            margin-right: 4px;
+            font-size: 14px;
+
+            svg {
+                padding-right: 5px;
+            }
+        }
     }
 }
