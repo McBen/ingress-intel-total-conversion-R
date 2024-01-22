@@ -108,7 +108,12 @@ export class PortalMOD {
         this.owner = data[0];
         this.type = data[1];
         this.rarity = data[2];
-        this.stats = data[3] as Record<PortalModStat, number>;
+        this.stats = {} as Record<PortalModStat | string, number>;
+        // eslint-disable-next-line guard-for-in
+        for (const n in data[3]) {
+            this.stats[n] = parseInt(data[3][n]);
+        }
+
     }
 }
 
