@@ -28,7 +28,7 @@ export const sharePortalDialog = (portal: PortalInfo): void => {
         id: "portallink",
         title: portal.title,
         html,
-        position: { my: "right-30 top+20", at: "left top", of: "#sidebar" }
+        position: { my: "right-30 top+20", at: "left top", of: "#sidebar2" }
     });
 
     // ($("#qrcode", mdia) as any).qrcode({ text: `GEO:${ll.lat},${ll.lng}` });
