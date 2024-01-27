@@ -4,6 +4,7 @@ import { render } from "solid-js/web";
 import { PortalInfoDetailed } from "../portal/portal_info_detailed";
 
 import { FACTION, FACTION_CSS } from "../constants";
+import { fixPortalImageUrl } from "../portal/portal_display";
 import * as Icons from "./components/icon";
 import { dialog } from "./dialog";
 import { PortalMods } from "./portal/PortalMods";
@@ -12,7 +13,8 @@ import { getPortalFieldsCount, getPortalLinks } from "../helper/portal_data";
 import { digits } from "../helper/utils_misc";
 import { formatInterval } from "../helper/times";
 import { player } from "../helper/player";
-import { fixPortalImageUrl } from "../portal/portal_display";
+import { portalDetail } from "../portal/portal_details_get";
+import { sharePortalDialog } from "./dialogs/share";
 
 
 export const setupSidebar = () => {
@@ -170,9 +172,11 @@ const zoomTo = (guid: PortalGUID, latE6: number, lngE6: number) => {
     if (isSmartphone()) { show("map") }
 }
 
-const sharePortal = (guid: PortalGUID, e: Event) => {
-    // TODO: showWebLinks(guid);
-    // import { showWebLinks } from "./plugins/PLink/Main";
+const sharePortal = (guid: PortalGUID) => {
+    const details = portalDetail.get(guid);
+    if (details) {
+        sharePortalDialog(details);
+    }
 }
 
 
