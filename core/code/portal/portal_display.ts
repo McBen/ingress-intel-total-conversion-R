@@ -6,6 +6,7 @@ import { getPortalMiscDetails, getResonatorDetails, getModDetails } from "./port
 import { teamStr2Faction } from "./portal_info";
 import { PortalInfoDetailed } from "./portal_info_detailed";
 import { selectPortal } from "../map/portal_select";
+import { setPortalDetails } from "../ui/sidebar";
 
 const DEFAULT_PORTAL_IMG = "//commondatastorage.googleapis.com/ingress.com/img/default-portal-image.png";
 
@@ -67,9 +68,12 @@ export const renderPortalDetails = (guid?: PortalGUID) => {
     const details = portalDetail.get(guid);
     if (details) {
         renderPortalFullDetails(guid, details);
+        setPortalDetails(details);
+
     } else {
         const portal = window.portals[guid];
         renderLowDetails(portal);
+        setPortalDetails(details);
     }
 }
 

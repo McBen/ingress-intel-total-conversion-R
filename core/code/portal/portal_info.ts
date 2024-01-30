@@ -11,13 +11,14 @@ export const enum HISTORY {
 
 export class PortalInfoBase {
 
-    // readonly guid: PortalGUID;
+    readonly guid: PortalGUID;
     // readonly timestamp: number;
     public team: FACTION;
     readonly latE6: number;
     readonly lngE6: number;
 
-    constructor(data: IITC.EntityPortalBasic) {
+    constructor(guid: PortalGUID, data: IITC.EntityPortalBasic) {
+        this.guid = guid;
         this.team = this.teamStr2Faction(data[1]);
         this.latE6 = data[2];
         this.lngE6 = data[3];
@@ -62,10 +63,10 @@ export class PortalInfo extends PortalInfoBase {
     readonly mission: boolean;
     readonly mission50plus: boolean;
     readonly artifactBrief: null | [];
-    readonly timestamp2: number;
+    readonly timestamp: number;
 
-    constructor(data: IITC.EntityPortalOverview) {
-        super(data as unknown as IITC.EntityPortalBasic);
+    constructor(guid: PortalGUID, data: IITC.EntityPortalOverview) {
+        super(guid, data as unknown as IITC.EntityPortalBasic);
 
         this.level = data[4];
         this.health = data[5];
@@ -76,7 +77,7 @@ export class PortalInfo extends PortalInfoBase {
         this.mission = data[10];
         this.mission50plus = data[11];
         this.artifactBrief = data[12];
-        this.timestamp2 = data[13];
+        this.timestamp = data[13];
 
         // fix team
         if (this.team === FACTION.none && this.resCount > 0) {
@@ -107,7 +108,12 @@ export class PortalMOD {
         this.owner = data[0];
         this.type = data[1];
         this.rarity = data[2];
-        this.stats = data[3] as Record<PortalModStat, number>;
+        this.stats = {} as Record<PortalModStat | string, number>;
+        // eslint-disable-next-line guard-for-in
+        for (const n in data[3]) {
+            this.stats[n] = parseInt(data[3][n]);
+        }
+
     }
 }
 

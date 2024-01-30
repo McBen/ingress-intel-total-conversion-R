@@ -1,0 +1,296 @@
+#scrollwrapper2 {
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: fixed;
+    right: 0px;
+    top: 0;
+    width: 340px;
+    bottom: 45px;
+    z-index: 3001;
+}
+
+
+#sidebar2 {
+  background-color: var(--iitc-bg-color-trans);
+  border-left: 1px solid var(--iitc-border-color_hi); 
+  color: var(--iitc-text);
+  backdrop-filter: blur(6px);
+  transition: background-color 0.4s ease;
+  padding: 0px 16px 0px 10px;
+  box-shadow: 0 1px 8px 1px #444;
+  overflow-y:scroll;
+  overflow-x:hidden;
+
+  position: relative;
+  left: 0;
+  top: 0;
+  max-height: 100%;
+
+  &:hover, &:focus-within {
+      background-color: var(--iitc-bg-color);
+  }
+}    
+  
+
+
+#portaldetails2 {
+  .title-block {
+      min-height: 2em;
+
+      h3 {
+          font-size: 17px;
+      }
+
+      .portal_link {
+          position: absolute;
+          top: 9px;
+          right: 30px;
+          cursor: pointer;
+      }
+  }
+
+  .close {
+      position: absolute;
+      top: -2px;
+      right: 2px;
+      cursor: pointer;
+      color: #FFCE00;
+      font-size: 16px;
+  }
+
+  .info-item {
+      min-height: 30px;
+      color: white;
+  }
+
+  .info-icon {
+      display: inline-block;
+      width: 20px;
+      height: 30px;
+      padding: 3px 6px 2px 13px;
+      font-size: 24px;
+      text-align: center;
+      vertical-align: middle;
+  }
+
+  .info-text {
+      display: inline-block;
+      white-space: normal;
+      padding: 3px 5px 2px;
+      font-size: 14px;
+      vertical-align: middle;
+      width: 240px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: normal;
+      line-height: 20px;
+  }
+  
+  #level2 {
+      padding: 3px 6px 2px 13px;
+  }
+
+  .imgpreview {
+      height: 180px;
+      background: no-repeat center center;
+      background-size: contain;
+      overflow: hidden;
+      position: relative;
+      margin: 5px 0;
+  }
+
+  .imgpreview img.hide {
+      display: none;
+  }
+
+  .imgpreview .portalDetails {
+      display: none;
+  }
+
+
+  .resodetails {
+      margin-bottom: 2px;
+      margin-bottom: 2px;
+      padding: 5px 6px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px black solid;
+      background: rgba(20,20,20,0.2);      
+  }
+  
+  .resonator {
+      display: block;
+      padding: 1px 0px;
+
+      .agent {
+        width: 54%;
+        display: inline-block;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        height: 18px;
+        vertical-align: middle;
+        margin-left: 6px;
+      }
+  }
+
+  .resonator.left-column {
+    .agent {
+        text-align: right;
+        margin-left: 0;
+        margin-right: 6px;
+    }
+  }
+
+  .meter {
+        text-align: center;
+        display: inline-block;
+        width: 40%;
+        /* height: 1em; */
+        /* transform: rotate(180deg); */
+        vertical-align: middle;
+        cursor: pointer;
+        border: 1px solid rgba(255,255,255,.1);
+        position: relative;
+
+        .bar {
+            background: rgb(150, 39, 244);
+            position: absolute;
+            height: 14px;
+            top: 1px;
+        }
+
+        .number {
+            position: absolute;
+            width: 100%;
+            height: 1em;
+            z-index: 2;
+            top:0;
+        }
+  }
+  .left-column .meter .bar {
+        right: 0;
+  }
+
+  .meter.north {
+      overflow: hidden;
+      &:before {
+          content: "";
+      }
+  }
+  
+  .meter-level {
+      position: relative;
+      display: inline-block;
+      font-size: 20px;
+      padding: 5px 8px;
+      color: white !important;
+      vertical-align: middle;
+      width: 26px;
+      height: 40px;
+      text-align: center;
+      box-sizing: border-box;
+  }
+
+ 
+  .mods span {
+      background-size: cover;
+      width: 53px;
+      height: 58px;
+      margin: 0 3px;
+      background-color: inherit;
+      border: none;
+  }
+
+  .mods {
+      padding: 0 30px;
+
+      span, .mod_free_slot {
+          background-image: url("images/portal/ingress-items/boxed/boxed_mod_free_slot.svg");
+      }
+
+      .force_amp.rare {
+          background-image: url("images/portal/ingress-items/boxed/boxed_force_amp_rare.svg");
+      }
+
+      .heat_sink.common {
+          background-image: url("images/portal/ingress-items/boxed/boxed_heat_sink_common.svg");
+      }
+
+      .heat_sink.rare {
+          background-image: url("images/portal/ingress-items/boxed/boxed_heat_sink_rare.svg");
+      }
+     
+      .heat_sink.very_rare {
+          background-image: url("images/portal/ingress-items/boxed/boxed_heat_sink_very_rare.svg");
+      }
+      
+      .ito_en_transmuter_plus.very_rare {
+          background-image: url("images/portal/ingress-items/boxed/boxed_ito_en_transmuter_+_very_rare.svg");
+      }
+      
+      .ito_en_transmuter_minus.very_rare {
+          background-image: url("images/portal/ingress-items/boxed/boxed_ito_en_transmuter_-_very_rare.svg");
+      }                               
+      
+      .link_amp.rare {
+          background-image: url("images/portal/ingress-items/boxed/boxed_link_amp_rare.svg");
+      }
+      
+      .link_amp.very_rare {
+          background-image: url("images/portal/ingress-items/boxed/boxed_link_amp_very_rare.svg");
+      }
+      
+      .multi_hack.common {
+          background-image: url("images/portal/ingress-items/boxed/boxed_multi_hack_common.svg");
+      }
+      
+      .multi_hack.rare {
+          background-image: url("images/portal/ingress-items/boxed/boxed_multi_hack_rare.svg");
+      }
+      
+      .multi_hack.very_rare {
+          background-image: url("images/portal/ingress-items/boxed/boxed_multi_hack_very_rare.svg");
+      }
+      
+      .portal_shield.common {
+          background-image: url("images/portal/ingress-items/boxed/boxed_portal_shield_common.svg");
+      }
+      
+      .portal_shield.rare {
+          background-image: url("images/portal/ingress-items/boxed/boxed_portal_shield_rare.svg");
+      }
+      
+      .portal_shield.very_rare {
+          background-image: url("images/portal/ingress-items/boxed/boxed_portal_shield_very_rare.svg");
+      }
+      
+      .aegis_shield.very_rare {
+          background-image: url("images/portal/ingress-items/boxed/boxed_portal_shield_very_rare_aegis.svg");
+      }
+      
+      .softbank_ultra_link.very_rare {
+          background-image: url("images/portal/ingress-items/boxed/boxed_softbank_ultra_link_very_rare.svg");
+      }
+      
+      .turret.rare {
+          background-image: url("images/portal/ingress-items/boxed/boxed_turret_rare.svg");
+      }
+  }
+
+    .stats {
+        display: flex;
+        flex-wrap: wrap;
+
+        .stat {
+            min-width: 90px;
+            margin-left: 4px;
+            margin-right: 4px;
+            font-size: 14px;
+
+            svg {
+                padding-right: 5px;
+            }
+        }
+    }
+}

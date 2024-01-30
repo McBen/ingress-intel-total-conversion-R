@@ -7,6 +7,7 @@
 @import "styles/dialog.pcss";
 @import "styles/dialog_plugins.pcss";
 @import "styles/sidebar.pcss";
+@import "styles/sidebar2.pcss";
 @import "styles/artifact.pcss";
 @import "styles/redeem.pcss";
 @import "styles/regionscore.pcss";
@@ -74,7 +75,7 @@ i.large {
   overflow-x: hidden;
   overflow-y: auto;
   position: fixed;
-  right: -38px;
+  right: 408px;
   top: 0;
   width: 340px;
   bottom: 45px;
@@ -82,33 +83,6 @@ i.large {
   pointer-events: none;
 }
 
-.RESISTANCE {
-  color: #00c2ff;
-}
-
-.ENLIGHTENED {
-  color: #28f428;
-}
-
-.MACHINA {
-  color: #ff0028;
-}
-
-.enl {
-  color: #03fe03;
-}
-
-.res {
-  color: #00c5ff;
-}
-
-.mac {
-  color: #ff657e;
-}
-
-.none {
-  color: #fff;
-}
 
 .nickname {
   cursor: pointer;

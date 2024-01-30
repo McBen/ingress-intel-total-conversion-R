@@ -246,6 +246,6 @@ declare namespace IITC {
         history: number | undefined
     ]
 
-    type EntityPortalMod = [owner: string, type: string, quality: string, stats: { [index: string]: number }];
+    type EntityPortalMod = [owner: string, type: string, quality: string, stats: { [index: string]: string }];
     type EntityPortalReso = [owner: string, level: number, energy: number];
 }

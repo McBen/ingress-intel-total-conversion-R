@@ -9,7 +9,8 @@
     "esModuleInterop": true,
     "importHelpers": true,
     "sourceMap": true,
-    "jsx": "react",
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
     "typeRoots": [
       "node_modules/@types",
       "types"

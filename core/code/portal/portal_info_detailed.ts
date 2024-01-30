@@ -26,8 +26,8 @@ export class PortalInfoDetailed extends PortalInfo {
     readonly artifactDetail: [];
     readonly history: number | undefined;
 
-    constructor(data: IITC.EntityPortalDetailed) {
-        super(data as unknown as IITC.EntityPortalOverview);
+    constructor(guid: PortalGUID, data: IITC.EntityPortalDetailed) {
+        super(guid, data as unknown as IITC.EntityPortalOverview);
 
         this.mods = [NoPortalMod, NoPortalMod, NoPortalMod, NoPortalMod];
         for (let i = 0; i < 4; i++) {

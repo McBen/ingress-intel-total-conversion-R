@@ -54,9 +54,8 @@ export const eraseCookie = (name: string): void => {
  * http://stackoverflow.com/a/1990590/1684530 by Doug Neiner.
  */
 export const digits = (d: number | string): string => {
-    // U+2009 - Thin Space. Recommended for use as a thousands separator...
-    // https://en.wikipedia.org/wiki/Space_(punctuation)#Table_of_spaces
-    return d.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1&#8201;");
+    // U+2009 - Thin Space. Recommended for use as a thousands separator
+    return d.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1 ");
 }
 
 export const showPortalPosLinks = (lat: number, lng: number, name: string) => {
