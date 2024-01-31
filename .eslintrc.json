@@ -83,7 +83,12 @@
                 "avoidEscape": true
             }
         ],
-        "@typescript-eslint/require-array-sort-compare": ["error",{"ignoreStringArrays": true }],
+        "@typescript-eslint/require-array-sort-compare": [
+            "error",
+            {
+                "ignoreStringArrays": true
+            }
+        ],
         "@typescript-eslint/unified-signatures": "off",
         "@typescript-eslint/unbound-method": [
             "warn",
@@ -206,7 +211,8 @@
                         "index": false
                     },
                     "res": false,
-                    "mod": false
+                    "mod": false,
+                    "props": false
                 }
             }
         ],

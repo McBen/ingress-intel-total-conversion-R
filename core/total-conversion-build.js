@@ -97,7 +97,7 @@ document.body.innerHTML = ''
   + '  <td><input id="chattext" type="text" maxlength="256" accesskey="c" title="[c]" /></td>'
   + '</tr></table></form>'
   + '<div id="toolbox" style="display: none"></div>'
-  + '<div id="scrollwrapper2"></div>' // enable scrolling for small screens
+  + '<div id="scrollwrapper2"></div>'
   // avoid error by stock JS
   + '<div id="play_button"></div>'
   + '<div id="header"><div id="nav"></div></div>';

@@ -1,10 +1,5 @@
-import { FACTION, FACTION_CSS } from "../constants";
 import { hooks } from "../helper/hooks";
-import { makePermalink, showPortalPosLinks } from "../helper/utils_misc";
 import { portalDetail } from "./portal_details_get";
-import { getPortalMiscDetails, getResonatorDetails, getModDetails } from "./portal_display_helper"
-import { PortalInfo, teamStr2Faction } from "./portal_info";
-import { PortalInfoDetailed } from "./portal_info_detailed";
 import { selectPortal } from "../map/portal_select";
 import { setPortalDetails } from "../ui/sidebar";
 
@@ -22,29 +17,9 @@ const resetScrollOnNewPortal = () => {
 }
 
 
-// to be ovewritten in app.js
-const renderPortalUrl = (lat: number, lng: number, title: string) => {
-    const linkDetails = $(".linkdetails");
-
-    // a permalink for the portal
-    const permaHtml = $("<a>").attr({
-        href: makePermalink(L.latLng(lat, lng)),
-        title: "Create a URL link to this portal"
-    }
-    ).text("Portal link");
-    linkDetails.append($("<aside>").append(permaHtml));
-
-    // and a map link popup dialog
-    const mapHtml = $("<a>", {
-        title: "Link to alternative maps (Google, etc)",
-        text: "Map links"
-    }).on("click", () => showPortalPosLinks(lat, lng, title));
-    linkDetails.append($("<aside>").append(mapHtml));
-};
-
 
 export const renderPortalDetails = (guid?: PortalGUID) => {
-    selectPortal(window.portals[guid] ? guid : null);
+    selectPortal(window.portals[guid] ? guid : undefined);
     if ($("#sidebar").is(":visible")) {
         resetScrollOnNewPortal();
         lastVisible = guid;
@@ -53,7 +28,6 @@ export const renderPortalDetails = (guid?: PortalGUID) => {
     if (guid && !portalDetail.isFresh(guid)) {
         void portalDetail.request(guid);
     }
-
 
     if (!window.portals[guid]) {
         urlPortal = guid;
@@ -68,7 +42,7 @@ export const renderPortalDetails = (guid?: PortalGUID) => {
     const details = portalDetail.get(guid);
     if (details) {
         setPortalDetails(details);
-
+        hooks.trigger("portalDetailsUpdated", { guid, portal: window.portals[guid], portalDetails: details, portalData: details.getPortalSummaryData() });
     } else {
         // const portal = window.portals[guid];
         // const info = new PortalInfo(portal,)
