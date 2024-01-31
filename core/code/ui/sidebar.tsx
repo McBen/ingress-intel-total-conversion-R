@@ -4,7 +4,6 @@ import { render } from "solid-js/web";
 import { PortalInfoDetailed } from "../portal/portal_info_detailed";
 
 import { FACTION, FACTION_CSS } from "../constants";
-import { fixPortalImageUrl } from "../portal/portal_display";
 import * as Icons from "./components/icon";
 import { dialog } from "./dialog";
 import { PortalMods } from "./portal/PortalMods";
@@ -13,6 +12,7 @@ import { getPortalFieldsCount, getPortalLinks } from "../helper/portal_data";
 import { digits } from "../helper/utils_misc";
 import { formatInterval } from "../helper/times";
 import { player } from "../helper/player";
+import { fixPortalImageUrl } from "../portal/portal_display";
 
 
 export const setupSidebar = () => {

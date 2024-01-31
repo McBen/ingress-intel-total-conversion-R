@@ -79,6 +79,15 @@ function setupIngressMarkers() {
   };
 }
 
+// to be overrided in smartphone.js
+window.setupStyles = function () {
+  $('head').append('<style>' +
+      ['#chatcontrols { bottom: ' + (CHAT_SHRINKED + 22) + 'px; }',
+      '#chat { height: ' + CHAT_SHRINKED + 'px; } '].join('\n')
+      + '</style>');
+};
+
+
 /*
 OMS doesn't cancel the original click event, so the topmost marker will get a click event while spiderfying.
 Also, OMS only supports a global callback for all managed markers. Therefore, we will use a custom event that gets fired
@@ -139,7 +148,7 @@ function boot() {
   window.ornaments.setup();
   window.setupTooltips();
   window.chat.setup();
-  window.setupSidebar();
+  window.setupStyles();
   setupSidebar();
 
 

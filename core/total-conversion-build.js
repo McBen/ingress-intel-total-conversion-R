@@ -96,15 +96,7 @@ document.body.innerHTML = ''
   + '  <td><mark>tell faction:</mark></td>'
   + '  <td><input id="chattext" type="text" maxlength="256" accesskey="c" title="[c]" /></td>'
   + '</tr></table></form>'
-  + '<a id="sidebartoggle" accesskey="i" title="Toggle sidebar [i]"><span class="toggle close"></span></a>'
-  + '<div id="scrollwrapper">' // enable scrolling for small screens
-  + '  <div id="sidebar" style="display: none">'
-  + '    <div id="playerstat">t</div>'
-  + '    <div id="gamestat">&nbsp;loading global control stats</div>'
-  + '    <div id="portaldetails"></div>'
-  + '    <div id="toolbox"></div>'
-  + '  </div>'
-  + '</div>'
+  + '<div id="toolbox" style="display: none"></div>'
   + '<div id="scrollwrapper2"></div>' // enable scrolling for small screens
   // avoid error by stock JS
   + '<div id="play_button"></div>'
