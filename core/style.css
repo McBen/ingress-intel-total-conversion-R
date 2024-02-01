@@ -14,6 +14,7 @@
 @import "styles/menu.pcss";
 @import "styles/statusbar.pcss";
 @import "styles/toast.pcss";
+@import "styles/dialogs/share.pcss";
 
 .text-overflow-ellipsis {
   display: inline-block;
