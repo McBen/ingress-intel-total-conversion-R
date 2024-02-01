@@ -1,6 +1,6 @@
 @import "styles/colors.pcss";
-
 @import "styles/leaflet_tweaks";
+@import "styles/jquery_tabs.pcss";
 @import "styles/print";
 @import "styles/backgrounds.pcss";
 @import "styles/chat.pcss";
@@ -11,6 +11,8 @@
 @import "styles/artifact.pcss";
 @import "styles/menu.pcss";
 @import "styles/statusbar.pcss";
+
+@import "styles/dialogs/about.pcss";
 @import "styles/dialogs/redeem.pcss";
 @import "styles/dialogs/regionscore.pcss";
 @import "styles/dialogs/share.pcss";
@@ -224,66 +226,6 @@ a:hover {
   text-align: center;
 }
 
-/* tabs */
-.ui-tabs-nav {
-  display: block;
-  border-bottom: 1px solid #20a8b1;
-  border-top: 1px solid transparent;
-  margin: 3px 0 0;
-  padding: 0;
-}
-
-.ui-tabs-nav::after {
-  content: "";
-  clear: left;
-  display: block;
-  height: 0;
-  width: 0;
-}
-
-.ui-tabs-nav li {
-  list-style: none;
-  display: block;
-  float: left;
-  margin: 0 0 -1px;
-  border: 1px solid #20a8b1;
-}
-
-.ui-tabs-nav li.ui-tabs-active {
-  border-bottom-color: #0f2c3f;
-  background: #0f2c3f;
-  border-width: 2px 2px 1px;
-  font-weight: bold;
-  margin: -1px 1px;
-}
-
-.ui-tabs-nav a {
-  display: inline-block;
-  padding: 0.2em 0.7em;
-}
-
-.ui-tabs-nav .ui-icon {
-  display: inline-block;
-  font-size: 0;
-  height: 22px;
-  overflow: hidden;
-  position: relative;
-  vertical-align: top;
-  width: 16px;
-}
-
-.ui-tabs-nav .ui-icon-close::before {
-  content: "×";
-  font-size: 16px;
-  height: 16px;
-  position: absolute;
-  text-align: center;
-  top: 2px;
-  vertical-align: baseline;
-  width: 16px;
-  cursor: pointer;
-}
-
 svg.icon-button {
   fill: currentColor;
 }
@@ -299,12 +241,4 @@ svg.icon-button {
   font-weight: bold;
   text-shadow: 1px 1px black, -1px -1px black;
   text-align: center;
-}
-
-.ui-dialog-aboutIITC .plugin-is-standard {
-  color: darkgray;
-}
-
-.ui-dialog-aboutIITC .plugin-error {
-  text-decoration: line-through;
 }
