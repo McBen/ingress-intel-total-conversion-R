@@ -2,17 +2,18 @@
 .ui-dialog {
   position: absolute;
   z-index: 9500;
-  background-color: rgba(8, 48, 78, 0.9);
-  border: 1px solid #20a8b1;
+  background-color: var(--iitc-bg-color-trans);
+  border: 1px solid var(--iitc-border-color);
   color: #eee;
   font-size: 13px;
   line-height: 15px;
   padding: 2px 4px;
+  backdrop-filter: var(--iitc_bgblur);  
 }
 
 .ui-dialog {
   padding: 0;
-  border-radius: 2px;
+  border-radius: 10px;
   max-width: calc(100vw - 2px);
 }
 
@@ -53,10 +54,14 @@
 
 .ui-dialog-titlebar {
   font-size: 13px;
-  line-height: 15px;
+  line-height: 16 px;
   text-align: center;
   padding: 4px;
-  background-color: rgba(8, 60, 78, 0.9);
+  background-color: var(--iitc-bg-color-trans);
+
+  &:has(.ui-dialog-title-active) {
+    background-color: var(--iitc-bg-color);
+  }
 }
 
 .ui-dialog-title {
@@ -83,8 +88,8 @@
   height: 17px;
   top: 3px;
   cursor: pointer;
-  border: 1px solid rgb(32, 168, 177);
-  background-color: rgba(0, 0, 0, 0);
+  border: 1px solid var(--iitc-border-color);
+  background: var(--iitc-bg-color);  
   padding: 0;
 
   &:active {
@@ -101,7 +106,7 @@
 }
 
 .ui-dialog-titlebar-button-collapse-collapsed {
-  background-color: rgb(32, 168, 177);
+  background-color: var(--iitc-text);
 }
 
 .ui-dialog-titlebar-button-collapse::after,
@@ -114,7 +119,7 @@
   width: 11px;
   margin-left: -6px;
   height: 0;
-  border-top: 2px solid rgb(32, 168, 177);
+  border-top: 2px solid var(--iitc-text);
 }
 
 .ui-dialog-titlebar-button-close::after {
