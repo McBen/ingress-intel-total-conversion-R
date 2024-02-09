@@ -1,13 +1,2 @@
-build
-local*.py
-*.pyc
-*.swp
-*~
-*.bak
-*.project
-.pydevproject
-.DS_Store
-
-.idea/
-
-node_modules
+build/
+node_modules/
