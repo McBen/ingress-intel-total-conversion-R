@@ -26,7 +26,8 @@
   },
   "include": [
     "types/*",
-    "core/**/*"
+    "core/**/*",
+    "tests/**/*"
   ]
 
 }
