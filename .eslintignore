@@ -4,3 +4,4 @@ mobile
 docs
 json_examples
 **/external
+jest.config.ts
