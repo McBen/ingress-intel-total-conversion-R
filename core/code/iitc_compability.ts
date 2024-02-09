@@ -129,6 +129,12 @@ globalThis.addPortalHighlighter = (name: string, hl: HighLighterFct | HighLighte
 };
 
 
+/** @deprecated
+globalThis.escapeJavascriptString = (str: string): string => {
+    return (str + "").replace(/[\\"']/g, "\\$&");
+}
+*/
+
 // utils
 globalThis.makePermalink = utils.makePermalink;
 globalThis.clampLatLngBounds = utils.clampLatLngBounds;
@@ -137,7 +143,6 @@ globalThis.genFourColumnTable = utils.genFourColumnTable;
 globalThis.uniqueArray = utils.uniqueArray;
 globalThis.prettyEnergy = utils.prettyEnergy;
 globalThis.escapeHtmlSpecialChars = utils.escapeHtmlSpecialChars;
-globalThis.escapeJavascriptString = utils.escapeJavascriptString;
 globalThis.convertTextToTableMagic = utils.convertTextToTableMagic;
 globalThis.scrollBottom = utils.scrollBottom;
 globalThis.writeCookie = utils.writeCookie;

@@ -59,15 +59,13 @@ export const digits = (d: number | string): string => {
 }
 
 export const showPortalPosLinks = (lat: number, lng: number, name: string) => {
-    const lat_str = lat.toString();
-    const lng_str = lng.toString();
     const encoded_name = encodeURIComponent(name);
     const qrcode = '<div id="qrcode"></div>';
-    const script = "<script>$('#qrcode').qrcode({text:'GEO:" + lat_str + "," + lng_str + "'});</script>";
-    const gmaps = '<a href="https://maps.google.com/maps?ll=' + lat_str + "," + lng_str + "&q=" + lat_str + "," + lng_str + "%20(" + encoded_name + ')">Google Maps</a>';
-    const bingmaps = '<a href="https://www.bing.com/maps/?v=2&cp=' + lat_str + "~" + lng_str + "&lvl=16&sp=Point." + lat_str + "_" + lng_str + "_" + encoded_name + '___">Bing Maps</a>';
-    const osm = '<a href="https://www.openstreetmap.org/?mlat=' + lat_str + "&mlon=" + lng_str + '&zoom=16">OpenStreetMap</a>';
-    const latLng = "<span>" + lat_str + "," + lng_str + "</span>";
+    const script = `<script>$('#qrcode').qrcode({text:'GEO:${lat},${lng}'});</script>`;
+    const gmaps = `<a href="https://maps.google.com/maps?ll=${lat},${lng}&q=${lat},${lng}%20(${encoded_name})">Google Maps</a>`;
+    const bingmaps = `<a href="https://www.bing.com/maps/?v=2&cp=${lat}~${lng}&lvl=16&sp=Point.${lat}_${lng}_${encoded_name}___">Bing Maps</a>`;
+    const osm = `<a href="https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}&zoom=16">OpenStreetMap</a>`;
+    const latLng = `<span>${lat},${lng}</span>`;
     dialog({
         html: '<div style="text-align: center;">' + qrcode + script + gmaps + "; " + bingmaps + "; " + osm + "<br />" + latLng + "</div>",
         title: name,
@@ -98,41 +96,29 @@ export const convertTextToTableMagic = (text: string): string => {
     // check if it should be converted to a table
     if (!/\t/.test(text)) return text.replace(/\n/g, "<br>");
 
-    const data = [];
-    let columnCount = 0;
 
     // parse data
     const rows = text.split("\n");
-    $.each(rows, function (i, row) {
-        data[i] = row.split("\t");
-        if (data[i].length > columnCount) columnCount = data[i].length;
-    });
+    const data = rows.map( row => row.split("\t"));
+    const columnCount = data.reduce( (max, current) => Math.max(max, current.length),0)
 
     // build the table
-    let table = "<table>";
-    $.each(data, function (i, row) {
-        table += "<tr>";
-        $.each(data[i], function (k, cell) {
+    const body = data.map( row => {
+        const cells = row.map( (cell, k) => {
             let attributes = "";
-            if (k === 0 && data[i].length < columnCount) {
-                attributes = ' colspan="' + (columnCount - data[i].length + 1) + '"';
+            if (k === 0 && row.length < columnCount) {
+                attributes = ' colspan="' + (columnCount - row.length + 1) + '"';
             }
-            table += "<td" + attributes + ">" + cell + "</td>";
+            return "<td" + attributes + ">" + cell + "</td>";
         });
-        table += "</tr>";
+
+        return `<tr>${cells.join("")}</tr>`;
     });
-    table += "</table>";
+
+    const table = `<table>${body.join("")}</table>`;
     return table;
 }
 
-
-/**
- * escape a javascript string, so quotes and backslashes are escaped with a backslash
- * (for strings passed as parameters to html onclick="..." for example)
- */
-export const escapeJavascriptString = (str: string): string => {
-    return (str + "").replace(/[\\"']/g, "\\$&");
-}
 
 /**
  * escape special characters, such as tags
