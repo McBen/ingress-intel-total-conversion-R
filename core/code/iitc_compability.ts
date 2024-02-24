@@ -173,4 +173,55 @@ globalThis.iitcCompabilityInit = () => {
     }
 }
 
+
+// IITC-CE v.0.38.0
+interface IITC_ButtonOptions {
+    id?: string;
+    label: string;
+    action: () => void;
+}
+
+globalThis.IITC = {
+    toolbox: {
+
+        /**
+         * Adds a button to the toolbox.
+         *
+         * @param {ButtonArgs} buttonArgs - The arguments for the button.
+         * @returns {string|null} The ID of the added button or null if required parameters are missing.
+         */
+        addButton: (buttonOptions: IITC_ButtonOptions): string | undefined => {
+            const entry = IITC.menu.addEntry({
+                id: buttonOptions.id,
+                name: "misc\\" + buttonOptions.label,
+                onClick: buttonOptions.action
+            });
+
+            return entry.id;
+        },
+
+        /**
+         * Updates an existing button in the toolbox.
+         * @returns True if the button is successfully updated, false otherwise.
+         */
+        updateButton: (_buttonId: string, _buttonOptions: Partial<IITC_ButtonOptions>): boolean => {
+            return false;
+        },
+
+        /**
+         * Removes a button from the toolbox.
+         *
+         * @returns True if the button is successfully removed, false otherwise.
+         */
+        removeButton: (buttonId: string): boolean => {
+            const known = IITC.menu.hasEntry(buttonId);
+            IITC.menu.removeEntry(buttonId);
+            return known;
+        }
+    }
+}
+
+
+
+
 log.info("IITC Compabiltiy layer loaded");
