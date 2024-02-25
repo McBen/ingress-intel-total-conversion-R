@@ -60,18 +60,18 @@ export class MenuDialog {
     }
 
 
-    addEntry(options: Partial<MenuDefinition>): void {
+    addEntry(options: Partial<MenuDefinition>): MenuEntry {
         const name = options.name || "unknown";
         const menuPath = name.split("\\");
         const menuName = menuPath.splice(-1, 1)[0];
 
         const menu = this.getSubMenu(menuPath);
 
-        menu.addEntryDirectly(menuName, options);
+        return menu.addEntryDirectly(menuName, options);
     }
 
     protected addEntryDirectly(name: string, options: Partial<MenuDefinition>): MenuEntry {
-        console.assert(!options.id || !this.entries.some(l => l.id === options.id), "Menu-ID already used", options.id);
+        this.checkID(options);
 
         const element = this.createMenuEntry(name, options);
 
@@ -92,6 +92,23 @@ export class MenuDialog {
         return entry;
     }
 
+
+    private checkID(options: Partial<MenuDefinition>) {
+        if (!options.id) {
+
+            const basename = options.name || "menuEntry";
+            options.id = basename;
+            let i = 1;
+            while (this.entries.some(l => l.id === options.id)) {
+                options.id = basename + i.toString();
+                i++;
+            }
+        }
+
+        console.assert(!this.entries.some(l => l.id === options.id), "Menu-ID already used", options.id);
+    }
+
+
     removeEntry(id: string): boolean {
         const entryIndex = this.entries.findIndex(l => l.id === id);
         if (entryIndex >= 0) {
@@ -108,6 +125,11 @@ export class MenuDialog {
         });
 
         return foundInSub;
+    }
+
+
+    hasEntry(id: string): boolean {
+        return this.entries.some(l => l.id === id);
     }
 
 
