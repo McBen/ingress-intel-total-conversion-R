@@ -18,7 +18,7 @@ import { sharePortalDialog } from "./dialogs/share";
 
 
 export const setupSidebar = () => {
-    const wrapper = document.querySelector("#scrollwrapper2")!;
+    const wrapper = document.querySelector("#scrollwrapper");
     render(() => <Sidebar />, wrapper);
 }
 

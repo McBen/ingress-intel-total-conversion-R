@@ -74,19 +74,6 @@ i.large {
   font-size: 6rem;
 }
 
-#scrollwrapper {
-  overflow-x: hidden;
-  overflow-y: auto;
-  position: fixed;
-  right: 408px;
-  top: 0;
-  width: 340px;
-  bottom: 45px;
-  z-index: 3001;
-  pointer-events: none;
-}
-
-
 .nickname {
   cursor: pointer;
 }
