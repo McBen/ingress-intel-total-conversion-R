@@ -17,7 +17,7 @@ export class DataCache<ID, T> {
     private REQUEST_CACHE_MAX_AGE = 5 * MINUTES;  // maximum cache age. entries are deleted from the cache after this time
 
     private REQUEST_CACHE_MAX_ITEMS = 1000;  // if more than this many entries, expire early
-    private REQUEST_CACHE_MAX_CHARS = 50000000; // or more than this total size
+    private REQUEST_CACHE_MAX_CHARS = 100000000; // or more than this total size
 
     private cache: Map<ID, CacheEntry<T>>;
     private cacheCharSize: number;
