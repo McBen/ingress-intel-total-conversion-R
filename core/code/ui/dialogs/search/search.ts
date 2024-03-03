@@ -3,6 +3,7 @@ import { Query, QueryResult } from "./query";
 import * as geojson from "geojson";
 import { hooks } from "../../../helper/hooks";
 import { renderPortalDetails } from "../../../portal/portal_display";
+import portalIcon from "!!raw-loader!../../../../images/icon-portal.svg";
 
 const NOMINATIM = "//nominatim.openstreetmap.org/search?format=json&polygon_geojson=1&q=";
 interface OpenStreetMapQueryResult {
@@ -93,12 +94,12 @@ export class Search {
 
             if (data.title.toLowerCase().includes(term)) {
                 const team = portal.options.team;
-                const color = team === FACTION.none ? "#CCC" : FACTION_COLORS[team];
+                const color = <FACTION>team === FACTION.none ? "#CCC" : FACTION_COLORS[team];
                 query.addResult({
                     title: data.title,
                     description: `${teams[team]}, L${data.level}, ${data.health}%, ${data.resCount} Resonators`,
                     position: portal.getLatLng(),
-                    icon: "data:image/svg+xml;base64," + btoa(require("!!raw-loader!../../../../images/icon-portal.svg").replace(/%COLOR%/g, color)),
+                    icon: "data:image/svg+xml;base64," + btoa(portalIcon.replace(/%COLOR%/g, color)),
                     onSelected: (result, event) => {
                         if (event.type === "dblclick") {
                             window.zoomToAndShowPortal(guid, portal.getLatLng());
