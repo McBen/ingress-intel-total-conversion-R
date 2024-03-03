@@ -26,14 +26,19 @@ export const initializeMenu = (iitcmenu: IITCMenu): void => {
 
 
 export const setupMenu = (iitcmenu: IITCMenu): void => {
-    iitcmenu.addEntry({ name: "Command\\Passcode", onClick: () => { new PasscodeDialog(); } });
-    iitcmenu.addEntry({ name: "View\\Search", onClick: () => { new SearchDialog(); } });
-    iitcmenu.addEntry({ name: "View\\Region Score", onClick: () => showRegionScore() });
+    iitcmenu.addEntry({ name: "Command" });
+    iitcmenu.addEntry({ name: "View" });
     iitcmenu.addEntry({ name: "Layer" });
-    iitcmenu.addEntry({ name: "Debug\\Tile cache", onClick: () => new CacheDebug(IITC.mapDataRequest.getCache()).show() });
+    iitcmenu.addEntry({ name: "Debug" });
     iitcmenu.addEntry({ name: "Misc" });
 
-    iitcmenu.addEntry({ name: "View\\Go to current location", onClick: panToLocation, isEnabled: isGettingLocation });
+    iitcmenu.addEntry({ name: "Command\\Passcode", onClick: () => { new PasscodeDialog(); } });
+    iitcmenu.addEntry({ name: "Command\\Search", onClick: () => { new SearchDialog(); } });
+    iitcmenu.addEntry({ name: "Command\\Go to current location", onClick: panToLocation, isEnabled: isGettingLocation });
+    iitcmenu.addEntry({ name: "Layer" });
+    iitcmenu.addEntry({ name: "Debug\\Tile cache", onClick: () => new CacheDebug(IITC.mapDataRequest.getCache()).show() });
+
+    iitcmenu.addEntry({ name: "View\\Region Score", onClick: () => showRegionScore() });
     iitcmenu.addEntry({
         name: "View\\Show Zoom-Buttons",
         onClick: toogleZoomButtons,
