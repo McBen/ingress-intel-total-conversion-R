@@ -137,7 +137,6 @@ export class PasscodeDialog {
         if (data.playerData) {
             // @ts-ignore
             PLAYER = data.playerData;
-            window.setupPlayerStat();
         }
 
 
