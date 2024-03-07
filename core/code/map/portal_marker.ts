@@ -52,7 +52,8 @@ export const getMarkerStyleOptions = (details: IITC.PortalOptions): L.CircleMark
     const LEVEL_TO_WEIGHT = [2, 2, 2, 2, 2, 3, 3, 4, 4];
     const LEVEL_TO_RADIUS = [7, 7, 7, 7, 8, 8, 9, 10, 11];
 
-    const level = Math.floor(details.level || 0);
+    let level = Math.floor(details.level || 0);
+    if (details.team === FACTION.MAC) level = 1;
 
     let weight = LEVEL_TO_WEIGHT[level] * Math.sqrt(scale);
     const radius = LEVEL_TO_RADIUS[level] * scale;
