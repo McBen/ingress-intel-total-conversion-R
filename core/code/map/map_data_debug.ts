@@ -1,11 +1,12 @@
 import * as L from "leaflet";
 import { IITC } from "../IITC";
 
-export enum TileState {
+export const enum TileState {
     "ok",
     "error",
     "cache_fresh",
     "cache_stale",
+    "cache_old",
     "requested",
     "retrying",
     "request_fail",
@@ -13,6 +14,21 @@ export enum TileState {
     "tile_timeout",
     "render_queue",
 }
+
+const StateColors: { [index in TileState]: { color: string, fill: string, clearDelay?: number } } = {
+    [TileState.ok]: { color: "#0f0", fill: "#0f0", clearDelay: 2 },
+    [TileState.error]: { color: "#f00", fill: "#f00", clearDelay: 30 },
+    [TileState.cache_fresh]: { color: "#0f0", fill: "#ff0", clearDelay: 2 },
+    [TileState.cache_stale]: { color: "#f00", fill: "#ff0", clearDelay: 10 },
+    [TileState.cache_old]: { color: "#f6f", fill: "#ff0", clearDelay: 10 },
+    [TileState.requested]: { color: "#66f", fill: "#66f" },
+    [TileState.retrying]: { color: "#666", fill: "#666" },
+    [TileState.request_fail]: { color: "#a00", fill: "#666" },
+    [TileState.tile_fail]: { color: "#f00", fill: "#666" },
+    [TileState.tile_timeout]: { color: "#ff0", fill: "#666" },
+    [TileState.render_queue]: { color: "#f0f", fill: "#f0f" }
+}
+
 
 
 /**
@@ -68,48 +84,16 @@ export class RenderDebugTiles {
     }
 
     setState(id: TileID, state: TileState) {
-        let col = "#f0f";
-        let fill = "#f0f";
-        let clearDelay = -1;
-        switch (state) {
-            case TileState.ok: {
-                col = "#0f0"; fill = "#0f0"; clearDelay = 2; break;
-            }
-            case TileState.error: {
-                col = "#f00"; fill = "#f00"; clearDelay = 30; break;
-            }
-            case TileState.cache_fresh: {
-                col = "#0f0"; fill = "#ff0"; clearDelay = 2; break;
-            }
-            case TileState.cache_stale: {
-                col = "#f00"; fill = "#ff0"; clearDelay = 10; break;
-            }
-            case TileState.requested: {
-                col = "#66f"; fill = "#66f"; break;
-            }
-            case TileState.retrying: {
-                col = "#666"; fill = "#666"; break;
-            }
-            case TileState.request_fail: {
-                col = "#a00"; fill = "#666"; break;
-            }
-            case TileState.tile_fail: {
-                col = "#f00"; fill = "#666"; break;
-            }
-            case TileState.tile_timeout: {
-                col = "#ff0"; fill = "#666"; break;
-            }
-            case TileState.render_queue: {
-                col = "#f0f"; fill = "#f0f"; break;
-            }
-        }
-        this.setColour(id, col, fill);
-        if (clearDelay >= 0) {
-            const clearAt = Date.now() + clearDelay * 1000;
+        const colors = StateColors[state];
+
+        this.setColour(id, colors.color, colors.fill);
+
+        if (colors.clearDelay >= 0) {
+            const clearAt = Date.now() + colors.clearDelay * 1000;
             this.debugTileClearTimes[id] = clearAt;
 
             if (!this.timer) {
-                this.startTimer(clearDelay * 1000);
+                this.startTimer(colors.clearDelay * 1000);
             }
         }
     }
