@@ -61,7 +61,7 @@ const FETCH_TO_REFRESH_FACTOR = 2;  // minimum refresh time is based on the time
 interface RenderQueueEntry {
     id: TileID,
     deleted: string[],
-    entities: any[],
+    entities: IITC.EntityData[],
     status: TileState
 }
 
@@ -111,7 +111,6 @@ export class MapDataRequest {
     private successTileCount: number;
     private failedTileCount: number;
     private staleTileCount: number;
-    private RENDER_BATCH_SIZE: number;
 
     /**
      * the 'set' of requested tile QKs
@@ -134,17 +133,12 @@ export class MapDataRequest {
         this.renderQueueTimer = undefined;
         this.renderQueuePaused = false;
 
-        // render queue
-        // number of items to process in each render pass. there are pros and cons to smaller and larger values
-        // (however, if using leaflet canvas rendering, it makes sense to push as much as possible through every time)
-        this.RENDER_BATCH_SIZE = window.map.options.preferCanvas ? 1e9 : 1500;
-
         this.idle = false;
 
         // add a portalDetailLoaded hook, so we can use the extended details to update portals on the map
         hooks.on("portalDetailLoaded", data => {
             if (data.success) {
-                this.render.createPortalEntity(data.ent, "detailed");
+                this.render.createPortalEntity(data.ent as IITC.EntityPortal, "detailed");
             }
         });
     }
@@ -418,8 +412,6 @@ export class MapDataRequest {
                 pendingTiles.push(id);
             }
         }
-
-        //  log.log('- request state: '+Object.keys(this.requestedTiles).length+' tiles in '+this.activeRequestCount+' active requests, '+pendingTiles.length+' tiles queued');
 
         const requestBuckets = MAX_REQUESTS - this.activeRequestCount;
         if (pendingTiles.length > 0 && requestBuckets > 0) {
@@ -721,35 +713,18 @@ export class MapDataRequest {
     }
 
     processRenderQueue() {
-        let drawEntityLimit = this.RENDER_BATCH_SIZE;
-
-
         // TODO: we don't take account of how many of the entities are actually new/removed - they
         // could already be drawn and not changed. will see how it works like this...
-        while (drawEntityLimit > 0 && this.renderQueue.length > 0) {
-            const current = this.renderQueue[0];
-
-            if (current.deleted.length > 0) {
-                const deleteThisPass = current.deleted.splice(0, drawEntityLimit);
-                drawEntityLimit -= deleteThisPass.length;
-                this.render.processDeletedGameEntityGuids(deleteThisPass);
-            }
-
-            if (drawEntityLimit > 0 && current.entities.length > 0) {
-                const drawThisPass = current.entities.splice(0, drawEntityLimit);
-                drawEntityLimit -= drawThisPass.length;
-                this.render.processGameEntities(drawThisPass, "extended");
-            }
+        this.renderQueue.forEach(current => {
+            this.render.processDeletedGameEntityGuids(current.deleted);
+            this.render.processGameEntities(current.entities, "extended");
 
             if (current.deleted.length === 0 && current.entities.length === 0) {
-                this.renderQueue.splice(0, 1);
                 this.debugTiles.setState(current.id, current.status);
             }
-        }
+        });
 
-        if (this.renderQueue.length > 0) {
-            this.startQueueTimer(RENDER_PAUSE);
-        } else if (Object.keys(this.queuedTiles).length === 0) {
+        if (Object.keys(this.queuedTiles).length === 0) {
 
             this.render.endRenderPass();
 
