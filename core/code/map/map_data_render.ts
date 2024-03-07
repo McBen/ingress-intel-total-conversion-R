@@ -19,21 +19,20 @@ export class Render {
     /**
      *  object - represents the set of all deleted game entity GUIDs seen in a render pass
      */
-    private deletedGuid = {};
-
-    private seenPortalsGuid = {};
-    private seenLinksGuid = {};
-    private seenFieldsGuid = {};
+    private deletedGuid = new Set<EntityGUID>();
+    private seenPortalsGuid = new Set<PortalGUID>();
+    private seenLinksGuid = new Set<LinkGUID>();
+    private seenFieldsGuid = new Set<FieldGUID>();
 
     /**
      * start a render pass. called as we start to make the batch of data requests to the servers
      */
     startRenderPass(bounds: L.LatLngBounds): void {
-        this.deletedGuid = {};
+        this.deletedGuid.clear();
+        this.seenPortalsGuid.clear();
+        this.seenLinksGuid.clear();
+        this.seenFieldsGuid.clear();
 
-        this.seenPortalsGuid = {};
-        this.seenLinksGuid = {};
-        this.seenFieldsGuid = {};
 
         // we pad the bounds used for clearing a litle bit, as entities are sometimes returned outside of their specified tile boundaries
         // this will just avoid a few entity removals at start of render when they'll just be added again
@@ -106,8 +105,8 @@ export class Render {
     processDeletedGameEntityGuids(deleted: string[]): void {
         deleted.forEach(guid => {
 
-            if (!(guid in this.deletedGuid)) {
-                this.deletedGuid[guid] = true;  // flag this guid as having being processed
+            if (!this.deletedGuid.has(guid)) {
+                this.deletedGuid.add(guid);  // flag this guid as having being processed
 
                 if (guid === selectedPortal) {
                     // the rare case of the selected portal being deleted. clear the details tab and deselect it
@@ -118,27 +117,21 @@ export class Render {
         });
     }
 
-    processGameEntities(entities: IITC.EntityData[], details?: DecodePortalDetails) { // details expected in decodeArray.portal
-        // we loop through the entities three times - for fields, links and portals separately
-        // this is a reasonably efficient work-around for leafletjs limitations on svg render order
+    /**
+     *
+     * @param details expected in decodeArray.portal
+     */
+    processGameEntities(entities: IITC.EntityData[], details?: DecodePortalDetails) {
+        const rest = entities.filter(ent => !this.deletedGuid.has(ent[0]));
 
-        entities.forEach(ent => {
-            if (ent[2][0] === "r" && !(ent[0] in this.deletedGuid)) {
-                this.createFieldEntity(ent as IITC.EntityField);
-            }
-        });
+        rest.filter(ent => ent[2][0] === "r")
+            .forEach(ent => this.createFieldEntity(ent as IITC.EntityField));
 
-        entities.forEach(ent => {
-            if (ent[2][0] === "e" && !(ent[0] in this.deletedGuid)) {
-                this.createLinkEntity(ent as IITC.EntityLink);
-            }
-        });
+        rest.filter(ent => ent[2][0] === "e")
+            .forEach(ent => this.createLinkEntity(ent as IITC.EntityLink));
 
-        entities.forEach(ent => {
-            if (ent[2][0] === "p" && !(ent[0] in this.deletedGuid)) {
-                this.createPortalEntity(ent as IITC.EntityPortal, details);
-            }
-        });
+        rest.filter(ent => ent[2][0] === "p")
+            .forEach(ent => this.createPortalEntity(ent as IITC.EntityPortal, details));
     }
 
 
@@ -155,19 +148,19 @@ export class Render {
         for (const guid in window.portals) {
             // special case for selected portal - it's kept even if not seen
             // artifact (e.g. jarvis shard) portals are also kept - but they're always 'seen'
-            if (!(guid in this.seenPortalsGuid) && guid !== selectedPortal) {
+            if (!this.seenPortalsGuid.has(guid) && guid !== selectedPortal) {
                 this.deletePortalEntity(guid);
                 countp++;
             }
         }
         for (const guid in window.links) {
-            if (!(guid in this.seenLinksGuid)) {
+            if (!this.seenLinksGuid.has(guid)) {
                 this.deleteLinkEntity(guid);
                 countl++;
             }
         }
         for (const guid in window.fields) {
-            if (!(guid in this.seenFieldsGuid)) {
+            if (!this.seenFieldsGuid.has(guid)) {
                 this.deleteFieldEntity(guid);
                 countf++;
             }
@@ -208,7 +201,7 @@ export class Render {
     }
 
 
-    deleteEntity(guid: PortalGUID | LinkGUID | FieldGUID): void {
+    deleteEntity(guid: EntityGUID): void {
         this.deletePortalEntity(guid);
         this.deleteLinkEntity(guid);
         this.deleteFieldEntity(guid);
@@ -264,7 +257,7 @@ export class Render {
         // check basic details are valid and delete the existing portal if out of date
         if (guid in window.portals) {
             const p = window.portals[guid];
-            this.seenPortalsGuid[guid] = true;
+            this.seenPortalsGuid.add(guid);
 
             if (team === p.options.data.team) return;
 
@@ -277,7 +270,7 @@ export class Render {
 
     // TODO. create by PortalInfo
     createPortalEntity(ent: IITC.EntityPortal, details: DecodePortalDetails): void { // details expected in decodeArray.portal
-        this.seenPortalsGuid[ent[0]] = true;  // flag we've seen it
+        this.seenPortalsGuid.add(ent[0]);
 
         let previousData;
         const data = decodeArray.portal(ent[2], details);
@@ -378,12 +371,12 @@ export class Render {
 
 
     createFieldEntity(ent: IITC.EntityField) {
-        this.seenFieldsGuid[ent[0]] = true;  // flag we've seen it
+        this.seenFieldsGuid.add(ent[0]);
 
         const data = {
             //    type: ent[2][0],
             team: ent[2][1],
-            points: ent[2][2].map(function (arr) { return { guid: arr[0], latE6: arr[1], lngE6: arr[2] }; })
+            points: ent[2][2].map(anchors => ({ guid: anchors[0], latE6: anchors[1], lngE6: anchors[2] }))
         };
 
         // create placeholder portals for field corners. we already do links, but there are the odd case where this is useful
@@ -420,7 +413,7 @@ export class Render {
             interactive: false,
 
             team,
-            ent,  // LEGACY - TO BE REMOVED AT SOME POINT! use .guid, .timestamp and .data instead
+            ent,  // @deprecated  - TO BE REMOVED AT SOME POINT! use .guid, .timestamp and .data instead
             guid: ent[0],
             timestamp: ent[1],
             data
@@ -441,7 +434,7 @@ export class Render {
         if (fakedLink.test(ent[0])) return;
 
 
-        this.seenLinksGuid[ent[0]] = true;  // flag we've seen it
+        this.seenLinksGuid.add(ent[0]);  // flag we've seen it
 
         const data = { // TODO add other properties and check correction direction
             //    type:   ent[2][0],

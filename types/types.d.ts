@@ -5,6 +5,8 @@
 type PortalGUID = string;
 type LinkGUID = string;
 type FieldGUID = string;
+// eslint-disable-next-line @typescript-eslint/no-duplicate-type-constituents
+type EntityGUID = PortalGUID | LinkGUID | FieldGUID;
 type TileID = string;
 
 declare namespace IITC {
@@ -35,7 +37,7 @@ declare namespace IITC {
         mission50plus: boolean;
         ornaments?: Ornaments[];
         resCount: number;
-        team: string;
+        team: EntityTeam;
         timestamp: number;
         title: string;
         history: number | undefined;
@@ -108,7 +110,7 @@ declare namespace IITC {
         oGuid: string;
         oLatE6: number;
         oLngE6: number;
-        team: string;
+        team: EntityTeam;
     }
 
     /** Field-Polygon */
@@ -124,7 +126,7 @@ declare namespace IITC {
     }
 
     interface FieldData {
-        team: string;
+        team: EntityTeam;
         points: {
             guid: string;
             latE6: number;
@@ -150,7 +152,7 @@ declare namespace IITC {
     interface SearchResult {
         title: string; // Will be interpreted as HTML, so make sure to escape properly.
         description: JQuery | any[] | Element | Text | string;
-        /** 
+        /**
          * a ILayer to be added to the map when the user selects this search result.
          * Will be generated if not set. Set to `null` to prevent the result from being
          * added to the map.
