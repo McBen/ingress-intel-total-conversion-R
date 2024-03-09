@@ -6,6 +6,8 @@ import { hooks } from "../helper/hooks";
 import { renderPortalDetails } from "../portal/portal_display";
 import { IITC } from "../IITC";
 import { createMarker, portalMarkerScale } from "./portal_marker";
+import { fieldFilter, linkFilter, portalFilter } from "./filter_layer";
+import { entityLayer } from "./map";
 const log = Log(LogApp.Map);
 
 
@@ -179,25 +181,10 @@ export class Render {
 
 
     bringPortalsToFront() {
-        portalsFactionLayers.forEach(levelLayer => {
-            // portals are stored in separate layers per faction
-            // to avoid giving weight to one faction or another, we'll push portals to front based on GUID order
-            const lvlPortals: { [index: PortalGUID]: IITC.Portal } = {};
-            levelLayer.forEach(factionLayer => {
-                // @ts-ignore
-                // eslint-disable-next-line no-underscore-dangle
-                if (factionLayer._map) {
-                    factionLayer.eachLayer((p: IITC.Portal) => {
-                        lvlPortals[p.options.guid] = p;
-                    });
-                }
-            });
-
-            const guids = Object.keys(lvlPortals);
-            guids.sort();
-
-            guids.forEach(guid => lvlPortals[guid].bringToFront());
-        });
+        // eslint-disable-next-line guard-for-in
+        for (const guid in window.portals) {
+            window.portals[guid].bringToFront();
+        }
     }
 
 
@@ -211,7 +198,7 @@ export class Render {
         const portal = window.portals[guid];
         if (portal) {
             window.ornaments.removePortal(portal);
-            this.removePortalFromMapLayer(portal);
+            portal.remove();
             delete window.portals[guid];
             hooks.trigger("portalRemoved", { portal, data: portal.options.data });
         }
@@ -220,7 +207,7 @@ export class Render {
     deleteLinkEntity(guid: LinkGUID): void {
         const link = window.links[guid];
         if (link) {
-            linksFactionLayers[link.options.team].removeLayer(link);
+            link.remove();
             delete window.links[guid];
             hooks.trigger("linkRemoved", { link, data: link.options.data });
         }
@@ -230,7 +217,7 @@ export class Render {
     deleteFieldEntity(guid: FieldGUID) {
         const field = window.fields[guid];
         if (field) {
-            fieldsFactionLayers[field.options.team].removeLayer(field);
+            field.remove();
             delete window.fields[guid];
             hooks.trigger("fieldRemoved", { field, data: field.options.data });
         }
@@ -255,8 +242,8 @@ export class Render {
         ];
 
         // check basic details are valid and delete the existing portal if out of date
-        if (guid in window.portals) {
-            const p = window.portals[guid];
+        const p = window.portals[guid];
+        if (p) {
             this.seenPortalsGuid.add(guid);
 
             if (team === p.options.data.team) return;
@@ -366,7 +353,9 @@ export class Render {
 
         window.ornaments.addPortal(marker);
 
-        this.addPortalToMapLayer(marker);
+        if (!portalFilter.filter(marker)) {
+            marker.addTo(entityLayer);
+        };
     }
 
 
@@ -423,7 +412,9 @@ export class Render {
 
         window.fields[ent[0]] = poly as IITC.Field;
 
-        fieldsFactionLayers[team].addLayer(poly);
+        if (!fieldFilter.filter(poly as IITC.Field)) {
+            poly.addTo(entityLayer);
+        };
     }
 
     createLinkEntity(ent: IITC.EntityLink): void {
@@ -492,7 +483,9 @@ export class Render {
 
         window.links[ent[0]] = poly as IITC.Link;
 
-        linksFactionLayers[team].addLayer(poly);
+        if (!linkFilter.filter(poly as IITC.Link)) {
+            poly.addTo(entityLayer);
+        };
     }
 
 
@@ -507,20 +500,4 @@ export class Render {
             IITC.highlighter.resetPortals();
         }
     }
-
-
-
-    /**
-     * add the portal to the visible map layer
-     */
-    addPortalToMapLayer(portal: IITC.Portal) {
-        portalsFactionLayers[portal.options.level || 0][portal.options.team].addLayer(portal);
-    }
-
-
-    removePortalFromMapLayer(portal: IITC.Portal) {
-        // remove it from the portalsLevels layer
-        portalsFactionLayers[portal.options.level || 0][portal.options.team].removeLayer(portal);
-    }
-
 }

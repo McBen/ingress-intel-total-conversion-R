@@ -8,6 +8,7 @@ import { hooks } from "../helper/hooks";
 import { IITC } from "../IITC";
 import * as L from "leaflet";
 import { Log, LogApp } from "../helper/log_apps";
+import { FilterLayer } from "./filter_layer";
 const log = Log(LogApp.Map);
 
 
@@ -74,6 +75,8 @@ export const setupMap = (): void => {
     });
 };
 
+export const entityLayer: L.LayerGroup = new L.LayerGroup();
+
 
 const createMap = (): void => {
     $("#map").text(""); // clear 'Loading, please wait'
@@ -106,6 +109,7 @@ const createMap = (): void => {
             .css({
                 "pointer-events": "none",
                 "margin": "0"
+                // eslint-disable-next-line no-underscore-dangle, @typescript-eslint/no-unsafe-argument
             }).appendTo((map as any)._controlCorners.bottomleft);
     }
 
@@ -280,22 +284,18 @@ const createDefaultBaseMapLayers = (): void => {
 
 
 const createDefaultOverlays = (): void => {
+    window.map.addLayer(entityLayer);
 
-    portalsFactionLayers = [];
-    const portalsLayers: L.LayerGroup[] = [];
     for (let i = 0; i <= 8; i++) {
-        portalsFactionLayers[i] = [L.layerGroup(), L.layerGroup(), L.layerGroup(), L.layerGroup()];
-        portalsLayers[i] = L.layerGroup();
+        const portalsLayer = new FilterLayer({ filterPortal: portal => portal.options.level === i });
         const name = (i === 0 ? "Unclaimed/Placeholder Portals" : `Level ${i} Portals`);
-        IITC.layers.addOverlay("Faction\\" + name, portalsLayers[i]);
+        IITC.layers.addOverlay("Faction\\" + name, portalsLayer);
     }
 
-    fieldsFactionLayers = [L.layerGroup(), L.layerGroup(), L.layerGroup(), L.layerGroup()];
-    const fieldsLayer = L.layerGroup();
+    const fieldsLayer = new FilterLayer({ filterField: () => true });
     IITC.layers.addOverlay("Fields", fieldsLayer);
 
-    linksFactionLayers = [L.layerGroup(), L.layerGroup(), L.layerGroup(), L.layerGroup()];
-    const linksLayer = L.layerGroup();
+    const linksLayer = new FilterLayer({ filterLink: () => true });
     IITC.layers.addOverlay("Links", linksLayer);
 
 
@@ -304,20 +304,10 @@ const createDefaultOverlays = (): void => {
     // the matching sub-layers within the above portals/fields/links are added/removed from their parent
     const factions = [FACTION.none, ...player.preferedTeamOrder(), FACTION.MAC];
     factions.forEach(faction => {
-        const facLayer = L.layerGroup();
-        facLayer.on("add", () => {
-            fieldsLayer.addLayer(fieldsFactionLayers[faction]);
-            linksLayer.addLayer(linksFactionLayers[faction]);
-            portalsLayers.forEach((portals, lvl) => {
-                portals.addLayer(portalsFactionLayers[lvl][faction]);
-            });
-        });
-        facLayer.on("remove", () => {
-            fieldsLayer.removeLayer(fieldsFactionLayers[faction]);
-            linksLayer.removeLayer(linksFactionLayers[faction]);
-            portalsLayers.forEach((portals, lvl) => {
-                portals.removeLayer(portalsFactionLayers[lvl][faction]);
-            });
+        const facLayer = new FilterLayer({
+            filterPortal: entity => entity.options.team === faction,
+            filterLink: entity => entity.options.team === faction,
+            filterField: entity => entity.options.team === faction
         });
         IITC.layers.addOverlay("Faction\\" + FACTION_NAMES[faction], facLayer);
     });
