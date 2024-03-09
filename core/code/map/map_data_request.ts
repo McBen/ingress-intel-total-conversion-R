@@ -719,9 +719,7 @@ export class MapDataRequest {
             this.render.processDeletedGameEntityGuids(current.deleted);
             this.render.processGameEntities(current.entities, "extended");
 
-            if (current.deleted.length === 0 && current.entities.length === 0) {
-                this.debugTiles.setState(current.id, current.status);
-            }
+            this.debugTiles.setState(current.id, current.status);
         });
 
         if (Object.keys(this.queuedTiles).length === 0) {
