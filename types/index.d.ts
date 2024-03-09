@@ -86,10 +86,6 @@ declare global {
         CURRENT_VERSION: string
     }
 
-    let portalsFactionLayers: L.LayerGroup[][];
-    let linksFactionLayers: L.LayerGroup[];
-    let fieldsFactionLayers: L.LayerGroup[];
-
     /** guid of current selected portal */
     let selectedPortal: PortalGUID | null;
     let urlPortal: PortalGUID | null;
