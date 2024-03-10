@@ -327,23 +327,7 @@ export class Render {
         });
 
         hooks.trigger("portalAdded", { portal: marker, previousData });
-
         window.portals[ent[0]] = marker;
-
-        // check for URL links to portal, and select it if this is the one
-        if (urlPortalLL && urlPortalLL[0] === marker.getLatLng().lat && urlPortalLL[1] === marker.getLatLng().lng) {
-            // URL-passed portal found via pll parameter - set the guid-based parameter
-            log.log(`urlPortalLL ${urlPortalLL[0]},${urlPortalLL[1]} matches portal GUID ${ent[0]}`);
-
-            urlPortal = ent[0];
-            urlPortalLL = undefined;  // clear the URL parameter so it's not matched again
-        }
-        if (urlPortal === ent[0]) {
-            // URL-passed portal found via guid parameter - set it as the selected portal
-            log.log(`urlPortal GUID ${urlPortal} found - selecting...`);
-            selectedPortal = ent[0];
-            urlPortal = undefined;  // clear the URL parameter so it's not matched again
-        }
 
         // (re-)select the portal, to refresh the sidebar on any changes
         if (ent[0] === selectedPortal) {

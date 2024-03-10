@@ -9,6 +9,7 @@ import { IITC } from "../IITC";
 import * as L from "leaflet";
 import { Log, LogApp } from "../helper/log_apps";
 import { FilterLayer } from "./filter_layer";
+import { readURLParamater } from "./url_paramater";
 const log = Log(LogApp.Map);
 
 
@@ -56,7 +57,8 @@ export const setupMap = (): void => {
 
 
     hooks.on("iitcLoaded", () => {
-        // (setting an initial position, before a base layer is added, causes issues with leaflet) // todo check
+
+        // (setting an initial position, before a base layer is added, causes issues with leaflet)
         let pos = getPosition();
         if (!pos) {
             pos = { center: [0, 0], zoom: 1 };
@@ -64,16 +66,10 @@ export const setupMap = (): void => {
         }
         window.map.setView(pos.center, pos.zoom, { reset: true } as L.ZoomPanOptions); // undocumented Leaflet Option
 
-        // read here ONCE, so the URL is only evaluated one time after the
-        // necessary data has been loaded.
-        const pll = getURLParam("pll");
-        if (pll) {
-            const pllSplit = pll.split(",");
-            window.urlPortalLL = normLL(pllSplit[0], pllSplit[1]).center;
-        }
-        window.urlPortal = getURLParam("pguid");
+        readURLParamater();
     });
 };
+
 
 export const entityLayer: L.LayerGroup = new L.LayerGroup();
 
@@ -90,7 +86,7 @@ const createMap = (): void => {
         markerZoomAnimation: false,
         bounceAtZoomLimits: false,
         maxBoundsViscosity: 0.7,
-        worldCopyJump: true,
+        worldCopyJump: true
     }, window.mapOptions) as L.MapOptions);
 
     const max_lat = (map.options.crs as any).projection.MAX_LATITUDE;
@@ -187,7 +183,7 @@ type NormalizedPosition = {
     zoom: number
 }
 
-const normLL = (lat: string | number, lng: string | number, zoom?: string): NormalizedPosition => {
+export const normLL = (lat: string | number, lng: string | number, zoom?: string): NormalizedPosition => {
     return {
         center: [
             parseFloat(lat as string) || 0,
