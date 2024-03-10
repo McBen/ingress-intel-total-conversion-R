@@ -1,4 +1,4 @@
-export enum FACTION {
+export const enum FACTION {
     none = 0,
     RES = 1,
     ENL = 2,

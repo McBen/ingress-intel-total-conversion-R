@@ -3,6 +3,7 @@
 /// <reference path="./types.d.ts" />
 /// <reference path="./constants.d.ts" />
 /// <reference path="./leaflet_extentions/index.d.ts" />
+import { FACTION } from "../core/code/constants.js";
 import "./intel.d.ts";
 import * as L from "leaflet";
 
@@ -22,7 +23,7 @@ declare global {
     function setupPlayerStat(): void;
     function useAppPanes(): boolean;
     function renderUpdateStatus(): void;
-    function teamStringToId(faction: string): number;
+    function teamStringToId(faction: string): FACTION;
     function show(paneID: string): void;
     function isSmartphone(): boolean;
     function zoomToAndShowPortal(guid: PortalGUID, pos: L.LatLng): void;
@@ -93,6 +94,7 @@ declare global {
 
     const script_info: ScriptInfo;
 
+    // eslint-disable-next-line id-blacklist
     interface String {
         capitalize(): string;
     }
