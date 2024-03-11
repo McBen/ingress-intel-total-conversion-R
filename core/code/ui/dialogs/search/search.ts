@@ -4,6 +4,7 @@ import * as geojson from "geojson";
 import { hooks } from "../../../helper/hooks";
 import { renderPortalDetails } from "../../../portal/portal_display";
 import portalIcon from "!!raw-loader!../../../../images/icon-portal.svg";
+import { selectPortalByLatLng } from "../../../map/url_paramater";
 
 const NOMINATIM = "//nominatim.openstreetmap.org/search?format=json&polygon_geojson=1&q=";
 interface OpenStreetMapQueryResult {
@@ -107,7 +108,7 @@ export class Search {
                             if (!window.map.getBounds().contains(result.position)) window.map.setView(result.position);
                             renderPortalDetails(guid);
                         } else {
-                            window.selectPortalByLatLng(portal.getLatLng());
+                            selectPortalByLatLng(portal.getLatLng());
                         }
                         return true; // prevent default behavior
                     }

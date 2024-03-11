@@ -7,6 +7,7 @@ import iconResImage from "./marker-blue.png";
 import iconResRetinaImage from "./marker-blue-2x.png";
 import { COLORS_LVL, DEFAULT_ZOOM, FACTION, FACTION_CSS, FACTION_NAMES, teamStr2Faction } from "../../constants";
 import { makePermalink } from "../../helper/utils_misc";
+import { selectPortalByLatLng } from "../../map/url_paramater";
 
 const PLAYER_TRACKER_MAX_TIME = 3 * HOURS;
 const PLAYER_TRACKER_MIN_ZOOM = 9;
@@ -466,14 +467,14 @@ export class PlayerTracker extends Plugin {
                 title: portalName,
                 href: makePermalink(position)
             })
-            .on("click", () => {
-                window.selectPortalByLatLng(position);
+            .on("click", (event: JQuery.ClickEvent) => {
+                selectPortalByLatLng(position);
                 event.preventDefault();
                 return false;
             })
-            .on("dblclick", () => {
+            .on("dblclick", (event: JQuery.DoubleClickEvent) => {
                 window.map.setView(position, DEFAULT_ZOOM);
-                window.selectPortalByLatLng(position);
+                selectPortalByLatLng(position);
                 event.preventDefault();
                 return false;
             });

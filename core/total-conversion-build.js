@@ -138,8 +138,6 @@ window.TEAM_NAMES = ['Neutral', 'Resistance', 'Enlightened', 'Machina'];
 // way would be to encapsulate them in an anonymous function and write
 // getters/setters, but if you are careful enough, this works.
 window.refreshTimeout = undefined;
-window.urlPortal = null;
-window.urlPortalLL = null;
 window.selectedPortal = null;
 window.portalRangeIndicator = null;
 window.portalAccessIndicator = null;

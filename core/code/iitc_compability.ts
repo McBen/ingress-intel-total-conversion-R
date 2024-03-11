@@ -17,6 +17,7 @@ import { createMarker, portalMarkerScale, setMarkerStyle } from "./map/portal_ma
 import { getPortalFields, getPortalFieldsCount, getPortalLinks } from "./helper/portal_data";
 import { portalDetail } from "./portal/portal_details_get";
 import { Highlighter } from "./portal/highlighters";
+import { selectPortalByLatLng } from "./map/url_paramater";
 const log = Log(LogApp.Plugins);
 
 
@@ -157,6 +158,7 @@ globalThis.showPortalPosLinks = utils.showPortalPosLinks;
 globalThis.isTouchDevice = utils.isTouchDevice;
 globalThis.getURLParam = utils.getURLParam;
 globalThis.readCookie = utils.readCookie;
+globalThis.selectPortalByLatLng = selectPortalByLatLng;
 
 globalThis.iitcCompabilityInit = () => {
     // these variables are only available after boot
