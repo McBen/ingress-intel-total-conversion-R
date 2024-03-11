@@ -103,15 +103,36 @@ export class Hooks {
     }
 
 
-    on(event: string, callback: HookCallback, first: boolean = false) {
-        if (!this.hooks[event]) {
-            this.hooks[event] = [callback];
-        } else {
-            if (first) {
+    on(event: "portalSelected", callback: (data: EventPortalSelected) => void, priority?: boolean): void;
+    on(event: "publicChatDataAvailable", callback: (data: EventPublicChatDataAvailable) => void, priority?: boolean): void;
+    on(event: "factionChatDataAvailable", callback: (data: EventFactionChatDataAvailable) => void, priority?: boolean): void;
+    on(event: "portalDetailsUpdated", callback: (data: EventPortalDetailsUpdated) => void, priority?: boolean): void;
+    on(event: "artifactsUpdated", callback: (data: EventArtifactsUpdated) => void, priority?: boolean): void;
+    on(event: "mapDataRefreshStart", callback: (data: EventMapDataRefreshStart) => void, priority?: boolean): void;
+    on(event: "mapDataEntityInject", callback: (data: EventMapDataEntityInject) => void, priority?: boolean): void;
+    on(event: "mapDataRefreshEnd", callback: (data: EventMapDataRefreshEnd) => void, priority?: boolean): void;
+    on(event: "portalAdded", callback: (data: EventPortalAdded) => void, priority?: boolean): void;
+    on(event: "linkAdded", callback: (data: EventLinkAdded) => void, priority?: boolean): void;
+    on(event: "fieldAdded", callback: (data: EventFieldAdded) => void, priority?: boolean): void;
+    on(event: "portalRemoved", callback: (data: EventPortalRemoved) => void, priority?: boolean): void;
+    on(event: "linkRemoved", callback: (data: EventLinkRemoved) => void, priority?: boolean): void;
+    on(event: "fieldRemoved", callback: (data: EventFieldRemoved) => void, priority?: boolean): void;
+    on(event: "requestFinished", callback: (data: EventRequestFinished) => void, priority?: boolean): void;
+    on(event: "nicknameClicked", callback: (data: EventNicknameClicked) => boolean, priority?: boolean): void;
+    on(event: "search", callback: (data: EventSearch) => void, priority?: boolean): void;
+    on(event: "iitcLoaded", callback: () => void, priority?: boolean): void;
+    on(event: "portalDetailLoaded", callback: (data: EventPortalDetailLoaded) => void, priority?: boolean): void;
+    on(event: "paneChanged", callback: (data: EventPaneChanged) => void, priority?: boolean): void;
+
+    on(event: string, callback: HookCallback, priority: boolean = false) {
+        if (this.hooks[event]) {
+            if (priority) {
                 this.hooks[event].splice(0, 0, callback);
             } else {
                 this.hooks[event].push(callback);
             }
+        } else {
+            this.hooks[event] = [callback];
         }
     }
 
@@ -132,6 +153,32 @@ export class Hooks {
         }
     }
 }
+
+
+type EventPortalSelected = { selectedPortalGuid: string, unselectedPortalGuid: string };
+
+export type EventPublicChatDataAvailable = { raw: any, result: Intel.ChatLine[], processed: any };
+export type EventFactionChatDataAvailable = { raw: any, result: Intel.ChatLine[], processed: any };
+export type EventPortalDetailsUpdated = { guid: string, portal: IITC.Portal, portalDetails: any /* class portalDetail */, portalData: IITC.PortalData };
+export type EventArtifactsUpdated = { old: any, new: any };
+export type EventMapDataRefreshStart = { bounds: L.LatLngBounds, mapZoom: number, dataZoom: number, minPortalLevel: number, tileBounds: L.LatLngBounds };
+export type EventMapDataEntityInject = { callback: (ents: any) => void }; // TODO: ents = portalDetailLoaded.ent
+export type EventMapDataRefreshEnd = unknown;
+export type EventPortalAdded = { portal: IITC.Portal, previousData: IITC.PortalData };
+export type EventLinkAdded = { link: IITC.Link };
+export type EventFieldAdded = { field: IITC.Field };
+export type EventPortalRemoved = { portal: IITC.Portal, data: IITC.PortalData };
+export type EventLinkRemoved = { link: IITC.Link, data: IITC.LinkData };
+export type EventFieldRemoved = { field: IITC.Field, data: IITC.FieldData };
+export type EventRequestFinished = { success: boolean };
+export type EventNicknameClicked = { event: MouseEvent, nickname: string };
+export type EventSearch = any; /* class search.Query */
+export type EventPaneChanged = string;
+
+type PortalDetailEnt = [guid: string, timestamp: number, portal: any /* Intel.PortalDetails */];
+type EventPortalDetailLoaded =
+    { guid: string, success: true, details: IITC.PortalDataDetail, ent: PortalDetailEnt }
+    | { guid: string, success: false, details: never, ent: never };
 
 
 export const hooks = new Hooks();
