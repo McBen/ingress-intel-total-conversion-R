@@ -27,7 +27,7 @@ const NUM_TILES_PER_REQUEST = 25;
 const MAX_TILE_RETRIES = 5;
 
 // refresh timers
-const MOVE_REFRESH = 1.5; // time, after a map move (pan/zoom) before starting the refresh processing
+const MOVE_REFRESH = 0.5; // time, after a map move (pan/zoom) before starting the refresh processing
 const STARTUP_REFRESH = 3; // refresh time used on first load of IITC
 const IDLE_RESUME_REFRESH = 5; // refresh time used after resuming from idle
 
