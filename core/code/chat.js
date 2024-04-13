@@ -469,8 +469,8 @@ window.chat.getChatPortalName = function (markup) {
 
 window.chat.renderPortal = function (portal) {
   var lat = portal.latE6 / 1E6, lng = portal.lngE6 / 1E6;
-  var perma = window.makePermalink([lat, lng]);
-  var js = 'window.selectPortalByLatLng(' + lat + ', ' + lng + ');return false';
+  var perma = window.makePermalink(L.latLng(lat, lng));
+  var js = 'window.selectPortalByLatLng(L.latLng(' + lat + ', ' + lng + '));return false';
   return '<a onclick="' + js + '"'
     + ' title="' + portal.address + '"'
     + ' href="' + perma + '" class="help">'

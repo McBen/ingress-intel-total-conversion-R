@@ -8,27 +8,6 @@ window.zoomToAndShowPortal = function (guid, latlng) {
     urlPortal = guid;
 }
 
-window.selectPortalByLatLng = function (lat, lng) {
-  if (lng === undefined && lat instanceof Array) {
-    lng = lat[1];
-    lat = lat[0];
-  } else if (lng === undefined && lat instanceof L.LatLng) {
-    lng = lat.lng;
-    lat = lat.lat;
-  }
-  for (var guid in window.portals) {
-    var latlng = window.portals[guid].getLatLng();
-    if (latlng.lat == lat && latlng.lng == lng) {
-      renderPortalDetails(guid);
-      return;
-    }
-  }
-
-  // not currently visible
-  urlPortalLL = [lat, lng];
-  map.setView(urlPortalLL, DEFAULT_ZOOM);
-};
-
 
 Object.defineProperty(String.prototype, 'capitalize', {
   value: function () {
