@@ -3,6 +3,7 @@ import { EventPortalAdded, hooks } from "../helper/hooks";
 import * as L from "leaflet";
 import { normLL } from "./map";
 import { renderPortalDetails } from "../portal/portal_display";
+import { DEFAULT_ZOOM } from "../constants";
 
 export const readURLParamater = () => {
 
@@ -35,7 +36,6 @@ const urlPortalCallack = data => {
 
 let urlPortalLL: L.LatLng | undefined;
 export const selectPortalByLatLng = (ll: L.LatLng) => {
-
     // eslint-disable-next-line guard-for-in
     for (const guid in window.portals) {
         const latlng = window.portals[guid].getLatLng();
@@ -47,6 +47,7 @@ export const selectPortalByLatLng = (ll: L.LatLng) => {
 
     urlPortalLL = ll;
     hooks.on("portalAdded", urlPortalLLCallack);
+    window.map.setView(urlPortalLL, DEFAULT_ZOOM);
 };
 
 const urlPortalLLCallack = (data: EventPortalAdded) => {
