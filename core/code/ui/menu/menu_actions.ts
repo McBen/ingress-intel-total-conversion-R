@@ -35,7 +35,6 @@ export const setupMenu = (iitcmenu: IITCMenu): void => {
     iitcmenu.addEntry({ name: "Command\\Passcode", onClick: () => { new PasscodeDialog(); } });
     iitcmenu.addEntry({ name: "Command\\Search", onClick: () => { new SearchDialog(); } });
     iitcmenu.addEntry({ name: "Command\\Go to current location", onClick: panToLocation, isEnabled: isGettingLocation });
-    iitcmenu.addEntry({ name: "Layer" });
     iitcmenu.addEntry({ name: "Debug\\Tile cache", onClick: () => new CacheDebug(IITC.mapDataRequest.getCache()).show() });
 
     iitcmenu.addEntry({ name: "View\\Region Score", onClick: () => showRegionScore() });
