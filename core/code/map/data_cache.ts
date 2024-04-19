@@ -72,6 +72,10 @@ export class DataCache<ID, T> {
         }
     }
 
+    reset(): void {
+        this.cache.clear();
+        this.cacheCharSize = 0;
+    }
 
     get(qk: ID): T | undefined {
         const entry = this.cache.get(qk);

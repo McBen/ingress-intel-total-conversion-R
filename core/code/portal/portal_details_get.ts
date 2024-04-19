@@ -19,6 +19,10 @@ export class PortalDetails {
         this.requestQueue = new Map();
     }
 
+    clearCache() {
+        this.cache.reset();
+    }
+
     get(guid: PortalGUID): PortalInfoDetailed | undefined {
         return this.cache.get(guid);
     }
