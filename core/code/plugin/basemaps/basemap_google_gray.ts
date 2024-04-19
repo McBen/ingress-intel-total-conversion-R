@@ -1,4 +1,4 @@
-import { IITC } from "../../IITC";
+import { IITCr } from "../../IITC";
 import { Plugin } from "../plugin_base";
 
 
@@ -31,10 +31,10 @@ export class PluginGrayGoolgleMap extends Plugin {
 
         const googleMutant = (L.gridLayer as any).googleMutant as (options: any) => L.GridLayer; // FIXME: GoogleMutant or leaflet-ext. defintion is wrong
         const grayMap = googleMutant(grayGMapsOptions);
-        IITC.layers.addBase("Google Gray", grayMap);
+        IITCr.layers.addBase("Google Gray", grayMap);
     }
 
     deactivate(): void {
-        IITC.layers.removeBase("Google Gray");
+        IITCr.layers.removeBase("Google Gray");
     }
 }

@@ -10,7 +10,7 @@ import * as L from "leaflet";
 
 import { Log, LogApp } from "./helper/log_apps";
 import { postAjax } from "./helper/send_request";
-import { IITC } from "./IITC";
+import { IITCr } from "./IITC";
 import { PortalInfoDetailed } from "./portal/portal_info_detailed";
 import { fixPortalImageUrl, renderPortalDetails } from "./portal/portal_display";
 import { createMarker, portalMarkerScale, setMarkerStyle } from "./map/portal_marker";
@@ -63,7 +63,7 @@ globalThis.postAjax = postAjax;
 
 // Render
 // globalThis.Render .. init below
-globalThis.isLayerGroupDisplayed = (name: string, defaultState: boolean) => IITC.layers.isLayerKnown(name) ? IITC.layers.isLayerVisible(name) : defaultState;
+globalThis.isLayerGroupDisplayed = (name: string, defaultState: boolean) => IITCr.layers.isLayerKnown(name) ? IITCr.layers.isLayerVisible(name) : defaultState;
 
 // layerChooser
 // globalThis.layerChooser .. init below
@@ -72,21 +72,21 @@ globalThis.isLayerGroupDisplayed = (name: string, defaultState: boolean) => IITC
  * @deprecated even in IITC-CE it is deprecated
  */
 globalThis.addLayerGroup = (name: string, layerGroup: L.LayerGroup<any>, defaultDisplay: boolean): void => {
-    IITC.layers.addOverlay(name, layerGroup, { default: defaultDisplay });
+    IITCr.layers.addOverlay(name, layerGroup, { default: defaultDisplay });
 };
 /**
  * @deprecated even in IITC-CE it is deprecated
  */
 globalThis.removeLayerGroup = (layerGroup: L.LayerGroup<any>): void => {
-    IITC.layers.removeOverlay(layerGroup);
+    IITCr.layers.removeOverlay(layerGroup);
 };
 
 // Hooks
 globalThis.pluginCreateHook = NOOP; // stub
 globalThis.VALID_HOOKS = []; // stub
-globalThis.runHooks = IITC.hooks.trigger.bind(IITC.hooks);
-globalThis.addHook = IITC.hooks.on.bind(IITC.hooks);
-globalThis.removeHook = IITC.hooks.off.bind(IITC.hooks);
+globalThis.runHooks = IITCr.hooks.trigger.bind(IITCr.hooks);
+globalThis.addHook = IITCr.hooks.on.bind(IITCr.hooks);
+globalThis.removeHook = IITCr.hooks.off.bind(IITCr.hooks);
 
 // portalDetails
 globalThis.getPortalRange = (d: PortalInfoDetailed) => { console.assert(d instanceof PortalInfoDetailed, "wrong type"); return d.getPortalRange(); };
@@ -119,10 +119,10 @@ globalThis.addPortalHighlighter = (name: string, hl: HighLighterFct | HighLighte
             highlight: (p: IITC.Portal) => (hl as HighLighterNew).highlight.call(hl, { portal: p }),
             setSelected: (hl as HighLighterNew).setSelected.bind(hl)
         };
-        IITC.highlighter.add(highlight);
+        IITCr.highlighter.add(highlight);
     } else {
         const fct = hl as HighLighterFct;
-        IITC.highlighter.add({
+        IITCr.highlighter.add({
             name,
             highlight: (p: IITC.Portal) => fct({ portal: p })
         });
@@ -162,16 +162,16 @@ globalThis.selectPortalByLatLng = selectPortalByLatLng;
 
 globalThis.iitcCompabilityInit = () => {
     // these variables are only available after boot
-    globalThis.mapDataRequest = IITC.mapDataRequest;
+    globalThis.mapDataRequest = IITCr.mapDataRequest;
     globalThis.Render = {
-        prototype: IITC.mapDataRequest.getRender() // used in Drone Helper
+        prototype: IITCr.mapDataRequest.getRender() // used in Drone Helper
     }
 
     globalThis.layerChooser = {
-        addOverlay: (layer: L.Layer, name: string, options = {}) => IITC.layers.addOverlay(name, layer, options),
-        removeLayer: (layer: L.Layer, _options = {}) => IITC.layers.removeOverlay(layer),
+        addOverlay: (layer: L.Layer, name: string, options = {}) => IITCr.layers.addOverlay(name, layer, options),
+        removeLayer: (layer: L.Layer, _options = {}) => IITCr.layers.removeOverlay(layer),
 
-        addBaseLayer: (layer: L.Layer, name: string) => IITC.layers.addBase(name, layer)
+        addBaseLayer: (layer: L.Layer, name: string) => IITCr.layers.addBase(name, layer)
     }
 }
 
@@ -193,7 +193,7 @@ globalThis.IITC = {
          * @returns {string|null} The ID of the added button or null if required parameters are missing.
          */
         addButton: (buttonOptions: IITC_ButtonOptions): string | undefined => {
-            const entry = IITC.menu.addEntry({
+            const entry = IITCr.menu.addEntry({
                 id: buttonOptions.id,
                 name: "misc\\" + buttonOptions.label,
                 onClick: buttonOptions.action
@@ -216,8 +216,8 @@ globalThis.IITC = {
          * @returns True if the button is successfully removed, false otherwise.
          */
         removeButton: (buttonId: string): boolean => {
-            const known = IITC.menu.hasEntry(buttonId);
-            IITC.menu.removeEntry(buttonId);
+            const known = IITCr.menu.hasEntry(buttonId);
+            IITCr.menu.removeEntry(buttonId);
             return known;
         }
     }

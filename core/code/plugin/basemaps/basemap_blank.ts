@@ -1,4 +1,4 @@
-import { IITC } from "../../IITC";
+import { IITCr } from "../../IITC";
 import { Plugin } from "../plugin_base";
 import blankWhiteImg from "images/map/basemap-blank-tile-white.png";
 import blankBlackImg from "images/map/basemap-blank-tile-black.png";
@@ -19,12 +19,12 @@ export class PluginBlankMaps extends Plugin {
         const blankWhite = new L.TileLayer(blankWhiteImg, blankOpt);
         const blankBlack = new L.TileLayer(blankBlackImg, blankOpt);
 
-        IITC.layers.addBase("Blank Map (White)", blankWhite);
-        IITC.layers.addBase("Blank Map (Black)", blankBlack);
+        IITCr.layers.addBase("Blank Map (White)", blankWhite);
+        IITCr.layers.addBase("Blank Map (Black)", blankBlack);
     }
 
     deactivate(): void {
-        IITC.layers.removeBase("Blank Map (White)");
-        IITC.layers.removeBase("Blank Map (Black)");
+        IITCr.layers.removeBase("Blank Map (White)");
+        IITCr.layers.removeBase("Blank Map (Black)");
     }
 }

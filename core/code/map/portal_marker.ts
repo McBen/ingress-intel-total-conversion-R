@@ -1,5 +1,5 @@
 import { FACTION, FACTION_COLORS } from "../constants";
-import { IITC } from "../IITC";
+import { IITCr } from "../IITC";
 
 const COLOR_SELECTED_PORTAL = "#f0f";
 
@@ -24,7 +24,7 @@ export const createMarker = (latlng: L.LatLng, data: IITC.PortalOptions): IITC.P
 
     const marker = L.circleMarker(latlng, options) as IITC.Portal;
 
-    IITC.highlighter.highlightPortal(marker);
+    IITCr.highlighter.highlightPortal(marker);
 
     return marker;
 }
@@ -37,7 +37,7 @@ export const setMarkerStyle = (marker: IITC.Portal, selected: boolean): void => 
 
     // FIXME? it's inefficient to set the marker style (above), then do it again inside the highlighter
     // the highlighter API would need to be changed for this to be improved though. will it be too slow?
-    IITC.highlighter.highlightPortal(marker);
+    IITCr.highlighter.highlightPortal(marker);
 
     if (selected) {
         marker.setStyle({ color: COLOR_SELECTED_PORTAL });

@@ -1,4 +1,4 @@
-import { IITC } from "../../IITC";
+import { IITCr } from "../../IITC";
 import { Plugin } from "../plugin_base";
 import * as L1 from "leaflet";
 
@@ -43,7 +43,7 @@ export class PluginYandexMaps extends Plugin {
         for (const name in this.sets) {
             const options = $.extend({}, baseOptions, this.sets[name]);
             const layer = L.yandex(options);
-            IITC.layers.addBase("Yandex " + name, layer);
+            IITCr.layers.addBase("Yandex " + name, layer);
         }
     }
 
@@ -51,7 +51,7 @@ export class PluginYandexMaps extends Plugin {
 
         // eslint-disable-next-line guard-for-in
         for (const name in this.sets) {
-            IITC.layers.removeBase("Yandex " + name);
+            IITCr.layers.removeBase("Yandex " + name);
         }
     }
 }

@@ -1,4 +1,4 @@
-import { IITC } from "../../IITC";
+import { IITCr } from "../../IITC";
 import { Plugin } from "../plugin_base";
 
 // see API here http://maps.stamen.com/
@@ -45,7 +45,7 @@ export class PluginStamenMaps extends Plugin {
         const addLayer = (name: string, options: any): void => {
             const L_StamenTileLayer = this.L_StamenTileLayer as any;
             // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-            IITC.layers.addBase("Stamen " + name, new L_StamenTileLayer(name, options) as L.TileLayer);
+            IITCr.layers.addBase("Stamen " + name, new L_StamenTileLayer(name, options) as L.TileLayer);
         }
 
         const options1 = { minZoom: 0, maxNativeZoom: 20 };
@@ -75,9 +75,9 @@ export class PluginStamenMaps extends Plugin {
     }
 
     deactivate(): void {
-        IITC.layers.removeBase("Stamen Toner");
-        IITC.layers.removeBase("Stamen Toner Background");
-        IITC.layers.removeBase("Stamen Toner Lite");
-        IITC.layers.removeBase("Stamen Watercolor");
+        IITCr.layers.removeBase("Stamen Toner");
+        IITCr.layers.removeBase("Stamen Toner Background");
+        IITCr.layers.removeBase("Stamen Toner Lite");
+        IITCr.layers.removeBase("Stamen Watercolor");
     }
 }

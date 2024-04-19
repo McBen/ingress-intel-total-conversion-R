@@ -5,7 +5,7 @@ import { idle } from "./idle";
 import { ON_MOVE_REFRESH, requests } from "../helper/send_request";
 import { GLOPT, IITCOptions } from "../helper/options";
 import { hooks } from "../helper/hooks";
-import { IITC } from "../IITC";
+import { IITCr } from "../IITC";
 import * as L from "leaflet";
 import { Log, LogApp } from "../helper/log_apps";
 import { FilterLayer } from "./filter_layer";
@@ -46,7 +46,7 @@ export const setupMap = (): void => {
 
 
     hooks.on("iitcLoaded", () => {
-        IITC.layers.showBaseMap(IITCOptions.get(GLOPT.BASE_MAP_LAYER));
+        IITCr.layers.showBaseMap(IITCOptions.get(GLOPT.BASE_MAP_LAYER));
 
         window.map.on("baselayerchange", event => {
             IITCOptions.set(GLOPT.BASE_MAP_LAYER, event.name);
@@ -117,11 +117,11 @@ const createMap = (): void => {
 
 const createLayers = () => {
     createDefaultBaseMapLayers();
-    IITC.menu.addSeparator("layer");
+    IITCr.menu.addSeparator("layer");
     createDefaultOverlays();
 
 
-    if (!IITC.layers.areAllDefaultLayerVisible()) {
+    if (!IITCr.layers.areAllDefaultLayerVisible()) {
         // as users often become confused if they accidentally switch a standard layer off, display a warning in this case
         $("#portaldetails")
             .html('<div class="layer_off_warning">'
@@ -129,7 +129,7 @@ const createLayers = () => {
                 + '<a id="enable_standard_layers">Enable standard layers</a>'
                 + "</div>");
         $("#enable_standard_layers").on("click", () => {
-            IITC.layers.showAllDefaultLayers();
+            IITCr.layers.showAllDefaultLayers();
             $("#portaldetails").html("");
         });
     }
@@ -230,8 +230,8 @@ const createDefaultBaseMapLayers = (): void => {
     const attribution = '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, ' +
         '&copy; <a href="http://cartodb.com/attributions">CartoDB</a>';
     const cartoUrl = "https://{s}.basemaps.cartocdn.com/{theme}/{z}/{x}/{y}.png";
-    IITC.layers.addBase("CartoDB Dark Matter", L.tileLayer(cartoUrl, { attribution, theme: "dark_all" } as L.TileLayerOptions));
-    IITC.layers.addBase("CartoDB Positron", L.tileLayer(cartoUrl, { attribution, theme: "light_all" } as L.TileLayerOptions));
+    IITCr.layers.addBase("CartoDB Dark Matter", L.tileLayer(cartoUrl, { attribution, theme: "dark_all" } as L.TileLayerOptions));
+    IITCr.layers.addBase("CartoDB Positron", L.tileLayer(cartoUrl, { attribution, theme: "light_all" } as L.TileLayerOptions));
 
     // Google Maps - including ingress default (using the stock-intel API-key)
     const googleMutant = (L.gridLayer as any).googleMutant as (options: any) => L.GridLayer; // FIXME: GoogleMutant defintion looks wrong
@@ -253,7 +253,7 @@ const createDefaultBaseMapLayers = (): void => {
             { featureType: "road", elementType: "labels.icon", stylers: [{ invert_lightness: !0 }] }
         ]
     };
-    IITC.layers.addBase("Google Default Ingress Map", googleMutant(gmapsOptionsIngress));
+    IITCr.layers.addBase("Google Default Ingress Map", googleMutant(gmapsOptionsIngress));
 
     const gmapsOptions = {
         type: "roadmap",
@@ -264,7 +264,7 @@ const createDefaultBaseMapLayers = (): void => {
             { featureType: "poi.sports_complex", elementType: "labels", stylers: [{ visibility: "off" }] }
         ]
     }
-    IITC.layers.addBase("Google Roads", googleMutant(gmapsOptions));
+    IITCr.layers.addBase("Google Roads", googleMutant(gmapsOptions));
 
     const trafficMutant = googleMutant({ type: "roadmap" });
     // FIXME
@@ -272,10 +272,10 @@ const createDefaultBaseMapLayers = (): void => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     trafficMutant.addGoogleLayer("TrafficLayer");
 
-    IITC.layers.addBase("Google Roads + Traffic", trafficMutant);
-    IITC.layers.addBase("Google Satellite", googleMutant({ type: "satellite" }));
-    IITC.layers.addBase("Google Hybrid", googleMutant({ type: "hybrid" }));
-    IITC.layers.addBase("Google Terrain", googleMutant({ type: "terrain" }));
+    IITCr.layers.addBase("Google Roads + Traffic", trafficMutant);
+    IITCr.layers.addBase("Google Satellite", googleMutant({ type: "satellite" }));
+    IITCr.layers.addBase("Google Hybrid", googleMutant({ type: "hybrid" }));
+    IITCr.layers.addBase("Google Terrain", googleMutant({ type: "terrain" }));
 }
 
 
@@ -285,14 +285,14 @@ const createDefaultOverlays = (): void => {
     for (let i = 0; i <= 8; i++) {
         const portalsLayer = new FilterLayer({ filterPortal: portal => portal.options.level === i });
         const name = (i === 0 ? "Unclaimed/Placeholder Portals" : `Level ${i} Portals`);
-        IITC.layers.addOverlay("Faction\\" + name, portalsLayer);
+        IITCr.layers.addOverlay("Faction\\" + name, portalsLayer);
     }
 
     const fieldsLayer = new FilterLayer({ filterField: () => true });
-    IITC.layers.addOverlay("Fields", fieldsLayer);
+    IITCr.layers.addOverlay("Fields", fieldsLayer);
 
     const linksLayer = new FilterLayer({ filterLink: () => true });
-    IITC.layers.addOverlay("Links", linksLayer);
+    IITCr.layers.addOverlay("Links", linksLayer);
 
 
     // faction-specific layers
@@ -305,7 +305,7 @@ const createDefaultOverlays = (): void => {
             filterLink: entity => entity.options.team === faction,
             filterField: entity => entity.options.team === faction
         });
-        IITC.layers.addOverlay("Faction\\" + FACTION_NAMES[faction], facLayer);
+        IITCr.layers.addOverlay("Faction\\" + FACTION_NAMES[faction], facLayer);
     });
 
 }

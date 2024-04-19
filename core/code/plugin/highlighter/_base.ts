@@ -1,5 +1,5 @@
 import { Plugin } from "../plugin_base";
-import { IITC } from "../../IITC";
+import { IITCr } from "../../IITC";
 
 
 export abstract class PluginHighlight extends Plugin {
@@ -7,10 +7,10 @@ export abstract class PluginHighlight extends Plugin {
 
     abstract highlight(_portal: IITC.Portal): void;
     activate(): void {
-        IITC.highlighter.add({ name: this.menuName, highlight: (portal: IITC.Portal) => this.highlight(portal) });
+        IITCr.highlighter.add({ name: this.menuName, highlight: (portal: IITC.Portal) => this.highlight(portal) });
     }
 
     deactivate(): void {
-        IITC.highlighter.remove(this.menuName);
+        IITCr.highlighter.remove(this.menuName);
     }
 }

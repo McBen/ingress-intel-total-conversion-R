@@ -1,5 +1,5 @@
 import { dialog } from "../dialog";
-import { IITC } from "../../IITC";
+import { IITCr } from "../../IITC";
 import { Plugin } from "../../plugin/plugin_base";
 
 import { Log, LogApp } from "../../helper/log_apps";
@@ -47,9 +47,9 @@ const createDialogContent = (): string => {
 
 const getPlugins = (): string => {
 
-    const pluginNames = IITC.plugins.getListOfActivePlugins();
+    const pluginNames = IITCr.plugins.getListOfActivePlugins();
     const plugins = pluginNames.map(pname => {
-        const plugin = IITC.plugins.getPlugin(pname);
+        const plugin = IITCr.plugins.getPlugin(pname);
         return pluginInfoToString(plugin)
     });
 

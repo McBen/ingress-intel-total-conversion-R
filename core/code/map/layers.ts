@@ -1,5 +1,5 @@
 import { Options } from "../helper/options";
-import { IITC } from "../IITC";
+import { IITCr } from "../IITC";
 import * as L from "leaflet";
 import { Log, LogApp } from "../helper/log_apps";
 const log = Log(LogApp.Map);
@@ -50,7 +50,7 @@ export class LayerManager {
 
         const menuName = "layer\\Base Layer\\" + name;
 
-        IITC.menu.addEntry({
+        IITCr.menu.addEntry({
             name: menuName,
             id: L.stamp(layer).toString(),
             onClick: () => {
@@ -72,7 +72,7 @@ export class LayerManager {
 
 
         const layer = this.layers[entryIndex].layer;
-        IITC.menu.removeEntry(L.stamp(layer).toString());
+        IITCr.menu.removeEntry(L.stamp(layer).toString());
         this.layers.splice(entryIndex, 1);
 
         if (this.isVisible(layer)) {
@@ -98,7 +98,7 @@ export class LayerManager {
 
         const menuName = "layer\\" + name;
 
-        IITC.menu.addEntry({
+        IITCr.menu.addEntry({
             name: menuName,
             id: L.stamp(entry.layer).toString(),
             onClick: () => {
@@ -139,7 +139,7 @@ export class LayerManager {
             return;
         }
 
-        IITC.menu.removeEntry(L.stamp(layer).toString());
+        IITCr.menu.removeEntry(L.stamp(layer).toString());
         this.layers.splice(entryIndex, 1);
 
         if (this.isVisible(layer)) {

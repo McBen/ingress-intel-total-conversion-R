@@ -1,4 +1,4 @@
-import { IITC } from "../../IITC";
+import { IITCr } from "../../IITC";
 import { PluginHighlight } from "./_base";
 
 

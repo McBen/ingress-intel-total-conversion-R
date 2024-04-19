@@ -1,4 +1,4 @@
-import { IITC } from "../IITC";
+import { IITCr } from "../IITC";
 import { Plugin } from "./plugin_base";
 
 const ICON_SIZE = 12;
@@ -26,10 +26,10 @@ export class PluginPortalLevelNumbers extends Plugin {
 
         this.levelLayers = new Map();
         this.levelLayerGroup = new L.LayerGroup();
-        IITC.layers.addOverlay("Portal Levels", this.levelLayerGroup, { default: true });
+        IITCr.layers.addOverlay("Portal Levels", this.levelLayerGroup, { default: true });
 
-        IITC.hooks.on("requestFinished", this.onRequestFinished);
-        IITC.hooks.on("mapDataRefreshEnd", this.onMapDataRefreshEnd);
+        IITCr.hooks.on("requestFinished", this.onRequestFinished);
+        IITCr.hooks.on("mapDataRefreshEnd", this.onMapDataRefreshEnd);
         window.map.on("overlayadd overlayremove", this.onOverlayChanged);
 
         this.delayedUpdatePortalLabels(2);
@@ -37,14 +37,14 @@ export class PluginPortalLevelNumbers extends Plugin {
 
     deactivate(): void {
 
-        IITC.hooks.off("requestFinished", this.onRequestFinished);
-        IITC.hooks.off("mapDataRefreshEnd", this.onMapDataRefreshEnd);
+        IITCr.hooks.off("requestFinished", this.onRequestFinished);
+        IITCr.hooks.off("mapDataRefreshEnd", this.onMapDataRefreshEnd);
         window.map.off("overlayadd overlayremove", this.onOverlayChanged);
 
         this.levelLayers.forEach(marker => this.levelLayerGroup.removeLayer(marker));
         this.levelLayers = undefined;
 
-        IITC.layers.removeOverlay(this.levelLayerGroup);
+        IITCr.layers.removeOverlay(this.levelLayerGroup);
         this.levelLayerGroup = undefined;
     }
 

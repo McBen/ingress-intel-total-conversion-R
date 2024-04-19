@@ -1,4 +1,4 @@
-import { IITC } from "../../IITC";
+import { IITCr } from "../../IITC";
 import { HOURS } from "../../helper/times";
 import { Plugin } from "../plugin_base";
 import iconEnlImage from "./marker-green.png";
@@ -93,33 +93,33 @@ export class PlayerTracker extends Plugin {
         });
 
         if (PLAYER.team === "RESISTANCE") {
-            IITC.layers.addOverlay("Player Tracker Resistance", this.drawnTracesRes, { default: true });
-            IITC.layers.addOverlay("Player Tracker Enlightened", this.drawnTracesEnl, { default: true });
+            IITCr.layers.addOverlay("Player Tracker Resistance", this.drawnTracesRes, { default: true });
+            IITCr.layers.addOverlay("Player Tracker Enlightened", this.drawnTracesEnl, { default: true });
         } else {
-            IITC.layers.addOverlay("Player Tracker Enlightened", this.drawnTracesEnl, { default: true });
-            IITC.layers.addOverlay("Player Tracker Resistance", this.drawnTracesRes, { default: true });
+            IITCr.layers.addOverlay("Player Tracker Enlightened", this.drawnTracesEnl, { default: true });
+            IITCr.layers.addOverlay("Player Tracker Resistance", this.drawnTracesRes, { default: true });
         }
 
         this.playerPopup = new L.Popup({ offset: L.point([1, -34]) });
 
-        IITC.hooks.on("publicChatDataAvailable", this.onHandleData);
+        IITCr.hooks.on("publicChatDataAvailable", this.onHandleData);
 
         window.map.on("zoomend", this.onZoom);
         this.onZoom();
 
-        IITC.hooks.on("nicknameClicked", this.onNicknameClicked);
-        IITC.hooks.on("search", this.onSearch);
+        IITCr.hooks.on("nicknameClicked", this.onNicknameClicked);
+        IITCr.hooks.on("search", this.onSearch);
     }
 
 
     deactivate(): void {
-        IITC.layers.removeOverlay(this.drawnTracesRes);
-        IITC.layers.removeOverlay(this.drawnTracesEnl);
+        IITCr.layers.removeOverlay(this.drawnTracesRes);
+        IITCr.layers.removeOverlay(this.drawnTracesEnl);
 
         window.map.off("zoomend", this.onZoom);
-        IITC.hooks.off("publicChatDataAvailable", this.onHandleData);
-        IITC.hooks.off("nicknameClicked", this.onNicknameClicked);
-        IITC.hooks.off("search", this.onSearch);
+        IITCr.hooks.off("publicChatDataAvailable", this.onHandleData);
+        IITCr.hooks.off("nicknameClicked", this.onNicknameClicked);
+        IITCr.hooks.off("search", this.onSearch);
     }
 
     onZoom = (): void => {

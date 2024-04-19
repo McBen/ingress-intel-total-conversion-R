@@ -61,8 +61,8 @@ window.ornaments = {
     this.layers['Ornaments'] = window.ornaments.layerGroup();
     this.layers['Excluded ornaments'] = window.ornaments.layerGroup(); // to keep excluded ornaments in an own layer
 
-    IITC.layers.addOverlay('Ornaments', this.layers['Ornaments'],);
-    IITC.layers.addOverlay('Excluded ornaments', this.layers['Excluded ornaments'], { default: false });
+    IITCr.layers.addOverlay('Ornaments', this.layers['Ornaments'],);
+    IITCr.layers.addOverlay('Excluded ornaments', this.layers['Excluded ornaments'], { default: false });
 
     $('<a>', {
       text: 'Ornaments Opt',

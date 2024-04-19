@@ -1,4 +1,4 @@
-import { IITC } from "../../IITC";
+import { IITCr } from "../../IITC";
 import { Plugin } from "../plugin_base";
 import * as L1 from "leaflet";
 
@@ -46,7 +46,7 @@ export class PluginBingMaps extends Plugin {
         for (const name in this.sets) {
             const options = $.extend({}, baseOptions, this.sets[name]);
             const layer = L.bingLayer(options);
-            IITC.layers.addBase("Bing " + name, layer);
+            IITCr.layers.addBase("Bing " + name, layer);
         }
     }
 
@@ -54,7 +54,7 @@ export class PluginBingMaps extends Plugin {
 
         // eslint-disable-next-line guard-for-in
         for (const name in this.sets) {
-            IITC.layers.removeBase("Bing " + name);
+            IITCr.layers.removeBase("Bing " + name);
         }
     }
 }

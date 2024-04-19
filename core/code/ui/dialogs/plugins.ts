@@ -1,4 +1,4 @@
-import { IITC } from "../../IITC";
+import { IITCr } from "../../IITC";
 import { Plugin } from "../../plugin/plugin_base";
 import { PluginMigrated } from "../../plugin/plugin_migrated";
 import { dialog } from "../dialog";
@@ -75,7 +75,7 @@ export class PluginDialog {
         const fstatus = $("#filterstatus", this.dialog).val() as string;
         const ftext = $("#filtertext", this.dialog).val() as string;
 
-        const entries = IITC.plugins.getAllPlugins().filter(p => {
+        const entries = IITCr.plugins.getAllPlugins().filter(p => {
 
             switch (fstatus) {
                 case "active":
@@ -107,9 +107,9 @@ export class PluginDialog {
 
     togglePlugin(plugin: Plugin, event: JQuery.ChangeEvent): void {
         if (plugin.isActive()) {
-            IITC.plugins.deactivatePlugin(plugin);
+            IITCr.plugins.deactivatePlugin(plugin);
         } else {
-            IITC.plugins.activatePlugin(plugin);
+            IITCr.plugins.activatePlugin(plugin);
         }
 
         const newCard = this.createPluginCard(plugin);

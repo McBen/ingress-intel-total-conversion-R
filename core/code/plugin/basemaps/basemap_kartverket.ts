@@ -1,6 +1,6 @@
 ﻿/* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
-import { IITC } from "../../IITC";
+import { IITCr } from "../../IITC";
 import { Plugin } from "../plugin_base";
 
 export class PluginKartverketMaps extends Plugin {
@@ -88,7 +88,7 @@ export class PluginKartverketMaps extends Plugin {
         for (const layerID in layers) {
             const name = layers[layerID];
             const layer = kartverket(layerID);
-            IITC.layers.addBase(name, layer);
+            IITCr.layers.addBase(name, layer);
         }
     }
 
@@ -100,7 +100,7 @@ export class PluginKartverketMaps extends Plugin {
 
         // eslint-disable-next-line guard-for-in
         for (const layerID in layers) {
-            IITC.layers.removeBase(layers[layerID]);
+            IITCr.layers.removeBase(layers[layerID]);
         }
     }
 }

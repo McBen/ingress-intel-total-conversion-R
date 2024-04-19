@@ -1,4 +1,4 @@
-import { IITC } from "../IITC";
+import { IITCr } from "../IITC";
 import { setMarkerStyle } from "../map/portal_marker";
 
 const STORE_KEY = "portal_highlighter";
@@ -33,7 +33,7 @@ export class Highlighters {
             this.changeHighlighter(highlighter.name);
         }
 
-        IITC.menu.addEntry({
+        IITCr.menu.addEntry({
             name: "View\\Hightlight\\" + highlighter.name,
             onClick: () => this.changeHighlighter(this.current.name === highlighter.name ? undefined : highlighter.name),
             hasCheckbox: true,

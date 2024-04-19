@@ -1,5 +1,5 @@
 ﻿/* eslint-disable object-shorthand */
-import { IITC } from "../../IITC";
+import { IITCr } from "../../IITC";
 import { Plugin } from "../plugin_base";
 
 
@@ -73,17 +73,17 @@ export class PluginGaodeMap extends Plugin {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         const satelliteRoad = L.layerGroup([satellite, new GaodeLayer({ style: 8, type: "roadnet", opacity: 0.75 })]);
 
-        IITC.layers.addBase("Gaode Roads [zh]", roads);
-        IITC.layers.addBase("Gaode Roads + Traffic", traffic);
-        IITC.layers.addBase("Gaode Satellite", satellite);
-        IITC.layers.addBase("Gaode Hybrid", satelliteRoad);
+        IITCr.layers.addBase("Gaode Roads [zh]", roads);
+        IITCr.layers.addBase("Gaode Roads + Traffic", traffic);
+        IITCr.layers.addBase("Gaode Satellite", satellite);
+        IITCr.layers.addBase("Gaode Hybrid", satelliteRoad);
     }
 
     deactivate(): void {
-        IITC.layers.removeBase("Gaode Roads [zh]");
-        IITC.layers.removeBase("Gaode Roads + Traffic");
-        IITC.layers.removeBase("Gaode Satellite");
-        IITC.layers.removeBase("Gaode Hybrid");
+        IITCr.layers.removeBase("Gaode Roads [zh]");
+        IITCr.layers.removeBase("Gaode Roads + Traffic");
+        IITCr.layers.removeBase("Gaode Satellite");
+        IITCr.layers.removeBase("Gaode Hybrid");
     }
 }
 

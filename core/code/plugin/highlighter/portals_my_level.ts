@@ -1,5 +1,5 @@
 import { FACTION } from "../../constants";
-import { IITC } from "../../IITC";
+import { IITCr } from "../../IITC";
 import { getMarkerStyleOptions } from "../../map/portal_marker";
 import { Plugin } from "../plugin_base";
 import { player } from "../../helper/player";
@@ -45,13 +45,13 @@ export class PluginHighlightMyLevel extends Plugin {
 
 
     activate(): void {
-        IITC.highlighter.add({ name: this.menuNameBelow, highlight: this.belowMyLevel });
-        IITC.highlighter.add({ name: this.menuNameAbove, highlight: this.aboveMyLevel });
+        IITCr.highlighter.add({ name: this.menuNameBelow, highlight: this.belowMyLevel });
+        IITCr.highlighter.add({ name: this.menuNameAbove, highlight: this.aboveMyLevel });
     }
 
     deactivate(): void {
-        IITC.highlighter.remove(this.menuNameBelow);
-        IITC.highlighter.remove(this.menuNameAbove);
+        IITCr.highlighter.remove(this.menuNameBelow);
+        IITCr.highlighter.remove(this.menuNameAbove);
     }
 }
 

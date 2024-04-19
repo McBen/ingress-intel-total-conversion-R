@@ -1,5 +1,5 @@
 import * as L from "leaflet";
-import { IITC } from "../IITC";
+import { IITCr } from "../IITC";
 
 export const enum TileState {
     "ok",
@@ -45,7 +45,7 @@ export class RenderDebugTiles {
 
     constructor() {
         this.debugTileLayer = L.layerGroup();
-        IITC.layers.addOverlay("DEBUG Data Tiles", this.debugTileLayer, { default: false });
+        IITCr.layers.addOverlay("DEBUG Data Tiles", this.debugTileLayer, { default: false });
 
         this.debugTileToRectangle = {};
         this.debugTileClearTimes = {};

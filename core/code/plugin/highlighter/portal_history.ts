@@ -1,4 +1,4 @@
-import { IITC } from "../../IITC";
+import { IITCr } from "../../IITC";
 import { HISTORY } from "../../portal/portal_info";
 import { Plugin } from "../plugin_base";
 
@@ -31,17 +31,17 @@ export class PluginHighlightPortalHistory extends Plugin {
 
 
     activate(): void {
-        IITC.highlighter.add({ name: "History: visited/captured", highlight: this.visited });
-        IITC.highlighter.add({ name: "History: not visited/captured", highlight: this.NotVisited });
-        IITC.highlighter.add({ name: "History: scout controlled", highlight: this.scoutControlled });
-        IITC.highlighter.add({ name: "History: not scout controlled", highlight: this.notScoutControlled });
+        IITCr.highlighter.add({ name: "History: visited/captured", highlight: this.visited });
+        IITCr.highlighter.add({ name: "History: not visited/captured", highlight: this.NotVisited });
+        IITCr.highlighter.add({ name: "History: scout controlled", highlight: this.scoutControlled });
+        IITCr.highlighter.add({ name: "History: not scout controlled", highlight: this.notScoutControlled });
     }
 
     deactivate(): void {
-        IITC.highlighter.remove("History: visited/captured");
-        IITC.highlighter.remove("History: not visited/captured");
-        IITC.highlighter.remove("History: scout controlled");
-        IITC.highlighter.remove("History: not scout controlled");
+        IITCr.highlighter.remove("History: visited/captured");
+        IITCr.highlighter.remove("History: not visited/captured");
+        IITCr.highlighter.remove("History: scout controlled");
+        IITCr.highlighter.remove("History: not scout controlled");
     }
 
 

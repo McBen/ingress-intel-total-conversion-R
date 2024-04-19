@@ -1,4 +1,4 @@
-import { IITC } from "../../IITC";
+import { IITCr } from "../../IITC";
 import { Plugin } from "../plugin_base";
 
 
@@ -26,14 +26,14 @@ export class PluginOSM extends Plugin {
         const OSMHum = "https://tile.openstreetmap.fr/hot/{z}/{x}/{y}.png";
         const OSMCycle = "https://{s}.tile-cyclosm.openstreetmap.fr/cyclosm/{z}/{x}/{y}.png";
 
-        IITC.layers.addBase("OpenStreetMap", new L.TileLayer(OSM, osmOpt));
-        IITC.layers.addBase("Humanitarian", new L.TileLayer(OSMHum, osmOpt));
-        IITC.layers.addBase("CyclOSM", new L.TileLayer(OSMCycle, osmOpt));
+        IITCr.layers.addBase("OpenStreetMap", new L.TileLayer(OSM, osmOpt));
+        IITCr.layers.addBase("Humanitarian", new L.TileLayer(OSMHum, osmOpt));
+        IITCr.layers.addBase("CyclOSM", new L.TileLayer(OSMCycle, osmOpt));
     }
 
     deactivate(): void {
-        IITC.layers.removeBase("OpenStreetMap");
-        IITC.layers.removeBase("Humanitarian");
+        IITCr.layers.removeBase("OpenStreetMap");
+        IITCr.layers.removeBase("Humanitarian");
     }
 }
 

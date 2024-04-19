@@ -143,7 +143,7 @@ function boot() {
   setupIngressMarkers();
   window.extractFromStock();
 
-  IITC.init();
+  IITCr.init();
 
   window.setupOMS();
   window.ornaments.setup();
