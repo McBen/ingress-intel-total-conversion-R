@@ -122,6 +122,12 @@ export class PlayerTracker extends Plugin {
         IITCr.hooks.off("search", this.onSearch);
     }
 
+    reset() {
+        this.stored.clear();
+        this.drawnTracesEnl.clearLayers();
+        this.drawnTracesRes.clearLayers();
+    }
+
     onZoom = (): void => {
         this.zoomListener();
     }
