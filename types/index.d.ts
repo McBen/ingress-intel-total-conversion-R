@@ -77,7 +77,7 @@ declare global {
 
     type DecodePortalDetails = "core" | "summary" | "detailed" | "extended" | "anyknown";
     const decodeArray: {
-        portal: (a: any, kind: DecodePortalDetails) => IITC.PortalData | IITC.PortalDataDetail
+        portal: (a: IITC.EntityPortalDetailed, kind: DecodePortalDetails) => IITC.PortalData | IITC.PortalDataDetail
     }
 
     const niantic_params: {

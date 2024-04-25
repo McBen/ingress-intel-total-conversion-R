@@ -162,7 +162,7 @@ export type EventFactionChatDataAvailable = { raw: any, result: Intel.ChatLine[]
 export type EventPortalDetailsUpdated = { guid: string, portal: IITC.Portal, portalDetails: any /* class portalDetail */, portalData: IITC.PortalData };
 export type EventArtifactsUpdated = { old: any, new: any };
 export type EventMapDataRefreshStart = { bounds: L.LatLngBounds, mapZoom: number, dataZoom: number, minPortalLevel: number, tileBounds: L.LatLngBounds };
-export type EventMapDataEntityInject = { callback: (ents: any) => void }; // TODO: ents = portalDetailLoaded.ent
+export type EventMapDataEntityInject = { callback: (ents: any, details: DecodePortalDetails) => void }; // TODO: ents = portalDetailLoaded.ent
 export type EventMapDataRefreshEnd = unknown;
 export type EventPortalAdded = { portal: IITC.Portal, previousData: IITC.PortalData };
 export type EventLinkAdded = { link: IITC.Link };
