@@ -24,7 +24,7 @@ export class PluginHighlightWeakness extends PluginHighlight {
             if (strength < 1) {
                 const fillOpacity = (1 - strength) * .85 + .15;
                 const color = "red";
-                const style: L.CircleMarkerOptions = { fillColor: color, fillOpacity };
+                const style: L.CircleMarkerOptions = { radius: portal.getRadius(), fillColor: color, fillOpacity };
 
                 // Hole per missing resonator
                 if (res_count < 8) {

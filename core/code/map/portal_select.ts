@@ -40,12 +40,12 @@ export const setPortalIndicators = (p?: IITC.Portal) => {
                     dashArray: range.isLinkable ? undefined : "10,10",
                     interactive: false
                 })
-                : L.circle(coord, range.range, { fill: false, stroke: false, interactive: false })
+                : L.circle(coord, { radius: range.range, fill: false, stroke: false, interactive: false })
             ).addTo(window.map);
         }
 
-        portalAccessIndicator = L.circle(coord, HACK_RANGE,
-            { fill: false, color: ACCESS_INDICATOR_COLOR, weight: 2, interactive: false }
+        portalAccessIndicator = L.circle(coord,
+            { radius: HACK_RANGE, fill: false, color: ACCESS_INDICATOR_COLOR, weight: 2, interactive: false }
         ).addTo(window.map);
     }
 
