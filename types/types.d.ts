@@ -27,7 +27,10 @@ declare namespace IITC {
     }
 
     interface PortalData {
-        artifactBrief: any;
+        artifactBrief: null | {
+            fragment: {},
+            target: {}
+        };
         health: number;
         image: string; // url
         level: number;
@@ -61,7 +64,11 @@ declare namespace IITC {
 
 
     interface PortalDataDetail extends PortalData {
-        artifactDetail: any;
+        artifactDetail: {
+            type: string,
+            displayName: string,
+            fragments: []
+        };
         mods: [Mod | null, Mod | null, Mod | null, Mod | null];
         owner: string;
         resonators: Resonator[];
