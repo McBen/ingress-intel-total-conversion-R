@@ -11,6 +11,7 @@ import { Log, LogApp } from "./helper/log_apps";
 import { hooks, Hooks } from "./helper/hooks";
 import { LayerManager } from "./map/layers";
 import { Highlighters } from "./portal/highlighters";
+import { Artifacts } from "./artifact";
 const log = Log(LogApp.Main);
 
 
@@ -22,6 +23,7 @@ export class IITCMain {
     public menu: IITCMenu;
     public layers: LayerManager;
     public highlighter: Highlighters;
+    public artifacts: Artifacts;
 
 
     constructor() {
@@ -46,6 +48,7 @@ export class IITCMain {
         idle.reset()
         this.mapDataRequest = new MapDataRequest();
         this.mapDataRequest.start();
+        this.artifacts = new Artifacts();
         requests.startRefreshTimeout(ON_MOVE_REFRESH);
         updateGameScore();
 
