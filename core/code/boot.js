@@ -7,7 +7,7 @@ import "overlapping-marker-spiderfier-leaflet"; //  ( TODO replace by https://ww
 localStorage.setItem('log', '*=debug');
 // localStorage.setItem('log', '*=debug;Map=warn');
 import anylogger from "anylogger"
-import { IITC } from "./IITC";
+import { IITCr } from "./IITC";
 import { setupSidebar } from "./ui/sidebar.tsx";
 
 const log = anylogger("Boot");
@@ -152,12 +152,8 @@ function boot() {
   window.setupStyles();
   setupSidebar();
 
-
   window.runOnSmartphonesAfterBoot();
   window.runOnAppAfterBoot();
-
-  // workaround for #129. Not sure why this is required.
-  // setTimeout('window.map.invalidateSize(false);', 500);
 
   window.iitcLoaded = true;
   window.runHooks('iitcLoaded');

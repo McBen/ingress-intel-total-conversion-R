@@ -1,5 +1,5 @@
 // ORNAMENTS ///////////////////////////////////////////////////////
-const { IITC } = require("./IITC");
+const { IITCr } = require("./IITC");
 
 // Added as part of the Ingress #Helios in 2014, ornaments
 // are additional image overlays for portals.
