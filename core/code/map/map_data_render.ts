@@ -260,7 +260,7 @@ export class Render {
         this.seenPortalsGuid.add(ent[0]);
 
         let previousData;
-        const data = decodeArray.portal(ent[2], details);
+        const data = decodeArray.portal(ent[2] as IITC.EntityPortalDetailed, details);
 
         // check if entity already exists
         if (ent[0] in window.portals) {
