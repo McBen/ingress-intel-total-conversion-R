@@ -1,0 +1,311 @@
+/* sidebar ************************************************************/
+
+#sidebar > * {
+    border-bottom: 1px solid #20A8B1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  
+  h2 {
+    color: #ffce00;
+    font-size: 21px;
+    padding: 0 4px;
+    margin: 0;
+    cursor:help;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+  }
+  
+  h2 #name {
+    font-weight: 300;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    white-space: nowrap;
+    width: 205px;
+    position: relative;
+  }
+  
+  h2 #stats {
+    float: right;
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  
+  h2 sup, h2 sub {
+    display: block;
+    font-size: 11px;
+    margin-bottom: -2px;
+  }
+  
+  #searchwrapper h3 {
+    font-size: 1em;
+    height: auto;
+    cursor: pointer;
+  }
+  .searchquery {
+    max-height: 25em;
+    overflow-y: auto;
+  }
+  #searchwrapper .ui-accordion-header::before {
+    font-size: 18px;
+    margin-right: 2px;
+    font-weight: normal;
+    line-height: 1em;
+    content: "⊞";
+  }
+  #searchwrapper .ui-accordion-header-active::before {
+    content: "⊟";
+  }
+  #searchwrapper .ui-accordion-content {
+    margin: 0;
+    overflow: hidden;
+  }
+  #searchwrapper ul {
+    padding-left: 14px;
+  }
+  #searchwrapper li {
+    cursor: pointer;
+  }
+  #searchwrapper li a {
+    margin-left: -14px;
+    padding-left: 14px;
+    background-position: 1px center;
+    background-repeat: no-repeat;
+    background-size: 12px 12px;
+  }
+  #searchwrapper li:focus a, #searchwrapper li:hover a {
+    text-decoration: underline;
+  }
+  #searchwrapper li em {
+    color: #ccc;
+    font-size: 0.9em;
+  }
+  
+  ::-webkit-input-placeholder {
+    font-style: italic;
+  }
+  
+  :-moz-placeholder {
+    font-style: italic;
+  }
+  
+  ::-moz-placeholder {
+    font-style: italic;
+  }
+  
+  .leaflet-control-layers input {
+    height: auto;
+    padding: 0;
+  }
+  
+  
+  /* portal title and image */
+  h3.title {
+    padding-right: 17px; /* to not overlap with close button */
+    margin: 2px 0;
+    line-height: 24px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .imgpreview {
+    height: 190px;
+    background: no-repeat center center;
+    background-size: contain;
+    cursor: help;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .imgpreview img.hide {
+    display: none;
+  }
+  
+  .imgpreview .portalDetails {
+    display: none;
+  }
+  
+  #level {
+    font-size: 40px;
+    text-shadow: -1px -1px #000, 1px -1px #000, -1px 1px #000, 1px 1px #000, 0 0 5px #fff;
+    display: block;
+    margin-right: 15px;
+    text-align:right;
+    float: right;
+  }
+  
+  /* portal mods */
+  .res .mods span, .res .meter {
+    border: 1px solid #0076b6;
+  }
+  .enl .mods span, .enl .meter {
+    border: 1px solid #017f01;
+  }
+  
+  /* random details, resonator details */
+  #randdetails, #resodetails {
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0 4px;
+    table-layout: fixed;
+    border-spacing: 0m;
+    border-collapse: collapse;
+  }
+  
+  #randdetails td, #resodetails td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    white-space: nowrap;
+    width: 50%;
+  }
+  
+  #randdetails th, #resodetails th {
+    font-weight: normal;
+    text-align: right;
+    width: 62px;
+    padding:0px;
+    padding-right:4px;
+    padding-left:4px;
+  }
+  
+  #randdetails th + th, #resodetails th + th {
+    text-align: left;
+    padding-right: 4px;
+    padding-left: 4px;
+  }
+  
+  #randdetails td:first-child, #resodetails td:first-child {
+    text-align: right;
+    padding-left: 2px;
+  }
+  
+  #randdetails td:last-child, #resodetails td:last-child {
+    text-align: left;
+    padding-right: 2px;
+  }
+  
+  
+  #randdetails {
+    margin-top: 4px;
+    margin-bottom: 5px;
+    color: #f0f0f0; /* #ffce00; */
+  }
+  
+  
+  #randdetails tt {
+    font-family: inherit;
+    cursor: help;
+  }
+  
+  #artifact_target, #artifact_fragments {
+    margin-top: 4px;
+    margin-bottom: 4px;
+  
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+  
+  
+  /* resonators */
+  #resodetails {
+    margin-bottom: 0px;
+  }
+  
+  .meter {
+    background: #000;
+    cursor: help;
+    display: inline-block;
+    height: 18px;
+    padding: 1px;
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    position: relative;
+    left: 0;
+    top: 0;
+  }
+  
+  .meter.north {
+    overflow: hidden;
+  }
+  .meter.north:before {
+    content: "";
+    background-color: red;
+    border: 1px solid #000000;
+    border-radius: 100%;
+    display: block;
+    height: 6px;
+    width: 6px;
+    left: 50%;
+    top: -3px;
+    margin-left: -4px;
+    position: absolute;
+  }
+  
+  .meter span {
+    display: block;
+    height: 14px;
+  }
+  
+  .meter-level {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -2px;
+    text-shadow: 0.0em 0.0em 0.3em #808080;
+    text-align: center;
+    word-spacing: 4px; /* to leave some space for the north indicator */
+  }
+  
+  /* links below resos */
+  
+  .linkdetails {
+    margin-bottom: 0px;
+    text-align: center;
+  }
+  
+  .linkdetails aside {
+    display: inline-block;
+    white-space: nowrap;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+  
+  #toolbox {
+    text-align: left;    /* centre didn't look as nice here as it did above in .linkdetails */
+  }
+  
+  #toolbox > a {
+    margin-left: 5px;
+    margin-right: 5px;
+    white-space: nowrap;
+    display: inline-block;
+  }
+  
+  /* a common portal display takes this much space (prevents moving
+   * content when first selecting a portal) */
+  
+  #portaldetails {
+    min-height: 63px;
+    position: relative; /* so the below '#portaldetails .close' is relative to this */
+  }
+  
+  #portaldetails .close {
+    position: absolute;
+    top: -2px;
+    right: 2px;
+    cursor: pointer;
+    color: #FFCE00;
+    font-size: 16px;
+  }
