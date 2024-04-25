@@ -1,0 +1,5 @@
+// get_portal_details - request
+{
+    "guid": "327417d62ef84193832f4eb82c12f2a8.16", // Portal GUID
+    "v": "166386b2659cd10cf46460829be8f8d7787fbb82" // intel-version string
+}

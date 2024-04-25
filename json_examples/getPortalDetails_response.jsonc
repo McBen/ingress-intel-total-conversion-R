@@ -1,0 +1,68 @@
+// get portal details - response (as of 25.04.2024)
+// note: values 0-13 are the same as in tile entities data
+// 
+// artifactBrief:
+//   null or array of [fragment, target]
+// artifactDetail
+//   ["","",[]] (or null?) if no information available
+//
+// History flag
+//   Bit 1 = visited
+//   Bit 2 = captured
+//   Bit 4 = scoutControlled
+{
+    "result": [
+        "p", // p = portal
+        "E", // faction
+        51501199, // latE6
+        -93489, // lngE6
+        1, // level
+        70, // health
+        1, // resonator count
+        "https://lh3.googleusercontent.com/0pdQ9oFPeNlosTDWuNZ6ewGFe3yAiUvj3xsRuttuGn0XY82aYX-qEn7KZ-1jqKcQt2QSS13CsT-opdtjX9cmKRIt_96K", // image
+        "Borough Tube Station", // name
+        [ // list of ornaments (here: "sc5_p" for "scout controller priority portal")
+            "sc5_p"
+        ],
+        false, // Mission
+        false, // mission50plus
+        null, // artifactBrief 
+        1713996802885, // timestamp - last detail change (including decay)
+        [ // Mods
+            null, // no mod
+            null,
+            [
+                "AgentA", // agent
+                "Portal Shield", // type
+                "COMMON", // rarity
+                { // mod attributes
+                    "MITIGATION": "30",
+                    "REMOVAL_STICKINESS": "0"
+                }
+            ],
+            [
+                "AgentA",
+                "Portal Shield",
+                "COMMON",
+                {
+                    "MITIGATION": "30",
+                    "REMOVAL_STICKINESS": "0"
+                }
+            ]
+        ],
+        [ // Resonators (0-8), not ordered
+            [
+                "AgentB", // Agent
+                8, // level
+                4200 // Energy
+            ]
+        ],
+        "AgentB", // Owner
+        [ // artifactDetail
+            "",
+            "",
+            []
+        ],
+        3 // History flag 
+    ]
+}

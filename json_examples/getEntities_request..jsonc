@@ -1,0 +1,13 @@
+// request for map data 
+// a) list of requested tile keys
+//   format: "<zoom>_<x>_<y>_<m>_8_100"
+//      m = min.level and max_level ("8") are no longer of use, but required
+//      min_level are stored in tileparameter list
+// b) version string
+{
+    "tileKeys": [
+        "15_15987_10640_0_8_100",
+        "15_15986_10640_0_8_100"
+    ],
+    "v": "166386b2659cd10cf46460829be8f8d7787fbb82"
+}

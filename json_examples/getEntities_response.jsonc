@@ -1,0 +1,78 @@
+// a response to getEntities (truncated to keep size low)
+// - latitude and longitute are stored as fixed point integer values (x*1e6)
+// - tiles can also return an error
+//     "TIMEOUT"  wait and retry. IG: server needs more time to prepare tiledata
+//     "RETRY"    wait and retry. IDK if this is still send (2024)
+{
+    "result": {
+        "map": {
+            "15_15987_10640_0_8_100": {
+                "gameEntities": [
+                    [
+                        "6ec5d78ddd3b4c40a08a1c1f20a32cc4.9", // GUID
+                        1713973906035, // timestamp
+                        [
+                            "e", // type: e = link, r=field, p=portal
+                            "R", // faction; R = resistance, E = enlightened, N = Neutral , M = Machina
+                            "4227bff947754ffb9478d3b4ef2ba947.16", // guid Origin
+                            51507209, // latE6
+                            -128995, // lngE6
+                            "d2ad7850e9ca36809a832333fac9b702.16", // guid Destination
+                            51504747,
+                            -131473
+                        ]
+                    ],
+                    [
+                        "b9387cdee6d34e65a1491e67050d85be.b",
+                        1712073415184,
+                        [
+                            "r", // Field
+                            "R", // Resistance
+                            [
+                                // List of Portals
+                                [
+                                    "a10ee35852c548378e31c443d8663b25.16",
+                                    51477716,
+                                    -113238
+                                ],
+                                [
+                                    "f41eb920257c4fec852b058e8f5fd4d4.16",
+                                    51484658,
+                                    -110573
+                                ],
+                                [
+                                    "b92629ce976d3a98b723b98e6ba6522b.16",
+                                    51476757,
+                                    -114155
+                                ]
+                            ]
+                        ]
+                    ],
+                    [
+                        "c2abf5ecebbd44c780ee320c45249464.16",
+                        1714038213666,
+                        [
+                            "p", // Portal
+                            "R",
+                            51513066, // LatE6
+                            -145982, // LngE6
+                            1, // Level
+                            55, // Health
+                            1, // Resonator count
+                            "https://lh3.googleusercontent.com/IpnWXzEwc2bIq0DUx6oEui44UbQMToyaPru1P8w6gGLjF3v5fhzY68cbooYHa3gOkglO_79frv-E3-1rwcH6lS_TAXA", // image
+                            "Handel House.", // Name
+                            [], // ornaments
+                            false, // mission
+                            false, // mission50plus
+                            null, // artifactBrief 
+                            1714038213666 // 2. timestamp
+                        ]
+                    ]
+                ]
+            },
+            "15_15986_10640_0_8_100": {
+                "error": "TIMEOUT"
+            }
+        }
+    }
+}
