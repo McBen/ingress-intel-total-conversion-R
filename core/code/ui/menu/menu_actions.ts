@@ -52,15 +52,16 @@ export const setupMenu = (iitcmenu: IITCMenu): void => {
 
 
 export const migrate = (iitcmenu: IITCMenu): void => {
+    iitcmenu.migrateToolbox(migrateNames());
+}
 
-    const migratePlugins = new Map<string, string>([
+export const migrateNames = (): Map<string, string> => {
+    return new Map<string, string>([
         ["About IITC", ""],
         ["Permalink", ""],
         ["Region scores", ""],
         ["Missions in view", "View\\Missions in view"]
     ]);
-
-    iitcmenu.migrateToolbox(migratePlugins);
 }
 
 

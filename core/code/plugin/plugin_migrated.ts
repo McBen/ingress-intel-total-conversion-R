@@ -2,7 +2,8 @@ import { Plugin } from "./plugin_base";
 import { BootCallback } from "../../../types";
 
 
-const oldStockPlugins = new Set(["Player tracker"]);
+// these plugins will be skipped
+const oldStockPlugins = new Set(["Player activity tracker"]);
 
 
 export class PluginMigrated extends Plugin {

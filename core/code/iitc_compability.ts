@@ -18,6 +18,7 @@ import { getPortalFields, getPortalFieldsCount, getPortalLinks } from "./helper/
 import { portalDetail } from "./portal/portal_details_get";
 import { Highlighter } from "./portal/highlighters";
 import { selectPortalByLatLng } from "./map/url_paramater";
+import { migrateNames } from "./ui/menu/menu_actions";
 const log = Log(LogApp.Plugins);
 
 
@@ -193,9 +194,12 @@ globalThis.IITC = {
          * @returns {string|null} The ID of the added button or null if required parameters are missing.
          */
         addButton: (buttonOptions: IITC_ButtonOptions): string | undefined => {
+
+            const name = migrateNames().get(buttonOptions.label) || "misc\\" + buttonOptions.label;
+
             const entry = IITCr.menu.addEntry({
                 id: buttonOptions.id,
-                name: "misc\\" + buttonOptions.label,
+                name,
                 onClick: buttonOptions.action
             });
 
