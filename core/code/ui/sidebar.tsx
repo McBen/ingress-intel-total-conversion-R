@@ -55,7 +55,7 @@ const PortalTitle: Component<{ details: PortalInfoDetailed }> = p => {
             onClick={() => zoomTo(p.details.guid, p.details.latE6, p.details.lngE6)}
         >{p.details.title}
         </h3>
-        <span class="portal_link" onClick={[sharePortal, p.details.guid]}><Icons.IconShare /></span>
+        <span class="portal_link" onClick={() => sharePortal(getPortalDetails().guid)}><Icons.IconShare /></span>
     </div >
     );
 }
