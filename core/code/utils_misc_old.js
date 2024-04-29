@@ -1,14 +1,3 @@
-window.zoomToAndShowPortal = function (guid, latlng) {
-  map.setView(latlng, DEFAULT_ZOOM);
-  // if the data is available, render it immediately. Otherwise defer
-  // until it becomes available.
-  if (window.portals[guid])
-    renderPortalDetails(guid);
-  else
-    urlPortal = guid;
-}
-
-
 Object.defineProperty(String.prototype, 'capitalize', {
   value: function () {
     return this.charAt(0).toUpperCase() + this.slice(1).toLowerCase();

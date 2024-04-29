@@ -19,8 +19,10 @@ export const readURLParamater = () => {
 };
 
 export const autoSelectPortal = (guid: PortalGUID) => {
+    if (!urlPortal) {
+        hooks.on("portalAdded", urlPortalCallack);
+    }
     urlPortal = guid;
-    hooks.on("portalAdded", urlPortalCallack);
 };
 
 

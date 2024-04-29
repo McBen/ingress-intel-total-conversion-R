@@ -10,7 +10,7 @@ import { dialog } from "./dialog";
 import { PortalMods } from "./portal/PortalMods";
 import { PortalResonators } from "./portal/PortalResonators";
 import { getPortalFieldsCount, getPortalLinks } from "../helper/portal_data";
-import { digits } from "../helper/utils_misc";
+import { digits, zoomToAndShowPortal } from "../helper/utils_misc";
 import { formatInterval } from "../helper/times";
 import { player } from "../helper/player";
 import { portalDetail } from "../portal/portal_details_get";

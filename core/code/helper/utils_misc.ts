@@ -1,5 +1,8 @@
 import L from "leaflet";
 import { dialog } from "../ui/dialog";
+import { DEFAULT_ZOOM } from "../constants";
+import { renderPortalDetails } from "../portal/portal_display";
+import { autoSelectPortal } from "../map/url_paramater";
 
 /**
  * retrieves parameter from the URL?query=string.
@@ -99,12 +102,12 @@ export const convertTextToTableMagic = (text: string): string => {
 
     // parse data
     const rows = text.split("\n");
-    const data = rows.map( row => row.split("\t"));
-    const columnCount = data.reduce( (max, current) => Math.max(max, current.length),0)
+    const data = rows.map(row => row.split("\t"));
+    const columnCount = data.reduce((max, current) => Math.max(max, current.length), 0)
 
     // build the table
-    const body = data.map( row => {
-        const cells = row.map( (cell, k) => {
+    const body = data.map(row => {
+        const cells = row.map((cell, k) => {
             let attributes = "";
             if (k === 0 && row.length < columnCount) {
                 attributes = ' colspan="' + (columnCount - row.length + 1) + '"';
@@ -207,3 +210,17 @@ export const makePermalink = (latlng?: L.LatLng, options?: Partial<makePermalink
     const url = options.fullURL ? document.baseURI : "/";
     return url + "?" + args.join("&");
 };
+
+
+export const zoomToAndShowPortal = (guid: PortalGUID, latlng: L.LatLng): void => {
+    const zoom = Math.max(DEFAULT_ZOOM, window.map.getZoom());
+
+    window.map.setView(latlng, zoom);
+    // if the data is available, render it immediately. Otherwise defer
+    // until it becomes available.
+    if (window.portals[guid]) {
+        renderPortalDetails(guid);
+    } else {
+        autoSelectPortal(guid);
+    }
+}

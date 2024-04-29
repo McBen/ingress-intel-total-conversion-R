@@ -26,8 +26,6 @@ declare global {
     function teamStringToId(faction: string): FACTION;
     function show(paneID: string): void;
     function isSmartphone(): boolean;
-    function zoomToAndShowPortal(guid: PortalGUID, pos: L.LatLng): void;
-
 
     interface Window {
 

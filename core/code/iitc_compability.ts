@@ -160,6 +160,7 @@ globalThis.isTouchDevice = utils.isTouchDevice;
 globalThis.getURLParam = utils.getURLParam;
 globalThis.readCookie = utils.readCookie;
 globalThis.selectPortalByLatLng = selectPortalByLatLng;
+globalThis.zoomToAndShowPortal = utils.zoomToAndShowPortal;
 
 globalThis.iitcCompabilityInit = () => {
     // these variables are only available after boot
