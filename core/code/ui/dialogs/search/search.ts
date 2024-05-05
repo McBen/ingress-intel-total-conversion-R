@@ -5,6 +5,8 @@ import { hooks } from "../../../helper/hooks";
 import { renderPortalDetails } from "../../../portal/portal_display";
 import portalIcon from "!!raw-loader!../../../../images/icon-portal.svg";
 import { selectPortalByLatLng } from "../../../map/url_paramater";
+import { util } from "webpack";
+import { zoomToAndShowPortal } from "../../../helper/utils_misc";
 
 const NOMINATIM = "//nominatim.openstreetmap.org/search?format=json&polygon_geojson=1&q=";
 interface OpenStreetMapQueryResult {
@@ -103,7 +105,7 @@ export class Search {
                     icon: "data:image/svg+xml;base64," + btoa(portalIcon.replace(/%COLOR%/g, color)),
                     onSelected: (result, event) => {
                         if (event.type === "dblclick") {
-                            window.zoomToAndShowPortal(guid, portal.getLatLng());
+                            zoomToAndShowPortal(guid, portal.getLatLng());
                         } else if (window.portals[guid]) {
                             if (!window.map.getBounds().contains(result.position)) window.map.setView(result.position);
                             renderPortalDetails(guid);
