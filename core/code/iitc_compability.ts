@@ -175,6 +175,14 @@ globalThis.iitcCompabilityInit = () => {
 
         addBaseLayer: (layer: L.Layer, name: string) => IITCr.layers.addBase(name, layer)
     }
+
+    // Artifacts
+    globalThis.artifact = {
+        requestData: IITCr.artifacts.requestData,
+        getArtifactEntities: IITCr.artifacts.getArtifactEntities,
+        handleFailure: IITCr.artifacts.handleFailure,
+        handleSuccess: IITCr.artifacts.handleSuccess
+    }
 }
 
 

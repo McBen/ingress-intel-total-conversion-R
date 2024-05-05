@@ -69,10 +69,6 @@ declare global {
         }
     }
 
-    const artifact: {
-        getArtifactEntities: () => IITC.EntityData[];
-    }
-
     type DecodePortalDetails = "core" | "summary" | "detailed" | "extended" | "anyknown";
     const decodeArray: {
         portal: (a: IITC.EntityPortalDetailed, kind: DecodePortalDetails) => IITC.PortalData | IITC.PortalDataDetail
