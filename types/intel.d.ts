@@ -15,7 +15,8 @@ export type PlayerData = {
     recursion_count?: string
 };
 
-
 declare global {
-    const PLAYER: PlayerData;
+    interface Window {
+        PLAYER: PlayerData;
+    }
 }

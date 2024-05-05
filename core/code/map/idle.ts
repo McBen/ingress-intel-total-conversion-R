@@ -3,6 +3,7 @@ import { Log, LogApp } from "../helper/log_apps";
 const log = Log(LogApp.Idle);
 
 const IDLE_POLL_TIME = 10;
+const MAX_IDLE_TIME = 15 * 60;
 export type IdleResumeCallback = () => void;
 
 

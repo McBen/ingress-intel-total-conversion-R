@@ -92,7 +92,7 @@ export class PlayerTracker extends Plugin {
             iconAnchor: [12, 41]
         });
 
-        if (PLAYER.team === "RESISTANCE") {
+        if (window.PLAYER.team === "RESISTANCE") {
             IITCr.layers.addOverlay("Player Tracker Resistance", this.drawnTracesRes, { default: true });
             IITCr.layers.addOverlay("Player Tracker Enlightened", this.drawnTracesEnl, { default: true });
         } else {

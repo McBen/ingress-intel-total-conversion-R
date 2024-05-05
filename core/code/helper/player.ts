@@ -8,14 +8,14 @@ export class Player {
 
     constructor() {
         if (this.isLoggedIn()) {
-            this.team = teamStr2Faction(PLAYER.team);
-            this.level = PLAYER.verified_level;
-            this.name = PLAYER.nickname;
+            this.team = teamStr2Faction(window.PLAYER.team);
+            this.level = window.PLAYER.verified_level;
+            this.name = window.PLAYER.nickname;
         }
     }
 
     isLoggedIn(): boolean {
-        return PLAYER && !!PLAYER.nickname;
+        return window.PLAYER && !!window.PLAYER.nickname;
     }
 
 
