@@ -1,0 +1,79 @@
+{
+    "result": {
+        "e5e818c5b4f94a8fa1bc485ec36c842e.16": [
+            "p",
+            "E",
+            -41298556,
+            174778796,
+            6,
+            93,
+            8,
+            "https://lh3.googleusercontent.com/PVNsXuc_l-g5CcOcfyhH_jl_VMbSjBiZr94hHAE8HpGAcWEHv4ZJK_Qp0i9DgqTX7T3-kya4cYcPDEWM9_oJj_O0Lads",
+            "Tunnel Of Leaves",
+            [
+                "ap2_start"
+            ],
+            false,
+            false,
+            [
+                [
+                    [
+                        "shard-alpha"
+                    ]
+                ],
+                []
+            ],
+            1714190446544
+        ],
+        "ae8263fb6dfa4d9a8f14b96df411fb1e.16": [
+            "p",
+            "E",
+            -41295128,
+            174775737,
+            7,
+            100,
+            8,
+            "https://lh3.googleusercontent.com/X6JVNNmPj50ZVJ4pnX03qCX1uGaJSka-h8kG_MqOHt3dv0KnCf4fsALdKYKcXYtqEOkI0Cv9hVhqqAUADvGr7zcUSw5g",
+            "Cobblestone Park",
+            [
+                "ap2_start"
+            ],
+            true,
+            true,
+            [
+                [
+                    [
+                        "shard-alpha"
+                    ]
+                ],
+                []
+            ],
+            1714190400220
+        ],
+        "5e8516468bc6411ea3093c4cb9369405.16": [
+            "p",
+            "E",
+            -41291963,
+            174777945,
+            7,
+            99,
+            8,
+            "https://lh3.googleusercontent.com/HJ1x8VxEFLJ3F3hwVn6JNfyvcX4wVA6jrJ8UUlpWt4pPBoO8no_hjwJh_uVL5ElC-VL9_nXtHHxbV8hl26U1aeA0ZsI",
+            "Te Aro Park Sign",
+            [
+                "ap2_start"
+            ],
+            true,
+            true,
+            [
+                [
+                    [
+                        "shard-alpha"
+                    ]
+                ],
+                []
+            ],
+            1714190436675
+        ]
+    }
+}
