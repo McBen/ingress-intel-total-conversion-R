@@ -95,6 +95,7 @@ globalThis.getLinkAmpRangeBoost = (d: PortalInfoDetailed) => d.getLinkAmpRangeBo
 globalThis.getPortalLevel = (d: PortalInfoDetailed) => d.getPortalLevel();
 globalThis.getPortalModsByType = (d: PortalInfoDetailed, type: string) => d.getPortalModsByType(type);
 globalThis.getMaxOutgoingLinks = (d: PortalInfoDetailed) => d.getMaxOutgoingLinks();
+globalThis.PortalInfoDetailed = PortalInfoDetailed;
 
 globalThis.portalDetail = portalDetail;
 
