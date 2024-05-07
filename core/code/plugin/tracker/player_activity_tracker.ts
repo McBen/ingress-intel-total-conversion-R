@@ -9,10 +9,6 @@ import { COLORS_LVL, DEFAULT_ZOOM, FACTION, FACTION_CSS, FACTION_NAMES, teamStr2
 import { makePermalink } from "../../helper/utils_misc";
 import { selectPortalByLatLng } from "../../map/url_paramater";
 
-const PLAYER_TRACKER_MAX_TIME = 3 * HOURS;
-const PLAYER_TRACKER_MIN_ZOOM = 9;
-const PLAYER_TRACKER_MIN_OPACITY = 0.3;
-const PLAYER_TRACKER_LINE_COLOUR = "#FF00FD";
 
 interface Player {
     team: FACTION;
@@ -27,6 +23,23 @@ interface Action {
     address: string
 
 }
+
+export interface TrackerOptions {
+    max_time?: number;
+    max_steps?: number;
+    min_zoom: number;
+    min_opacity: number
+    line_color: string
+}
+
+const DEFAULT_OPTIONS: TrackerOptions = {
+    max_time: 3 * HOURS,
+    max_steps: undefined,
+    min_zoom: 9,
+    min_opacity: 0.3,
+    line_color: "#FF00FD"
+}
+
 
 // TODO: find better place
 const isTouchDevice = (): boolean => {
@@ -65,6 +78,7 @@ export class PlayerTracker extends Plugin {
     private playerPopup: L.Popup;
     private iconEnl: L.Icon;
     private iconRes: L.Icon;
+    private option: TrackerOptions;
 
     constructor() {
         super();
@@ -73,6 +87,8 @@ export class PlayerTracker extends Plugin {
 
         // eslint-disable-next-line unicorn/prefer-module
         require("./player-tracker.css");
+
+        this.setOptions();
     }
 
     activate(): void {
@@ -122,6 +138,15 @@ export class PlayerTracker extends Plugin {
         IITCr.hooks.off("search", this.onSearch);
     }
 
+    setOptions(options?: Partial<TrackerOptions>) {
+        if (options) {
+            this.option = { ...this.option, ...options };
+        } else {
+            this.option = { ...DEFAULT_OPTIONS };
+        }
+    }
+
+
     reset() {
         this.stored.clear();
         this.drawnTracesEnl.clearLayers();
@@ -144,24 +169,32 @@ export class PlayerTracker extends Plugin {
     }
 
     zoomListener = (): void => {
-        if (window.map.getZoom() < PLAYER_TRACKER_MIN_ZOOM) {
+        if (window.map.getZoom() < this.option.min_zoom) {
             this.drawnTracesEnl.clearLayers();
             this.drawnTracesRes.clearLayers();
         }
     }
 
     private getLimit() {
-        return Date.now() - PLAYER_TRACKER_MAX_TIME;
+        return this.option.max_time ? Date.now() - this.option.max_time : 0;
     }
 
     private discardOldData() {
-        const limit = this.getLimit();
-        this.stored.forEach((player, plrname) => {
-            player.actions = player.actions.filter(event => event.time >= limit);
-            if (player.actions.length === 0) {
-                this.stored.delete(plrname);
-            }
-        })
+        if (this.option.max_steps) {
+            this.stored.forEach(player => {
+                if (player.actions.length > this.option.max_steps) {
+                    player.actions = player.actions.slice(-this.option.max_steps);
+                }
+            })
+        } else {
+            const limit = this.getLimit();
+            this.stored.forEach((player, plrname) => {
+                player.actions = player.actions.filter(event => event.time >= limit);
+                if (player.actions.length === 0) {
+                    this.stored.delete(plrname);
+                }
+            });
+        }
     }
 
     private eventHasLatLng(action: Action, latLng: L.LatLng) {
@@ -297,7 +330,7 @@ export class PlayerTracker extends Plugin {
         const polyLineByAgeEnl: [L.LatLng[][], L.LatLng[][], L.LatLng[][], L.LatLng[][]] = [[], [], [], []];
         const polyLineByAgeRes: [L.LatLng[][], L.LatLng[][], L.LatLng[][], L.LatLng[][]] = [[], [], [], []];
 
-        const split = PLAYER_TRACKER_MAX_TIME / 4;
+        const split = this.option.max_time ? 4 / this.option.max_time : 0;
         const now = Date.now();
         this.stored.forEach((playerData, plrname) => {
             if (!playerData || playerData.actions.length === 0) {
@@ -309,7 +342,7 @@ export class PlayerTracker extends Plugin {
             // their age
             for (let i = 1; i < playerData.actions.length; i++) {
                 const p = playerData.actions[i];
-                const ageBucket = Math.min(Math.ceil((now - p.time) / split), 4 - 1);
+                const ageBucket = Math.min(Math.ceil((now - p.time) * split), 4 - 1);
                 const line = [this.getLatLngFromEvent(p), this.getLatLngFromEvent(playerData.actions[i - 1])];
 
                 if (playerData.team === FACTION.RES) {
@@ -329,8 +362,8 @@ export class PlayerTracker extends Plugin {
             const popup = this.createPopup(plrname, playerData);
 
             // marker opacity
-            const relativeOpacity = 1 - (now - last.time) / PLAYER_TRACKER_MAX_TIME
-            const absOpacity = PLAYER_TRACKER_MIN_OPACITY + (1 - PLAYER_TRACKER_MIN_OPACITY) * relativeOpacity;
+            const relativeOpacity = this.option.max_time ? 1 - (now - last.time) / this.option.max_time : 1;
+            const absOpacity = this.option.min_opacity + (1 - this.option.min_opacity) * relativeOpacity;
 
             // marker itself
             const icon = playerData.team === FACTION.RES ? this.iconRes : this.iconEnl;
@@ -354,7 +387,7 @@ export class PlayerTracker extends Plugin {
 
             const options = {
                 weight: 2 - 0.25 * i,
-                color: PLAYER_TRACKER_LINE_COLOUR,
+                color: this.option.line_color,
                 interactive: false,
                 opacity: 1 - 0.2 * i,
                 dashArray: "5,8"
@@ -369,7 +402,7 @@ export class PlayerTracker extends Plugin {
 
             const options = {
                 weight: 2 - 0.25 * i,
-                color: PLAYER_TRACKER_LINE_COLOUR,
+                color: this.option.line_color,
                 interactive: false,
                 opacity: 1 - 0.2 * i,
                 dashArray: "5,8"
@@ -487,7 +520,7 @@ export class PlayerTracker extends Plugin {
     }
 
     onHandleData = (data: Intel.ChatCallback): void => {
-        if (window.map.getZoom() < PLAYER_TRACKER_MIN_ZOOM) return;
+        if (window.map.getZoom() < this.option.min_zoom) return;
 
         this.discardOldData();
         this.processNewData(data);
@@ -508,7 +541,7 @@ export class PlayerTracker extends Plugin {
         const data = this.findUser(nick);
         if (!data) return false;
 
-        const last = data.actions[data.actions.length - 1];
+        const last = data.actions.at(-1);
         const position = this.getLatLngFromEvent(last);
 
         if (window.isSmartphone()) window.show("map");
@@ -552,7 +585,7 @@ export class PlayerTracker extends Plugin {
         this.stored.forEach((data, nick) => {
             if (!nick.toLowerCase().includes(term)) return;
 
-            const event = data.actions[data.actions.length - 1];
+            const event = data.actions.at(-1);
             const faction = FACTION_NAMES[data.team].slice(0, 3).toUpperCase();
             const lastTime = new Date(event.time).toLocaleString(navigator.languages);
 
