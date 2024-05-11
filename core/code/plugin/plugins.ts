@@ -10,6 +10,7 @@ import { register as registerHighlighters } from "./highlighter/_all";
 import { PluginPortalLevelNumbers } from "./portal_level_numbers";
 import { PluginManager } from "./plugin_manager";
 import { PlayerTracker } from "./tracker/player_activity_tracker";
+import { ViewOrnaments } from "./beacons/view_beacons";
 
 export const registerPlugins = (manager: PluginManager): void => {
 
@@ -24,6 +25,7 @@ export const registerPlugins = (manager: PluginManager): void => {
     manager.add(new PluginStamenMaps());
     manager.add(new PluginPortalLevelNumbers());
     manager.add(new PlayerTracker());
+    manager.add(new ViewOrnaments());
 
     // Highlighters
     registerHighlighters(manager);

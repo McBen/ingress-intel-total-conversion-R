@@ -3,7 +3,7 @@ import { BootCallback } from "../../../types";
 
 
 // these plugins will be skipped
-const oldStockPlugins = new Set(["Player activity tracker"]);
+const oldStockPlugins = new Set(["Player activity tracker", "View Beacons"]);
 
 
 export class PluginMigrated extends Plugin {
