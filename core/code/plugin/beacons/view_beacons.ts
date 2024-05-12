@@ -1,3 +1,5 @@
+import * as Chatparser from "../../helper/chatparser";
+import { ChatLineType } from "../../helper/chatlines";
 import { EventPublicChatDataAvailable, hooks } from "../../helper/hooks";
 import { Plugin } from "../plugin_base";
 
@@ -146,26 +148,17 @@ export class ViewOrnaments extends Plugin {
         }
     }
 
-    onPublicChatDataAvailable = (data: EventPublicChatDataAvailable): boolean | void => {
-        $.each(data.result, (ind: number, json: Intel.ChatLine): boolean => {
-            if (json[2].plext.plextType !== "SYSTEM_BROADCAST") return true;
+    onBeaconChat = (type: ChatLineType, line: Intel.ChatLine) => {
+        const time = Chatparser.getTime(line);
 
-            const msg = json[2].plext.markup;
+        const portal = Chatparser.getPortal(line);
+        const portalStr = portal.latE6 + "&" + portal.lngE6;
+        const player = Chatparser.getAgent(line).plain;
 
-            if (!this.isBeaconMessage(msg)) return true;
-
-            const time = json[1];
-            const portal = msg[2][1] as Intel.MarkUpPortalType;
-            const portalStr = portal.latE6 + "&" + portal.lngE6;
-            const player = msg[0][1] as Intel.MarkUpPlayerType;
-
-            const last = this.lastDeploy.get(portalStr);
-            if (!last || time > last.time) {
-                this.lastDeploy.set(portalStr, { player: player.plain, time });
-            }
-
-            return true;
-        });
+        const last = this.lastDeploy.get(portalStr);
+        if (!last || time > last.time) {
+            this.lastDeploy.set(portalStr, { player, time });
+        }
     }
 
     private isBeaconMessage(msg: Intel.MarkUp): boolean {
