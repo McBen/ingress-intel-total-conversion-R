@@ -80,10 +80,14 @@ export class Hooks {
     private hooks: { [index: string]: HookCallback[] } = {};
     private isRunning: number;
 
+    public chat = {
+        on: ChatParser.on,
+        off: ChatParser.off
+    };
+
     constructor() {
         this.hooks = {};
         this.isRunning = 0;
-
     }
 
     trigger(event: string, data: any): boolean {

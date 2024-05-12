@@ -1,0 +1,570 @@
+{
+    "result": [
+        [
+            "field destroyed",
+            1708455891815,
+            {
+                "plext": {
+                    "text": "Agent FTbD destroyed the Enlightened Control Field @Fontanário da Bela Vista (R. Eça Queirós 131, 4510-555 Fânzeres, Portugal) -2813 MUs",
+                    "team": "RESISTANCE",
+                    "markup": [
+                        [
+                            "TEXT",
+                            {
+                                "plain": "Agent "
+                            }
+                        ],
+                        [
+                            "PLAYER",
+                            {
+                                "plain": "FTbD",
+                                "team": "RESISTANCE"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " destroyed the "
+                            }
+                        ],
+                        [
+                            "FACTION",
+                            {
+                                "team": "ENLIGHTENED",
+                                "plain": "Enlightened"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " Control Field @"
+                            }
+                        ],
+                        [
+                            "PORTAL",
+                            {
+                                "plain": "Fontanário da Bela Vista (R. Eça Queirós 131, 4510-555 Fânzeres, Portugal)",
+                                "name": "Fontanário da Bela Vista",
+                                "address": "R. Eça Queirós 131, 4510-555 Fânzeres, Portugal",
+                                "latE6": 41167743,
+                                "lngE6": -8520385,
+                                "team": "ENLIGHTENED"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " -"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": "2813"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " MUs"
+                            }
+                        ]
+                    ],
+                    "plextType": "SYSTEM_BROADCAST",
+                    "categories": 1
+                }
+            }
+        ],
+        [
+            "link destroyed",
+            1708455891815,
+            {
+                "plext": {
+                    "text": "Agent FTbD destroyed the Enlightened Link Fontanário da Bela Vista (R. Eça Queirós 131, 4510-555 Fânzeres, Portugal) to Pousada do Porto (Av. Escritor Costa Barreto 421, 4300-316 Porto, Portugal)",
+                    "team": "ENLIGHTENED",
+                    "markup": [
+                        [
+                            "TEXT",
+                            {
+                                "plain": "Agent "
+                            }
+                        ],
+                        [
+                            "PLAYER",
+                            {
+                                "plain": "FTbD",
+                                "team": "RESISTANCE"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " destroyed the "
+                            }
+                        ],
+                        [
+                            "FACTION",
+                            {
+                                "team": "ENLIGHTENED",
+                                "plain": "Enlightened"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " Link "
+                            }
+                        ],
+                        [
+                            "PORTAL",
+                            {
+                                "plain": "Fontanário da Bela Vista (R. Eça Queirós 131, 4510-555 Fânzeres, Portugal)",
+                                "name": "Fontanário da Bela Vista",
+                                "address": "R. Eça Queirós 131, 4510-555 Fânzeres, Portugal",
+                                "latE6": 41167743,
+                                "lngE6": -8520385,
+                                "team": "RESISTANCE"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " to "
+                            }
+                        ],
+                        [
+                            "PORTAL",
+                            {
+                                "plain": "Pousada do Porto (Av. Escritor Costa Barreto 421, 4300-316 Porto, Portugal)",
+                                "name": "Pousada do Porto",
+                                "address": "Av. Escritor Costa Barreto 421, 4300-316 Porto, Portugal",
+                                "latE6": 41142218,
+                                "lngE6": -8575094,
+                                "team": "ENLIGHTENED"
+                            }
+                        ]
+                    ],
+                    "plextType": "SYSTEM_BROADCAST",
+                    "categories": 1
+                }
+            }
+        ],
+        [
+            "link created",
+            1708455883827,
+            {
+                "plext": {
+                    "text": "Enlightened agent EliteGaia linked from Posto de Correios CTT da Pracinha - Raza de Cima (Av. Infante Dom Henrique 266, 4400-115 Vila Nova de Gaia, Portugal) to Ruínas do Mirante da Quinta do Fojo (R. Entre Muros 192, 4400 Vila Nova de Gaia, Portugal)",
+                    "team": "ENLIGHTENED",
+                    "markup": [
+                        [
+                            "FACTION",
+                            {
+                                "team": "ENLIGHTENED",
+                                "plain": "Enlightened"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " agent "
+                            }
+                        ],
+                        [
+                            "PLAYER",
+                            {
+                                "plain": "EliteGaia",
+                                "team": "ENLIGHTENED"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " linked from "
+                            }
+                        ],
+                        [
+                            "PORTAL",
+                            {
+                                "plain": "Posto de Correios CTT da Pracinha - Raza de Cima (Av. Infante Dom Henrique 266, 4400-115 Vila Nova de Gaia, Portugal)",
+                                "name": "Posto de Correios CTT da Pracinha - Raza de Cima",
+                                "address": "Av. Infante Dom Henrique 266, 4400-115 Vila Nova de Gaia, Portugal",
+                                "latE6": 41120726,
+                                "lngE6": -8615396,
+                                "team": "ENLIGHTENED"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " to "
+                            }
+                        ],
+                        [
+                            "PORTAL",
+                            {
+                                "plain": "Ruínas do Mirante da Quinta do Fojo (R. Entre Muros 192, 4400 Vila Nova de Gaia, Portugal)",
+                                "name": "Ruínas do Mirante da Quinta do Fojo",
+                                "address": "R. Entre Muros 192, 4400 Vila Nova de Gaia, Portugal",
+                                "latE6": 41122348,
+                                "lngE6": -8635588,
+                                "team": "ENLIGHTENED"
+                            }
+                        ]
+                    ],
+                    "plextType": "SYSTEM_BROADCAST",
+                    "categories": 1
+                }
+            }
+        ],
+        [
+            "deployed",
+            1708455841429,
+            {
+                "plext": {
+                    "text": "ruyruys deployed a Resonator on Estação de General Torres (Rua General Torres 830-842, 4430 Vila Nova de Gaia, Portugal)",
+                    "team": "RESISTANCE",
+                    "markup": [
+                        [
+                            "PLAYER",
+                            {
+                                "plain": "ruyruys",
+                                "team": "RESISTANCE"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " deployed a Resonator on "
+                            }
+                        ],
+                        [
+                            "PORTAL",
+                            {
+                                "plain": "First Portal (Rua General Torres 830-842, 4430 Vila Nova de Gaia, Portugal)",
+                                "name": "First Portal",
+                                "address": "Rua General Torres 830-842, 4430 Vila Nova de Gaia, Portugal",
+                                "latE6": 41133114,
+                                "lngE6": -8608863,
+                                "team": "RESISTANCE"
+                            }
+                        ]
+                    ],
+                    "plextType": "SYSTEM_BROADCAST",
+                    "categories": 1
+                }
+            }
+        ],
+        [
+            "field created",
+            1708455544088,
+            {
+                "plext": {
+                    "text": "Resistance agent Pable1993 created a Control Field @Ogre Azul (Avenida França 19, 4050 Porto, Portugal) +5 MUs",
+                    "team": "RESISTANCE",
+                    "markup": [
+                        [
+                            "FACTION",
+                            {
+                                "team": "RESISTANCE",
+                                "plain": "Resistance"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " agent "
+                            }
+                        ],
+                        [
+                            "PLAYER",
+                            {
+                                "plain": "Pable1993",
+                                "team": "RESISTANCE"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " created a Control Field @"
+                            }
+                        ],
+                        [
+                            "PORTAL",
+                            {
+                                "plain": "Ogre Azul (Avenida França 19, 4050 Porto, Portugal)",
+                                "name": "Ogre Azul",
+                                "address": "Avenida França 19, 4050 Porto, Portugal",
+                                "latE6": 41158929,
+                                "lngE6": -8629600,
+                                "team": "RESISTANCE"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " +"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": "5"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " MUs"
+                            }
+                        ]
+                    ],
+                    "plextType": "SYSTEM_BROADCAST",
+                    "categories": 1
+                }
+            }
+        ],
+        [
+            "capture",
+            1708455522292,
+            {
+                "plext": {
+                    "text": "Pable1993 captured Ogre Azul (Avenida França 19, 4050 Porto, Portugal)",
+                    "team": "RESISTANCE",
+                    "markup": [
+                        [
+                            "PLAYER",
+                            {
+                                "plain": "Pable1993",
+                                "team": "RESISTANCE"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " captured "
+                            }
+                        ],
+                        [
+                            "PORTAL",
+                            {
+                                "plain": "Ogre Azul (Avenida França 19, 4050 Porto, Portugal)",
+                                "name": "Ogre Azul",
+                                "address": "Avenida França 19, 4050 Porto, Portugal",
+                                "latE6": 41158929,
+                                "lngE6": -8629600,
+                                "team": "RESISTANCE"
+                            }
+                        ]
+                    ],
+                    "plextType": "SYSTEM_BROADCAST",
+                    "categories": 1
+                }
+            }
+        ],
+        [
+            "destroyed",
+            1708455443039,
+            {
+                "plext": {
+                    "text": "Pable1993 destroyed a Resonator on Antiga Estação da Boavista (Praça Mouzinho de Albuquerque 19, 4050 Porto, Portugal)",
+                    "team": "RESISTANCE",
+                    "markup": [
+                        [
+                            "PLAYER",
+                            {
+                                "plain": "Pable1993",
+                                "team": "RESISTANCE"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " destroyed a Resonator on "
+                            }
+                        ],
+                        [
+                            "PORTAL",
+                            {
+                                "plain": "Antiga Estação da Boavista (Praça Mouzinho de Albuquerque 19, 4050 Porto, Portugal)",
+                                "name": "Antiga Estação da Boavista",
+                                "address": "Praça Mouzinho de Albuquerque 19, 4050 Porto, Portugal",
+                                "latE6": 41158994,
+                                "lngE6": -8629345,
+                                "team": "ENLIGHTENED"
+                            }
+                        ]
+                    ],
+                    "plextType": "SYSTEM_BROADCAST",
+                    "categories": 1
+                }
+            }
+        ],
+        [
+            "machina linked",
+            1708544393470,
+            {
+                "plext": {
+                    "text": "Neutral agent __MACHINA__ linked from Triebachse im Grünen (Cheruskerstraße 20, 46117 Oberhausen, Germany) to Sprichworttafel (Westfälische Straße 19, 46117 Oberhausen, Germany)",
+                    "team": "NEUTRAL",
+                    "markup": [
+                        [
+                            "FACTION",
+                            {
+                                "team": "NEUTRAL",
+                                "plain": "Neutral"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " agent "
+                            }
+                        ],
+                        [
+                            "PLAYER",
+                            {
+                                "plain": "__MACHINA__",
+                                "team": "NEUTRAL"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " linked from "
+                            }
+                        ],
+                        [
+                            "PORTAL",
+                            {
+                                "plain": "Triebachse im Grünen (Cheruskerstraße 20, 46117 Oberhausen, Germany)",
+                                "name": "Triebachse im Grünen",
+                                "address": "Cheruskerstraße 20, 46117 Oberhausen, Germany",
+                                "latE6": 51500443,
+                                "lngE6": 6893285,
+                                "team": "NEUTRAL"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " to "
+                            }
+                        ],
+                        [
+                            "PORTAL",
+                            {
+                                "plain": "Sprichworttafel (Westfälische Straße 19, 46117 Oberhausen, Germany)",
+                                "name": "Sprichworttafel",
+                                "address": "Westfälische Straße 19, 46117 Oberhausen, Germany",
+                                "latE6": 51502304,
+                                "lngE6": 6889981,
+                                "team": "NEUTRAL"
+                            }
+                        ]
+                    ],
+                    "plextType": "SYSTEM_BROADCAST",
+                    "categories": 1
+                }
+            }
+        ],
+        [
+            "chat",
+            1708541588148,
+            {
+                "plext": {
+                    "text": "DieRachedesZ: @Zauberer999 ✌🖐",
+                    "team": "RESISTANCE",
+                    "markup": [
+                        [
+                            "SENDER",
+                            {
+                                "plain": "DieRachedesZ: ",
+                                "team": "RESISTANCE"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": ""
+                            }
+                        ],
+                        [
+                            "AT_PLAYER",
+                            {
+                                "plain": "@Zauberer999",
+                                "team": "ENLIGHTENED"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " ✌🖐"
+                            }
+                        ]
+                    ],
+                    "plextType": "PLAYER_GENERATED",
+                    "categories": 1
+                }
+            }
+        ],
+        [
+            "unknown",
+            1708455522892,
+            {
+                "plext": {
+                    "text": "Pable1993 did something Ogre Azul (Avenida França 19, 4050 Porto, Portugal)",
+                    "team": "RESISTANCE",
+                    "markup": [
+                        [
+                            "PLAYER",
+                            {
+                                "plain": "Pable1993",
+                                "team": "RESISTANCE"
+                            }
+                        ],
+                        [
+                            "TEXT",
+                            {
+                                "plain": " did something "
+                            }
+                        ],
+                        [
+                            "PORTAL",
+                            {
+                                "plain": "Ogre Azul (Avenida França 19, 4050 Porto, Portugal)",
+                                "name": "Ogre Azul",
+                                "address": "Avenida França 19, 4050 Porto, Portugal",
+                                "latE6": 41158929,
+                                "lngE6": -8629600,
+                                "team": "RESISTANCE"
+                            }
+                        ]
+                    ],
+                    "plextType": "SYSTEM_BROADCAST",
+                    "categories": 1
+                }
+            }
+        ],
+        [
+            "kinetic",
+            1708541588200,
+            {
+                "plext": {
+                    "text": "Your Kinetic Capsule is now ready.",
+                    "team": "NEUTRAL",
+                    "markup": [
+                        [
+                            "TEXT",
+                            {
+                                "plain": "Your Kinetic Capsule is now ready."
+                            }
+                        ]
+                    ],
+                    "plextType": "SYSTEM_NARROWCAST",
+                    "categories": 4
+                }
+            }
+        ]
+    ]
+}

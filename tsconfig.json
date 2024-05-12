@@ -9,6 +9,7 @@
     "esModuleInterop": true,
     "importHelpers": true,
     "sourceMap": true,
+    "resolveJsonModule": true,
     "jsx": "preserve",
     "jsxImportSource": "solid-js",
     "typeRoots": [
@@ -16,7 +17,9 @@
       "types"
     ],
     "paths": {
-      "images/*": ["./assets/images/*"]
+      "images/*": [
+        "./assets/images/*"
+      ]
     }
   },
   "ts-node": {
@@ -29,5 +32,4 @@
     "core/**/*",
     "tests/**/*"
   ]
-
 }

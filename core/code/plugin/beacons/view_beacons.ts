@@ -40,15 +40,14 @@ const beaconNames: { [key: string]: BeaconNames } = {
 };
 const nameRewardBeacon = "peBR_REWARD-"; // example: peBR_REWARD-10_125_38
 
-
-
 const imagePath = "https://commondatastorage.googleapis.com/ingress.com/img/map_icons/marker_images/";
 
 interface BeaconDeploy {
     player: string;
     time: number;
 }
-type LatLngString = string;
+
+const chatMessages = [ChatLineType.BEACON, ChatLineType.BATTLE, ChatLineType.BATTLE_RESULT, ChatLineType.FIREWORKS];
 
 
 export class ViewOrnaments extends Plugin {
@@ -59,21 +58,22 @@ export class ViewOrnaments extends Plugin {
     public tags: ["ornaments", "beacon", "portal", "info"];
     public defaultInactive = false;
 
-    private lastDeploy: Map<LatLngString, BeaconDeploy> = new Map();
+    private lastDeploy: Map<string, BeaconDeploy> = new Map();
 
     constructor() {
         super();
         require("./styles.css");
     }
 
+
     activate() {
         hooks.on("portalDetailsUpdated", this.onPortalDetails);
-        hooks.on("publicChatDataAvailable", this.onPublicChatDataAvailable);
+        hooks.chat.on(chatMessages, this.onBeaconChat, true);
     }
 
     deactivate() {
         hooks.off("portalDetailsUpdated", this.onPortalDetails);
-        hooks.off("publicChatDataAvailable", this.onPublicChatDataAvailable);
+        hooks.chat.off(chatMessages, this.onBeaconChat, true);
     }
 
     onPortalDetails = (): void => {

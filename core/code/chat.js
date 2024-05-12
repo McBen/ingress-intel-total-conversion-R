@@ -446,15 +446,15 @@ window.chat.writeDataToHash = function (newData, storageHash, isPublicChannel, i
 // Rendering primitive for markup, chat cells (td) and chat row (tr)
 //
 window.chat.renderText = function (text) {
-    if (text.team) {
-        var teamId = window.teamStringToId(text.team);
-        if (teamId === TEAM_NONE) teamId = TEAM_MAC;
-        var spanClass = window.TEAM_TO_CSS[teamId];
-        return $("<div>")
-            .append($("<span>", { class: spanClass, text: text.plain }))
-            .html();
-    }
-    return $("<div>").text(text.plain).html().autoLink();
+  if (text.team) {
+    var teamId = window.teamStringToId(text.team);
+    if (teamId === TEAM_NONE) teamId = TEAM_MAC;
+    var spanClass = window.TEAM_TO_CSS[teamId];
+    return $("<div>")
+      .append($("<span>", { class: spanClass, text: text.plain }))
+      .html();
+  }
+  return $("<div>").text(text.plain).html().autoLink();
 };
 
 // Override portal names that are used over and over, such as 'US Post Office'
@@ -479,10 +479,10 @@ window.chat.renderPortal = function (portal) {
 };
 
 window.chat.renderFactionEnt = function (faction) {
-    var teamId = window.teamStringToId(faction.team);
-    var name = window.TEAM_NAMES[teamId];
-    var spanClass = window.TEAM_TO_CSS[teamId];
-    return $("<div>").html($("<span>").attr("class", spanClass).text(name)).html();
+  var teamId = window.teamStringToId(faction.team);
+  var name = window.TEAM_NAMES[teamId];
+  var spanClass = window.TEAM_TO_CSS[teamId];
+  return $("<div>").html($("<span>").attr("class", spanClass).text(name)).html();
 };
 
 window.chat.renderPlayer = function (player, at, sender) {
@@ -520,52 +520,55 @@ window.chat.renderMarkupEntity = function (ent) {
 };
 
 window.chat.renderMarkup = function (markup) {
-    var msg = "";
+  var msg = "";
 
-    transformMessage(markup);
+  const cleanedUpMessage = transformMessage(markup);
 
-    markup.forEach(function (ent, ind) {
-        switch (ent[0]) {
-            case "SENDER":
-            case "SECURE":
-                // skip as already handled
-                break;
+  cleanedUpMessage.forEach(function (ent, ind) {
+    switch (ent[0]) {
+      case "SENDER":
+      case "SECURE":
+        // skip as already handled
+        break;
 
-            case "PLAYER": // automatically generated messages
-                if (ind > 0) msg += chat.renderMarkupEntity(ent); // don’t repeat nick directly
-                break;
+      case "PLAYER": // automatically generated messages
+        if (ind > 0) msg += chat.renderMarkupEntity(ent); // don’t repeat nick directly
+        break;
 
-            default:
-                // add other enitities whatever the type
-                msg += chat.renderMarkupEntity(ent);
-                break;
-        }
-    });
-    return msg;
+      default:
+        // add other enitities whatever the type
+        msg += chat.renderMarkupEntity(ent);
+        break;
+    }
+  });
+  return msg;
 };
 
 function transformMessage(markup) {
+  const cleaned = markup.slice(0);
+
   // "Agent "<player>"" destroyed the "<faction>" Link "
-  if (markup.length > 4) {
-    if (markup[3][0] === "FACTION" && markup[4][0] === "TEXT" && (markup[4][1].plain === " Link " || markup[4][1].plain === " Control Field @")) {
-      markup[4][1].team = markup[3][1].team;
-      markup.splice(3, 1);
+  if (cleaned.length > 4) {
+    if (cleaned[3][0] === "FACTION" && cleaned[4][0] === "TEXT" && (cleaned[4][1].plain === " Link " || cleaned[4][1].plain === " Control Field @")) {
+      cleaned[4][1].team = cleaned[3][1].team;
+      cleaned.splice(3, 1);
     }
   }
 
   // skip "<faction> agent <player>"
-  if (markup.length > 1) {
-    if (markup[0][0] === "TEXT" && markup[0][1].plain === "Agent " && markup[1][0] === "PLAYER") {
-      markup.splice(0, 1);
+  if (cleaned.length > 1) {
+    if (cleaned[0][0] === "TEXT" && cleaned[0][1].plain === "Agent " && cleaned[1][0] === "PLAYER") {
+      cleaned.splice(0, 1);
     }
   }
 
   // skip "agent <player>""
-  if (markup.length > 2) {
-    if (markup[0][0] === "FACTION" && markup[1][0] === "TEXT" && markup[1][1].plain === " agent " && markup[2][0] === "PLAYER") {
-      markup.splice(0, 2);
+  if (cleaned.length > 2) {
+    if (cleaned[0][0] === "FACTION" && cleaned[1][0] === "TEXT" && cleaned[1][1].plain === " agent " && cleaned[2][0] === "PLAYER") {
+      cleaned.splice(0, 2);
     }
   }
+  return cleaned;
 }
 
 window.chat.renderTimeCell = function (time, classNames) {
