@@ -5,6 +5,7 @@ import { idle } from "./map/idle";
 import { Log, LogApp } from "./helper/log_apps";
 import { EventMapDataEntityInject, hooks } from "./helper/hooks";
 import { dialog } from "./ui/dialog";
+import { escapeHtmlSpecialChars } from "./helper/utils_misc";
 const log = Log(LogApp.Artifacts);
 
 /**
@@ -131,7 +132,6 @@ export class Artifacts {
 
             // let's pre-generate the entities needed to render the map - array of [guid, timestamp, ent_array]
             this.entities.push([guid, data.timestamp, ent]);
-
         }
 
     }
@@ -191,19 +191,45 @@ export class Artifacts {
     }
 
 
+    private getArtifactTypes(): string[] {
+        const portals = [...this.portalInfo.values()];
+        const types = new Set<string>();
+        portals.forEach(p => {
+            Object.keys(p.artifactBrief.target).forEach(t => types.add(t))
+            Object.keys(p.artifactBrief.fragment).forEach(t => types.add(t))
+        });
+
+        return [...types.values()];
+    }
+
+    private getPortalsWithArtifactTypes(type: string): Map<PortalGUID, IITC.PortalDataDetail> {
+
+        return new Map([...this.portalInfo.entries()].filter(([_key, portal]) => this.portalHasFragment(portal, type) || this.portalIsTarget(portal, type)));
+
+    }
+
+    private portalHasFragment(portal: IITC.PortalDataDetail, fragment: string): boolean {
+        return !!portal.artifactBrief.fragment[fragment];
+    }
+
+    private portalIsTarget(portal: IITC.PortalDataDetail, target: string): boolean {
+        return !!portal.artifactBrief.target[target];
+    }
+
+
     showArtifactList() {
         let html = "";
 
-        /*
-        if (this.artifactTypes.length === 0) {
+        const types = this.getArtifactTypes();
+        if (types.length === 0) {
             html += "<i>No artifacts at this time</i>";
         }
 
         let first = true;
-        this.artifactTypes.forEach(type => {
+        types.forEach(type => {
             // no nice way to convert the Niantic internal name into the correct display name
             // (we do get the description string once a portal with that shard type is selected - could cache that somewhere?)
-            var name = type.capitalize() + " shards";
+            const name = type.capitalize() + " shards";
 
             if (!first) html += "<hr>";
             first = false;
@@ -212,41 +238,35 @@ export class Artifacts {
             html += '<table class="artifact artifact-' + type + '">';
             html += "<tr><th>Portal</th><th>Details</th></tr>";
 
-            var tableRows = [];
+            const tableRows = [];
 
-            $.each(artifact.portalInfo, function (guid, data) {
-                if (type in data) {
-                    // this portal has data for this artifact type - add it to the table
+            this.getPortalsWithArtifactTypes(type).forEach((portal, guid) => {
+                // this portal has data for this artifact type - add it to the table
 
-                    var onclick = "zoomToAndShowPortal('" + guid + "',[" + data._data.latE6 / 1E6 + "," + data._data.lngE6 / 1E6 + "])";
-                    var row = '<tr><td class="portal"><a onclick="' + onclick + '">' + escapeHtmlSpecialChars(data._data.title) + "</a></td>";
+                var onclick = "zoomToAndShowPortal('" + guid + "',[" + portal.latE6 / 1E6 + "," + portal.lngE6 / 1E6 + "])";
+                var row = '<tr><td class="portal"><a onclick="' + onclick + '">' + escapeHtmlSpecialChars(portal.title) + "</a></td>";
 
-                    row += '<td class="info">';
+                row += '<td class="info">';
 
-                    if (data[type].target !== undefined) {
-                        if (data[type].target == TEAM_NONE) {
-                            row += '<span class="target">Target Portal</span> ';
-                        } else {
-                            row += '<span class="target ' + TEAM_TO_CSS[data[type].target] + '">' + (data[type].target == TEAM_RES ? "Resistance" : "Enlightened") + " target</span> ";
-                        }
-                    }
-
-                    if (data[type].fragments) {
-                        if (data[type].target !== undefined) {
-                            row += "<br>";
-                        }
-                        var fragmentName = "shard";
-                        //          row += '<span class="fragments'+(data[type].target?' '+TEAM_TO_CSS[data[type].target]:'')+'">'+fragmentName+': #'+data[type].fragments.join(', #')+'</span> ';
-                        row += '<span class="fragments' + (data[type].target ? " " + TEAM_TO_CSS[data[type].target] : "") + '">' + fragmentName + ": yes</span> ";
-                    }
-
-                    row += "</td></tr>";
-
-                    // sort by target portals first, then by portal GUID
-                    var sortVal = (data[type].target !== undefined ? "A" : "Z") + guid;
-
-                    tableRows.push([sortVal, row]);
+                const isTarget = this.portalIsTarget(portal, type);
+                if (isTarget) {
+                    row += '<span class="target">Target Portal</span> ';
                 }
+
+                if (this.portalHasFragment(portal, type)) {
+                    if (isTarget) {
+                        row += "<br>";
+                    }
+                    const fragmentName = "shard";
+                    row += '<span class="fragments">' + fragmentName + "</span> ";
+                }
+
+                row += "</td></tr>";
+
+                // sort by target portals first, then by portal GUID
+                var sortVal = (this.portalIsTarget(portal, type) ? "A" : "Z") + guid;
+
+                tableRows.push([sortVal, row]);
             });
 
             // check for no rows, and add a note to the table instead
@@ -273,7 +293,6 @@ export class Artifacts {
         // - Which shards are at each portal, just that it has one or more shards
         // You can select a portal and the detailed data contains the list of shard numbers, but there's still no
         // more information on targets
-        */
         dialog({
             title: "Artifacts",
             id: "iitc-artifacts",
