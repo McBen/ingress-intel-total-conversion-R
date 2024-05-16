@@ -4,6 +4,12 @@ import { readCookie } from "./utils_misc";
 import { SECONDS } from "./times";
 
 /**
+ *  chat refresh every 30s (base time)
+ *  (intel has 2min refresh)
+ */
+const REFRESH = 30 * SECONDS;
+
+/**
  * limit on refresh time since previous refresh, limiting repeated move refresh rate
  */
 const MINIMUM_OVERRIDE_REFRESH = 10 * SECONDS;
@@ -160,7 +166,7 @@ export class RequestQueue {
                 t = (MINIMUM_OVERRIDE_REFRESH - timeSinceLastRefresh);
             }
         } else {
-            t = REFRESH * 1000;
+            t = REFRESH;
 
             const adj = ZOOM_LEVEL_ADJ * (18 - window.map.getZoom());
             if (adj > 0) t += adj;

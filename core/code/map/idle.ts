@@ -1,9 +1,11 @@
 // IDLE HANDLING /////////////////////////////////////////////////////
 import { Log, LogApp } from "../helper/log_apps";
+import { MINUTES, SECONDS } from "../helper/times";
 const log = Log(LogApp.Idle);
 
-const IDLE_POLL_TIME = 10;
-const MAX_IDLE_TIME = 15 * 60;
+const IDLE_POLL_TIME = 10 * SECONDS;
+const MAX_IDLE_TIME = 15 * MINUTES;
+const MAX_IDLE_TIME_HIDDEN = 1 * MINUTES;
 export type IdleResumeCallback = () => void;
 
 
@@ -21,7 +23,7 @@ export class Idle {
         this.lastMouseX = -1;
         this.lastMouseY = -1;
 
-        window.setInterval(() => this.idlePoll(), IDLE_POLL_TIME * 1000);
+        window.setInterval(() => this.idlePoll(), IDLE_POLL_TIME);
         $("body").on("keypress", () => this.reset());
         $("body").on("mousemove", (event: JQuery.MouseMoveEvent) => this.onMouseMove(event));
     }
@@ -33,7 +35,7 @@ export class Idle {
         const hidden = document.visibilityState === "hidden";
         if (hidden) {
             // set a small time limit before entering idle mode
-            this.idleTimeLimit = REFRESH;
+            this.idleTimeLimit = MAX_IDLE_TIME_HIDDEN;
         }
         if (!wasIdle && this.isIdle()) {
             log.log("idlePoll: entering idle mode");
