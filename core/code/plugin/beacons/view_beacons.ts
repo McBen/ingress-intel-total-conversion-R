@@ -107,7 +107,7 @@ export class ViewOrnaments extends Plugin {
             if (beaconNames[name]) {
                 tname = beaconNames[name].name;
             } else if (name.startsWith("pe")) {
-                tname = `Beacon (${name.slice(2)}`;
+                tname = `Beacon (${name.slice(2)})`;
             }
 
             if (this.beaconHasDeployer(name) && possibleDeployer) {
