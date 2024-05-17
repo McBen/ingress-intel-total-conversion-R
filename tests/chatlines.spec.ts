@@ -1,4 +1,5 @@
 import * as ChatLine from "../core/code/helper/chatlines";
+import * as ChatParser from "../core/code/helper/chatparser";
 import intelChatData from "./data/chat.json";
 
 import { Log, LogApp } from "../core/code/helper/log_apps";
@@ -19,9 +20,9 @@ describe("chatline", () => {
         global.console = require('console');
     });
 
-    it.only("should build the DecisionTree", () => {
+    it("should build the DecisionTree", () => {
         const dt = ChatLine.buildDT();
-        ChatLine.dumpAsCode(dt);
+        // ChatLine.dumpAsCode(dt);
         // ChatLine.dumpTree(dt);
         expect(typeof dt).toBe("object");
     })
@@ -82,10 +83,57 @@ describe("chatline", () => {
     })
 
     /*
-    it("should get portal", () => {
-        const deploy = getIntelChat("deployed");
-        const portal = Chat.getPortal(deploy);
-        expect(portal.name, "First Portal");
+    it("should find same type with code and tree'", () => {
+        const dt = ChatLine.buildDT();
+
+        ChatLine.ChatRules.forEach(c => {
+            const line = convertPatterToChat(c.pattern);
+            expect(ChatLine.findType(dt, line)).toBe(ChatLine.findTypeCode(line));
+        });
     })
     */
+
+    ChatLine.ChatRules.forEach(c => {
+        it(` tree + fct should identify: ${c.pattern.join(";")}`, () => {
+            const dt = ChatLine.buildDT();
+            const line = convertPatterToChat(c.pattern);
+            expect(ChatLine.findTypeCode(line)).toBe(ChatLine.findType(dt, line));
+        })
+    });
+
+
+    const convertPatterToChat = (pattern: string[]): Intel.MarkUp => {
+        return pattern.map(e => {
+            switch (e) {
+                case "PLAYER":
+                    return <Intel.MarkUpPlayer>["PLAYER", { team: "RESISTANCE", plain: "agent" }];
+                case "SECURE":
+                    return <Intel.MarkUpSecure>["SECURE", { plain: "[secure] " }];
+                case "FACTION":
+                    return <Intel.MarkUpFaction>["FACTION", { team: "RESISTANCE", plain: "RESISTANCE" }];
+                case "PORTAL":
+                    return <Intel.MarkUpPortal>["PORTAL", { latE6: 1, lngE6: 1, team: "RESISTANCE", plain: "portal1 (Muster)", name: "portal1", address: "Muster", }];
+                case "SENDER":
+                    return <Intel.MarkUpSender>["SENDER", { team: "RESISTANCE", plain: "RESISTANCE" }];
+
+                // special
+                case "NUMBER":
+                    return <Intel.MarkUpText>["TEXT", { plain: "123" }];
+                case "SEPTICYCLE":
+                    return <Intel.MarkUpText>["TEXT", { plain: "123" }]; // FIXME
+                case "CHAT":
+                    return <Intel.MarkUpText>["TEXT", { plain: "blaba" }];
+
+            }
+            return <Intel.MarkUpText>["TEXT", { plain: e }]
+        })
+    }
+
+
+    it("should get portal", () => {
+        const deploy = getIntelChat("deployed");
+        const portal = ChatParser.getPortal(deploy);
+        expect(portal.name).toBe("First Portal");
+    })
 })
+

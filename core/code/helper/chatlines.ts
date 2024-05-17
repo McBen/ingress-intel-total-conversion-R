@@ -40,46 +40,49 @@ interface Rule {
     pattern: string[];
 }
 
+// DEBUG-START
+export // only used in test
+    // DEBUG-END
+    const ChatRules: Rule[] = [
+        { propability: 100, type: ChatLineType.DEPLOY, pattern: ["PLAYER", " deployed a Resonator on ", "PORTAL"] },
+        { propability: 70, type: ChatLineType.LINK, pattern: ["FACTION", " agent ", "PLAYER", " linked from ", "PORTAL", " to ", "PORTAL"] },
+        { propability: 70, type: ChatLineType.FIELD, pattern: ["FACTION", " agent ", "PLAYER", " created a Control Field @", "PORTAL", " +", "NUMBER", " MUs"] },
+        { propability: 70, type: ChatLineType.CAPTURE, pattern: ["PLAYER", " captured ", "PORTAL"] },
+        { propability: 60, type: ChatLineType.DESTROY_RESONATOR, pattern: ["PLAYER", " destroyed a Resonator on ", "PORTAL"] },
+        { propability: 50, type: ChatLineType.DESTROY_LINK, pattern: ["Agent ", "PLAYER", " destroyed the ", "FACTION", " Link ", "PORTAL", " to ", "PORTAL"] },
+        { propability: 1, type: ChatLineType.DESTROY_LINK, pattern: ["PLAYER", " destroyed the Link ", "PORTAL", " to ", "PORTAL"] }, // OLD
+        { propability: 1, type: ChatLineType.DESTROY_FIELD, pattern: ["PLAYER", " destroyed a Control Field @", "PORTAL", " -", "NUMBER", " MUs"] }, // OLD
+        { propability: 30, type: ChatLineType.DESTROY_FIELD, pattern: ["Agent ", "PLAYER", " destroyed the ", "FACTION", " Control Field @", "PORTAL", " -", "NUMBER", " MUs"] },
+        { propability: 10, type: ChatLineType.FIREWORKS, pattern: ["PLAYER", " deployed Fireworks on ", "PORTAL"] },
+        { propability: 10, type: ChatLineType.BEACON, pattern: ["PLAYER", " deployed a Beacon on ", "PORTAL"] },
+        { propability: 5, type: ChatLineType.NEUTRALIZE, pattern: ["Your Portal ", "PORTAL", " neutralized by ", "PLAYER"] },
+        { propability: 5, type: ChatLineType.DESTROY_LINK, pattern: ["Your Link ", "PORTAL", " to ", "PORTAL", " destroyed by ", "PLAYER"] },
+        { propability: 5, type: ChatLineType.ATTACK, pattern: ["Your Portal ", "PORTAL", " is under attack by ", "PLAYER"] },
+        { propability: 2, type: ChatLineType.KINETIC, pattern: ["Your Kinetic Capsule is now ready."] },
+        { propability: 2, type: ChatLineType.FRACKER, pattern: ["PLAYER", " deployed a Portal Fracker on ", "PORTAL"] },
+        { propability: 2, type: ChatLineType.BATTLE, pattern: ["PLAYER", " deployed a Very Rare Battle Beacon on ", "PORTAL"] },
+        { propability: 2, type: ChatLineType.BATTLE, pattern: ["PLAYER", " deployed a Rare Battle Beacon on ", "PORTAL"] },
+        { propability: 2, type: ChatLineType.BATTLE, pattern: ["PLAYER", " deployed a Battle Beacon on ", "PORTAL"] }, // OLD ?
+        { propability: 2, type: ChatLineType.BATTLE_SCHEDULED, pattern: ["Rare Battle Beacon", " will be deployed at the end of the Septicycle (", "TEXT", " UTC) on ", "PORTAL"] },
+        // FIXME { propability: 2, type: ChatLineType.BATTLE_SCHEDULED, pattern: ["Rare Battle Beacon", " will be deployed at the end of the Septicycle (", "SEPTICYCLE", " UTC) on ", "PORTAL"] },
+        { propability: 2, type: ChatLineType.BATTLE_RESULT, pattern: ["FACTION", " won a CAT-", "TEXT", " Very Rare Battle Beacon on ", "PORTAL"] },
+        { propability: 2, type: ChatLineType.BATTLE_RESULT, pattern: ["FACTION", " won a CAT-", "TEXT", " Rare Battle Beacon on ", "PORTAL"] },
+        { propability: 1, type: ChatLineType.BATTLE_RESULT, pattern: ["FACTION", " won a Very Rare Battle Beacon on ", "PORTAL"] }, // OLD ?
+        { propability: 1, type: ChatLineType.BATTLE_RESULT, pattern: ["FACTION", " won a Rare Battle Beacon on ", "PORTAL"] }, // OLD ?
+        { propability: 1, type: ChatLineType.BATTLE_RESULT, pattern: ["FACTION", " won a Battle Beacon on ", "PORTAL"] }, // dropped ?
+        { propability: 1, type: ChatLineType.LINK, pattern: ["PLAYER", " linked ", "PORTAL", " to ", "PORTAL"] }, // OLD
+        { propability: 1, type: ChatLineType.FIELD, pattern: ["PLAYER", " created a Control Field @", "PORTAL", " +", "NUMBER", " MUs"] }, // OLD
+        { propability: 1, type: ChatLineType.RECURSE, pattern: ["PLAYER", " Recursed"] },
+        { propability: 1, type: ChatLineType.FIRST_LINK, pattern: ["SECURE", " ", "PLAYER", " created their first Link."] },
+        { propability: 1, type: ChatLineType.FIRST_FIELD, pattern: ["SECURE", " ", "PLAYER", " created their first Control Field"] },
+        { propability: 1, type: ChatLineType.FIRST_CAPTURE, pattern: ["SECURE", " ", "PLAYER", " captured their first Portal."] },
+        { propability: 1, type: ChatLineType.DRONE_RETURNED, pattern: ["Your Drone returned by ", "PLAYER"] },
+        { propability: 1, type: ChatLineType.DRONE_RETURNED, pattern: ["Drone returned to Agent by ", "PLAYER"] },
 
-const ChatRules: Rule[] = [
-    { propability: 100, type: ChatLineType.DEPLOY, pattern: ["PLAYER", " deployed a Resonator on ", "PORTAL"] },
-    { propability: 70, type: ChatLineType.LINK, pattern: ["FACTION", " agent ", "PLAYER", " linked from ", "PORTAL", " to ", "PORTAL"] },
-    { propability: 70, type: ChatLineType.FIELD, pattern: ["FACTION", " agent ", "PLAYER", " created a Control Field @", "PORTAL", " +", "NUMBER", " MUs"] },
-    { propability: 70, type: ChatLineType.CAPTURE, pattern: ["PLAYER", " captured ", "PORTAL"] },
-    { propability: 60, type: ChatLineType.DESTROY_RESONATOR, pattern: ["PLAYER", " destroyed a Resonator on ", "PORTAL"] },
-    { propability: 50, type: ChatLineType.DESTROY_LINK, pattern: ["Agent ", "PLAYER", " destroyed the ", "FACTION", " Link ", "PORTAL", " to ", "PORTAL"] },
-    { propability: 1, type: ChatLineType.DESTROY_LINK, pattern: ["PLAYER", " destroyed the Link ", "PORTAL", " to ", "PORTAL"] }, // OLD
-    { propability: 1, type: ChatLineType.DESTROY_FIELD, pattern: ["PLAYER", " destroyed a Control Field @", "PORTAL", " -", "NUMBER", " MUs"] }, // OLD
-    { propability: 30, type: ChatLineType.DESTROY_FIELD, pattern: ["Agent ", "PLAYER", " destroyed the ", "FACTION", " Control Field @", "PORTAL", " -", "NUMBER", " MUs"] },
-    { propability: 10, type: ChatLineType.FIREWORKS, pattern: ["PLAYER", " deployed Fireworks on ", "PORTAL"] },
-    { propability: 10, type: ChatLineType.BEACON, pattern: ["PLAYER", " deployed a Beacon on ", "PORTAL"] },
-    { propability: 5, type: ChatLineType.NEUTRALIZE, pattern: ["Your Portal ", "PORTAL", " neutralized by ", "PLAYER"] },
-    { propability: 5, type: ChatLineType.DESTROY_LINK, pattern: ["Your Link ", "PORTAL", " to ", "PORTAL", " destroyed by ", "PLAYER"] },
-    { propability: 5, type: ChatLineType.ATTACK, pattern: ["Your Portal ", "PORTAL", " is under attack by ", "PLAYER"] },
-    { propability: 2, type: ChatLineType.KINETIC, pattern: ["Your Kinetic Capsule is now ready."] },
-    { propability: 2, type: ChatLineType.FRACKER, pattern: ["PLAYER", " deployed a Portal Fracker on ", "PORTAL"] },
-    { propability: 2, type: ChatLineType.BATTLE, pattern: ["PLAYER", " deployed a Very Rare Battle Beacon on ", "PORTAL"] },
-    { propability: 2, type: ChatLineType.BATTLE, pattern: ["PLAYER", " deployed a Rare Battle Beacon on ", "PORTAL"] },
-    { propability: 2, type: ChatLineType.BATTLE, pattern: ["PLAYER", " deployed a Battle Beacon on ", "PORTAL"] }, // OLD ?
-    { propability: 2, type: ChatLineType.BATTLE_SCHEDULED, pattern: ["Rare Battle Beacon", " will be deployed at the end of the Septicycle (", "SEPTICYCLE", " UTC) on ", "PORTAL"] },
-    { propability: 2, type: ChatLineType.BATTLE_RESULT, pattern: ["FACTION", " won a CAT-", "TEXT", " Very Rare Battle Beacon on ", "PORTAL"] },
-    { propability: 2, type: ChatLineType.BATTLE_RESULT, pattern: ["FACTION", " won a CAT-", "TEXT", " Rare Battle Beacon on ", "PORTAL"] },
-    { propability: 1, type: ChatLineType.BATTLE_RESULT, pattern: ["FACTION", " won a Very Rare Battle Beacon on ", "PORTAL"] }, // OLD ?
-    { propability: 1, type: ChatLineType.BATTLE_RESULT, pattern: ["FACTION", " won a Rare Battle Beacon on ", "PORTAL"] }, // OLD ?
-    { propability: 1, type: ChatLineType.BATTLE_RESULT, pattern: ["FACTION", " won a Battle Beacon on ", "PORTAL"] }, // dropped ?
-    { propability: 1, type: ChatLineType.LINK, pattern: ["PLAYER", " linked ", "PORTAL", " to ", "PORTAL"] }, // OLD
-    { propability: 1, type: ChatLineType.FIELD, pattern: ["PLAYER", " created a Control Field @", "PORTAL", " +", "NUMBER", " MUs"] }, // OLD
-    { propability: 1, type: ChatLineType.RECURSE, pattern: ["PLAYER", " Recursed"] },
-    { propability: 1, type: ChatLineType.FIRST_LINK, pattern: ["SECURE", " ", "PLAYER", " created their first Link."] },
-    { propability: 1, type: ChatLineType.FIRST_FIELD, pattern: ["SECURE", " ", "PLAYER", " created their first Control Field"] },
-    { propability: 1, type: ChatLineType.FIRST_CAPTURE, pattern: ["SECURE", " ", "PLAYER", " captured their first Portal."] },
-    { propability: 1, type: ChatLineType.DRONE_RETURNED, pattern: ["Your Drone returned by ", "PLAYER"] },
-    { propability: 1, type: ChatLineType.DRONE_RETURNED, pattern: ["Drone returned to Agent by ", "PLAYER"] },
-
-    { propability: 10, type: ChatLineType.FACTION_CHAT, pattern: ["SECURE", "SENDER", "TEXT" /* empty */, "CHAT"] },
-    { propability: 10, type: ChatLineType.CHAT, pattern: ["SENDER", "TEXT" /* empty */, "CHAT"] }
-    // CHAT = array of ( AT_PLAYER | TEXT )
-];
+        { propability: 10, type: ChatLineType.FACTION_CHAT, pattern: ["SECURE", "SENDER", "TEXT" /* empty */, "CHAT"] },
+        { propability: 10, type: ChatLineType.CHAT, pattern: ["SENDER", "TEXT" /* empty */, "CHAT"] }
+        // CHAT = array of ( AT_PLAYER | TEXT )
+    ];
 
 type FilterFunction = (line: Intel.MarkUp) => 0 | 1;
 type FilterFunctionRule = (pattern: Rule) => 0 | 1 | undefined;
