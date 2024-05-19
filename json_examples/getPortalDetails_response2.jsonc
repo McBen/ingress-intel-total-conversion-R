@@ -1,0 +1,119 @@
+{
+    "result": [
+        "p",
+        "R",
+        26212262,
+        127692946,
+        8,
+        99,
+        8,
+        "https://lh3.googleusercontent.com/GSUHTtrYh8CAJRHyi7XYL66M33HmdxxOYTzWgbcMhHcavYo6ewE94jM16LeE9kvQUMfRjRP90mVYBy1PLtl3GY6APQ",
+        "Tsuboya C3B7 Artesian Well",
+        [
+            "peNIA"
+        ],
+        false,
+        false,
+        [
+            [
+                [
+                    "shard-alpha"
+                ]
+            ],
+            [
+                [
+                    "targetres"
+                ]
+            ]
+        ],
+        1716013068562,
+        [
+            [
+                "BlueHawkLv28",
+                "Aegis Shield",
+                "VERY_RARE",
+                {
+                    "REMOVAL_STICKINESS": "550000",
+                    "MITIGATION": "70"
+                }
+            ],
+            [
+                "easelkk",
+                "Aegis Shield",
+                "VERY_RARE",
+                {
+                    "REMOVAL_STICKINESS": "550000",
+                    "MITIGATION": "70"
+                }
+            ],
+            [
+                "anjyun",
+                "Aegis Shield",
+                "VERY_RARE",
+                {
+                    "REMOVAL_STICKINESS": "550000",
+                    "MITIGATION": "70"
+                }
+            ],
+            [
+                "ek9b18c250ps",
+                "Aegis Shield",
+                "VERY_RARE",
+                {
+                    "REMOVAL_STICKINESS": "550000",
+                    "MITIGATION": "70"
+                }
+            ]
+        ],
+        [
+            [
+                "BlueHawkLv28",
+                8,
+                6000
+            ],
+            [
+                "yunoyu",
+                8,
+                5993
+            ],
+            [
+                "tujiyan",
+                8,
+                5993
+            ],
+            [
+                "tachinomisan",
+                8,
+                5992
+            ],
+            [
+                "anjyun",
+                8,
+                5993
+            ],
+            [
+                "easelkk",
+                8,
+                5993
+            ],
+            [
+                "ek9b18c250ps",
+                8,
+                5993
+            ],
+            [
+                "YAHO13",
+                8,
+                5992
+            ]
+        ],
+        "ma9",
+        [
+            "shard-alpha",
+            "ALPHA",
+            [
+                34
+            ]
+        ]
+    ]
+}
