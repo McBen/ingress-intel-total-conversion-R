@@ -4,7 +4,7 @@ declare namespace Intel {
     }
 
     type ChatLine = [guid: string, time: number, plext: PlextContainer];
-    type MarkUp = (MarkUpPortal | MarkUpPlayer | MarkUpText | MarkUpFaction | MarkUpSecture)[];
+    type MarkUp = (MarkUpPortal | MarkUpPlayer | MarkUpText | MarkUpFaction | MarkUpSecure | MarkUpSender)[];
     type TeamStr = "RESISTANCE" | "ENLIGHTENED" | "NEUTRAL"; // TODO CHECK if "NEUTRAL" is valid
 
     interface PlextContainer {
@@ -22,8 +22,14 @@ declare namespace Intel {
         plain: string;
     }
 
-    type MarkUpSecture = ["SECURE", MarkUpASecureType];
-    interface MarkUpASecureType {
+    type MarkUpSender = ["SENDER" | "AT_PLAYER", MarkUpSenderType];
+    interface MarkUpSenderType {
+        team: TeamStr;
+        plain: string;
+    }
+
+    type MarkUpSecure = ["SECURE", MarkUpSecureType];
+    interface MarkUpSecureType {
         plain: string;
     }
 
