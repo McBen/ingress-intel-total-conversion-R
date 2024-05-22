@@ -10,6 +10,7 @@ export enum LogApp {
     Events = "Events",
     Score = "Score",
     Artifacts = "Artifacts",
+    Chat = "Chat",
 }
 
 export const Log = (type: LogApp) => anylogger(type);

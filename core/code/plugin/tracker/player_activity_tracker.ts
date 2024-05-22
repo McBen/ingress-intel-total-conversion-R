@@ -8,6 +8,9 @@ import iconResRetinaImage from "./marker-blue-2x.png";
 import { COLORS_LVL, DEFAULT_ZOOM, FACTION, FACTION_CSS, FACTION_NAMES, teamStr2Faction } from "../../constants";
 import { makePermalink } from "../../helper/utils_misc";
 import { selectPortalByLatLng } from "../../map/url_paramater";
+import { hooks } from "../../helper/hooks";
+import * as Chat from "../../helper/chatlines";
+import * as ChatParse from "../../helper/chatparser";
 
 
 interface Player {
@@ -62,6 +65,12 @@ const getChatPortalName = (name: string, address: string): string => {
     return name;
 };
 
+const C = Chat.ChatLineType;
+const InfoMessages = [
+    C.CAPTURE, C.FIELD,
+    C.BEACON, C.FIREWORKS, C.BATTLE, C.FRACKER,
+    C.DEPLOY, C.DESTROY_RESONATOR, C.LINK, C.ATTACK, C.NEUTRALIZE
+];
 
 export class PlayerTracker extends Plugin {
     public name = "Player activity tracker";
@@ -75,6 +84,7 @@ export class PlayerTracker extends Plugin {
 
     private drawnTracesEnl: L.LayerGroup;
     private drawnTracesRes: L.LayerGroup;
+    private isInvalidate: boolean;
     private playerPopup: L.Popup;
     private iconEnl: L.Icon;
     private iconRes: L.Icon;
@@ -118,8 +128,8 @@ export class PlayerTracker extends Plugin {
 
         this.playerPopup = new L.Popup({ offset: L.point([1, -34]) });
 
-        IITCr.hooks.on("publicChatDataAvailable", this.onHandleData);
-
+        hooks.chat.on(InfoMessages, this.onChatMessage, true);
+        hooks.chat.on(Chat.ChatLineType.UPDATE_DONE, this.onChatUpdated);
         window.map.on("zoomend", this.onZoom);
         this.onZoom();
 
@@ -133,7 +143,8 @@ export class PlayerTracker extends Plugin {
         IITCr.layers.removeOverlay(this.drawnTracesEnl);
 
         window.map.off("zoomend", this.onZoom);
-        IITCr.hooks.off("publicChatDataAvailable", this.onHandleData);
+        hooks.chat.off(InfoMessages, this.onChatMessage, true);
+        hooks.chat.off(Chat.ChatLineType.UPDATE_DONE, this.onChatUpdated);
         IITCr.hooks.off("nicknameClicked", this.onNicknameClicked);
         IITCr.hooks.off("search", this.onSearch);
     }
@@ -198,113 +209,89 @@ export class PlayerTracker extends Plugin {
     }
 
     private eventHasLatLng(action: Action, latLng: L.LatLng) {
-        return action.latlngs.includes(latLng);
+        return action.latlngs.some(ll => ll.equals(latLng));
     }
 
-    private processNewData(data: Intel.ChatCallback) {
-        const limit = this.getLimit();
+    onChatMessage = (_type: Chat.ChatLineType, line: Intel.ChatLine) => {
+        if (window.map.getZoom() < this.option.min_zoom) return;
 
-        // Destroy link and field messages depend on where the link or
-        // field was originally created. Therefore it’s not clear which
-        // portal the player is at, so ignore it.
-        const ignoreMessages = new Set([
-            " destroyed the ", "Your Link ",
-            " destroyed the Link ", " destroyed a Control Field @" // old messages
-        ]);
+        const time = ChatParse.getTime(line);
+        const portal = ChatParse.getPortal(line);
+        const agent = ChatParse.getAgent(line);
 
-        data.result.forEach(chat => {
-            // skip old data
-            if (chat[1] < limit) return;
+        const plrteam = teamStr2Faction(agent.team);
+        const plrname = agent.plain;
+        if ([FACTION.ENL, FACTION.RES].includes(plrteam)
+            && time >= this.getLimit()
+            && plrname !== "NiaSection14") {
 
-            // find player and portal information
-            let plrname: string;
-            let plrteam: FACTION;
-            let latLng: L.LatLng;
-            let address: string;
-            let name: string;
-            let skipThisMessage = false;
+            this.addAction(plrname, plrteam, {
+                time,
+                latlngs: [L.latLng(portal.latE6 / 1e6, portal.lngE6 / 1e6)],
+                name: portal.plain,
+                address: portal.address
+            })
 
+            this.isInvalidate = true;
+        };
+    }
 
-            chat[2].plext.markup.every(markup => {
-                switch (markup[0]) {
-                    case "TEXT":
-                        if (ignoreMessages.has(markup[1].plain)) {
-                            skipThisMessage = true;
-                            return false;
-                        }
-                        break;
-                    case "PLAYER":
-                        plrname = markup[1].plain;
-                        plrteam = teamStr2Faction(markup[1].team);
-                        break;
-                    case "PORTAL":
-                        // link messages are “player linked X to Y” and the player is at X.
-                        latLng = latLng ?? L.latLng(markup[1].latE6 / 1e6, markup[1].lngE6 / 1e6);
+    addAction(plrname: string, plrteam: FACTION, newEvent: Action) {
+        const playerData = this.stored.get(plrname);
 
-                        name = name ?? markup[1].name;
-                        address = address ?? markup[1].address;
-                        break;
-                }
-                return true;
+        // short-path if this is a new player
+        if (!playerData || playerData.actions.length === 0) {
+            this.stored.set(plrname, {
+                team: plrteam,
+                actions: [newEvent]
             });
+            return;
+        }
 
-            // skip unusable events
-            if (skipThisMessage || !latLng || !plrname || ![FACTION.ENL, FACTION.RES].includes(plrteam)) return;
-            if (plrname === "NiaSection14") return;
+        const actions = playerData.actions;
+        // find correct place to insert.
+        const i = actions.findIndex(action => action.time > newEvent.time);
+        const nextTime = i >= 0 ? i : actions.length;
+        const prevTime = Math.max(nextTime - 1, 0);
 
-            const newEvent: Action = {
-                latlngs: [latLng],
-                time: chat[1],
-                name,
-                address
-            };
+        // so we have an event that happened at the same time. Most likely
+        // this is multiple resos destroyed at the same time.
+        if (actions[prevTime].time === newEvent.time) {
+            actions[prevTime].latlngs.push(newEvent.latlngs[0]);
+            return;
+        }
 
-            const playerData = this.stored.get(plrname);
+        // the time changed. Is the player still at the same location?
 
-            // short-path if this is a new player
-            if (!playerData || playerData.actions.length === 0) {
-                this.stored.set(plrname, {
-                    team: plrteam,
-                    actions: [newEvent]
-                });
-                return;
-            }
+        // assume this is an older event at the same location. Then we need
+        // to look at the next item in the event list. If this event is the
+        // newest one, there may not be a newer event so check for that. If
+        // it really is an older event at the same location, then skip it.
+        if (actions[prevTime + 1] && this.eventHasLatLng(actions[prevTime + 1], newEvent.latlngs[0])) return;
 
-            const actions = playerData.actions;
-            // there’s some data already. Need to find correct place to insert.
-            let i: number;
-            for (i = 0; i < actions.length; i++) {
-                if (actions[i].time > chat[1]) break;
-            }
+        // if this event is newer, need to look at the previous one
+        const sameLocation = this.eventHasLatLng(actions[prevTime], newEvent.latlngs[0]);
 
-            const cmp = Math.max(i - 1, 0);
+        // if it’s the same location, just update the timestamp. Otherwise
+        // push as new event.
+        if (sameLocation) {
+            actions[prevTime].time = newEvent.time;
+        } else {
+            actions.splice(nextTime, 0, newEvent);
+        }
+    }
 
-            // so we have an event that happened at the same time. Most likely
-            // this is multiple resos destroyed at the same time.
-            if (actions[cmp].time === chat[1]) {
-                actions[cmp].latlngs.push(latLng);
-                return;
-            }
 
-            // the time changed. Is the player still at the same location?
+    onChatUpdated = () => {
+        if (this.isInvalidate) {
+            this.discardOldData();
 
-            // assume this is an older event at the same location. Then we need
-            // to look at the next item in the event list. If this event is the
-            // newest one, there may not be a newer event so check for that. If
-            // it really is an older event at the same location, then skip it.
-            if (actions[cmp + 1] && this.eventHasLatLng(actions[cmp + 1], latLng)) return;
+            this.drawnTracesEnl.clearLayers();
+            this.drawnTracesRes.clearLayers();
+            this.drawData();
 
-            // if this event is newer, need to look at the previous one
-            const sameLocation = this.eventHasLatLng(actions[cmp], latLng);
-
-            // if it’s the same location, just update the timestamp. Otherwise
-            // push as new event.
-            if (sameLocation) {
-                actions[cmp].time = chat[1];
-            } else {
-                actions.splice(i, 0, newEvent);
-            }
-        });
+            this.isInvalidate = false;
+        }
     }
 
     private getLatLngFromEvent(action: Action): L.LatLng {
@@ -517,17 +504,6 @@ export class PlayerTracker extends Plugin {
                 event.preventDefault();
                 return false;
             });
-    }
-
-    onHandleData = (data: Intel.ChatCallback): void => {
-        if (window.map.getZoom() < this.option.min_zoom) return;
-
-        this.discardOldData();
-        this.processNewData(data);
-
-        this.drawnTracesEnl.clearLayers();
-        this.drawnTracesRes.clearLayers();
-        this.drawData();
     }
 
     private findUser(nick: string): Player | undefined {

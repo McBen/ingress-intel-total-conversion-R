@@ -1,3 +1,5 @@
+import * as Chat from "./chatlines";
+import * as ChatParser from "./chatparser";
 import { Log, LogApp } from "../helper/log_apps";
 const log = Log(LogApp.Events);
 
@@ -80,10 +82,14 @@ export class Hooks {
     private hooks: { [index: string]: HookCallback[] } = {};
     private isRunning: number;
 
+    public chat = {
+        on: ChatParser.on,
+        off: ChatParser.off
+    };
+
     constructor() {
         this.hooks = {};
         this.isRunning = 0;
-
     }
 
     trigger(event: string, data: any): boolean {
