@@ -15,6 +15,7 @@ import { formatInterval } from "../helper/times";
 import { player } from "../helper/player";
 import { portalDetail } from "../portal/portal_details_get";
 import { sharePortalDialog } from "./dialogs/share";
+import { selectPortal } from "../map/portal_select";
 
 
 export const setupSidebar = () => {
@@ -102,8 +103,7 @@ const PortalImage: Component<{ details: PortalInfoDetailed }> = p => {
 
 
 const PortalCloseButton = () => {
-    // TODO: click: () => this.clearDetails()
-    return <span class="close" title="Close [w]" accessKey="w">X</span>;
+    return <span class="close" title="Close [w]" accessKey="w" onClick={() => { selectPortal(); setPortalDetails(); }}>X</span>;
 }
 
 

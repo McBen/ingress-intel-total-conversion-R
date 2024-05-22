@@ -57,7 +57,7 @@ export const setPortalIndicators = (p?: IITC.Portal) => {
  * Returns true if it's still the same portal that just needs an
  * update.
  */
-export const selectPortal = (guid: PortalGUID | null) => {
+export const selectPortal = (guid?: PortalGUID) => {
     const update = selectedPortal === guid;
     const oldPortalGuid = selectedPortal;
     selectedPortal = guid;
