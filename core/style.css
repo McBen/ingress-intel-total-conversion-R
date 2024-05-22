@@ -11,6 +11,7 @@
 @import "styles/artifact.pcss";
 @import "styles/menu.pcss";
 @import "styles/statusbar.pcss";
+@import "styles/logwindow.pcss";
 
 @import "styles/dialogs/about.pcss";
 @import "styles/dialogs/redeem.pcss";
