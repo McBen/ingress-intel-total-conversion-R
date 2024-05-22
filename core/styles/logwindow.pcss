@@ -1,0 +1,64 @@
+#logwindow {
+    z-index: 3000;
+    position: absolute;
+    left: 0;
+    bottom: 200px;
+    width: 700px;
+    /*  height: 250px; */
+    background-color: var(--iitc-bg-color-trans);
+    backdrop-filter: blur(6px);
+    color: var(--iitc-text);
+    
+    &:hover, &:focus-within {
+        background-color: var(--iitc-bg-color);
+    }
+
+    .logtabs {
+        height: 20px;
+        margin: 0;
+        top: -22px;
+        position: relative;        
+        list-style: none;
+        padding: 0;
+        
+        li {
+            cursor:pointer;
+            display:inline-block;
+            height: 22px;
+            width: 5em;
+            margin-left: 4px;            
+            margin-right: 4px;            
+            padding-left: 6px;
+            text-align: center;            
+            background-color: var(--iitc-bg-color);
+            opacity: 0.7;
+            border: 1px solid var(--iitc-border-color_hi); 
+            border-bottom: none; 
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+
+            &.selected {
+                color: var(--iitc-text-highlit);
+                background-color: var(--iitc-bg-color-hi);
+                    opacity: 1;
+            }
+        }
+    }
+
+    .contents {
+        border: 1px solid var(--iitc-border-color_hi); 
+        position: relative;
+        top: 0;
+        bottom: 24px;
+        min-height: 100px;        
+      }
+
+    .sendtext {
+        height: 24px;
+        border: 1px solid var(--iitc-border-color_hi); 
+        bottom: 0;
+        position: relative;
+        background-color: var(--iitc-bg-color); 
+    }
+
+}
