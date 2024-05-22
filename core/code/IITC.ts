@@ -12,6 +12,8 @@ import { hooks, Hooks } from "./helper/hooks";
 import { LayerManager } from "./map/layers";
 import { Highlighters } from "./portal/highlighters";
 import { Artifacts } from "./artifact";
+import { setupSidebar } from "./ui/sidebar";
+import { setupLogWindow } from "./ui/log";
 const log = Log(LogApp.Main);
 
 
@@ -43,6 +45,10 @@ export class IITCMain {
         this.menu = new IITCMenu();
         setupMap();
         this.menu.initMenu();
+
+        setupSidebar();
+        setupLogWindow();
+
 
         log.info("init: data requests");
         idle.reset()
