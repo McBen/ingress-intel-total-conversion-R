@@ -1,7 +1,7 @@
 import { hooks } from "../helper/hooks";
 import { portalDetail } from "./portal_details_get";
 import { selectPortal } from "../map/portal_select";
-import { setPortalDetails } from "../ui/sidebar";
+import { setPortalDetails } from "../ui/portal/sidebar";
 
 const DEFAULT_PORTAL_IMG = "//commondatastorage.googleapis.com/ingress.com/img/default-portal-image.png";
 

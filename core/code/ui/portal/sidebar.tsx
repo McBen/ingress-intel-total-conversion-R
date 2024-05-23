@@ -1,21 +1,21 @@
 /* eslint-disable unicorn/prefer-string-replace-all */
 import { Component, Match, Show, Switch, createMemo, createSignal } from "solid-js";
 import { render } from "solid-js/web";
-import { PortalInfoDetailed } from "../portal/portal_info_detailed";
+import { PortalInfoDetailed } from "../../portal/portal_info_detailed";
 
-import { FACTION, FACTION_CSS } from "../constants";
-import { fixPortalImageUrl } from "../portal/portal_display";
-import * as Icons from "./components/icon";
-import { dialog } from "./dialog";
-import { PortalMods } from "./portal/PortalMods";
-import { PortalResonators } from "./portal/PortalResonators";
-import { getPortalFieldsCount, getPortalLinks } from "../helper/portal_data";
-import { digits, zoomToAndShowPortal } from "../helper/utils_misc";
-import { formatInterval } from "../helper/times";
-import { player } from "../helper/player";
-import { portalDetail } from "../portal/portal_details_get";
-import { sharePortalDialog } from "./dialogs/share";
-import { selectPortal } from "../map/portal_select";
+import { FACTION, FACTION_CSS } from "../../constants";
+import { fixPortalImageUrl } from "../../portal/portal_display";
+import * as Icons from "../components/icon";
+import { dialog } from "../dialog";
+import { PortalMods } from "./PortalMods";
+import { PortalResonators } from "./PortalResonators";
+import { getPortalFieldsCount, getPortalLinks } from "../../helper/portal_data";
+import { digits, zoomToAndShowPortal } from "../../helper/utils_misc";
+import { formatInterval } from "../../helper/times";
+import { player } from "../../helper/player";
+import { portalDetail } from "../../portal/portal_details_get";
+import { sharePortalDialog } from "../dialogs/share";
+import { selectPortal } from "../../map/portal_select";
 
 
 export const setupSidebar = () => {
@@ -28,7 +28,10 @@ export const [getPortalDetails, setPortalDetails] = createSignal<PortalInfoDetai
 
 const Sidebar = () => {
     return (
-        <div id="sidebar2">
+        <div class="relative top-0 left-0 max-h-full pr-4 pl-2.5 
+            overflow-y-scroll overflow-x-hidden
+            text-primary bg-primarybg/90 backdrop-blur 
+            transition-colors duration-300 hover:bg-primarybg/100 focus-within:bg-prinarybg/100" id="sidebar2">
             <div id="portaldetails2">
                 <Show when={getPortalDetails()} fallback={<div id="portalStatus">...</div>}>
                     <PortalTitle details={getPortalDetails()} /><PortalCloseButton />
@@ -56,7 +59,7 @@ const PortalTitle: Component<{ details: PortalInfoDetailed }> = p => {
             onClick={() => zoomTo(p.details.guid, p.details.latE6, p.details.lngE6)}
         >{p.details.title}
         </h3>
-        <span class="portal_link" onClick={() => sharePortal(getPortalDetails().guid)}><Icons.IconShare /></span>
+        <span class="absolute top-2 right-7.5 cursor-pointer" onClick={() => sharePortal(getPortalDetails().guid)}><Icons.IconShare /></span>
     </div >
     );
 }

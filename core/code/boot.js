@@ -8,7 +8,7 @@ localStorage.setItem('log', '*=debug');
 // localStorage.setItem('log', '*=debug;Map=warn');
 import anylogger from "anylogger"
 import { IITCr } from "./IITC";
-import { setupSidebar } from "./ui/sidebar.tsx";
+import { setupSidebar } from "./ui/portal/sidebar.tsx";
 
 const log = anylogger("Boot");
 

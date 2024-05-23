@@ -2,7 +2,7 @@ import { Component, For, Match, Show, Switch, createMemo } from "solid-js";
 import { RESO_NRG } from "../../portal/portal_info_detailed";
 import { PortalRESO } from "../../portal/portal_info";
 import { COLORS_LVL, FACTION } from "../../constants";
-import { Agent } from "../sidebar";
+import { Agent } from "./sidebar";
 
 
 export const PortalResonators: Component<{ resonators: PortalRESO[], team: FACTION }> = p => {
