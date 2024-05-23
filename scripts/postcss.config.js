@@ -1,10 +1,10 @@
 module.exports = {
-    plugins: [
-        require('postcss-import'),
-        require('postcss-css-variables'),
-        require('postcss-nested'),
-        require('cssnano')({ preset: 'default' }),
-        require('postcss-image-inliner')({
+    plugins: {
+        "postcss-import": {},
+        "postcss-css-variables": {},
+        "postcss-nested": {},
+        "cssnano": { preset: 'default' },
+        "postcss-image-inliner": {
             strict: true,
             maxFileSize: 0,
             assetPaths: [
@@ -12,6 +12,8 @@ module.exports = {
                 './core/', './core/external/',
                 './plugins/', './plugins/external'
             ]
-        })
-    ]
+        },
+        tailwindcss: {},
+        autoprefixer: {},
+    }
 };

@@ -18,6 +18,12 @@
 @import "styles/dialogs/share.pcss";
 @import "styles/dialogs/toast.pcss";
 
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
 .text-overflow-ellipsis {
   display: inline-block;
   overflow: hidden;
