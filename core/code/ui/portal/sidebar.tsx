@@ -106,7 +106,13 @@ const PortalImage: Component<{ details: PortalInfoDetailed }> = p => {
 
 
 const PortalCloseButton = () => {
-    return <span class="close" title="Close [w]" accessKey="w" onClick={() => { selectPortal(); setPortalDetails(); }}>X</span>;
+    return <span
+        class="absolute right-0.5 -top-0.5 cursor-pointer text-neutral-300"
+        title="Close [w]"
+        accessKey="w"
+        onClick={() => { selectPortal(); setPortalDetails(); }}>
+        X
+    </span>;
 }
 
 
