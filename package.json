@@ -10,8 +10,8 @@
     "autobuild": "concurrently --kill-others \"yarn build --watch\" \"yarn start\"",
     "build": "webpack",
     "build:prod": "NODE_ENV=production webpack",
-    "start": "node ./scripts/fileserver.js",
-    "test": "jest"
+    "start": "node ./config/fileserver.js",
+    "test": "jest -c config/jest.config.ts"
   },
   "dependencies": {
     "anylogger": "^1.0.11",

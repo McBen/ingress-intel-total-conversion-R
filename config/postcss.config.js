@@ -13,7 +13,7 @@ module.exports = {
                 './plugins/', './plugins/external'
             ]
         },
-        tailwindcss: {},
+        tailwindcss: { config: './config/tailwind.config.js' },
         autoprefixer: {},
     }
 };
