@@ -754,6 +754,7 @@ window.chat.backgroundChannelData = function (instance, channel, flag) {
 
 
 window.chat.request = function () {
+  return;
   var channel = chat.tabToChannel(chat.getActive());
   if (channel == 'faction' || (window.chat.backgroundChannels && window.chat.backgroundChannels['faction'])) {
     chat.requestFaction(false);
