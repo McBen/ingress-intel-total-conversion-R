@@ -5,21 +5,15 @@
     bottom: 200px;
     width: 700px;
     /*  height: 250px; */
-    background-color: var(--iitc-bg-color-trans);
-    backdrop-filter: blur(6px);
     color: var(--iitc-text);
-    
-    &:hover, &:focus-within {
-        background-color: var(--iitc-bg-color);
-    }
 
     .logtabs {
         height: 20px;
         margin: 0;
-        top: -22px;
         position: relative;        
         list-style: none;
         padding: 0;
+        user-select: none;
         
         li {
             cursor:pointer;
@@ -45,20 +39,30 @@
         }
     }
 
-    .contents {
-        border: 1px solid var(--iitc-border-color_hi); 
-        position: relative;
-        top: 0;
-        bottom: 24px;
-        min-height: 100px;        
-      }
+    .loglines{
+        background-color: var(--iitc-bg-color-trans);
+        backdrop-filter: blur(6px);
+        
+        &:hover, &:focus-within {
+            background-color: var(--iitc-bg-color);
+        }
 
-    .sendtext {
-        height: 24px;
-        border: 1px solid var(--iitc-border-color_hi); 
-        bottom: 0;
-        position: relative;
-        background-color: var(--iitc-bg-color); 
+
+        .contents {
+            border: 1px solid var(--iitc-border-color_hi); 
+            position: relative;
+            top: 0;
+            bottom: 24px;
+            min-height: 100px;        
+        }
+
+        .sendtext {
+            height: 24px;
+            border: 1px solid var(--iitc-border-color_hi); 
+            bottom: 0;
+            position: relative;
+            background: transparent; 
+        }
+
     }
-
 }
