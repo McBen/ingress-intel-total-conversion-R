@@ -179,10 +179,10 @@ globalThis.iitcCompabilityInit = () => {
 
     // Artifacts
     globalThis.artifact = {
-        requestData: IITCr.artifacts.requestData,
-        getArtifactEntities: IITCr.artifacts.getArtifactEntities,
-        handleFailure: IITCr.artifacts.handleFailure,
-        handleSuccess: IITCr.artifacts.handleSuccess
+        requestData: IITCr.artifacts.requestData.bind(IITCr.artifacts),
+        getArtifactEntities: IITCr.artifacts.getArtifactEntities.bind(IITCr.artifacts),
+        handleFailure: IITCr.artifacts.handleFailure.bind(IITCr.artifacts),
+        processData: IITCr.artifacts.processData.bind(IITCr.artifacts)
     }
 }
 
