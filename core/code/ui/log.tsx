@@ -1,5 +1,5 @@
 import { render } from "solid-js/web";
-import { LogWindow, setTabs } from "./log/logwindow";
+import { LogWindow, LogSetPage, setTabs } from "./log/logwindow";
 import { LogRequest } from "./log/logrequest";
 
 
@@ -9,9 +9,12 @@ export const setupLogWindow = () => {
     render(() => <LogWindow />, logwindow[0]);
 
 
-    setTabs([
-        new LogRequest("all"),
-        new LogRequest("faction"),
-        new LogRequest("alerts"),
-    ]);
+    const tabs = [
+        new LogRequest("all", "All"),
+        new LogRequest("faction", "Faction"),
+        new LogRequest("alerts", "Alerts"),
+    ];
+
+    setTabs(tabs);
+    setTimeout(() => LogSetPage(tabs[0]), 500); // delay before init request
 }
