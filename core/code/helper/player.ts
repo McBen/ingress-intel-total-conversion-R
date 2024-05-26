@@ -29,7 +29,9 @@ export class Player {
             [FACTION.RES, FACTION.ENL] : [FACTION.ENL, FACTION.RES];
     }
 
-
+    itsMe(name: string): boolean {
+        return name === this.name;
+    }
 }
 
 export const player = new Player();
