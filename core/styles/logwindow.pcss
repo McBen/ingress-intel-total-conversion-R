@@ -2,8 +2,8 @@
     z-index: 3000;
     position: absolute;
     left: 0;
-    bottom: 200px;
-    width: 700px;
+    bottom: 60px;
+    width: 705px;
     height: 350px; 
     max-height: 600px; 
     color: var(--iitc-text);
@@ -56,12 +56,53 @@
             border-spacing: 0;
             table-layout: fixed;
             width: 100%;
+
+            td {
+                &:nth-child(2) {
+                    overflow: hidden;
+                    white-space: nowrap;
+                }
+            }
+
+            mark {
+                background: transparent;
+              }
+              
+            .invisep { /* required? */
+                display: inline-block;
+                width: 1px;
+                height: 1px;
+                overflow: hidden;
+                color: transparent;
+            }
+            
+            .pl_nudge_me {
+                color: #ffd652;
+            }
+
+            .pl_nudge_date {
+                background-color: #724510;
+                border-left: 1px solid #ffd652;
+                border-bottom: 1px solid #ffd652;
+                border-top: 1px solid #ffd652;
+                color: #ffd652;
+                display: inline-block;
+                float: left;
+                height: 18px;
+                text-align: center;
+            }
+
+            .system_narrowcast {
+                color: #f66;
+            }
+              
         }
 
         .contents {
             border: 1px solid var(--iitc-border-color_hi); 
             flex: 1; 
-            overflow: scroll;
+            overflow-x: hidden;
+            overflow-y: scroll;
         }
 
         .sendtext {
