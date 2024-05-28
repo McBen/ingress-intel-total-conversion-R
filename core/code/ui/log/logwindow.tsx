@@ -10,7 +10,7 @@ import { player as whoami } from "../../helper/player";
 
 
 export const [tabs, setTabs] = createSignal<LogRequest[]>([])
-export const [lines, setLines] = createSignal<Intel.ChatLine[]>([]);
+const [lines, _setLines] = createSignal<Intel.ChatLine[]>([]);
 export const [current, setCurrent] = createSignal(tabs()[0]);
 
 export const LogSetPage = (page: LogRequest) => {
@@ -18,8 +18,21 @@ export const LogSetPage = (page: LogRequest) => {
     setCurrent(page);
 }
 
+export const setLines = (lines: Intel.ChatLine[]) => {
+    const content = $(".loglines .contents");
+    const scollposition = content.get(0).scrollHeight - content.innerHeight() - content.scrollTop();
+
+    _setLines(lines);
+
+    if (scollposition === 0) {
+        content.scrollTop(content.height());
+    } else {
+        content.scrollTop(content.innerHeight() - scollposition);
+    }
+}
+
 export const LogWindow = () => {
-    const updateTab = (page: LogRequest) => (page) => LogSetPage(page);
+    const updateTab = (page: LogRequest) => () => LogSetPage(page);
 
     return (
         <>
@@ -33,7 +46,7 @@ export const LogWindow = () => {
                 </For>
             </ul>
             <div class="loglines">
-                <div class="contents">
+                <div class="contents" onScroll={event => checkForHistoryMessages(event.currentTarget)}>
                     <table>
                         <colgroup>
                             <col style="width:44px" />
@@ -48,8 +61,18 @@ export const LogWindow = () => {
             </div>
         </>
     );
-};
+}
 
+
+const CHAT_REQUEST_SCROLL_TOP = 0;
+
+const checkForHistoryMessages = (element: HTMLElement) => {
+    //  if (t.data('ignoreNextScroll')) return t.data('ignoreNextScroll', false);
+    if (element.scrollTop <= CHAT_REQUEST_SCROLL_TOP) {
+        current().request(true);
+    }
+    // if (window.scrollBottom(t) === 0) channelDesc.request(channelDesc.id, false);
+}
 
 export const ChatLine: Component<{ line: Intel.ChatLine }> = p => {
 
@@ -96,6 +119,7 @@ const simplifyChatLine = (markup: Intel.MarkUp): Intel.MarkUp => {
     ) {
         (markup[4][1] as any).team = markup[3][1].team;
         markup = markup.slice() as Intel.MarkUp;
+        console.log("destroy set team -> ", (markup[3][1] as any).team);
         markup.splice(3, 1);
     }
 
@@ -177,7 +201,8 @@ const getPlayer = (plext: Intel.PlextContainer): { name: string, team: FACTION }
 
 
 const MarkupTEXT: Component<{ markup: Intel.MarkUpTextType }> = p => {
-    const team = (p.markup as any).team;
+    let team = (p.markup as any).team;
+    if (team === FACTION.none) team = FACTION.MAC;
     if (team && FACTION_CSS[team]) {
         return <span class={FACTION_CSS[team]}>{p.markup.plain}</span>
     } else {
@@ -198,7 +223,7 @@ const MarkupPORTAL: Component<{ markup: Intel.MarkUpPortalType }> = p => {
         onClick={() => selectPortalByLatLng(latlng)}
         title={p.markup.address}
         class="help"
-        href={permalink}
+    /* href={permalink} */
     >{p.markup.name}</a>
 }
 
