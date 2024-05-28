@@ -144,6 +144,22 @@ export class RequestQueue {
     private lastRefreshTime: number = 0;
 
 
+    add(ajax: JQuery.jqXHR): void {
+        this.activeRequests.push(ajax);
+    }
+
+    remove(ajax: JQuery.jqXHR): void {
+        const index = this.activeRequests.indexOf(ajax);
+        this.activeRequests.splice(index, 1);
+    }
+
+    abort(): void {
+        this.activeRequests.forEach(request => request.abort());
+
+        this.activeRequests = [];
+    }
+
+
     /**
      * sets the timer for the next auto refresh. Ensures only one timeout
      * is queued. May be given 'override' in milliseconds if time should
@@ -175,20 +191,6 @@ export class RequestQueue {
         this.refreshTimeout = window.setTimeout(() => this.callOnRefreshFunctions(), t);
     }
 
-    add(ajax: JQuery.jqXHR): void {
-        this.activeRequests.push(ajax);
-    }
-
-    remove(ajax: JQuery.jqXHR): void {
-        const index = this.activeRequests.indexOf(ajax);
-        this.activeRequests.splice(index, 1);
-    }
-
-    abort(): void {
-        this.activeRequests.forEach(request => request.abort());
-
-        this.activeRequests = [];
-    }
 
 
     callOnRefreshFunctions() {
