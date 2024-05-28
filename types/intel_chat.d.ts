@@ -9,10 +9,11 @@ declare namespace Intel {
 
     interface PlextContainer {
         plext: {
-            plextType: "SYSTEM_BROADCAST";
+            plextType: "SYSTEM_BROADCAST" | "SYSTEM_NARROWCAST";
             markup: MarkUp;
             team: TeamStr;
             text: string;
+            categories: number;
         };
     }
 
