@@ -96,18 +96,6 @@ const createMap = (): void => {
         padding: window.RENDERER_PADDING || 0.5
     });
 
-    // add empty div to leaflet control areas - to force other leaflet controls to move around IITC UI elements
-    // TODO? move the actual IITC DOM into the leaflet control areas, so dummy <div>s aren't needed
-    if (!isSmartphone()) {
-        // chat window area
-        $("<div>").addClass("leaflet-control")
-            .width(708).height(108)
-            .css({
-                "pointer-events": "none",
-                "margin": "0"
-                // eslint-disable-next-line no-underscore-dangle, @typescript-eslint/no-unsafe-argument
-            }).appendTo((map as any)._controlCorners.bottomleft);
-    }
 
     map.attributionControl.setPrefix("");
 
