@@ -117,9 +117,8 @@ const simplifyChatLine = (markup: Intel.MarkUp): Intel.MarkUp => {
         markup[4][0] === 'TEXT' &&
         (markup[4][1].plain === ' Link ' || markup[4][1].plain === ' Control Field @')
     ) {
-        (markup[4][1] as any).team = markup[3][1].team;
+        (markup[4][1] as any).team = teamStringToId(markup[3][1].team);
         markup = markup.slice() as Intel.MarkUp;
-        console.log("destroy set team -> ", (markup[3][1] as any).team);
         markup.splice(3, 1);
     }
 
