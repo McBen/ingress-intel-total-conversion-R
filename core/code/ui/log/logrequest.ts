@@ -128,17 +128,15 @@ export class LogRequest {
             return log.warn(`${this.channel} chat error. Waiting for next auto-refresh.`);
         }
 
-        if (data.result.length === 0) {
-            return;
+        if (data.result.length > 0) {
+            this.mergeData(data.result, isSortedAscending);
         }
 
-
-        this.mergeData(data.result, isSortedAscending);
 
         // trigger updates
         switch (this.channel) {
             case "all":
-                hooks.trigger('publciChatDataAvailable', { raw: data, result: data.result, processed: this.data });
+                hooks.trigger('publicChatDataAvailable', { raw: data, result: data.result, processed: this.data });
                 break;
             case "faction":
                 hooks.trigger('factionChatDataAvailable', { raw: data, result: data.result, processed: this.data });
@@ -149,7 +147,7 @@ export class LogRequest {
         }
 
         // update view
-        if (current() === this) {
+        if (data.result.length > 0 && current() === this) {
             setLines(this.data);
         }
     }
@@ -159,10 +157,13 @@ export class LogRequest {
     mergeData(data: Intel.ChatLine[], isSortedAscending: boolean) {
 
         const filter = data.filter(line => !this.data.some(c => c[0] === line[0]));
+
+        // filter duplicated lines
         if (filter.length !== data.length) {
-            // should not happen!
-            log.warn(`receiving duplicate chat lines (count:${data.length - filter.length})`);
-            return;
+            const dups = data.length - filter.length;
+            if (dups > 1) { // there should be only 1 duplicated (the start/end)
+                log.warn(`receiving duplicate chat lines (count: ${data.length} dup: ${data.length - filter.length})`);
+            }
         }
 
         if (filter.length === 0) return;
@@ -179,7 +180,7 @@ export class LogRequest {
 
         // DEBUG-START
         if (this.data.every((a, index) => index === 0 || a[index - 1][1] <= a[index - 1][1])) {
-            log.warn("chat lines are not sorted");
+            log.error("chat lines are not sorted");
         }
         // DEBUG-END
 
