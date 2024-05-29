@@ -186,6 +186,11 @@ globalThis.iitcCompabilityInit = () => {
     }
 }
 
+globalThis.chat = {
+    postMsg: NOOP,
+    backgroundChannelData: NOOP,
+    getActive: () => { return "all" }
+};
 
 // IITC-CE v.0.38.0
 interface IITC_ButtonOptions {
