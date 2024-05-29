@@ -8,13 +8,19 @@
   // as north/south lines have very little curvature in the projection, we can use longitude (east/west) seperation
   // to calculate intermediate points. hopefully this will avoid the rounding issues seen in the full intermediate
   // points code that have been seen
+  var clamped;
   function geodesicConvertLine(start, end, convertedPoints) { // push intermediate points into convertedPoints
 
-    const bounds = window.map.getBounds();
+    // if (this.options.clamp) {
+    let bounds = window.map.getBounds();
+    bounds = bounds.pad(-0.7);
     if (!bounds.contains(start) || !bounds.contains(end)) {
-      console.log("clamp line");
+      clamped = false;
       [start, end] = clamp(start, end, bounds);
+
+      if (clamped) this.setStyle({ color: "#aaaa33" });
     }
+    // }
 
     var lng1 = start.lng * d2r;
     var lng2 = end.lng * d2r;
@@ -67,7 +73,10 @@
 
   function clampPlane(ac, bc, p1, p2) {
     const np = cross(p1, p2);
-    if (dot(ac, np) >= 0) return ac;
+    if (dot(ac, np) >= 0) return ac; // its inside
+    if (dot(bc, np) <= 0) return ac; // both on same sice
+    clamped = true;
+    console.log("clamp");
 
     const lineDir = minus(ac, bc);
     const dotProduct = dot(np, lineDir);
@@ -95,10 +104,10 @@
   }
 
   function boundsToVector(bounds) {
-    const sw = bounds.getSouthWest();
-    const se = bounds.getSouthEast();
     const nw = bounds.getNorthWest();
     const ne = bounds.getNorthEast();
+    const sw = bounds.getSouthWest();
+    const se = bounds.getSouthEast();
 
     return [
       toCartesian(nw.lat, nw.lng),
@@ -226,6 +235,9 @@
 
   PolyMixin.options = polyOptions; // workaround for https://github.com/Leaflet/Leaflet/pull/6766/
   L.GeodesicPolygon = L.Polygon.extend(PolyMixin);
+  PolyMixin.options = polyOptions
+  // L.GeodesicPolygon2 = L.Polygon.extend(PolyMixin);
+  // L.GeodesicPolygon2.options.clamp = true;
 
   L.GeodesicCircle = L.Polygon.extend({
     options: {
