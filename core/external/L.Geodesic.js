@@ -1,18 +1,24 @@
 (function () {
   // constants
-  var d2r = Math.PI/180.0;
-  var r2d = 180.0/Math.PI;
+  var d2r = Math.PI / 180.0;
+  var r2d = 180.0 / Math.PI;
   var earthR = 6367000.0; // earth radius in meters (doesn't have to be exact)
 
   // alternative geodesic line intermediate points function
   // as north/south lines have very little curvature in the projection, we can use longitude (east/west) seperation
   // to calculate intermediate points. hopefully this will avoid the rounding issues seen in the full intermediate
   // points code that have been seen
-  function geodesicConvertLine (start, end, convertedPoints) { // push intermediate points into convertedPoints
+  function geodesicConvertLine(start, end, convertedPoints) { // push intermediate points into convertedPoints
+
+    const bounds = window.map.getBounds();
+    if (!bounds.contains(start) || !bounds.contains(end)) {
+      console.log("clamp line");
+      [start, end] = clamp(start, end, bounds);
+    }
 
     var lng1 = start.lng * d2r;
     var lng2 = end.lng * d2r;
-    var dLng = lng1-lng2;
+    var dLng = lng1 - lng2;
 
     var segments = Math.floor(Math.abs(dLng * earthR / this.options.segmentsCoeff));
     if (segments < 2) { return; }
@@ -26,23 +32,113 @@
     var sinLat2 = Math.sin(lat2);
     var cosLat1 = Math.cos(lat1);
     var cosLat2 = Math.cos(lat2);
-    var sinLat1CosLat2 = sinLat1*cosLat2;
-    var sinLat2CosLat1 = sinLat2*cosLat1;
-    var cosLat1CosLat2SinDLng = cosLat1*cosLat2*Math.sin(dLng);
+    var sinLat1CosLat2 = sinLat1 * cosLat2;
+    var sinLat2CosLat1 = sinLat2 * cosLat1;
+    var cosLat1CosLat2SinDLng = cosLat1 * cosLat2 * Math.sin(dLng);
 
-    for (var i=1; i < segments; i++) {
-      var iLng = lng1-dLng*(i/segments);
+    for (var i = 1; i < segments; i++) {
+      var iLng = lng1 - dLng * (i / segments);
       var iLat = Math.atan(
-        (sinLat1CosLat2 * Math.sin(iLng-lng2) - sinLat2CosLat1 * Math.sin(iLng-lng1))
-          / cosLat1CosLat2SinDLng
+        (sinLat1CosLat2 * Math.sin(iLng - lng2) - sinLat2CosLat1 * Math.sin(iLng - lng1))
+        / cosLat1CosLat2SinDLng
       );
-      convertedPoints.push(L.latLng(iLat*r2d, iLng*r2d));
+      convertedPoints.push(L.latLng(iLat * r2d, iLng * r2d));
     }
   }
 
+  function clamp(a, b, bounds) {
+    const bp = boundsToVector(bounds);
+    let ac = toCartesian(a.lat, a.lng);
+    let bc = toCartesian(b.lat, b.lng);
+
+    ac = clampA(ac, bc, bp);
+    bc = clampA(bc, ac, bp);
+
+    return [XYZToLatLng(ac), XYZToLatLng(bc)];
+  }
+
+  function clampA(ac, bc, pbounds) {
+    ac = clampPlane(ac, bc, pbounds[0], pbounds[1]);
+    ac = clampPlane(ac, bc, pbounds[1], pbounds[2]);
+    ac = clampPlane(ac, bc, pbounds[2], pbounds[3]);
+    ac = clampPlane(ac, bc, pbounds[3], pbounds[0]);
+    return ac;
+  }
+
+  function clampPlane(ac, bc, p1, p2) {
+    const np = cross(p1, p2);
+    if (dot(ac, np) >= 0) return ac;
+
+    const lineDir = minus(ac, bc);
+    const dotProduct = dot(np, lineDir);
+    if (Math.abs(dotProduct) < 1e-6) return ac; // parallel to bounds
+
+    const t = dot(minus(p1, ac), np) / dotProduct;
+
+    return [
+      ac[0] + t * lineDir[0],
+      ac[1] + t * lineDir[1],
+      ac[2] + t * lineDir[2]
+    ];
+  }
+
+  function isInside(pc, pbounds) {
+    const np1 = cross(pbounds[0], pbounds[1]);
+    const np2 = cross(pbounds[1], pbounds[2]);
+    const np3 = cross(pbounds[2], pbounds[3]);
+    const np4 = cross(pbounds[3], pbounds[0]);
+
+    return dot(np1, pc) >= 0 &&
+      dot(np2, pc) >= 0 &&
+      dot(np3, cpc) >= 0 &&
+      dot(np3, cpc) >= 0;
+  }
+
+  function boundsToVector(bounds) {
+    const sw = bounds.getSouthWest();
+    const se = bounds.getSouthEast();
+    const nw = bounds.getNorthWest();
+    const ne = bounds.getNorthEast();
+
+    return [
+      toCartesian(nw.lat, nw.lng),
+      toCartesian(ne.lat, ne.lng),
+      toCartesian(se.lat, se.lng),
+      toCartesian(sw.lat, sw.lng),
+    ]
+  }
+
+  function toCartesian(lat, lng) {
+    lat *= d2r;
+    lng *= d2r;
+    var o = Math.cos(lat);
+    return [o * Math.cos(lng), o * Math.sin(lng), Math.sin(lat)]
+  }
+
+  function XYZToLatLng(xyz) {
+    const r2d = 180.0 / Math.PI;
+
+    const lat = Math.atan2(xyz[2], Math.sqrt(xyz[0] * xyz[0] + xyz[1] * xyz[1]));
+    const lng = Math.atan2(xyz[1], xyz[0]);
+
+    return L.latLng(lat * r2d, lng * r2d);
+  }
+
+
+  function cross(t, n) {
+    return [t[1] * n[2] - t[2] * n[1], t[2] * n[0] - t[0] * n[2], t[0] * n[1] - t[1] * n[0]]
+  }
+
+  function dot(t, n) {
+    return t[0] * n[0] + t[1] * n[1] + t[2] * n[2]
+  }
+
+  function minus(a, b) {
+    return [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+  }
 
   // iterate pairs of connected vertices with fn(), adding new intermediate vertices (if returned)
-  function processPoly (latlngs, fn) {
+  function processPoly(latlngs, fn) {
     var result = [];
 
     // var isPolygon = this.options.fill; // !wrong: L.Draw use options.fill with polylines
@@ -53,13 +149,13 @@
       result.push(latlngs[0]);
     }
     for (var i = 0, len = latlngs.length - 1; i < len; i++) {
-      fn.call(this, latlngs[i], latlngs[i+1], result);
-      result.push(latlngs[i+1]);
+      fn.call(this, latlngs[i], latlngs[i + 1], result);
+      result.push(latlngs[i + 1]);
     }
     return result;
   }
 
-  function geodesicConvertLines (latlngs) {
+  function geodesicConvertLines(latlngs) {
     if (latlngs.length === 0) {
       return [];
     }
@@ -71,14 +167,14 @@
 
     // points are wrapped after being offset relative to the first point coordinate, so they're
     // within +-180 degrees
-    latlngs = latlngs.map(function (a) { return L.latLng(a.lat, a.lng-lngOffset).wrap(); });
+    latlngs = latlngs.map(function (a) { return L.latLng(a.lat, a.lng - lngOffset).wrap(); });
 
-    var geodesiclatlngs = this._processPoly(latlngs,this._geodesicConvertLine);
+    var geodesiclatlngs = this._processPoly(latlngs, this._geodesicConvertLine);
 
     // now add back the offset subtracted above. no wrapping here - the drawing code handles
     // things better when there's no sudden jumps in coordinates. yes, lines will extend
     // beyond +-180 degrees - but they won't be 'broken'
-    geodesiclatlngs = geodesiclatlngs.map(function (a) { return L.latLng(a.lat, a.lng+lngOffset); });
+    geodesiclatlngs = geodesiclatlngs.map(function (a) { return L.latLng(a.lat, a.lng + lngOffset); });
 
     return geodesiclatlngs;
   }
@@ -140,7 +236,7 @@
     initialize: function (latlng, options, legacyOptions) {
       if (typeof options === 'number') {
         // Backwards compatibility with 0.7.x factory (latlng, radius, options?)
-        options = L.extend({}, legacyOptions, {radius: options});
+        options = L.extend({}, legacyOptions, { radius: options });
       }
       this._latlng = L.latLng(latlng);
       this._radius = options.radius; // note: https://github.com/Leaflet/Leaflet/issues/6656
@@ -184,17 +280,17 @@
       var sinRadRadius = Math.sin(radRadius);
 
       var calcLatLngAtAngle = function (angle) {
-        var lat = Math.asin(sinCentreLat*cosRadRadius + cosCentreLat*sinRadRadius*Math.cos(angle));
-        var lng = centreLng + Math.atan2(Math.sin(angle)*sinRadRadius*cosCentreLat, cosRadRadius-sinCentreLat*Math.sin(lat));
+        var lat = Math.asin(sinCentreLat * cosRadRadius + cosCentreLat * sinRadRadius * Math.cos(angle));
+        var lng = centreLng + Math.atan2(Math.sin(angle) * sinRadRadius * cosCentreLat, cosRadRadius - sinCentreLat * Math.sin(lat));
 
-        return L.latLng(lat * r2d,lng * r2d);
+        return L.latLng(lat * r2d, lng * r2d);
       };
 
       var o = this.options;
-      var segments = Math.max(o.segmentsMin,Math.floor(this._radius/o.segmentsCoeff));
+      var segments = Math.max(o.segmentsMin, Math.floor(this._radius / o.segmentsCoeff));
       var points = [];
-      for (var i=0; i<segments; i++) {
-        var angle = Math.PI*2/segments*i;
+      for (var i = 0; i < segments; i++) {
+        var angle = Math.PI * 2 / segments * i;
 
         var point = calcLatLngAtAngle(angle);
         points.push(point);
