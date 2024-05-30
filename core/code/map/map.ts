@@ -7,10 +7,17 @@ import { GLOPT, IITCOptions } from "../helper/options";
 import { hooks } from "../helper/hooks";
 import { IITCr } from "../IITC";
 import * as L from "leaflet";
-import { Log, LogApp } from "../helper/log_apps";
 import { FilterLayer } from "./filter_layer";
 import { readURLParamater } from "./url_paramater";
+import { GeodesicPolyline3 } from "../helper/L.Geopolyline";
+import { Log, LogApp } from "../helper/log_apps";
 const log = Log(LogApp.Map);
+
+
+global.L.GeodesicPolyline3 = GeodesicPolyline3;
+global.L.geodesicPolyline3 = (latlng, options) => {
+    return new GeodesicPolyline3(latlng, options);
+};
 
 
 export const setupMap = (): void => {

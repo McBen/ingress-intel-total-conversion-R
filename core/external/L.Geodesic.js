@@ -8,24 +8,20 @@
   // as north/south lines have very little curvature in the projection, we can use longitude (east/west) seperation
   // to calculate intermediate points. hopefully this will avoid the rounding issues seen in the full intermediate
   // points code that have been seen
-  var clamped;
   function geodesicConvertLine(start, end, convertedPoints) { // push intermediate points into convertedPoints
 
-    // if (this.options.clamp) {
-    let bounds = window.map.getBounds();
-    bounds = bounds.pad(-0.7);
-    if (!bounds.contains(start) || !bounds.contains(end)) {
-      clamped = false;
-      [start, end] = clamp(start, end, bounds);
-
-      if (clamped) this.setStyle({ color: "#aaaa33" });
-    }
-    // }
 
     var lng1 = start.lng * d2r;
     var lng2 = end.lng * d2r;
     var dLng = lng1 - lng2;
 
+    /*var lat1 = start.lat * d2r;
+    var lat2 = end.lat * d2r;
+    var distance = Math.acos(
+      Math.sin(lat1) * Math.sin(lat2) +
+      Math.cos(lat1) * Math.cos(lat2) * Math.cos(-dLng));
+    var segments = Math.ceil(distance * earthR / 100000);
+    */
     var segments = Math.floor(Math.abs(dLng * earthR / this.options.segmentsCoeff));
     if (segments < 2) { return; }
 
@@ -52,6 +48,32 @@
     }
   }
 
+  // A: https://intel.ingress.com/intel?ll=,z=17
+  // C: https://intel.ingress.com/intel?ll=,&z=17  
+  // [{"type":"polyline","latLngs":[{"lat":55.477626,"lng":9.458853},{"lat":53.785501,"lng":9.415725}],"color":"#ff0000"},{"type":"polygon","latLngs":[{"lat":55.477626,"lng":9.458853},{"lat":53.785501,"lng":9.415725},{"lat":54.73886933043496,"lng":9.43299651145935}],"color":"#a24ac3"}]  
+
+
+
+  // B: https://intel.ingress.com/intel?ll=54.73925,9.439722&z=17
+
+  function geodesicConvertLineClamp(start, end, convertedPoints) {
+
+    let bounds = window.map.getBounds();
+    bounds = bounds.pad(-0.8);
+
+    if (!bounds.contains(start) || !bounds.contains(end)) {
+      clamped = false;
+      [start, end] = clamp(start, end, bounds);
+      if (clamped) {
+        this.setStyle({ color: "#aaaa33" });
+      } else {
+        this.setStyle({ color: "#aa33aa" });
+      }
+    }
+
+    geodesicConvertLine.call(this, start, end, convertedPoints);
+  }
+
   function clamp(a, b, bounds) {
     const bp = boundsToVector(bounds);
     let ac = toCartesian(a.lat, a.lng);
@@ -73,14 +95,14 @@
 
   function clampPlane(ac, bc, p1, p2) {
     const np = cross(p1, p2);
-    if (dot(ac, np) >= 0) return ac; // its inside
-    if (dot(bc, np) <= 0) return ac; // both on same sice
-    clamped = true;
-    console.log("clamp");
+    if (dot(ac, np) <= 0) return ac; // its inside
+    if (dot(bc, np) >= 0) return ac; // both on same sice
 
-    const lineDir = minus(ac, bc);
+    const lineDir = minus(bc, ac);
     const dotProduct = dot(np, lineDir);
-    if (Math.abs(dotProduct) < 1e-6) return ac; // parallel to bounds
+    // if (Math.abs(dotProduct) < 1e-6) return ac; // parallel to bounds
+    if (dotProduct === 0) { return ac; }
+    clamped = true;
 
     const t = dot(minus(p1, ac), np) / dotProduct;
 
@@ -89,18 +111,6 @@
       ac[1] + t * lineDir[1],
       ac[2] + t * lineDir[2]
     ];
-  }
-
-  function isInside(pc, pbounds) {
-    const np1 = cross(pbounds[0], pbounds[1]);
-    const np2 = cross(pbounds[1], pbounds[2]);
-    const np3 = cross(pbounds[2], pbounds[3]);
-    const np4 = cross(pbounds[3], pbounds[0]);
-
-    return dot(np1, pc) >= 0 &&
-      dot(np2, pc) >= 0 &&
-      dot(np3, cpc) >= 0 &&
-      dot(np3, cpc) >= 0;
   }
 
   function boundsToVector(bounds) {
@@ -150,19 +160,66 @@
   function processPoly(latlngs, fn) {
     var result = [];
 
-    // var isPolygon = this.options.fill; // !wrong: L.Draw use options.fill with polylines
     var isPolygon = this instanceof L.Polygon;
     if (isPolygon) {
       latlngs.push(latlngs[0]);
     } else {
       result.push(latlngs[0]);
     }
+
     for (var i = 0, len = latlngs.length - 1; i < len; i++) {
       fn.call(this, latlngs[i], latlngs[i + 1], result);
       result.push(latlngs[i + 1]);
     }
+
     return result;
   }
+
+
+  // map.addLayer(L.rectangle(map.getBounds().pad(-0.8))); 
+  var clamped;
+  function pclamp(start, end, bounds) {
+    if (!bounds.contains(start) || !bounds.contains(end)) {
+      [start, end] = clamp(start, end, bounds);
+    }
+
+    return [start, end];
+  }
+
+  function processPolyclamped(latlngs, fn) {
+    let bounds = window.map.getBounds();
+    bounds = bounds.pad(-0.8);
+
+    clamped = false;
+
+    var result = [];
+
+    var isPolygon = this instanceof L.Polygon;
+    let lastEnd = L.latLng(180, 180);
+    if (isPolygon) {
+      latlngs.push(latlngs[0]);
+    } else {
+      lastEnd = latlngs[0];
+    }
+    for (var i = 0, len = latlngs.length - 1; i < len; i++) {
+      [start, end] = pclamp(latlngs[i], latlngs[i + 1], bounds);
+
+      if (!start.equals(lastEnd)) result.push(start);
+      fn.call(this, latlngs[i], latlngs[i + 1], result);
+      result.push(end);
+      lastEnd = end;
+    }
+
+    if (clamped) {
+      this.setStyle({ color: "#aaaa33" });
+    }
+
+    return result;
+  }
+
+
+
+
 
   function geodesicConvertLines(latlngs) {
     if (latlngs.length === 0) {
@@ -172,31 +229,29 @@
     // geodesic calculations have issues when crossing the anti-meridian. so offset the points
     // so this isn't an issue, then add back the offset afterwards
     // a center longitude would be ideal - but the start point longitude will be 'good enough'
-    var lngOffset = latlngs[0].lng;
+    // var lngOffset = latlngs[0].lng;
 
     // points are wrapped after being offset relative to the first point coordinate, so they're
     // within +-180 degrees
-    latlngs = latlngs.map(function (a) { return L.latLng(a.lat, a.lng - lngOffset).wrap(); });
+    // latlngs = latlngs.map(function (a) { return L.latLng(a.lat, a.lng - lngOffset).wrap(); });
 
     var geodesiclatlngs = this._processPoly(latlngs, this._geodesicConvertLine);
 
     // now add back the offset subtracted above. no wrapping here - the drawing code handles
     // things better when there's no sudden jumps in coordinates. yes, lines will extend
     // beyond +-180 degrees - but they won't be 'broken'
-    geodesiclatlngs = geodesiclatlngs.map(function (a) { return L.latLng(a.lat, a.lng + lngOffset); });
+    // geodesiclatlngs = geodesiclatlngs.map(function (a) { return L.latLng(a.lat, a.lng + lngOffset); });
 
     return geodesiclatlngs;
   }
 
   var polyOptions = {
-    segmentsCoeff: 1000
+    segmentsCoeff: 5000
   };
 
   var PolyMixin = {
     _geodesicConvertLine: geodesicConvertLine,
-
     _processPoly: processPoly,
-
     _geodesicConvertLines: geodesicConvertLines,
 
     _geodesicConvert: function () {
@@ -235,9 +290,16 @@
 
   PolyMixin.options = polyOptions; // workaround for https://github.com/Leaflet/Leaflet/pull/6766/
   L.GeodesicPolygon = L.Polygon.extend(PolyMixin);
+
   PolyMixin.options = polyOptions
-  // L.GeodesicPolygon2 = L.Polygon.extend(PolyMixin);
-  // L.GeodesicPolygon2.options.clamp = true;
+  L.GeodesicPolyline2 = L.Polyline.extend(PolyMixin);
+  L.GeodesicPolyline2.prototype._processPoly = processPolyclamped;
+  // L.GeodesicPolyline2.prototype._geodesicConvertLine = geodesicConvertLineClamp;
+  L.GeodesicPolyline2.prototype._projectLatlngs = function (latlngs, result, projectedBounds) {
+    latlngs = this._defaultShape();
+    var geo_latlngs = this._geodesicConvertLines(latlngs);
+    L.Polyline.prototype._projectLatlngs.call(this, geo_latlngs, result, projectedBounds);
+  }
 
   L.GeodesicCircle = L.Polygon.extend({
     options: {
@@ -317,6 +379,11 @@
   L.geodesicPolyline = function (latlngs, options) {
     return new L.GeodesicPolyline(latlngs, options);
   };
+
+  L.geodesicPolyline2 = function (latlngs, options) {
+    return new L.GeodesicPolyline2(latlngs, options);
+  };
+
 
   L.geodesicPolygon = function (latlngs, options) {
     return new L.GeodesicPolygon(latlngs, options);
