@@ -56,6 +56,13 @@ export const move = (start: XYZ, direction: XYZ, distance: number): XYZ => {
     return [start[0] + direction[0] * distance, start[1] + direction[1] * distance, start[2] + direction[2] * distance];
 }
 
+export const normalize = (a: XYZ): void => {
+    const length = 1 / Math.sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2]);
+    a[0] *= length;
+    a[1] *= length;
+    a[2] *= length;
+}
+
 export const equals = (a: XYZ, b: XYZ): boolean => {
     const margin = Math.max(
         Math.abs(a[0] - b[0]),
