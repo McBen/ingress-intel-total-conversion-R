@@ -3,10 +3,40 @@ import * as Vec from "../helper/vector";
 
 
 const toRepaint: GeodesicPolyline3[] = [];
+let bounds = [];
+let segcoff = 1;
 
 const repaintAll = () => {
-    // TODO: store & convert bounds; recalc points + call redraw, replace "_projectLatlngs"
+    updateBounds();
+    updatePixelRatio();
     toRepaint.forEach(p => p.redraw());
+}
+
+const updatePixelRatio = () => {
+
+    const v = Vec.length(Vec.minus(bounds[2], bounds[0]));
+    // const h = Math.sqrt(screen.height * screen.height + screen.width * screen.width);
+    segcoff = 10 / v;
+}
+
+const updateBounds = () => {
+    const mapbounds = window.map.getBounds().pad(-0.9);
+    // const mapbounds = window.map.getBounds().pad(0.1);
+    bounds = boundsToVector(mapbounds);
+}
+
+const boundsToVector = (bounds: L.LatLngBounds): Vec.XYZ[] => {
+    const nw = bounds.getNorthWest();
+    const ne = bounds.getNorthEast();
+    const se = bounds.getSouthEast();
+    const sw = bounds.getSouthWest();
+
+    return [
+        Vec.LatLngToXYZ(nw),
+        Vec.LatLngToXYZ(ne),
+        Vec.LatLngToXYZ(se),
+        Vec.LatLngToXYZ(sw)
+    ]
 }
 
 
@@ -23,6 +53,7 @@ export class GeodesicPolyline3 extends L.Polyline {
     onAdd(map: Map): this {
         if (toRepaint.length === 0) {
             window.map.on("moveend", repaintAll);
+            updateBounds();
         }
         toRepaint.push(this);
 
@@ -55,54 +86,32 @@ export class GeodesicPolyline3 extends L.Polyline {
 
     private geodesicConvertLines(latlngs: L.LatLng[]): L.LatLng[] {
 
-        const bounds = window.map.getBounds().pad(-0.8); // TODO: for debug only
-        const cbounds = this.boundsToVector(bounds);
+        const result = [];
 
-        const result = [
-            bounds.getNorthWest(),
-            bounds.getNorthEast(),
-            bounds.getSouthEast(),
-            bounds.getSouthWest(),
-            bounds.getNorthWest(),
-        ];
+        // DEBUG
+        result.push(Vec.XYZToLLatLng(bounds[0]), Vec.XYZToLLatLng(bounds[1]), Vec.XYZToLLatLng(bounds[2]), Vec.XYZToLLatLng(bounds[3]), Vec.XYZToLLatLng(bounds[0]));
 
-        // result.push(latlngs[0]);
+        result.push(latlngs[0]);
 
         let start = Vec.LatLngToXYZ(latlngs[0]);
 
         for (let i = 1; i < latlngs.length; i++) {
             let end = Vec.LatLngToXYZ(latlngs[i]);
 
-            let startClipped = this.boundCollission(start, end, cbounds);
-            let endClipped = this.boundCollission(end, start, cbounds);
+            let startClipped = this.boundCollission(start, end, bounds);
+            let endClipped = this.boundCollission(end, start, bounds);
 
-            // if (startClipped) result.push(Vec.XYZToLLatLng(startClipped));
-            result.push(Vec.XYZToLLatLng(startClipped || start));
+            if (startClipped) result.push(Vec.XYZToLLatLng(startClipped));
 
             this.addPathLatLngs(startClipped || start, endClipped || end, result);
 
-            if (!endClipped) result.push(Vec.XYZToLLatLng(end));
-            // if (endClipped) result.push(Vec.XYZToLLatLng(end));
+            if (endClipped) result.push(Vec.XYZToLLatLng(end));
             start = end;
         }
 
-        return result;;
+        return result;
     }
 
-
-    private boundsToVector(bounds): Vec.XYZ[] {
-        const nw = bounds.getNorthWest();
-        const ne = bounds.getNorthEast();
-        const se = bounds.getSouthEast();
-        const sw = bounds.getSouthWest();
-
-        return [
-            Vec.LatLngToXYZ(nw),
-            Vec.LatLngToXYZ(ne),
-            Vec.LatLngToXYZ(se),
-            Vec.LatLngToXYZ(sw)
-        ]
-    }
 
     private boundCollission(x: Vec.XYZ, target: Vec.XYZ, cbounds: Vec.XYZ[]): Vec.XYZ | undefined {
         let c = this.planeCollision(x, target, cbounds[0], cbounds[1]);  // north
@@ -119,10 +128,9 @@ export class GeodesicPolyline3 extends L.Polyline {
 
         const lineDir = Vec.minus(target, x);
         const dotProduct = Vec.dot(p_norm, lineDir);
-        if (dotProduct === 0) return; // parallel to bounds ; 
+        if (dotProduct === 0) return; // parallel to boundaries
 
         const t = Vec.dot(Vec.minus(p1, x), p_norm) / dotProduct;
-        // const t = -Vec.dot(p_norm, Vec.minus(x, p1)) / dotProduct;
 
         const p = Vec.move(x, lineDir, t)
         console.assert(Math.abs(Vec.dot(p, p_norm)) < 1e-9, "point is not on plane");
@@ -133,7 +141,8 @@ export class GeodesicPolyline3 extends L.Polyline {
     private addPathLatLngs(start: Vec.XYZ, end: Vec.XYZ, result: L.LatLng[]): void {
 
         const direction = Vec.minus(end, start);
-        const segments = 5;
+        const segments = 10; // Math.ceil(Vec.length(direction) * segcoff);
+        // console.log("segments:", segments);
         for (let i = 1; i <= segments; i++) {
             const p = Vec.move(start, direction, i / segments);
             Vec.normalize(p);

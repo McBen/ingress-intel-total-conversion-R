@@ -70,5 +70,9 @@ export const equals = (a: XYZ, b: XYZ): boolean => {
         Math.abs(a[2] - b[2])
     );
 
-    return margin <= 1.0E-9;
+    return margin <= 1e-9;
+}
+
+export const length = (a: XYZ): number => {
+    return Math.sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2]);
 }
