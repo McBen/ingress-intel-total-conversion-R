@@ -114,9 +114,10 @@ export class GeodesicPolyline3 extends L.Polyline {
 
 
     private boundCollission(x: Vec.XYZ, target: Vec.XYZ, cbounds: Vec.XYZ[]): Vec.XYZ | undefined {
-        let c = this.planeCollision(x, target, cbounds[0], cbounds[1]);  // north
-        c = this.planeCollision(c || x, target, cbounds[1], cbounds[2]) || c; // east
-        c = this.planeCollision(c || x, target, cbounds[2], cbounds[3]) || c; // south
+        // let c = this.planeCollision(x, target, cbounds[0], cbounds[1]);  // north
+        // c = this.planeCollision(c || x, target, cbounds[1], cbounds[2]); || c; // east
+        let c = this.planeCollision(x, target, cbounds[1], cbounds[2]);// || c; // east
+        // c = this.planeCollision(c || x, target, cbounds[2], cbounds[3]) || c; // south
         c = this.planeCollision(c || x, target, cbounds[3], cbounds[0]) || c; // west
         return c;
     }
@@ -135,6 +136,7 @@ export class GeodesicPolyline3 extends L.Polyline {
         const p = Vec.move(x, lineDir, t)
         console.assert(Math.abs(Vec.dot(p, p_norm)) < 1e-9, "point is not on plane");
         Vec.normalize(p);
+        console.assert(Math.abs(Vec.dot(p, p_norm)) < 1e-9, "point.nrl is not on plane");
         return p;
     }
 
