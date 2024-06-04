@@ -106,11 +106,13 @@
 
     const t = dot(minus(p1, ac), np) / dotProduct;
 
-    return [
+    const c = [
       ac[0] + t * lineDir[0],
       ac[1] + t * lineDir[1],
       ac[2] + t * lineDir[2]
     ];
+    Vec.normalize(c);
+    return c;
   }
 
   function boundsToVector(bounds) {
