@@ -169,7 +169,13 @@ export const dialog = (options: DialogOptions): JQuery => {
             }
         },
         open: function () {
-            var titlebar = $(this).closest(".ui-dialog").find(".ui-dialog-titlebar");
+            var ui = $(this).closest(".ui-dialog");
+            if (!options.modal) {
+                ui.draggable("option", "containment", '#map');
+            }
+            ui.resizable("option", "containment", '#map');
+
+            var titlebar = ui.find('.ui-dialog-titlebar');
             titlebar.find(".ui-dialog-title")
                 .addClass("ui-dialog-title-active")
                 .addClass("text-overflow-ellipsis");
