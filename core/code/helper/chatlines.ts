@@ -64,6 +64,7 @@ export // only used in test
         { propability: 2, type: ChatLineType.BATTLE, pattern: ["PLAYER", " deployed a Rare Battle Beacon on ", "PORTAL"] },
         { propability: 2, type: ChatLineType.BATTLE, pattern: ["PLAYER", " deployed a Battle Beacon on ", "PORTAL"] }, // OLD ?
         { propability: 2, type: ChatLineType.BATTLE_SCHEDULED, pattern: ["Rare Battle Beacon", " will be deployed at the end of the Septicycle (", "TEXT", " UTC) on ", "PORTAL"] },
+        // SEPTICYCLE = TEXT, plain="2024.05.26 19:00"
         // FIXME { propability: 2, type: ChatLineType.BATTLE_SCHEDULED, pattern: ["Rare Battle Beacon", " will be deployed at the end of the Septicycle (", "SEPTICYCLE", " UTC) on ", "PORTAL"] },
         { propability: 2, type: ChatLineType.BATTLE_RESULT, pattern: ["FACTION", " won a CAT-", "TEXT", " Very Rare Battle Beacon on ", "PORTAL"] },
         { propability: 2, type: ChatLineType.BATTLE_RESULT, pattern: ["FACTION", " won a CAT-", "TEXT", " Rare Battle Beacon on ", "PORTAL"] },
