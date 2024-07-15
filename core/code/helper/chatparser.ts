@@ -13,6 +13,7 @@ let isActive = false;
 const chatHooks: Map<Chat.ChatLineType, ChatHook> = new Map();
 // DEBUG-START
 let chatTypeDT: Chat.DTNode;
+let typeCounts: number[] = [];
 // DEBUG-END
 
 
@@ -81,6 +82,8 @@ const activate = () => {
 
     // DEBUG-START
     chatTypeDT = Chat.buildDT();
+    const oldStats = localStorage.getItem("chatstat");
+    if (oldStats) typeCounts = JSON.parse(oldStats);
     // DEBUG-END
 
     hooks.on("publicChatDataAvailable", onPublicChatDataAvailable);
@@ -107,6 +110,11 @@ const onPublicChatDataAvailable = (chat: EventPublicChatDataAvailable) => {
         Chat.findTypeCode(line[2].plext.markup);
         // RELEASE-END
 
+        // DEBUG-START
+        // counting what happens most
+        typeCounts[type] = (typeCounts[type] || 0) + 1;
+        // DEBUG-END
+
         // log.debug(Chat.ChatLineType[type], line[2].plext.text);
         const toTrigger = chatHooks.get(type);
         if (toTrigger) {
@@ -126,6 +134,9 @@ const onPublicChatDataAvailable = (chat: EventPublicChatDataAvailable) => {
         toTrigger.callbacks.forEach(trigger => trigger(Chat.ChatLineType.UPDATE_DONE, [] as any));
     }
 
+    // DEBUG-START
+    const oldStats = localStorage.setItem("chatstat", JSON.stringify(typeCounts));
+    // DEBUG-END
 }
 
 
