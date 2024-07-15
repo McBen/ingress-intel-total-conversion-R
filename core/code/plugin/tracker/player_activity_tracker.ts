@@ -1,5 +1,5 @@
 import { IITCr } from "../../IITC";
-import { HOURS } from "../../helper/times";
+import { ago, HOURS } from "../../helper/times";
 import { Plugin } from "../plugin_base";
 import iconEnlImage from "./marker-green.png";
 import iconEnlRetinaImage from "./marker-green-2x.png";
@@ -24,7 +24,6 @@ interface Action {
     latlngs: L.LatLng[];
     name: string,
     address: string
-
 }
 
 export interface TrackerOptions {
@@ -45,7 +44,7 @@ const DEFAULT_OPTIONS: TrackerOptions = {
 
 
 // TODO: find better place
-const isTouchDevice = (): boolean => {
+export const isTouchDevice = (): boolean => {
     return "ontouchstart" in window // works on most browsers
         || "onmsgesturechange" in window; // works on ie10
 };
@@ -74,7 +73,7 @@ const InfoMessages = [
 
 export class PlayerTracker extends Plugin {
     public name = "Player activity tracker";
-    public version = "0.13.1";
+    public version = "1.0.0";
     public description = "Draw trails for the path a user took onto the map based on status messages in COMMs. Uses up to three hours of data.";
     public author = "breunigs";
     public tags: ["player", "agent", "track", "stalk", "where"];
@@ -299,16 +298,6 @@ export class PlayerTracker extends Plugin {
         return L.latLng(latLng[0] / action.latlngs.length, latLng[1] / action.latlngs.length);
     }
 
-    private ago(time: number, now: number) {
-        const s = (now - time) / 1000;
-        const h = Math.floor(s / 3600);
-        const m = Math.floor((s % 3600) / 60);
-        if (h > 0) {
-            return `${h}h${m}m`;
-        } else {
-            return `${m}m`;
-        }
-    }
 
     private drawData() {
         // eslint-disable-next-line unicorn/prevent-abbreviations
@@ -343,7 +332,7 @@ export class PlayerTracker extends Plugin {
             const last = playerData.actions[evtsLength - 1];
 
             // tooltip for marker - no HTML - and not shown on touchscreen devices
-            const tooltip = isTouchDev ? "" : (plrname + ", " + this.ago(last.time, now) + " ago");
+            const tooltip = isTouchDev ? "" : (plrname + ", " + ago(last.time, now) + " ago");
 
             // popup for marker
             const popup = this.createPopup(plrname, playerData);
@@ -419,7 +408,7 @@ export class PlayerTracker extends Plugin {
 
         popup
             .append("<br>")
-            .append(document.createTextNode(this.ago(last.time, now)))
+            .append(document.createTextNode(ago(last.time, now)))
             .append("<br>")
             .append(this.getPortalLink(last));
 
@@ -438,7 +427,7 @@ export class PlayerTracker extends Plugin {
                 const action = playerData.actions[i];
                 $("<tr>")
                     .append($("<td>")
-                        .text(this.ago(action.time, now) + " ago"))
+                        .text(ago(action.time, now) + " ago"))
                     .append($("<td>")
                         .append(this.getPortalLink(action)))
                     .appendTo(table);

@@ -102,3 +102,19 @@ export const formatInterval = (seconds: number, maxTerms?: number): string => {
 
     return terms.join(" ");
 }
+
+
+/**
+ * Format time interval as "10h40m"
+ */
+export const ago = (time: number, now: number): string => {
+    const s = (now - time) / 1000;
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    if (h > 0) {
+        return `${h}h${m}m`;
+    } else {
+        return `${m}m`;
+    }
+}
+
