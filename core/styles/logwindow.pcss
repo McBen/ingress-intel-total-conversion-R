@@ -8,6 +8,21 @@
     max-height: 600px; 
     color: var(--iitc-text);
 
+    .scalebutton {
+        float: right;
+        width: 20px;
+        height: 20px;
+        background: url("images/dialog/scale.png");
+        opacity: 0.2;
+        transition: opacity 0.5s;
+        z-index: 2;
+        position: relative;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
     .logtabs {
         height: 20px;
         margin: 0;

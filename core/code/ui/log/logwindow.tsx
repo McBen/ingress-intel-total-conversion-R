@@ -1,4 +1,4 @@
-import { Component, createSignal, For } from "solid-js"
+import { Component, createSignal, ErrorBoundary, For } from "solid-js"
 import { LogRequest } from "./logrequest";
 import { unixTimeToDateTimeString, unixTimeToHHmm } from "../../helper/times";
 import { Dynamic } from "solid-js/web";
@@ -6,7 +6,6 @@ import { FACTION, FACTION_CSS, FACTION_NAMES } from "../../constants";
 import { selectPortalByLatLng } from "../../map/url_paramater";
 import { makePermalink } from "../../helper/utils_misc";
 import { player as whoami } from "../../helper/player";
-
 
 
 export const [tabs, setTabs] = createSignal<LogRequest[]>([])
@@ -31,20 +30,24 @@ export const setLines = (lines: Intel.ChatLine[]) => {
     }
 }
 
+
 export const LogWindow = () => {
     const updateTab = (page: LogRequest) => () => LogSetPage(page);
 
     return (
         <>
-            <ul class="logtabs">
-                <For each={tabs()}>
-                    {item => (
-                        <li classList={{ selected: current() === item }} onClick={updateTab(item)}>
-                            {item.title}
-                        </li>
-                    )}
-                </For>
-            </ul>
+            <div>
+                <div class="scalebutton" onMouseDown={onChatDragStart}></div>
+                <ul class="logtabs">
+                    <For each={tabs()}>
+                        {item => (
+                            <li classList={{ selected: current() === item }} onClick={updateTab(item)}>
+                                {item.title}
+                            </li>
+                        )}
+                    </For>
+                </ul>
+            </div>
             <div class="loglines">
                 <div class="contents" onScroll={event => checkForHistoryMessages(event.currentTarget)}>
                     <table>
@@ -62,6 +65,44 @@ export const LogWindow = () => {
         </>
     );
 }
+
+
+let mouseMoveStartX: number;
+let mouseMoveStartY: number;
+
+const onChatDragStart = (event: MouseEvent): void => {
+    mouseMoveStartX = event.pageX;
+    mouseMoveStartY = event.pageY;
+
+    document.addEventListener("mousemove", onChatDrag);
+    document.addEventListener("mouseup", onChatDragStop);
+}
+
+const MIN_MOUSE_MOVEMENT = 10;
+const onChatDrag = (event: MouseEvent): void => {
+    if (Math.abs(mouseMoveStartX - event.pageX) + Math.abs(mouseMoveStartY - event.pageY) < MIN_MOUSE_MOVEMENT) return;
+
+    const chat = document.getElementById("logwindow");
+    console.assert(chat, "chat is lost");
+    if (!chat) return;
+
+    const current = chat.getBoundingClientRect();
+
+    chat.style.width = event.pageX - current.left + "px";
+    chat.style.height = current.bottom - event.pageY + "px";
+
+    event.preventDefault();
+    event.stopPropagation();
+}
+
+
+const onChatDragStop = (event: MouseEvent): void => {
+    mouseMoveStartX = undefined;
+    mouseMoveStartY = undefined;
+    document.removeEventListener("mousemove", onChatDrag);
+    document.removeEventListener("mouseup", onChatDragStop);
+}
+
 
 
 const CHAT_REQUEST_SCROLL_TOP = 0;
