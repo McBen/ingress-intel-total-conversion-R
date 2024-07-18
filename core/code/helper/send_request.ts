@@ -87,6 +87,7 @@ export const postAjax = (action: string, data: any,
     const versionStr = niantic_params.CURRENT_VERSION;
     const post_data = JSON.stringify($.extend({}, data, { v: versionStr }));
 
+    // TODO use fetch
     const result = $.ajax({
         url: "/r/" + action,
         type: "POST",

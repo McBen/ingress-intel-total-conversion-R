@@ -53,8 +53,8 @@ export class LogRequest {
             (data) => this.processNewLogData(data, post.ascendingTimestampOrder),
             () => {
                 isRetry
-                    ? function () { this.requestRunning = false; }
-                    : function () { this.request(getOldMessages, true) }
+                    ? () => { this.requestRunning = false; }
+                    : () => { this.requestRunning = false; this.request(getOldMessages, true) }
             }
         );
     }
