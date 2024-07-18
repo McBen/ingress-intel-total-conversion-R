@@ -58,7 +58,8 @@ export class Options<OT extends string> {
 
 export const enum GLOPT {
     SHOW_ZOOM_BUTTONS = "zoombut",
-    BASE_MAP_LAYER = "bmap"
+    BASE_MAP_LAYER = "bmap",
+    CHAT_LOCATION = "chatloc"
 }
 
 export const IITCOptions = new Options<GLOPT>("IITC_OPT");
