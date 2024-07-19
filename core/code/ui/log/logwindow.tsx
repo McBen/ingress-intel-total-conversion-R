@@ -20,15 +20,13 @@ export const LogSetPage = (page: LogRequest) => {
 
 export const setLines = (lines: Intel.ChatLine[]) => {
     const content = $(".loglines .contents");
-    const scollposition = content.get(0).scrollHeight - content.innerHeight() - content.scrollTop();
+    const table = $("table", content);
+    const scrollPosition = table.height() - content.scrollTop();
 
     _setLines(lines);
 
-    if (scollposition === 0) {
-        content.scrollTop(content.height());
-    } else {
-        content.scrollTop(content.innerHeight() - scollposition);
-    }
+    // keep scroll position from bottom
+    content.scrollTop(table.height() - scrollPosition);
 }
 
 
