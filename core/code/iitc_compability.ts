@@ -14,7 +14,7 @@ import { IITCr } from "./IITC";
 import { PortalInfoDetailed } from "./portal/portal_info_detailed";
 import { fixPortalImageUrl, renderPortalDetails } from "./portal/portal_display";
 import { createMarker, portalMarkerScale, setMarkerStyle } from "./map/portal_marker";
-import { getPortalFields, getPortalFieldsCount, getPortalLinks } from "./helper/portal_data";
+import { getPortalFields, getPortalFieldsCount, getPortalLinks, getPortalLinksCount } from "./helper/portal_data";
 import { portalDetail } from "./portal/portal_details_get";
 import { Highlighter } from "./portal/highlighters";
 import { selectPortalByLatLng } from "./map/url_paramater";
@@ -57,6 +57,8 @@ globalThis.setMarkerStyle = setMarkerStyle;
 globalThis.getPortalLinks = getPortalLinks;
 globalThis.getPortalFields = getPortalFields;
 globalThis.getPortalFieldsCount = getPortalFieldsCount;
+globalThis.getPortalLinksCount = getPortalLinksCount;
+
 
 // Request
 globalThis.postAjax = postAjax;
