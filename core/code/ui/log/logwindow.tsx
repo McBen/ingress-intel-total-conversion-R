@@ -1,4 +1,4 @@
-import { Component, createSignal, ErrorBoundary, For } from "solid-js"
+import { Component, createSignal, ErrorBoundary, For, onMount } from "solid-js"
 import { LogRequest } from "./logrequest";
 import { unixTimeToDateTimeString, unixTimeToHHmm } from "../../helper/times";
 import { Dynamic } from "solid-js/web";
@@ -36,8 +36,8 @@ export const LogWindow = () => {
 
     return (
         <>
+            <div class="scalebutton ui-resizable-handle ui-resizable-ne" ></div>
             <div>
-                <div class="scalebutton" onMouseDown={onChatDragStart}></div>
                 <ul class="logtabs">
                     <For each={tabs()}>
                         {item => (
@@ -60,52 +60,11 @@ export const LogWindow = () => {
                         </For>
                     </table>
                 </div>
-                <input class="sendtext" style="text"></input>
+                <input class="sendtext" type="text"></input>
             </div>
         </>
     );
 }
-
-
-let mouseMoveStartX: number;
-let mouseMoveStartY: number;
-
-const onChatDragStart = (event: MouseEvent): void => {
-    mouseMoveStartX = event.pageX;
-    mouseMoveStartY = event.pageY;
-
-    document.addEventListener("mousemove", onChatDrag);
-    document.addEventListener("mouseup", onChatDragStop);
-}
-
-const MIN_MOUSE_MOVEMENT = 10;
-const onChatDrag = (event: MouseEvent): void => {
-    if (Math.abs(mouseMoveStartX - event.pageX) + Math.abs(mouseMoveStartY - event.pageY) < MIN_MOUSE_MOVEMENT) return;
-
-    const current = getLogLocation();
-    if (event.shiftKey) {
-        // (event.target as HTMLElement).style.cursor = "crosshair";
-        current.x = event.pageX - current.width;
-        current.y = event.pageY;
-    } else {
-        current.width = event.pageX - current.left;
-        current.height = current.height + (current.y - event.pageY);
-        current.y = event.pageY;
-    }
-    setLogLocation(current);
-
-    event.preventDefault();
-    event.stopPropagation();
-}
-
-
-const onChatDragStop = (event: MouseEvent): void => {
-    mouseMoveStartX = undefined;
-    mouseMoveStartY = undefined;
-    document.removeEventListener("mousemove", onChatDrag);
-    document.removeEventListener("mouseup", onChatDragStop);
-}
-
 
 
 const CHAT_REQUEST_SCROLL_TOP = 0;
