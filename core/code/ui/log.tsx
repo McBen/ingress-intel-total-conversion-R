@@ -12,6 +12,12 @@ export const setupLogWindow = () => {
     $("body").append(logwindow);
     render(() => <LogWindow />, logwindow[0]);
 
+    $("#logwindow").resizable({
+        distance: 5,
+        handles: { ne: ".scalebutton" },
+        resize: (event: any) => console.log(event)
+    });
+
     initLocation();
 
     const tabs = [
@@ -49,7 +55,7 @@ export const getLogLocation = (): DOMRect => {
 }
 
 export const setLogLocation = (loc: DOMRect) => {
-    const chat = document.getElementById("logwindow");
+    /*const chat = document.getElementById("logwindow");
     console.assert(chat, "chat is lost");
     if (!chat) return;
 
@@ -65,4 +71,7 @@ export const setLogLocation = (loc: DOMRect) => {
         height: loc.height
     }
     IITCOptions.set(GLOPT.CHAT_LOCATION, store);
+    */
+
+    $("#logwindow").position({ my: "left bottom", at: "left bottom-30" });
 }
