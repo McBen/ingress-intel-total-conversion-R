@@ -172,8 +172,8 @@ export const dialog = (options: DialogOptions): JQuery => {
             var ui = $(this).closest(".ui-dialog");
             if (!options.modal) {
                 ui.draggable("option", "containment", '#map');
+                ui.resizable("option", "containment", '#map');
             }
-            ui.resizable("option", "containment", '#map');
 
             var titlebar = ui.find('.ui-dialog-titlebar');
             titlebar.find(".ui-dialog-title")
