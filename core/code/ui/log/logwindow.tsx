@@ -6,7 +6,6 @@ import { FACTION, FACTION_CSS, FACTION_NAMES } from "../../constants";
 import { selectPortalByLatLng } from "../../map/url_paramater";
 import { makePermalink } from "../../helper/utils_misc";
 import { player as whoami } from "../../helper/player";
-import { getLogLocation, setLogLocation } from "../log";
 
 
 export const [tabs, setTabs] = createSignal<LogRequest[]>([])

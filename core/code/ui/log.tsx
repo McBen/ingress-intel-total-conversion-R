@@ -4,7 +4,9 @@ import { LogRequest } from "./log/logrequest";
 import { requests } from "../helper/send_request";
 import { GLOPT, IITCOptions } from "../helper/options";
 
-const Default_Location: DOMRect = new DOMRect(0, 0, 705, 350);
+
+type Size = { width: number, height: number };
+const DefaultSize: Size = { width: 705, height: 350 };
 
 
 export const setupLogWindow = () => {
@@ -12,13 +14,9 @@ export const setupLogWindow = () => {
     $("body").append(logwindow);
     render(() => <LogWindow />, logwindow[0]);
 
-    $("#logwindow").resizable({
-        distance: 5,
-        handles: { ne: ".scalebutton" },
-        resize: (event: any) => console.log(event)
-    });
-
+    initResize();
     initLocation();
+
 
     const tabs = [
         new LogRequest("all", "All"),
@@ -32,46 +30,23 @@ export const setupLogWindow = () => {
     requests.addRefreshFunction(() => current().request(false));
 }
 
+const initResize = () => {
+    $("#logwindow").resizable({
+        distance: 5,
+        handles: { ne: ".scalebutton" },
+        stop: (_event: any, ui: JQueryUI.ResizableUIParams) => storeSize(ui.size)
+    });
+};
 
-type Location = { x: number, y: number, width: number, height: number };
+0
+
 const initLocation = () => {
-    const stored = IITCOptions.get<Location>(GLOPT.CHAT_LOCATION);
-    if (stored) {
-        const loc = new DOMRect(stored.x, stored.y, stored.width, stored.height);
-        setLogLocation(loc);
-    } else {
-        const y = $("#logwindow").parent().height() - Default_Location.height;
-        const loc = new DOMRect(Default_Location.x, y, Default_Location.width, Default_Location.height);
-        setLogLocation(loc);
-    }
+    const stored = IITCOptions.getSafe(GLOPT.CHAT_LOCATION, DefaultSize);
+    $("#logwindow").width(stored.width);
+    $("#logwindow").height(stored.height);
 }
 
-export const getLogLocation = (): DOMRect => {
-    const chat = document.getElementById("logwindow");
-    console.assert(chat, "chat is lost");
-    if (!chat) return Default_Location;
-
-    return chat.getBoundingClientRect();
-}
-
-export const setLogLocation = (loc: DOMRect) => {
-    /*const chat = document.getElementById("logwindow");
-    console.assert(chat, "chat is lost");
-    if (!chat) return;
-
-    chat.style.left = loc.x + "px";
-    chat.style.top = loc.y + "px";
-    chat.style.width = loc.width + "px";
-    chat.style.height = loc.height + "px";
-
-    const store: Location = {
-        x: loc.x,
-        y: loc.y,
-        width: loc.width,
-        height: loc.height
-    }
-    IITCOptions.set(GLOPT.CHAT_LOCATION, store);
-    */
-
-    $("#logwindow").position({ my: "left bottom", at: "left bottom-30" });
+const storeSize = (size: Size) => {
+    $("#logwindow").css("top", ""); // "Resizeable" sets TOP, but we use BOTTOM
+    IITCOptions.set(GLOPT.CHAT_LOCATION, size);
 }
