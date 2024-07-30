@@ -319,11 +319,6 @@ export class Render {
         marker.on("contextmenu", event => {
             const portal = event.target as IITC.Portal;
             renderPortalDetails(portal.options.guid);
-            if (window.isSmartphone()) {
-                window.show("info");
-            } else if (!$("#scrollwrapper").is(":visible")) {
-                $("#sidebartoggle").trigger("click");
-            }
         });
 
         hooks.trigger("portalAdded", { portal: marker, previousData });

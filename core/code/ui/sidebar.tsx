@@ -28,8 +28,8 @@ export const [getPortalDetails, setPortalDetails] = createSignal<PortalInfoDetai
 
 const Sidebar = () => {
     return (
-        <div id="sidebar2">
-            <div id="portaldetails2">
+        <div id="sidebar">
+            <div id="portaldetails">
                 <Show when={getPortalDetails()} fallback={<div id="portalStatus">...</div>}>
                     <PortalTitle details={getPortalDetails()} /><PortalCloseButton />
                     <PortalImage details={getPortalDetails()} />
