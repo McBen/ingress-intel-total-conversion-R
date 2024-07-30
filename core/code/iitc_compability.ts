@@ -19,6 +19,7 @@ import { portalDetail } from "./portal/portal_details_get";
 import { Highlighter } from "./portal/highlighters";
 import { selectPortalByLatLng } from "./map/url_paramater";
 import { migrateNames } from "./ui/menu/menu_actions";
+import { current as currentChat } from "./ui/log/logwindow";
 const log = Log(LogApp.Plugins);
 
 
@@ -194,7 +195,8 @@ interface HighLighterNew {
 globalThis.chat = {
     postMsg: NOOP,
     backgroundChannelData: NOOP,
-    getActive: () => { return "all" }
+    getActive: () => { return "all" },
+    request: () => currentChat().request(false)
 };
 
 // IITC-CE v.0.38.0
