@@ -34,7 +34,9 @@ const config = tseslint.config(
             "mobile/",
             "docs/",
             "json_examples/",
-            "types/"
+            "types/",
+            '**/node_modules',
+            '**/external'
         ]
     },
     {
