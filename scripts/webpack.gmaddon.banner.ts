@@ -1,20 +1,29 @@
-'use strict';
-
-const ConcatSource = require('webpack-sources').ConcatSource;
-const Compilation = require('webpack/lib/Compilation');
-const fs = require('fs');
-const path = require('path');
+import { ConcatSource } from 'webpack-sources';
+import { Compilation } from 'webpack';
+import fs from 'fs';
+import path from 'path';
 
 
-class GMAddonBannerPlugin {
-    constructor(options) {
+interface GMAddonBannerPluginoOtions {
+    downloadURL?: string;
+    updateURL?: string;
+    banner?: string;
+    [index: string]: string | undefined;
+}
+
+
+export default class GMAddonBannerPlugin {
+
+    options: GMAddonBannerPluginoOtions;
+
+    constructor(options: Partial<GMAddonBannerPluginoOtions>) {
         if (arguments.length > 1)
             throw new Error('GMAddonBannerPlugin only takes one argument (pass an options object)');
         this.options = options || {};
     }
 
 
-    apply(compiler) {
+    apply(compiler: any) {
 
         const plugin = {
             name: this.constructor.name,
@@ -22,7 +31,7 @@ class GMAddonBannerPlugin {
         };
 
 
-        compiler.hooks.compilation.tap(plugin, compilation => {
+        compiler.hooks.compilation.tap(plugin, (compilation: Compilation) => {
             compilation.hooks.processAssets.tap(plugin,
                 () => {
                     compilation.chunks.forEach(chunk => {
@@ -39,6 +48,7 @@ class GMAddonBannerPlugin {
                             }
 
                             const banner = this.generateMetaBlock(true);
+                            // @ts-ignore
                             return compilation.assets[file] = new ConcatSource(banner, '\n', compilation.assets[file]);
                         });
                     });
@@ -47,7 +57,7 @@ class GMAddonBannerPlugin {
     }
 
 
-    updateDownloadURL(filename) {
+    updateDownloadURL(filename: string) {
         if (!this.options.downloadURL) return;
 
         const regex = new RegExp("/" + filename + "$");
@@ -57,7 +67,7 @@ class GMAddonBannerPlugin {
     }
 
 
-    generateMetaBlock(fullDetails) {
+    generateMetaBlock(fullDetails: boolean) {
         const options = this.options;
         const std_entries = ['name', 'id', 'category', 'version', 'namespace', 'updateURL', 'downloadURL', 'description', 'match', 'include', 'grant', 'run-at'];
         const ignore = ['banner'];
@@ -65,7 +75,7 @@ class GMAddonBannerPlugin {
             ignore.push("icon64");
         }
 
-        var entries = [];
+        var entries: string[] = [];
         std_entries.forEach((cat) => {
             if (options[cat]) {
                 this.createMetaEntry(entries, cat, options[cat]);
@@ -87,7 +97,7 @@ class GMAddonBannerPlugin {
     }
 
 
-    createMetaEntry(entries, name, value) {
+    createMetaEntry(entries: string[], name: string, value: any) {
         if (typeof (value) == 'function') {
             value = value();
         }
@@ -101,7 +111,4 @@ class GMAddonBannerPlugin {
             entries.push(key + value);
         }
     }
-
 }
-
-module.exports = GMAddonBannerPlugin;
