@@ -50,7 +50,7 @@ export class LogRequest {
         postAjax(
             'getPlexts',
             post,
-            (data) => this.processNewLogData(data, post.ascendingTimestampOrder),
+            (data) => this.processNewLogData(data, !!post.ascendingTimestampOrder),
             () => {
                 isRetry
                     ? () => { this.requestRunning = false; }
@@ -172,14 +172,14 @@ export class LogRequest {
             filter.reverse();
         }
 
-        if (data.length > 0 && filter.at(-1)[1] <= data[0][1]) {
+        if (data.length > 0 && filter.at(-1)![1] <= data[0][1]) {
             this.data = data.concat(this.data);
         } else {
             this.data = this.data.concat(data);
         }
 
         // DEBUG-START
-        if (this.data.every((a, index) => index === 0 || a[index - 1][1] <= a[index - 1][1])) {
+        if (this.data.every((a, index) => index === 0 || this.data[index - 1][1] <= a[1])) {
             log.error("chat lines are not sorted");
         }
         // DEBUG-END

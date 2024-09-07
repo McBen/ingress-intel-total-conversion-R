@@ -1,4 +1,4 @@
-import { Component, createSignal, ErrorBoundary, For, onMount } from "solid-js"
+import { Component, createSignal, For } from "solid-js"
 import { LogRequest } from "./logrequest";
 import { unixTimeToDateTimeString, unixTimeToHHmm } from "../../helper/times";
 import { Dynamic } from "solid-js/web";
@@ -20,12 +20,12 @@ export const LogSetPage = (page: LogRequest) => {
 export const setLines = (lines: Intel.ChatLine[]) => {
     const content = $(".loglines .contents");
     const table = $("table", content);
-    const scrollPosition = table.height() - content.scrollTop();
+    const scrollPosition = table.height()! - content.scrollTop()!;
 
     _setLines(lines);
 
     // keep scroll position from bottom
-    content.scrollTop(table.height() - scrollPosition);
+    content.scrollTop(table.height()! - scrollPosition);
 }
 
 
@@ -78,7 +78,7 @@ const checkForHistoryMessages = (element: HTMLElement) => {
 
 export const ChatLine: Component<{ line: Intel.ChatLine }> = p => {
 
-    const componets = {
+    const componets: Record<string, any> = {
         "TEXT": MarkupTEXT,
         "PLAYER": MarkupPLAYER,
         "PORTAL": MarkupPORTAL,
@@ -147,7 +147,7 @@ const simplifyChatLine = (markup: Intel.MarkUp): Intel.MarkUp => {
 
 const ChatTime: Component<{ time: number }> = p => {
     const time_str = unixTimeToHHmm(p.time);
-    const datetime = unixTimeToDateTimeString(p.time, true);
+    const datetime = unixTimeToDateTimeString(p.time, true)!;
     const datetime_title = (datetime.slice(0, 19) + '<small class="milliseconds">' + datetime.slice(19) + '</small>')
 
     return (
@@ -224,7 +224,7 @@ const MarkupPORTAL: Component<{ markup: Intel.MarkUpPortalType }> = p => {
         onClick={() => selectPortalByLatLng(latlng)}
         title={p.markup.address}
         class="help"
-    /* href={permalink} */
+        href={permalink}
     >{p.markup.name}</a>
 }
 

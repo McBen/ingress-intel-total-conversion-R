@@ -192,7 +192,7 @@ interface HighLighterNew {
     };
 }
 
-globalThis.chat = {
+(globalThis as any).chat = {
     postMsg: NOOP,
     backgroundChannelData: NOOP,
     getActive: () => { return "all" },
