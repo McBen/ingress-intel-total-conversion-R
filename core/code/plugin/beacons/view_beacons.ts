@@ -1,6 +1,6 @@
 import * as Chatparser from "../../helper/chatparser";
 import { ChatLineType } from "../../helper/chatlines";
-import { EventPublicChatDataAvailable, hooks } from "../../helper/hooks";
+import { hooks } from "../../helper/hooks";
 import { Plugin } from "../plugin_base";
 
 
@@ -64,6 +64,8 @@ export class ViewOrnaments extends Plugin {
 
     constructor() {
         super();
+
+        // eslint-disable-next-line @typescript-eslint/no-require-imports, unicorn/prefer-module
         require("./styles.css");
     }
 
@@ -149,6 +151,7 @@ export class ViewOrnaments extends Plugin {
     }
 
     onBeaconChat = (type: ChatLineType, line: Intel.ChatLine) => {
+
         const time = Chatparser.getTime(line);
 
         const portal = Chatparser.getPortal(line);
@@ -159,13 +162,6 @@ export class ViewOrnaments extends Plugin {
         if (!last || time > last.time) {
             this.lastDeploy.set(portalStr, { player, time });
         }
-    }
-
-    private isBeaconMessage(msg: Intel.MarkUp): boolean {
-        // " deployed a Beacon on "; Battle
-        return msg[0][0] === "PLAYER"
-            && msg[1][0] === "TEXT" && msg[1][1].plain.includes("Beacon")
-            && msg[2][0] === "PORTAL"
     }
 
     private beaconHasDeployer(ornamentName: string): boolean {

@@ -48,11 +48,11 @@ export class PluginGaodeMap extends Plugin {
 
 
         const AmapTraffic = GaodeLayer.extend({
-            getTileUrl: function (coords) {
+            getTileUrl: function (coords: any) {
                 this.options.time = Date.now();
                 return L.TileLayer.prototype.getTileUrl.call(this, coords);
             },
-            initialize: function (options) {
+            initialize: function (options: any) {
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-call
                 (L.TileLayer.prototype as any).initialize.call(this, trafficUrl, options);
             },

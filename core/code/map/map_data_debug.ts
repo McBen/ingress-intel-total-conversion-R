@@ -75,7 +75,7 @@ export class RenderDebugTiles {
         }
     }
 
-    setColour(id: TileID, bordercol, fillcol) {
+    setColour(id: TileID, bordercol: string, fillcol: string) {
         const l = this.debugTileToRectangle[id];
         if (l) {
             const s = { color: bordercol, fillColor: fillcol };
@@ -88,7 +88,7 @@ export class RenderDebugTiles {
 
         this.setColour(id, colors.color, colors.fill);
 
-        if (colors.clearDelay >= 0) {
+        if (colors.clearDelay && colors.clearDelay >= 0) {
             const clearAt = Date.now() + colors.clearDelay * 1000;
             this.debugTileClearTimes[id] = clearAt;
 

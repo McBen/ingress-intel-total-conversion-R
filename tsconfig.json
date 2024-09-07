@@ -1,14 +1,13 @@
 {
   "compilerOptions": {
-    /*    "forceConsistentCasingInFileNames": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "noImplicitAny": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
-    "strictNullChecks": true,
     "strictFunctionTypes": true,
     "noUnusedLocals": true,
-  */
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "module": "es2020",

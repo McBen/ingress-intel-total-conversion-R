@@ -17,7 +17,7 @@ interface LayerEntity {
     default?: boolean;
 }
 
-const groupOldLayers = {
+const groupOldLayers: Record<string, string[]> = {
     "Ornaments": ["Artifacts", "Beacons", "Frackers",
         "Ornament: Anomaly Portals", "Ornament: Battle Beacons",
         "Ornament: Battle Results", "Ornament: Scout Controller"],
@@ -63,7 +63,7 @@ export class LayerManager {
     }
 
 
-    removeBase(name: string): L.Layer {
+    removeBase(name: string): void {
         const entryIndex = this.layers.findIndex(l => l.name === name);
         if (entryIndex < 0) {
             log.warn("layer not found", name);
@@ -120,7 +120,6 @@ export class LayerManager {
 
 
     private renameOldLayer(name: string): string {
-        // eslint-disable-next-line guard-for-in
         for (const group in groupOldLayers) {
             const names = groupOldLayers[group] as string[];
             if (names.includes(name)) {
@@ -148,7 +147,7 @@ export class LayerManager {
     }
 
 
-    showBaseMap(name: string): void {
+    showBaseMap(name?: string): void {
         let layer = this.layers.find(l => l.name === name);
         if (!layer) layer = this.layers.find(l => l.name === "Google Roads");
         if (!layer) layer = this.layers.find(l => l.isBaseLayer);

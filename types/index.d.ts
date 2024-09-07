@@ -81,8 +81,8 @@ declare global {
     }
 
     /** guid of current selected portal */
-    let selectedPortal: PortalGUID | null;
-    let urlPortal: PortalGUID | null;
+    let selectedPortal: PortalGUID | undefined;
+    let urlPortal: PortalGUID | undefined;
     let urlPortalLL: [number, number] | undefined;
 
     const script_info: ScriptInfo;

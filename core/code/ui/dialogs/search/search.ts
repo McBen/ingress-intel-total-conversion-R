@@ -5,7 +5,6 @@ import { hooks } from "../../../helper/hooks";
 import { renderPortalDetails } from "../../../portal/portal_display";
 import portalIcon from "!!raw-loader!../../../../images/icon-portal.svg";
 import { selectPortalByLatLng } from "../../../map/url_paramater";
-import { util } from "webpack";
 import { zoomToAndShowPortal } from "../../../helper/utils_misc";
 
 const NOMINATIM = "//nominatim.openstreetmap.org/search?format=json&polygon_geojson=1&q=";
@@ -107,7 +106,7 @@ export class Search {
                         if (event.type === "dblclick") {
                             zoomToAndShowPortal(guid, portal.getLatLng());
                         } else if (window.portals[guid]) {
-                            if (!window.map.getBounds().contains(result.position)) window.map.setView(result.position);
+                            if (!window.map.getBounds().contains(result.position!)) window.map.setView(result.position!);
                             renderPortalDetails(guid);
                         } else {
                             selectPortalByLatLng(portal.getLatLng());
@@ -125,20 +124,19 @@ export class Search {
 
         if (!locations) return;
 
-        const added = {};
+        const added = new Set();
         locations.forEach(location => {
             const pair = location.split(",").map(s => parseFloat(s).toFixed(6));
             const latlngstr = pair.join(",");
             const latlng = L.latLng(pair.map(s => parseFloat(s)) as [number, number]);
-            if (added[latlngstr]) return;
-            added[latlngstr] = true;
+            if (added.has(latlngstr)) return;
+            added.add(latlngstr);
 
             query.addResult({
                 title: latlngstr,
                 description: "geo coordinates",
                 position: latlng,
                 onSelected: (result, _event) => {
-                    // eslint-disable-next-line guard-for-in
                     for (const guid in window.portals) {
                         const ll = window.portals[guid].getLatLng();
                         if ((ll.lat.toFixed(6) + "," + ll.lng.toFixed(6)) === latlngstr) {
@@ -147,7 +145,7 @@ export class Search {
                         }
                     }
 
-                    urlPortalLL = [result.position.lat, result.position.lng];
+                    urlPortalLL = [result.position!.lat, result.position!.lng];
                 }
             });
         });
@@ -164,9 +162,9 @@ export class Search {
         const viewbox = `&viewbox=${mapBounds.getSouthWest().lng},${mapBounds.getSouthWest().lat},${mapBounds.getNorthEast().lng},${mapBounds.getNorthEast().lat}`;
 
         let resultCount = 0;
-        const resultMap = {};
+        const resultMap = new Set();
 
-        const onQueryResult = (isViewboxResult, data: OpenStreetMapQueryResult[]) => {
+        const onQueryResult = (isViewboxResult: boolean, data: OpenStreetMapQueryResult[]) => {
             resultCount += data.length;
             if (isViewboxResult) {
                 // Search for things outside the viewbox
@@ -184,8 +182,8 @@ export class Search {
             }
 
             data.forEach(item => {
-                if (resultMap[item.place_id]) { return; } // duplicate
-                resultMap[item.place_id] = true;
+                if (resultMap.has(item.place_id)) { return; } // duplicate
+                resultMap.add(item.place_id);
 
                 const result: QueryResult = {
                     title: item.display_name,

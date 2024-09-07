@@ -11,7 +11,7 @@ import { formatDayHours, formatHours, formatMinutes } from "../../../helper/time
 export class RegionScoreDialog {
     private mainDialog: JQuery;
     private regionScore: RegionScore;
-    private timer: number;
+    private timer: number | undefined;
 
     static showDialog(): void {
         const latLng = window.map.getCenter();
@@ -69,7 +69,7 @@ export class RegionScoreDialog {
         this.mainDialog.html("Failed to load region scores - try again");
     }
 
-    onRequestSuccess(data) {
+    onRequestSuccess(data: any) {
         if (data.result === undefined) {
             return this.onRequestFailure();
         }
@@ -114,7 +114,7 @@ export class RegionScoreDialog {
 
     setupToolTips() {
         const that = this;
-        // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
+
         $("g.checkpoint", this.mainDialog).each(function (i, element) {
             const $element = $(element);
 
@@ -130,8 +130,8 @@ export class RegionScoreDialog {
                 return res;
             }
 
-            let tooltip: string;
-            const cp = parseInt($element.attr("data-cp"));
+            let tooltip: string = "";
+            const cp = parseInt($element.attr("data-cp") as string);
             if (cp) {
                 const score_now = that.regionScore.getCPScore(cp);
                 const score_last = that.regionScore.getCPScore(cp - 1);

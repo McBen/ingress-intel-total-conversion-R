@@ -19,7 +19,7 @@ const resetScrollOnNewPortal = () => {
 
 
 export const renderPortalDetails = (guid?: PortalGUID) => {
-    selectPortal(window.portals[guid] ? guid : undefined);
+    selectPortal((guid && window.portals[guid]) ? guid : undefined);
     if ($("#sidebar").is(":visible")) {
         resetScrollOnNewPortal();
         lastVisible = guid;
@@ -29,7 +29,7 @@ export const renderPortalDetails = (guid?: PortalGUID) => {
         void portalDetail.request(guid);
     }
 
-    if (!window.portals[guid]) {
+    if (!guid || !window.portals[guid]) {
         urlPortal = guid;
         $("#portaldetails").html("");
         if (isSmartphone()) {

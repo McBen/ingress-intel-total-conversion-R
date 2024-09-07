@@ -51,7 +51,7 @@ export class PluginKartverketMaps extends Plugin {
             },
 
             // eslint-disable-next-line object-shorthand
-            initialize: function (layer: string, options) {
+            initialize: function (layer: string, options: any) {
                 if (typeof this.layers[layer] === "undefined") {
                     if (this.mappings[layer]) {
                         layer = this.mappings[layer];
@@ -66,7 +66,7 @@ export class PluginKartverketMaps extends Plugin {
             }
         });
 
-        (L.tileLayer as any).kartverket = (layer: string, options): L.TileLayer => {
+        (L.tileLayer as any).kartverket = (layer: string, options: any): L.TileLayer => {
             // eslint-disable-next-line @typescript-eslint/no-unsafe-call
             return new (L.TileLayer as any).Kartverket(layer, options);
         };

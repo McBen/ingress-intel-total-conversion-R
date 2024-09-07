@@ -46,7 +46,7 @@ export const setupMap = (): void => {
 
 
     hooks.on("iitcLoaded", () => {
-        IITCr.layers.showBaseMap(IITCOptions.get(GLOPT.BASE_MAP_LAYER));
+        IITCr.layers.showBaseMap(IITCOptions.get<string>(GLOPT.BASE_MAP_LAYER));
 
         window.map.on("baselayerchange", event => {
             IITCOptions.set(GLOPT.BASE_MAP_LAYER, event.name);
@@ -189,7 +189,7 @@ export const normLL = (lat: string | number, lng: string | number, zoom?: string
             parseFloat(lat as string) || 0,
             parseFloat(lng as string) || 0
         ],
-        zoom: parseInt(zoom) || DEFAULT_ZOOM
+        zoom: (zoom && parseInt(zoom)) || DEFAULT_ZOOM
     };
 }
 
@@ -219,6 +219,8 @@ const getPosition = (): NormalizedPosition | undefined => {
         log.log("mappos: reading cookies");
         return normLL(lat, lng, readCookie("ingress.intelmap.zoom"));
     }
+
+    return;
 }
 
 

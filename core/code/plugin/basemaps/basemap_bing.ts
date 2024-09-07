@@ -7,7 +7,7 @@ import "leaflet-plugins/layer/tile/Bing.addon.applyMaxNativeZoom";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace L {
-    function bingLayer(options): L1.TileLayer;
+    function bingLayer(options: any): L1.TileLayer;
 }
 
 
@@ -21,7 +21,7 @@ export class PluginBingMaps extends Plugin {
 
     private apiKey = "Ajt5lr3kR35OADGQqFzptNJA3tXzXYpZoCOSnY1JgGf4tEyWBErROgnuK5V9vYEE";
 
-    private sets = {
+    private sets: Record<string, Object> = {
         Road: {
             imagerySet: "RoadOnDemand"
         },

@@ -49,7 +49,7 @@ const getPlugins = (): string => {
 
     const pluginNames = IITCr.plugins.getListOfActivePlugins();
     const plugins = pluginNames.map(pname => {
-        const plugin = IITCr.plugins.getPlugin(pname);
+        const plugin = IITCr.plugins.getPlugin(pname)!;
         return pluginInfoToString(plugin)
     });
 

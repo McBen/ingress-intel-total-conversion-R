@@ -74,7 +74,7 @@ export class Artifacts {
     }
 
 
-    handleSuccess = data => {
+    handleSuccess = (data: any) => {
         this.processData(data);
 
         const now = Date.now();
@@ -86,7 +86,7 @@ export class Artifacts {
     }
 
 
-    processData(data) {
+    processData(data: any) {
 
         if (data.error || !data.result) {
             log.warn("Failed to find result in getArtifactPortals response", data);
@@ -146,7 +146,7 @@ export class Artifacts {
     }
 
     // quick test for portal being relevant to artifacts - of any type
-    isInterestingPortal(guid): boolean {
+    isInterestingPortal(guid: PortalGUID): boolean {
         return guid in this.portalInfo;
     }
 
@@ -156,12 +156,12 @@ export class Artifacts {
         this.portalInfo.forEach((data, _guid) => {
             const latlng = L.latLng([data.latE6 / 1e6, data.lngE6 / 1e6]);
 
-            const targetType = Object.keys(data.artifactBrief.target)[0];
-            const fragmentType = Object.keys(data.artifactBrief.fragment)[0];
+            const targetType = Object.keys(data.artifactBrief!.target)[0];
+            const fragmentType = Object.keys(data.artifactBrief!.fragment)[0];
             if (targetType) {
                 const iconUrl = "//commondatastorage.googleapis.com/ingress.com/img/map_icons/marker_images/" + targetType + "_shard_target.png"
                 const iconSize = 100 / 2;
-                const opacity = 1.0;
+                const opacity = 1;
 
                 const icon = L.icon({
                     iconUrl,
@@ -195,8 +195,8 @@ export class Artifacts {
         const portals = [...this.portalInfo.values()];
         const types = new Set<string>();
         portals.forEach(p => {
-            Object.keys(p.artifactBrief.target).forEach(t => types.add(t))
-            Object.keys(p.artifactBrief.fragment).forEach(t => types.add(t))
+            Object.keys(p.artifactBrief!.target).forEach(t => types.add(t))
+            Object.keys(p.artifactBrief!.fragment).forEach(t => types.add(t))
         });
 
         return [...types.values()];
@@ -209,11 +209,13 @@ export class Artifacts {
     }
 
     private portalHasFragment(portal: IITC.PortalDataDetail, fragment: string): boolean {
+        // @ts-ignore
         return !!portal.artifactBrief.fragment[fragment];
     }
 
     private portalIsTarget(portal: IITC.PortalDataDetail, target: string): boolean {
-        return !!portal.artifactBrief.target[target];
+        // @ts-ignore
+        return (portal.artifactBrief?.target) ? !!portal.artifactBrief.target[target] : false;
     }
 
 
@@ -238,7 +240,7 @@ export class Artifacts {
             html += '<table class="artifact artifact-' + type + '">';
             html += "<tr><th>Portal</th><th>Details</th></tr>";
 
-            const tableRows = [];
+            const tableRows: [string, string][] = [];
 
             this.getPortalsWithArtifactTypes(type).forEach((portal, guid) => {
                 // this portal has data for this artifact type - add it to the table

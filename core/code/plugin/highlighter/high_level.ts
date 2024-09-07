@@ -1,4 +1,3 @@
-import { IITCr } from "../../IITC";
 import { PluginHighlight } from "./_base";
 
 
@@ -13,7 +12,7 @@ export class PluginHighlightHighLevel extends PluginHighlight {
     protected menuName = "Higher Level Portals";
 
 
-    private styles = {
+    private styles: Record<string, Partial<L.CircleMarkerOptions>> = {
         level6: {
             fillOpacity: 0.7,
             fillColor: "orange"
@@ -32,7 +31,7 @@ export class PluginHighlightHighLevel extends PluginHighlight {
         const portal_level = portal.options.data.level;
         if (portal_level === undefined) return;
 
-        const newStyle = this.styles[`level${portal_level}`] as L.CircleMarkerOptions;
+        const newStyle = this.styles[`level${portal_level}`];
 
         if (newStyle) {
             portal.setStyle(newStyle);

@@ -27,7 +27,7 @@ export const autoSelectPortal = (guid: PortalGUID) => {
 
 
 let urlPortal: PortalGUID | undefined;
-const urlPortalCallack = data => {
+const urlPortalCallack = (data: any) => {
     if (data.portal.options.guid === urlPortal) {
         selectedPortal = urlPortal;
         urlPortal = undefined;
@@ -53,8 +53,9 @@ export const selectPortalByLatLng = (ll: L.LatLng) => {
 };
 
 const urlPortalLLCallack = (data: EventPortalAdded) => {
+    console.assert(urlPortalLL, "urlPortalLL not set");
     const ll = data.portal.getLatLng();
-    if (ll.equals(urlPortalLL)) {
+    if (ll.equals(urlPortalLL!)) {
         autoSelectPortal(data.portal.options.guid);
         urlPortalCallack(data);
         urlPortalLL = undefined;

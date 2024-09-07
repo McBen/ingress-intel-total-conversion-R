@@ -52,10 +52,10 @@ export class IITCMain {
         requests.startRefreshTimeout(ON_MOVE_REFRESH);
         updateGameScore();
 
-        if (globalThis.iitcCompabilityInit) {
+        if ((globalThis as any).iitcCompabilityInit) {
             log.info("init: finalize compability layer");
             // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-            globalThis.iitcCompabilityInit();
+            (globalThis as any).iitcCompabilityInit();
         }
         setTimeout(() => this.onIdle(), 10);
     }
@@ -69,4 +69,4 @@ export class IITCMain {
 
 
 export const IITCr = new IITCMain();
-global.IITCr = IITCr;
+(globalThis as any).IITCr = IITCr;

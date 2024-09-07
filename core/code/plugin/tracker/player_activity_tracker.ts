@@ -192,8 +192,8 @@ export class PlayerTracker extends Plugin {
     private discardOldData() {
         if (this.option.max_steps) {
             this.stored.forEach(player => {
-                if (player.actions.length > this.option.max_steps) {
-                    player.actions = player.actions.slice(-this.option.max_steps);
+                if (player.actions.length > this.option.max_steps!) {
+                    player.actions = player.actions.slice(-this.option.max_steps!);
                 }
             })
         } else {
@@ -311,7 +311,7 @@ export class PlayerTracker extends Plugin {
         this.stored.forEach((playerData, plrname) => {
             if (!playerData || playerData.actions.length === 0) {
                 console.warn("broken player data for plrname=" + plrname);
-                return true;
+                return;
             }
 
             // gather line data and put them in buckets so we can color them by
@@ -346,7 +346,7 @@ export class PlayerTracker extends Plugin {
             // as per OverlappingMarkerSpiderfier docs, click events (popups, etc) must be handled via it rather than the standard
             // marker click events. so store the popup text in the options, then display it in the oms click handler
             const m = L.marker(this.getLatLngFromEvent(last), { icon, opacity: absOpacity, desc: popup[0], title: tooltip } as L.MapOptions);
-            m.addEventListener("spiderfiedclick", this.onClickListener);
+            m.addEventListener("spiderfiedclick", this.onClickListener as any);
 
             // m.bindPopup(title);
 
@@ -359,7 +359,7 @@ export class PlayerTracker extends Plugin {
 
         // draw the poly lines to the map
         polyLineByAgeEnl.forEach((polyLine, i) => {
-            if (polyLine.length === 0) return true;
+            if (polyLine.length === 0) return;
 
             const options = {
                 weight: 2 - 0.25 * i,
@@ -374,7 +374,7 @@ export class PlayerTracker extends Plugin {
             });
         });
         polyLineByAgeRes.forEach((polyLine, i) => {
-            if (polyLine.length === 0) return true;
+            if (polyLine.length === 0) return;
 
             const options = {
                 weight: 2 - 0.25 * i,
@@ -498,15 +498,15 @@ export class PlayerTracker extends Plugin {
     private findUser(nick: string): Player | undefined {
         nick = nick.toLowerCase();
 
-        const name = [...this.stored.keys()].find(n => n.toLowerCase() === nick)
-        return this.stored.get(name);
+        const name = [...this.stored.keys()].find(n => n.toLowerCase() === nick);
+        return name ? this.stored.get(name) : undefined;
     }
 
     private centerMapOnUser(nick: string): boolean {
         const data = this.findUser(nick);
         if (!data) return false;
 
-        const last = data.actions.at(-1);
+        const last = data.actions.at(-1)!;
         const position = this.getLatLngFromEvent(last);
 
         if (window.isSmartphone()) window.show("map");
@@ -550,7 +550,7 @@ export class PlayerTracker extends Plugin {
         this.stored.forEach((data, nick) => {
             if (!nick.toLowerCase().includes(term)) return;
 
-            const event = data.actions.at(-1);
+            const event = data.actions.at(-1)!;
             const faction = FACTION_NAMES[data.team].slice(0, 3).toUpperCase();
             const lastTime = new Date(event.time).toLocaleString(navigator.languages);
 
@@ -559,7 +559,7 @@ export class PlayerTracker extends Plugin {
                 nickname: nick,
                 description: `${faction}, last seen ${lastTime}`,
                 position: this.getLatLngFromEvent(event),
-                onSelected: this.onSearchResultSelected
+                onSelected: this.onSearchResultSelected as any
             } as IITC.SearchResultPosition);
         });
     }

@@ -32,7 +32,7 @@ export const on = (type: Chat.ChatLineType | Chat.ChatLineType[], callback: Call
     type.forEach(typ => register(typ, callback, onetime));
 }
 
-const register = (type: Chat.ChatLineType, callback: CallBack, onetime) => {
+const register = (type: Chat.ChatLineType, callback: CallBack, onetime: boolean) => {
     let current = chatHooks.get(type);
     if (!current) {
         current = { callbacks: [], callbacksOF: [], done: new Set() };
@@ -135,7 +135,7 @@ const onPublicChatDataAvailable = (chat: EventPublicChatDataAvailable) => {
     }
 
     // DEBUG-START
-    const oldStats = localStorage.setItem("chatstat", JSON.stringify(typeCounts));
+    localStorage.setItem("chatstat", JSON.stringify(typeCounts));
     // DEBUG-END
 }
 

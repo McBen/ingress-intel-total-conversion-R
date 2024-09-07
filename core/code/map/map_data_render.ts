@@ -133,7 +133,7 @@ export class Render {
             .forEach(ent => this.createLinkEntity(ent as IITC.EntityLink));
 
         rest.filter(ent => ent[2][0] === "p")
-            .forEach(ent => this.createPortalEntity(ent as IITC.EntityPortal, details));
+            .forEach(ent => this.createPortalEntity(ent as IITC.EntityPortal, details!));
     }
 
 
@@ -224,7 +224,7 @@ export class Render {
     }
 
 
-    createPlaceholderPortalEntity(guid: PortalGUID, latE6: number, lngE6: number, team): void {
+    createPlaceholderPortalEntity(guid: PortalGUID, latE6: number, lngE6: number, team: IITC.EntityTeam): void {
         // intel no longer returns portals at anything but the closest zoom
         // stock intel creates 'placeholder' portals from the data in links/fields - IITC needs to do the same
         // we only have the portal guid, lat/lng coords, and the faction - no other data

@@ -62,8 +62,8 @@ export const selectPortal = (guid?: PortalGUID) => {
     const oldPortalGuid = selectedPortal;
     selectedPortal = guid;
 
-    const oldPortal = window.portals[oldPortalGuid];
-    const newPortal = window.portals[guid];
+    const oldPortal = oldPortalGuid && window.portals[oldPortalGuid];
+    const newPortal = guid && window.portals[guid];
 
     // Restore style of unselected portal
     if (!update && oldPortal) setMarkerStyle(oldPortal, false);
@@ -77,7 +77,7 @@ export const selectPortal = (guid?: PortalGUID) => {
         }
     }
 
-    setPortalIndicators(newPortal);
+    setPortalIndicators(newPortal ? newPortal : undefined);
 
     hooks.trigger("portalSelected", { selectedPortalGuid: guid, unselectedPortalGuid: oldPortalGuid });
     return update;

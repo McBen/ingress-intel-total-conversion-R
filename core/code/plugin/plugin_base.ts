@@ -33,11 +33,12 @@ export class Plugin {
         /* RELEASE-END */
 
         this.activated++;
+        return true;
     }
 
 
     disable(manager: PluginManager): void {
-        console.assert(this.activated > 0, "plugin is not active")
+        console.assert(this.activated > 0, "plugin is not active");
         this.activated--;
         if (this.activated <= 0) {
             this.deactivateRequirements(manager);
@@ -51,7 +52,7 @@ export class Plugin {
     private activateRequirements(manager: PluginManager): boolean {
         if (!this.requires) return true;
 
-        return !this.requires.some(dependency => {
+        return this.requires.every(dependency => {
             const plugin = manager.getPlugin(dependency);
             if (!plugin) {
                 this.error = `requires plugin: ${dependency}`;
@@ -62,6 +63,8 @@ export class Plugin {
                 this.error = `required plugin: ${dependency} cannot be activated`;
                 return false;
             }
+
+            return true;
         })
     }
 

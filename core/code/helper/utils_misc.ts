@@ -22,7 +22,7 @@ export const getURLParam = (parameter: string): string => {
 export const readCookie = (name: string): string => {
     let C;
     const c = document.cookie.split("; ");
-    const cookies = {};
+    const cookies: Record<string, string> = {};
     for (let i = c.length - 1; i >= 0; i--) {
         C = c[i].split("=");
         cookies[C[0]] = decodeURI(C[1]);
@@ -88,7 +88,7 @@ export const isTouchDevice = (): boolean => {
  */
 export const scrollBottom = (element: string | JQuery): number => {
     if (typeof element === "string") element = $(element);
-    return element.get(0).scrollHeight - element.innerHeight() - element.scrollTop();
+    return element.get(0)!.scrollHeight - element.innerHeight()! - element.scrollTop()!;
 }
 
 

@@ -41,7 +41,7 @@ export class PortalDetails {
             return newRequest;
         }
 
-        return this.requestQueue.get(guid);
+        return this.requestQueue.get(guid)!;
     }
 
 

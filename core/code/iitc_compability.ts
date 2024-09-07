@@ -25,88 +25,88 @@ const log = Log(LogApp.Plugins);
 const NOOP = () => { /* */ };
 
 // DIALOG
-globalThis.alert = alert as any;
-globalThis.dialog = dialog;
-globalThis.DIALOGS = DIALOGS;
+(globalThis as any).alert = alert as any;
+(globalThis as any).dialog = dialog;
+(globalThis as any).DIALOGS = DIALOGS;
 
 
 // IDLE
-globalThis.isIdle = () => idle.isIdle();
-globalThis.idleReset = () => idle.reset();
-globalThis.idleSet = () => idle.set();
-globalThis.addResumeFunction = (fct: IdleResumeCallback) => idle.addResumeFunction(fct);
+(globalThis as any).isIdle = () => idle.isIdle();
+(globalThis as any).idleReset = () => idle.reset();
+(globalThis as any).idleSet = () => idle.set();
+(globalThis as any).addResumeFunction = (fct: IdleResumeCallback) => idle.addResumeFunction(fct);
 
 
 // MAP_DATA_CALC_TOOLS
-globalThis.setupDataTileParams = CalcTools.setupDataTileParameters;
-globalThis.getMapZoomTileParameters = CalcTools.getMapZoomTileParameters;
-globalThis.getDataZoomTileParameters = CalcTools.getDataZoomTileParameters;
-globalThis.getDataZoomForMapZoom = CalcTools.getDataZoomForMapZoom;
-globalThis.lngToTile = CalcTools.lngToTile;
-globalThis.latToTile = CalcTools.latToTile;
-globalThis.tileToLng = CalcTools.tileToLng;
-globalThis.tileToLat = CalcTools.tileToLat;
-globalThis.pointToTileId = CalcTools.pointToTileId;
+(globalThis as any).setupDataTileParams = CalcTools.setupDataTileParameters;
+(globalThis as any).getMapZoomTileParameters = CalcTools.getMapZoomTileParameters;
+(globalThis as any).getDataZoomTileParameters = CalcTools.getDataZoomTileParameters;
+(globalThis as any).getDataZoomForMapZoom = CalcTools.getDataZoomForMapZoom;
+(globalThis as any).lngToTile = CalcTools.lngToTile;
+(globalThis as any).latToTile = CalcTools.latToTile;
+(globalThis as any).tileToLng = CalcTools.tileToLng;
+(globalThis as any).tileToLat = CalcTools.tileToLat;
+(globalThis as any).pointToTileId = CalcTools.pointToTileId;
 
 // PortalMarker
-globalThis.portalMarkerScale = portalMarkerScale;
-globalThis.createMarker = createMarker;
-globalThis.setMarkerStyle = setMarkerStyle;
+(globalThis as any).portalMarkerScale = portalMarkerScale;
+(globalThis as any).createMarker = createMarker;
+(globalThis as any).setMarkerStyle = setMarkerStyle;
 
 // Portal_Data
-globalThis.getPortalLinks = getPortalLinks;
-globalThis.getPortalFields = getPortalFields;
-globalThis.getPortalFieldsCount = getPortalFieldsCount;
-globalThis.getPortalLinksCount = getPortalLinksCount;
+(globalThis as any).getPortalLinks = getPortalLinks;
+(globalThis as any).getPortalFields = getPortalFields;
+(globalThis as any).getPortalFieldsCount = getPortalFieldsCount;
+(globalThis as any).getPortalLinksCount = getPortalLinksCount;
 
 
 // Request
-globalThis.postAjax = postAjax;
-// globalThis.mapDataRequest .. init below
+(globalThis as any).postAjax = postAjax;
+// (globalThis as any).mapDataRequest .. init below
 
 // Render
-// globalThis.Render .. init below
-globalThis.isLayerGroupDisplayed = (name: string, defaultState: boolean) => IITCr.layers.isLayerKnown(name) ? IITCr.layers.isLayerVisible(name) : defaultState;
+// (globalThis as any).Render .. init below
+(globalThis as any).isLayerGroupDisplayed = (name: string, defaultState: boolean) => IITCr.layers.isLayerKnown(name) ? IITCr.layers.isLayerVisible(name) : defaultState;
 
 // layerChooser
-// globalThis.layerChooser .. init below
+// (globalThis as any).layerChooser .. init below
 
 /**
  * @deprecated even in IITC-CE it is deprecated
  */
-globalThis.addLayerGroup = (name: string, layerGroup: L.LayerGroup<any>, defaultDisplay: boolean): void => {
+(globalThis as any).addLayerGroup = (name: string, layerGroup: L.LayerGroup<any>, defaultDisplay: boolean): void => {
     IITCr.layers.addOverlay(name, layerGroup, { default: defaultDisplay });
 };
 /**
  * @deprecated even in IITC-CE it is deprecated
  */
-globalThis.removeLayerGroup = (layerGroup: L.LayerGroup<any>): void => {
+(globalThis as any).removeLayerGroup = (layerGroup: L.LayerGroup<any>): void => {
     IITCr.layers.removeOverlay(layerGroup);
 };
 
 // Hooks
-globalThis.pluginCreateHook = NOOP; // stub
-globalThis.VALID_HOOKS = []; // stub
-globalThis.runHooks = IITCr.hooks.trigger.bind(IITCr.hooks);
-globalThis.addHook = IITCr.hooks.on.bind(IITCr.hooks);
-globalThis.removeHook = IITCr.hooks.off.bind(IITCr.hooks);
+(globalThis as any).pluginCreateHook = NOOP; // stub
+(globalThis as any).VALID_HOOKS = []; // stub
+(globalThis as any).runHooks = IITCr.hooks.trigger.bind(IITCr.hooks);
+(globalThis as any).addHook = IITCr.hooks.on.bind(IITCr.hooks);
+(globalThis as any).removeHook = IITCr.hooks.off.bind(IITCr.hooks);
 
 // portalDetails
-globalThis.getPortalRange = (d: PortalInfoDetailed) => { console.assert(d instanceof PortalInfoDetailed, "wrong type"); return d.getPortalRange(); };
-globalThis.getLinkAmpRangeBoost = (d: PortalInfoDetailed) => d.getLinkAmpRangeBoost();
-globalThis.getPortalLevel = (d: PortalInfoDetailed) => d.getPortalLevel();
-globalThis.getPortalModsByType = (d: PortalInfoDetailed, type: string) => d.getPortalModsByType(type);
-globalThis.getMaxOutgoingLinks = (d: PortalInfoDetailed) => d.getMaxOutgoingLinks();
-globalThis.PortalInfoDetailed = PortalInfoDetailed;
+(globalThis as any).getPortalRange = (d: PortalInfoDetailed) => { console.assert(d instanceof PortalInfoDetailed, "wrong type"); return d.getPortalRange(); };
+(globalThis as any).getLinkAmpRangeBoost = (d: PortalInfoDetailed) => d.getLinkAmpRangeBoost();
+(globalThis as any).getPortalLevel = (d: PortalInfoDetailed) => d.getPortalLevel();
+(globalThis as any).getPortalModsByType = (d: PortalInfoDetailed, type: string) => d.getPortalModsByType(type);
+(globalThis as any).getMaxOutgoingLinks = (d: PortalInfoDetailed) => d.getMaxOutgoingLinks();
+(globalThis as any).PortalInfoDetailed = PortalInfoDetailed;
 
-globalThis.portalDetail = portalDetail;
+(globalThis as any).portalDetail = portalDetail;
 
 
 // portalDetails Display
-globalThis.fixPortalImageUrl = fixPortalImageUrl;
-globalThis.renderPortalDetails = renderPortalDetails;
+(globalThis as any).fixPortalImageUrl = fixPortalImageUrl;
+(globalThis as any).renderPortalDetails = renderPortalDetails;
 
-globalThis.renderUpdateStatus = NOOP; // stub
+(globalThis as any).renderUpdateStatus = NOOP; // stub
 
 // highlighter
 type HighLighterFct = (data: { portal: IITC.Portal }) => void;
@@ -115,12 +115,14 @@ interface HighLighterNew {
     setSelected?: (activate: boolean) => void;
 }
 
-globalThis.addPortalHighlighter = (name: string, hl: HighLighterFct | HighLighterNew) => {
+(globalThis as any).addPortalHighlighter = (name: string, hl: HighLighterFct | HighLighterNew) => {
 
     if ((hl as HighLighterNew).highlight) {
         const highlight: Highlighter = {
             name,
+            // @ts-ignore
             highlight: (p: IITC.Portal) => (hl as HighLighterNew).highlight.call(hl, { portal: p }),
+            // @ts-ignore
             setSelected: (hl as HighLighterNew).setSelected.bind(hl)
         };
         IITCr.highlighter.add(highlight);
@@ -135,57 +137,58 @@ globalThis.addPortalHighlighter = (name: string, hl: HighLighterFct | HighLighte
 
 
 /** @deprecated
-globalThis.escapeJavascriptString = (str: string): string => {
+(globalThis as any).escapeJavascriptString = (str: string): string => {
     return (str + "").replace(/[\\"']/g, "\\$&");
 }
 */
 
 // utils
-globalThis.makePermalink = utils.makePermalink;
-globalThis.clampLatLngBounds = utils.clampLatLngBounds;
-globalThis.clampLatLng = utils.clampLatLng;
-globalThis.genFourColumnTable = utils.genFourColumnTable;
-globalThis.uniqueArray = utils.uniqueArray;
-globalThis.prettyEnergy = utils.prettyEnergy;
-globalThis.escapeHtmlSpecialChars = utils.escapeHtmlSpecialChars;
-globalThis.convertTextToTableMagic = utils.convertTextToTableMagic;
-globalThis.scrollBottom = utils.scrollBottom;
-globalThis.writeCookie = utils.writeCookie;
-globalThis.eraseCookie = utils.eraseCookie;
-globalThis.digits = utils.digits;
-globalThis.zeroPad = times.zeroPad;
-globalThis.unixTimeToString = times.unixTimeToString;
-globalThis.unixTimeToDateTimeString = times.unixTimeToDateTimeString;
-globalThis.unixTimeToHHmm = times.unixTimeToHHmm;
-globalThis.formatInterval = times.formatInterval;
-globalThis.showPortalPosLinks = utils.showPortalPosLinks;
-globalThis.isTouchDevice = utils.isTouchDevice;
-globalThis.getURLParam = utils.getURLParam;
-globalThis.readCookie = utils.readCookie;
-globalThis.selectPortalByLatLng = selectPortalByLatLng;
-globalThis.zoomToAndShowPortal = utils.zoomToAndShowPortal;
+(globalThis as any).makePermalink = utils.makePermalink;
+(globalThis as any).clampLatLngBounds = utils.clampLatLngBounds;
+(globalThis as any).clampLatLng = utils.clampLatLng;
+(globalThis as any).genFourColumnTable = utils.genFourColumnTable;
+(globalThis as any).uniqueArray = utils.uniqueArray;
+(globalThis as any).prettyEnergy = utils.prettyEnergy;
+(globalThis as any).escapeHtmlSpecialChars = utils.escapeHtmlSpecialChars;
+(globalThis as any).convertTextToTableMagic = utils.convertTextToTableMagic;
+(globalThis as any).scrollBottom = utils.scrollBottom;
+(globalThis as any).writeCookie = utils.writeCookie;
+(globalThis as any).eraseCookie = utils.eraseCookie;
+(globalThis as any).digits = utils.digits;
+(globalThis as any).zeroPad = times.zeroPad;
+(globalThis as any).unixTimeToString = times.unixTimeToString;
+(globalThis as any).unixTimeToDateTimeString = times.unixTimeToDateTimeString;
+(globalThis as any).unixTimeToHHmm = times.unixTimeToHHmm;
+(globalThis as any).formatInterval = times.formatInterval;
+(globalThis as any).showPortalPosLinks = utils.showPortalPosLinks;
+(globalThis as any).isTouchDevice = utils.isTouchDevice;
+(globalThis as any).getURLParam = utils.getURLParam;
+(globalThis as any).readCookie = utils.readCookie;
+(globalThis as any).selectPortalByLatLng = selectPortalByLatLng;
+(globalThis as any).zoomToAndShowPortal = utils.zoomToAndShowPortal;
 
-globalThis.iitcCompabilityInit = () => {
+(globalThis as any).iitcCompabilityInit = () => {
     // these variables are only available after boot
-    globalThis.mapDataRequest = IITCr.mapDataRequest;
-    globalThis.Render = {
+    (globalThis as any).mapDataRequest = IITCr.mapDataRequest;
+    (globalThis as any).Render = {
+        // @ts-ignore
         prototype: IITCr.mapDataRequest.getRender() // used in Drone Helper
-    }
-
-    globalThis.layerChooser = {
+    };
+    // @ts-ignore
+    (globalThis as any).layerChooser = {
         addOverlay: (layer: L.Layer, name: string, options = {}) => IITCr.layers.addOverlay(name, layer, options),
         removeLayer: (layer: L.Layer, _options = {}) => IITCr.layers.removeOverlay(layer),
 
         addBaseLayer: (layer: L.Layer, name: string) => IITCr.layers.addBase(name, layer)
-    }
+    };
 
     // Artifacts
-    globalThis.artifact = {
+    (globalThis as any).artifact = {
         requestData: IITCr.artifacts.requestData.bind(IITCr.artifacts),
         getArtifactEntities: IITCr.artifacts.getArtifactEntities.bind(IITCr.artifacts),
         handleFailure: IITCr.artifacts.handleFailure.bind(IITCr.artifacts),
         processData: IITCr.artifacts.processData.bind(IITCr.artifacts)
-    }
+    };
 }
 
 
@@ -196,7 +199,7 @@ interface IITC_ButtonOptions {
     action: () => void;
 }
 
-globalThis.IITC = {
+(globalThis as any).IITC = {
     toolbox: {
 
         /**

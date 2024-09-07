@@ -68,6 +68,7 @@ const HealthMeter: Component<{ level: number, percent: number, classname?: strin
     );
 }
 
+/*
 const LevelNumber: Component<{ level: number }> = (p) => {
     return (
         <div
@@ -76,3 +77,4 @@ const LevelNumber: Component<{ level: number }> = (p) => {
         >{p.level}</div>
     );
 }
+*/

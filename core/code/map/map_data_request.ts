@@ -93,7 +93,7 @@ export class MapDataRequest {
     private debugTiles: RenderDebugTiles;
 
     private activeRequestCount = 0;
-    private requestedTiles = {};
+    private requestedTiles: Record<string, any> = {};
 
     private renderQueue: RenderQueueEntry[];
     private renderQueueTimer: number | undefined;
@@ -103,7 +103,7 @@ export class MapDataRequest {
         dataZoom: number,
         bounds: L.LatLngBounds
     };
-    private refreshStartTime;
+    private refreshStartTime: number;
     private timerExpectedTimeoutTime: number;
     private timer: number | undefined;
     private tileErrorCount: { [index: TileID]: number };
@@ -316,7 +316,7 @@ export class MapDataRequest {
         this.failedTileCount = 0;
         this.staleTileCount = 0;
 
-        const tilesToFetchDistance = {};
+        const tilesToFetchDistance: Record<string, number> = {};
 
         // map center point - for fetching center tiles first
         const mapCenterPoint = window.map.project(window.map.getCenter(), mapZoom);
@@ -335,7 +335,7 @@ export class MapDataRequest {
 
                 if (this.cache.isFresh(tile_id)) {
                     // data is fresh in the cache - just render it
-                    this.pushRenderQueue(tile_id, this.cache.get(tile_id), TileState.cache_fresh);
+                    this.pushRenderQueue(tile_id, this.cache.get(tile_id)!, TileState.cache_fresh);
                 } else {
 
                     // no fresh data
@@ -383,7 +383,7 @@ export class MapDataRequest {
     }
 
 
-    delayProcessRequestQueue(seconds) {
+    delayProcessRequestQueue(seconds: number) {
         if (this.timer === undefined) {
             this.timer = window.setTimeout(() => {
                 this.timer = window.setTimeout(() => { this.timer = undefined; this.processRequestQueue(); }, seconds * 1000);
@@ -698,7 +698,7 @@ export class MapDataRequest {
         }
     }
 
-    pauseRenderQueue(pause) {
+    pauseRenderQueue(pause: boolean) {
         this.renderQueuePaused = pause;
         if (pause) {
             if (this.renderQueueTimer) {

@@ -21,7 +21,7 @@ export const RESO_NRG = [0, 1000, 1500, 2000, 2500, 3000, 4000, 5000, 6000];
 
 export class PortalInfoDetailed extends PortalInfo {
     readonly mods: [PortalMOD, PortalMOD, PortalMOD, PortalMOD];
-    readonly resonators: PortalRESO[];
+    readonly resonators: (PortalRESO)[];
     readonly owner: string;
     readonly artifactDetail: [];
     readonly history: number | undefined;
@@ -35,7 +35,7 @@ export class PortalInfoDetailed extends PortalInfo {
             if (inMod) this.mods[i] = new PortalMOD(inMod);
         }
 
-        this.resonators = data[15].map(r => r ? new PortalRESO(r) : undefined);
+        this.resonators = data[15].filter(r => r !== undefined).map(r => new PortalRESO(r));
         this.owner = data[16];
         this.artifactDetail = data[17];
         this.history = data[18];
@@ -93,18 +93,19 @@ export class PortalInfoDetailed extends PortalInfo {
         let hasReso = false;
 
         this.resonators.forEach(reso => {
-            if (!reso) return true;
-            lvl += reso.level;
-            hasReso = true;
+            if (reso) {
+                lvl += reso.level;
+                hasReso = true;
+            }
         });
 
         return hasReso ? Math.max(1, lvl / 8) : 0;
     }
 
 
-    getPortalModsByType(type): PortalMOD[] {
+    getPortalModsByType(type: string): PortalMOD[] {
 
-        const typeToStat = {
+        const typeToStat: Record<string, string> = {
             RES_SHIELD: "MITIGATION",
             FORCE_AMP: "FORCE_AMPLIFIER",
             TURRET: "HIT_BONUS",  // and/or ATTACK_FREQUENCY??
@@ -282,12 +283,12 @@ export class PortalInfoDetailed extends PortalInfo {
         return Math.round(10 * linkDefenseBoost) / 10;
     }
 
-    getPortalLinksMitigation(linkCount) {
+    getPortalLinksMitigation(linkCount: number) {
         const mitigation = Math.round(400 / 9 * Math.atan(linkCount / Math.E));
         return mitigation;
     }
 
-    getPortalMitigationDetails(linkCount) {
+    getPortalMitigationDetails(linkCount: number) {
         const linkDefenseBoost = this.getPortalLinkDefenseBoost();
 
         const shields = this.getPortalShieldMitigation();

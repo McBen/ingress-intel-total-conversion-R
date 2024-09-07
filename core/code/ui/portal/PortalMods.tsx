@@ -1,7 +1,7 @@
 import { Component, For, Show, createMemo } from "solid-js";
 import { NoPortalMod, PortalMOD } from "../../portal/portal_info";
 
-export const COLORS_MOD = { VERY_RARE: "#b08cff", RARE: "#73a8ff", COMMON: "#8cffbf" };
+export const COLORS_MOD: Record<string, string> = { VERY_RARE: "#b08cff", RARE: "#73a8ff", COMMON: "#8cffbf" };
 
 
 export const PortalMods: Component<{ mods: PortalMOD[]; }> = p => {

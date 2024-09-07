@@ -47,7 +47,7 @@ export const postAjax = (action: string, data: any,
     errorCallback?: (xhr: JQuery.jqXHR | null, textStatus: any | undefined, errorText: string) => void): void => {
 
 
-    const onError = (jqXHR: JQuery.jqXHR, textStatus, errorThrown: string) => {
+    const onError = (jqXHR: JQuery.jqXHR, textStatus: any, errorThrown: string) => {
         requests.remove(jqXHR);
 
         // pass through to the user error func, if one exists
@@ -56,7 +56,7 @@ export const postAjax = (action: string, data: any,
         }
     };
 
-    const onSuccess = (data, textStatus, jqXHR: JQuery.jqXHR) => {
+    const onSuccess = (data: any, textStatus: any, jqXHR: JQuery.jqXHR) => {
         requests.remove(jqXHR);
 
         // the Niantic server can return a HTTP success, but the JSON response contains an error. handle that sensibly

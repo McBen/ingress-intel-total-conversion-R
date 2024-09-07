@@ -25,7 +25,7 @@ export class PluginHighlightMyLevel extends Plugin {
     }
 
     private colorLevel(below: boolean, portal: IITC.Portal) {
-        const portal_level = portal.options.level;
+        const portal_level = portal.options.level!;
 
         // as portal levels can never be higher than L8, clamp the player level to this for highlight purposes
         const player_level = Math.min(player.level, 8);

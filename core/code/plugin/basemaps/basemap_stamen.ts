@@ -30,7 +30,7 @@ export class PluginStamenMaps extends Plugin {
                 ].join("")
             },
             // eslint-disable-next-line object-shorthand
-            initialize: function (name: string, options) {
+            initialize: function (name: string, options: any) {
                 options.layer = name.replace(" ", "-").toLowerCase();
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-call
                 (L.TileLayer as any).prototype.initialize.call(this, baseUrl, options);

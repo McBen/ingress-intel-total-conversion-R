@@ -14,7 +14,7 @@ let DIALOG_ID = 0;
  * All onscreen dialogs, keyed by their ID.
  * (old Mission plugin needs access to DIALOGS)
  */
-export const DIALOGS = {};
+export const DIALOGS: Record<string, HTMLElement> = {};
 
 /* The number of dialogs on screen.
  */
@@ -22,7 +22,7 @@ let DIALOG_COUNT = 0;
 
 /* The dialog that has focus.
  */
-let DIALOG_FOCUS;
+let DIALOG_FOCUS: HTMLElement | undefined;
 
 /* Controls how quickly the slide toggle animation
  * should play for dialog collapsing and expanding.
@@ -247,7 +247,8 @@ export const dialog = (options: DialogOptions): JQuery => {
                 close.addClass("ui-dialog-titlebar-button-close");
             }
 
-            DIALOGS[$(this).data("id")] = this;
+            const id: string = $(this).data("id");
+            DIALOGS[id] = this as unknown as HTMLElement;
             DIALOG_COUNT++;
 
             log.log("window.dialog: " + $(this).data("id") + " (" + $(this).dialog("option", "title") + ") opened. " + DIALOG_COUNT + " remain.");
@@ -260,7 +261,7 @@ export const dialog = (options: DialogOptions): JQuery => {
 
             // Make sure that we don't keep a dead dialog in focus
             if (DIALOG_FOCUS && $(DIALOG_FOCUS).data("id") === $(this).data("id")) {
-                DIALOG_FOCUS = null;
+                DIALOG_FOCUS = undefined;
             }
 
             // Finalize
@@ -288,7 +289,7 @@ export const dialog = (options: DialogOptions): JQuery => {
             }
 
             // This dialog is now in focus
-            DIALOG_FOCUS = this;
+            DIALOG_FOCUS = this as unknown as HTMLElement;
             $(this).closest(".ui-dialog").find(".ui-dialog-title").removeClass("ui-dialog-title-inactive").addClass("ui-dialog-title-active");
         }
     }, options);
@@ -304,12 +305,12 @@ export const dialog = (options: DialogOptions): JQuery => {
     dialogElement.data("jqID", jqID);
 
     // Set callbacks
-    dialogElement.data("closeCallback", options.closeCallback);
-    dialogElement.data("collapseCallback", options.collapseCallback);
-    dialogElement.data("expandCallback", options.expandCallback);
-    dialogElement.data("collapseExpandCallback", options.collapseExpandCallback);
-    dialogElement.data("focusCallback", options.focusCallback);
-    dialogElement.data("blurCallback", options.blurCallback);
+    dialogElement.data("closeCallback", options.closeCallback as any);
+    dialogElement.data("collapseCallback", options.collapseCallback as any);
+    dialogElement.data("expandCallback", options.expandCallback as any);
+    dialogElement.data("collapseExpandCallback", options.collapseExpandCallback as any);
+    dialogElement.data("focusCallback", options.focusCallback as any);
+    dialogElement.data("blurCallback", options.blurCallback as any);
 
     if (options.modal) {
         // ui-modal includes overrides for modal dialogs

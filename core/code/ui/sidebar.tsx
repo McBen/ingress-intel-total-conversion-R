@@ -19,7 +19,7 @@ import { selectPortal } from "../map/portal_select";
 
 
 export const setupSidebar = () => {
-    const wrapper = document.querySelector("#scrollwrapper");
+    const wrapper = document.querySelector("#scrollwrapper")!;
     render(() => <Sidebar />, wrapper);
 }
 
@@ -31,12 +31,12 @@ const Sidebar = () => {
         <div id="sidebar">
             <div id="portaldetails">
                 <Show when={getPortalDetails()} fallback={<div id="portalStatus">...</div>}>
-                    <PortalTitle details={getPortalDetails()} /><PortalCloseButton />
-                    <PortalImage details={getPortalDetails()} />
-                    <PortalMods mods={getPortalDetails().mods} />
-                    <PortalOwner details={getPortalDetails()} />
-                    <PortalResonators resonators={getPortalDetails().resonators} team={getPortalDetails().team} />
-                    <PortalMiscData details={getPortalDetails()} />
+                    <PortalTitle details={getPortalDetails()!} /><PortalCloseButton />
+                    <PortalImage details={getPortalDetails()!} />
+                    <PortalMods mods={getPortalDetails()!.mods} />
+                    <PortalOwner details={getPortalDetails()!} />
+                    <PortalResonators resonators={getPortalDetails()!.resonators} team={getPortalDetails()!.team} />
+                    <PortalMiscData details={getPortalDetails()!} />
                 </Show>
             </div>
         </div>);
@@ -56,7 +56,7 @@ const PortalTitle: Component<{ details: PortalInfoDetailed }> = p => {
             onClick={() => zoomTo(p.details.guid, p.details.latE6, p.details.lngE6)}
         >{p.details.title}
         </h3>
-        <span class="portal_link" onClick={() => sharePortal(getPortalDetails().guid)}><Icons.IconShare /></span>
+        <span class="portal_link" onClick={() => sharePortal(getPortalDetails()!.guid)}><Icons.IconShare /></span>
     </div >
     );
 }
@@ -206,7 +206,7 @@ const PortalMiscData: Component<{ details: PortalInfoDetailed }> = p => {
     const apGain = createMemo(() => getAttackApGainText(p.details, fieldCount(), links().incoming + links().outgoing));
 
     return <div class="stats">
-        <div class="stat"><PortalHealth details={getPortalDetails()} /></div>
+        <div class="stat"><PortalHealth details={getPortalDetails()!} /></div>
         <div class="stat" title={migrate().title}><Icons.FiShield />{migrate().text}</div>
         <div class="stat" title={apGain().title}><Icons.TbMoneybag />{apGain().text}</div>
         <div class="stat" title="Fields"><Icons.TbVectorTriangle />{fieldCount()}</div>

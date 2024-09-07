@@ -9,7 +9,7 @@ export interface QueryResult {
     position?: L.LatLng;
     bounds?: L.LatLngBounds;
     layer?: L.LayerGroup;
-    onSelected?: (result: QueryResult, event) => void | boolean;
+    onSelected?: (result: QueryResult, event: any) => void | boolean;
     onRemove?: (result: QueryResult) => void;
 
 }
@@ -22,7 +22,6 @@ export class Query {
 
     private results: QueryResult[]
     private container: JQuery;
-    private header: JQuery;
     private list: JQuery;
     private selectedResult: QueryResult | undefined;
     private hoverResult: QueryResult | undefined;
@@ -39,7 +38,7 @@ export class Query {
 
         this.container = $("<div>").addClass("searchquery");
 
-        this.header = $("<h3>")
+        $("<h3>")
             .text(this.getHeaderText())
             .appendTo(this.container);
 
@@ -145,7 +144,7 @@ export class Query {
     }
 
 
-    onResultSelected(result: QueryResult, event) {
+    onResultSelected(result: QueryResult, event: any) {
         this.removeHoverResult();
         this.removeSelectedResult();
         this.selectedResult = result;

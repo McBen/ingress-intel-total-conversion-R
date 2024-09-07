@@ -57,7 +57,7 @@ export class PluginDialog {
             }),
             $("<div>", { class: "title", text: plugin.name }),
             $("<span>", { text: plugin.version }),
-            plugin.error ? $("<div>", { class: "error", text: plugin.error }) : undefined,
+            plugin.error ? $("<div>", { class: "error", text: plugin.error }) : "",
             $("<div>", { class: "description", text: plugin.description })
         )
     }

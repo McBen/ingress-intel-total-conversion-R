@@ -26,7 +26,7 @@ export interface IconProps extends SVGSVGElementTags {
 }
 
 export const IconTemplate: Component<{ iconSrc: SVGString, props?: IconProps }> = p => {
-    const { data, attributes } = getSVGFromSource(p.iconSrc);
+    const { data } = getSVGFromSource(p.iconSrc);
 
     const props: IconProps = p.props || {}
 
@@ -58,8 +58,8 @@ const getSVGFromSource = (source: SVGString): { data: string, attributes: NamedN
     svgContainer.innerHTML = source;
     const element = svgContainer.firstElementChild;
 
-    const data = svgContainer.firstElementChild.innerHTML;
-    const attributes = element.attributes;
+    const data = svgContainer.firstElementChild!.innerHTML;
+    const attributes = element!.attributes;
 
     return { data, attributes }
 }

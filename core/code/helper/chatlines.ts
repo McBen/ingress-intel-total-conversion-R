@@ -258,7 +258,7 @@ type sizeLimits = [number, number | undefined];
 const findBestNode = (rules: Rule[], dividers: Divider[], sizes: sizeLimits = [1, undefined], route: string[] = []): DTNode => {
 
     // found a leaf ?
-    if (rules.length === 0) return <DTLeaf>{ type: ChatLineType.UNKNOWN, verify: [] };
+    if (rules.length === 0) return { type: ChatLineType.UNKNOWN, verify: [] } as unknown as DTLeaf;
 
     const resultType = rules[0].type;
     if (rules.every(r => r.type === resultType)) {

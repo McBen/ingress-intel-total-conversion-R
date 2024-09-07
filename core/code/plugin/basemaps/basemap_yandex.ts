@@ -7,7 +7,7 @@ import "leaflet-plugins/layer/tile/Yandex.addon.LoadApi";
 
 // eslint-disable-next-line @typescript-eslint/no-namespace
 declare namespace L {
-    function yandex(options): L1.TileLayer;
+    function yandex(options: any): L1.TileLayer;
 }
 
 
@@ -21,7 +21,7 @@ export class PluginYandexMaps extends Plugin {
 
     private apiKey = "";
 
-    private sets = {
+    private sets: Record<string, Object> = {
         map: {
             type: "map"
         },
@@ -39,7 +39,6 @@ export class PluginYandexMaps extends Plugin {
             key: this.apiKey
         }
 
-        // eslint-disable-next-line guard-for-in
         for (const name in this.sets) {
             const options = $.extend({}, baseOptions, this.sets[name]);
             const layer = L.yandex(options);
@@ -48,8 +47,6 @@ export class PluginYandexMaps extends Plugin {
     }
 
     deactivate(): void {
-
-        // eslint-disable-next-line guard-for-in
         for (const name in this.sets) {
             IITCr.layers.removeBase("Yandex " + name);
         }

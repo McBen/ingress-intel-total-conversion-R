@@ -42,10 +42,7 @@ export class PluginPortalLevelNumbers extends Plugin {
         window.map.off("overlayadd overlayremove", this.onOverlayChanged);
 
         this.levelLayers.forEach(marker => this.levelLayerGroup.removeLayer(marker));
-        this.levelLayers = undefined;
-
         IITCr.layers.removeOverlay(this.levelLayerGroup);
-        this.levelLayerGroup = undefined;
     }
 
 
@@ -93,7 +90,7 @@ export class PluginPortalLevelNumbers extends Plugin {
         this.removeLabel(guid);
 
         const portal = window.portals[guid];
-        const levelNumber = portal.options.level;
+        const levelNumber = portal.options.level!;
         const marker = L.marker(latLng, {
             icon: L.divIcon({
                 className: "plugin-portal-level-numbers",
@@ -131,7 +128,7 @@ export class PluginPortalLevelNumbers extends Plugin {
         }
 
         // for efficient testing of intersection, group portals into buckets based on the defined rectangle size
-        const buckets: Map<string, Set<PortalGUID>> = new Map();
+        const buckets = new Map<string, Set<PortalGUID>>();
 
         portalPoints.forEach((point, guid) => {
 
@@ -142,15 +139,15 @@ export class PluginPortalLevelNumbers extends Plugin {
             bucketIds.forEach(i => {
                 const b = i.toString();
                 if (!buckets.has(b)) buckets.set(b, new Set());
-                buckets.get(b).add(guid);
+                buckets.get(b)!.add(guid);
             })
         })
 
-        const coveredPortals: Set<PortalGUID> = new Set();
+        const coveredPortals = new Set<PortalGUID>();
 
         buckets.forEach(bucketGuids => {
             bucketGuids.forEach(guid => {
-                const point = portalPoints.get(guid);
+                const point = portalPoints.get(guid)!;
                 // the bounds used for testing are twice as wide as the rectangle. this is so that there's no left/right
                 // overlap between two different portals text
                 const southWest = point.subtract([SQUARE_SIZE, SQUARE_SIZE]);
@@ -159,12 +156,12 @@ export class PluginPortalLevelNumbers extends Plugin {
 
                 for (const otherGuid of bucketGuids) {
                     // do not check portals already marked as covered
-                    if (guid !== otherGuid && !coveredPortals[otherGuid]) {
-                        const otherPoint = portalPoints.get(otherGuid);
+                    if (guid !== otherGuid && !coveredPortals.has(otherGuid)) {
+                        const otherPoint = portalPoints.get(otherGuid)!;
 
                         if (largeBounds.contains(otherPoint)) {
                             // another portal is within the rectangle - remove if it has not a higher level
-                            if (window.portals[guid].options.level <= window.portals[otherGuid].options.level) {
+                            if (window.portals[guid].options.level! <= window.portals[otherGuid].options.level!) {
                                 coveredPortals.add(guid);
                                 break;
                             }
