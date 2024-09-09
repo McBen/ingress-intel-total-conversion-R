@@ -11,7 +11,7 @@
     "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
     "module": "es2020",
-    "target": "es2020",
+    "target": "es2021",
     "allowJs": false, // true,
     "esModuleInterop": true,
     "importHelpers": true,
