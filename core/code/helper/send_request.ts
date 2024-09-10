@@ -22,7 +22,7 @@ const ZOOM_LEVEL_ADJ = 5 * SECONDS;
 /**
  * refresh time to use after a movement event
  */
-export const ON_MOVE_REFRESH = 2.5 * SECONDS;
+export const ON_MOVE_REFRESH = 0.1 * SECONDS;
 
 /**
  * don't request anymore data
