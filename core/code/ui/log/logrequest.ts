@@ -59,11 +59,10 @@ export class LogRequest {
         postAjax(
             'getPlexts',
             post,
-            (data) => this.processNewLogData(data, !!post.ascendingTimestampOrder, getOldMessages),
+            (data: Intel.ChatCallback) => this.processNewLogData(data, !!post.ascendingTimestampOrder, getOldMessages),
             () => {
-                isRetry
-                    ? () => { this.requestRunning = false; }
-                    : () => { this.requestRunning = false; this.request(getOldMessages, true) }
+                this.requestRunning = false;
+                if (!isRetry) this.request(getOldMessages, true)
             }
         );
     }
