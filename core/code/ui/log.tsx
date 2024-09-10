@@ -1,11 +1,11 @@
 import { render } from "solid-js/web";
-import { LogWindow, LogSetPage, setTabs, current } from "./log/logwindow";
+import { LogWindow, setTabs, current, setCurrent } from "./log/logwindow";
 import { LogRequest } from "./log/logrequest";
 import { requests } from "../helper/send_request";
 import { GLOPT, IITCOptions } from "../helper/options";
 
 
-type Size = { width: number, height: number };
+interface Size { width: number, height: number }
 const DefaultSize: Size = { width: 705, height: 350 };
 
 
@@ -17,7 +17,6 @@ export const setupLogWindow = () => {
     initResize();
     initLocation();
 
-
     const tabs = [
         new LogRequest("all", "All"),
         new LogRequest("faction", "Faction"),
@@ -25,7 +24,7 @@ export const setupLogWindow = () => {
     ];
 
     setTabs(tabs);
-    setTimeout(() => LogSetPage(tabs[0]), 500); // delay before init request
+    setCurrent(tabs[0]);
 
     requests.addRefreshFunction(() => current().request(false));
 }
@@ -38,7 +37,6 @@ const initResize = () => {
     });
 };
 
-0
 
 const initLocation = () => {
     const stored = IITCOptions.getSafe(GLOPT.CHAT_LOCATION, DefaultSize);
