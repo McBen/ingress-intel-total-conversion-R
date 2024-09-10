@@ -1,9 +1,9 @@
 // TODO: move outside of UI
 import { clampLatLngBounds } from "../../helper/utils_misc";
-import { Log, LogApp } from "../../helper/log_apps";
 import { postAjax } from "../../helper/send_request";
 import { hooks } from "../../helper/hooks";
 import { current, setLines } from "./logwindow";
+import { Log, LogApp } from "../../helper/log_apps";
 const log = Log(LogApp.Chat);
 
 /**
@@ -34,15 +34,24 @@ export class LogRequest {
     private requestRunning: boolean;
     readonly title: string;
 
+    // TODO: DEBUG .. these shouldn't be needed
+    private oldestLine: Intel.ChatLine | undefined;
+    private newestLine: Intel.ChatLine | undefined;
+
+
     constructor(channel: Channels, title?: string) {
         this.channel = channel;
-        this.title = title || channel;
+        this.title = title ?? channel;
         this.clear();
     }
 
 
     request(getOldMessages: boolean, isRetry = false) {
-        if (this.requestRunning && !isRetry) return;
+        log.debug("request")
+        if (this.requestRunning && !isRetry) {
+            log.debug("-> abort requestRunning")
+            return;
+        }
 
         this.requestRunning = true;
 
@@ -50,7 +59,7 @@ export class LogRequest {
         postAjax(
             'getPlexts',
             post,
-            (data) => this.processNewLogData(data, !!post.ascendingTimestampOrder),
+            (data) => this.processNewLogData(data, !!post.ascendingTimestampOrder, getOldMessages),
             () => {
                 isRetry
                     ? () => { this.requestRunning = false; }
@@ -71,24 +80,30 @@ export class LogRequest {
         const sw = bounds.getSouthWest();
 
         const postData: ChatRequestData = {
-            minLatE6: Math.round(sw.lat * 1E6),
-            minLngE6: Math.round(sw.lng * 1E6),
-            maxLatE6: Math.round(ne.lat * 1E6),
-            maxLngE6: Math.round(ne.lng * 1E6),
+            minLatE6: Math.round(sw.lat * 1e6),
+            minLngE6: Math.round(sw.lng * 1e6),
+            maxLatE6: Math.round(ne.lat * 1e6),
+            maxLngE6: Math.round(ne.lng * 1e6),
             minTimestampMs: -1,
             maxTimestampMs: -1,
             tab: this.channel
         }
 
         if (getOldMessages) {
-            const message = this.data[0];
+            const messageShould = this.data[0];
+            const message = this.oldestLine;
+
             if (message) {
+                console.assert(message[0] === messageShould[0], "oldest differ")
                 postData.plextContinuationGuid = message[0];
                 postData.maxTimestampMs = message[1];
             }
         } else {
-            const message = this.data.at(-1);
+            const messageShould = this.data.at(-1);
+            const message = this.newestLine;
+
             if (message) {
+                console.assert(message[0] === messageShould![0], "newest differ", message, messageShould);
                 postData.plextContinuationGuid = message[0];
                 postData.minTimestampMs = message[1];
                 postData.ascendingTimestampOrder = true;
@@ -107,7 +122,7 @@ export class LogRequest {
             return this.oldBounds;
         }
 
-        log.debug(`Bounding Box changed, chat will be cleared (old: ${this.oldBounds && this.oldBounds.toBBoxString()}; new: ${bounds.toBBoxString()})`);
+        log.debug(`Bounding Box changed, chat will be cleared (old: ${this.oldBounds?.toBBoxString()}; new: ${bounds.toBBoxString()})`);
 
         this.clear();
 
@@ -117,11 +132,13 @@ export class LogRequest {
 
     clear() {
         this.data = [];
+        this.oldestLine = undefined;
+        this.newestLine = undefined;
     }
 
 
 
-    processNewLogData(data: Intel.ChatCallback, isSortedAscending: boolean) {
+    processNewLogData(data: Intel.ChatCallback, isSortedAscending: boolean, oldData: boolean) {
         this.requestRunning = false;
 
         if (!data || !data.result) {
@@ -129,7 +146,7 @@ export class LogRequest {
         }
 
         if (data.result.length > 0) {
-            this.mergeData(data.result, isSortedAscending);
+            this.mergeData(data.result, isSortedAscending, oldData);
         }
 
 
@@ -154,32 +171,40 @@ export class LogRequest {
 
 
     //window.chat.writeDataToHash = function (newData, storageHash, isPublicChannel, isOlderMsgs, isAscendingOrder) {
-    mergeData(data: Intel.ChatLine[], isSortedAscending: boolean) {
+    mergeData(data: Intel.ChatLine[], isSortedAscending: boolean, oldData: boolean) {
+
+        if (oldData) {
+            console.assert(!isSortedAscending, "requesting old data should not be asc.sorted");
+            this.oldestLine = isSortedAscending ? [...data[0]] : [...data.at(-1)!];
+        } else {
+            this.newestLine = isSortedAscending ? [...data.at(-1)!] : [...data[0]];
+        }
 
         const filter = data.filter(line => !this.data.some(c => c[0] === line[0]));
 
         // filter duplicated lines
         if (filter.length !== data.length) {
             const dups = data.length - filter.length;
-            if (dups > 1) { // there should be only 1 duplicated (the start/end)
+            if (dups > 0) {
                 log.warn(`receiving duplicate chat lines (count: ${data.length} dup: ${data.length - filter.length})`);
             }
         }
 
         if (filter.length === 0) return;
 
+
         if (!isSortedAscending) {
             filter.reverse();
         }
 
-        if (data.length > 0 && filter.at(-1)![1] <= data[0][1]) {
-            this.data = data.concat(this.data);
-        } else {
-            this.data = this.data.concat(data);
-        }
+        const is_previous_data = this.data.length > 0 && filter.at(-1)![1] <= data[0][1];
+        console.assert(is_previous_data === oldData, "is old data but is not ?!?");
+        this.data = is_previous_data ?
+            [...filter, ...this.data] :
+            [...this.data, ...filter];
 
         // DEBUG-START
-        if (this.data.every((a, index) => index === 0 || this.data[index - 1][1] <= a[1])) {
+        if (this.data.every((a, index) => index === 0 || this.data[index - 1][1] >= a[1])) {
             log.error("chat lines are not sorted");
         }
         // DEBUG-END
