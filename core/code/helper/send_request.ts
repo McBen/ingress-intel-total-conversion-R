@@ -12,7 +12,7 @@ const REFRESH = 30 * SECONDS;
 /**
  * limit on refresh time since previous refresh, limiting repeated move refresh rate
  */
-const MINIMUM_OVERRIDE_REFRESH = 10 * SECONDS;
+const MINIMUM_OVERRIDE_REFRESH = 1 * SECONDS;
 
 /**
  *  add 5 seconds per zoom level
