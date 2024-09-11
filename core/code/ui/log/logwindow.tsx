@@ -120,7 +120,7 @@ const simplifyChatLine = (markup: Intel.MarkUp): Intel.MarkUp => {
         (markup[4][1].plain === ' Link ' || markup[4][1].plain === ' Control Field @')
     ) {
         (markup[4][1] as any).team = teamStringToId(markup[3][1].team);
-        markup = markup.slice() as Intel.MarkUp;
+        markup = [...markup];
         markup.splice(3, 1);
     }
 
@@ -176,12 +176,12 @@ const ChatSender: Component<{ plext: Intel.PlextContainer }> = p => {
 
 const getPlayer = (plext: Intel.PlextContainer): { name: string, team: FACTION } => {
 
-    var player = {
+    const player = {
         name: '',
         team: teamStringToId(plext.plext.team)
     };
 
-    plext.plext.markup.forEach(function (ent) {
+    plext.plext.markup.forEach(ent => {
         switch (ent[0]) {
             case 'SENDER': // user generated messages
                 player.name = ent[1].plain.replace(/: $/, ''); // cut “: ” at end
@@ -221,7 +221,7 @@ const MarkupPORTAL: Component<{ markup: Intel.MarkUpPortalType }> = p => {
     const permalink = makePermalink(latlng);
 
     return <a
-        onClick={() => selectPortalByLatLng(latlng)}
+        onClick={(event: Event) => { selectPortalByLatLng(latlng); event.preventDefault(); }}
         title={p.markup.address}
         class="help"
         href={permalink}
