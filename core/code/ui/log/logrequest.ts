@@ -89,17 +89,17 @@ export class LogRequest {
         }
 
         if (getOldMessages) {
-            const messageShould = this.data[0];
-            const message = this.oldestLine;
+            const message = this.data[0];
+            const messageShould = this.oldestLine;
 
             if (message) {
-                console.assert(message[0] === messageShould[0], "oldest differ")
+                console.assert(message[0] === messageShould![0], "oldest differ")
                 postData.plextContinuationGuid = message[0];
                 postData.maxTimestampMs = message[1];
             }
         } else {
-            const messageShould = this.data.at(-1);
-            const message = this.newestLine;
+            const message = this.data.at(-1);
+            const messageShould = this.newestLine;
 
             if (message) {
                 console.assert(message[0] === messageShould![0], "newest differ", message, messageShould);
@@ -177,6 +177,10 @@ export class LogRequest {
             this.oldestLine = isSortedAscending ? [...data[0]] : [...data.at(-1)!];
         } else {
             this.newestLine = isSortedAscending ? [...data.at(-1)!] : [...data[0]];
+
+            if (!this.oldestLine) {
+                this.oldestLine = isSortedAscending ? [...data[0]] : [...data.at(-1)!];
+            }
         }
 
         const filter = data.filter(line => !this.data.some(c => c[0] === line[0]));
