@@ -77,11 +77,6 @@ const config = tseslint.config(
     {
         // UNICORN rules
         rules: {
-            "unicorn/filename-case": ["error",
-                {
-                    "case": "pascalCase",
-                    "ignore": [".*\\.d\\.ts$", "^index(\\.d)?\\.ts$", "^API.*", "\\.schema(\\.ts)?", "\\.spec\\.ts$"]
-                }],
             "unicorn/prevent-abbreviations": ["error",
                 {
                     "replacements": {
