@@ -2,6 +2,7 @@ import * as L from "leaflet";
 import { DEFAULT_ZOOM } from "../../../constants";
 import { hooks } from "../../../helper/hooks";
 
+const HIGHTLIGHT_COLOER = "yellow";
 export interface QueryResult {
     title: string;
     icon?: string;
@@ -20,39 +21,46 @@ export class Query {
     public term: string;
     public confirmed: boolean;
 
-    private results: QueryResult[]
     private container: JQuery;
+
+    private results: QueryResult[]
     private list: JQuery;
     private selectedResult: QueryResult | undefined;
     private hoverResult: QueryResult | undefined;
 
-    constructor(term: string, confirmed: boolean) {
+
+    getContainer(): JQuery {
+        this.container = $("<div>", { class: "searchquery" });
+        return this.container;
+    }
+
+    query(term: string, confirmed: boolean) {
+
+        // don't make the same query again
+        if (this.confirmed === confirmed && this.term === term) return;
+        if (!confirmed && this.term === term) return;
+        if (term === "") return;
+
         this.term = term;
         this.confirmed = confirmed;
-        this.init();
+        this.results = [];
+
+        this.startQuery();
     }
 
 
-    init() {
-        this.results = [];
-
-        this.container = $("<div>").addClass("searchquery");
-
-        $("<h3>")
-            .text(this.getHeaderText())
-            .appendTo(this.container);
-
+    private startQuery() {
+        const head = $("<h3>", { text: this.getHeaderText() });
         this.list = $("<ul>")
-            .appendTo(this.container)
             .append($("<li>").text(this.confirmed ? "No local results, searching online..." : "No local results."));
 
-        this.container.accordion({
-            collapsible: true,
-            heightStyle: "content"
-        });
+        this.container.empty().append(head, this.list);
+        this.clear();
 
         hooks.trigger("search", this);
     }
+
+
 
     private getHeaderText(): string {
         if (this.confirmed) return this.term;
@@ -66,15 +74,12 @@ export class Query {
         return text + " (Return to load more)";
     }
 
-    show() {
-        this.container.appendTo("#searchwrapper");
-    }
 
-    hide() {
-        this.container.remove();
+    clear() {
         this.removeSelectedResult();
         this.removeHoverResult();
     }
+
 
     addResult(result: QueryResult) {
         if (this.results.length === 0) {
@@ -120,14 +125,14 @@ export class Query {
 
     }
 
-    resultLayer(result: QueryResult): L.LayerGroup<any> {
+    resultLayer(result: QueryResult): L.LayerGroup {
         if (result.layer !== null && !result.layer) {
             result.layer = L.layerGroup();
 
             if (result.position) {
                 L.marker(result.position, {
                     // @ts-ignore
-                    icon: L.divIcon.coloredSvg("red"),
+                    icon: L.divIcon.coloredSvg(HIGHTLIGHT_COLOER),
                     title: result.title
                 }).addTo(result.layer);
             }
@@ -135,7 +140,7 @@ export class Query {
             if (result.bounds) {
                 L.rectangle(result.bounds, {
                     interactive: false,
-                    color: "red",
+                    color: HIGHTLIGHT_COLOER,
                     fill: false
                 }).addTo(result.layer);
             }

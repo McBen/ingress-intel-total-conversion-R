@@ -1,25 +1,28 @@
 import { MILLISECONDS } from "../../../helper/times";
 import { dialog } from "../../dialog";
-import { search } from "./search";
+import { Query } from "./query";
+import { initSearch } from "./search";
 
 const SEARCH_DELAY = 500 * MILLISECONDS;
 
 export class SearchDialog {
 
     private timer: number | undefined;
+    private search: Query;
 
     constructor() {
         this.show();
+        initSearch();
     }
 
-    show(): void {
 
-        $("#searchwrapper").remove();
+    show(): void {
 
         const input = $("<input>", {
             id: "search",
             placeholder: "Search location…",
-            type: "search"
+            type: "search",
+            class: "w-full"
         })
             .on("keypress", event => {
                 if (event.key !== "Enter") return;
@@ -27,27 +30,42 @@ export class SearchDialog {
                 const term = input.val() as string;
 
                 clearTimeout(this.timer);
-                search.doSearch(term, true);
+                this.doSearch(term, true);
             })
             .on("keyup keypress change paste", () => {
                 clearTimeout(this.timer);
                 this.timer = window.setTimeout(() => {
                     const term = input.val() as string;
-                    search.doSearch(term, false);
+                    this.doSearch(term, false);
                 }, SEARCH_DELAY);
             });
 
+        this.search = new Query();
+
 
         const html = $("<div>", { id: "searchwrapper" }).append(
-            $("<div>", { id: "searchdecorator" }).append(
-                input
-            )
+            input,
+            this.search.getContainer()
         );
 
         dialog({
             title: "Search",
             html,
-            resizable: true
+            resizable: true,
+            closeCallback: () => {
+                this.search.clear();
+            }
         })
     }
+
+
+    private doSearch(term: string, confirmed: boolean): void {
+        term = term.trim();
+
+        // minimum 3 characters for automatic search
+        if (term.length < 3 && !confirmed) return;
+
+        this.search.query(term, confirmed);
+    }
+
 }
