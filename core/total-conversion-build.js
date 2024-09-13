@@ -62,11 +62,11 @@ if (!window.PLAYER || !PLAYER.nickname) {
 
 // catch ARK onLoad error
 window.addEventListener(
-    "error",
-    (event) => {
-        if (event.error.filename && event.error.filename.includes("ark.js")) event.preventDefault();
-    },
-    { capture: true, once: true }
+  "error",
+  (event) => {
+    if (event.error.filename && event.error.filename.includes("ark.js")) event.preventDefault();
+  },
+  { capture: true, once: true }
 );
 
 // remove complete page. We only wanted the user-data and the page’s
@@ -82,22 +82,6 @@ document.head.innerHTML = ''
 document.body = document.createElement('body');
 document.body.innerHTML = ''
   + '<div id="map">Loading, please wait</div>'
-  + '<div id="chatcontrols" style="display:none">'
-  + '<a accesskey="0" title="[0]"><span class="toggle"></span></a>'
-  + '<a accesskey="1" title="[1]">all</a>'
-  + '<a accesskey="2" title="[2]" class="active">faction</a>'
-  + '<a accesskey="3" title="[3]">alerts</a>'
-  + '</div>'
-  + '<div id="chat" style="display:none">'
-  + '  <div id="chatfaction"></div>'
-  + '  <div id="chatall"></div>'
-  + '  <div id="chatalerts"></div>'
-  + '</div>'
-  + '<form id="chatinput" style="display:none"><table><tr>'
-  + '  <td><time></time></td>'
-  + '  <td><mark>tell faction:</mark></td>'
-  + '  <td><input id="chattext" type="text" maxlength="256" accesskey="c" title="[c]" /></td>'
-  + '</tr></table></form>'
   + '<div id="toolbox" style="display: none"></div>'
   + '<div id="scrollwrapper"></div>'
   // avoid error by stock JS
@@ -105,13 +89,6 @@ document.body.innerHTML = ''
   + '<div id="header"><div id="nav"></div></div>';
 
 // CONFIG OPTIONS ////////////////////////////////////////////////////
-window.HIDDEN_SCROLLBAR_ASSUMED_WIDTH = 20;
-window.SIDEBAR_WIDTH = 300;
-
-// how many pixels to the top before requesting new data
-window.CHAT_REQUEST_SCROLL_TOP = 200;
-window.CHAT_SHRINKED = 60;
-
 window.COLORS = ['#FF6600', '#0088FF', '#03DC03', "#ff0028"]; // none, res, enl
 window.COLORS_LVL = ['#000', '#FECE5A', '#FFA630', '#FF7315', '#E40000', '#FD2992', '#EB26CD', '#C124E0', '#9627F4'];
 

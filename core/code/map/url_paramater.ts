@@ -38,7 +38,6 @@ const urlPortalCallack = (data: any) => {
 
 let urlPortalLL: L.LatLng | undefined;
 export const selectPortalByLatLng = (ll: L.LatLng) => {
-    // eslint-disable-next-line guard-for-in
     for (const guid in window.portals) {
         const latlng = window.portals[guid].getLatLng();
         if (latlng.equals(ll)) {
@@ -47,8 +46,8 @@ export const selectPortalByLatLng = (ll: L.LatLng) => {
         }
     }
 
+    if (!urlPortalLL) hooks.on("portalAdded", urlPortalLLCallack);
     urlPortalLL = ll;
-    hooks.on("portalAdded", urlPortalLLCallack);
     window.map.setView(urlPortalLL, DEFAULT_ZOOM);
 };
 

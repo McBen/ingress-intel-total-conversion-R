@@ -12,7 +12,7 @@ const REFRESH = 30 * SECONDS;
 /**
  * limit on refresh time since previous refresh, limiting repeated move refresh rate
  */
-const MINIMUM_OVERRIDE_REFRESH = 10 * SECONDS;
+const MINIMUM_OVERRIDE_REFRESH = 1 * SECONDS;
 
 /**
  *  add 5 seconds per zoom level
@@ -22,7 +22,7 @@ const ZOOM_LEVEL_ADJ = 5 * SECONDS;
 /**
  * refresh time to use after a movement event
  */
-export const ON_MOVE_REFRESH = 2.5 * SECONDS;
+export const ON_MOVE_REFRESH = 0.1 * SECONDS;
 
 /**
  * don't request anymore data
@@ -87,6 +87,7 @@ export const postAjax = (action: string, data: any,
     const versionStr = niantic_params.CURRENT_VERSION;
     const post_data = JSON.stringify($.extend({}, data, { v: versionStr }));
 
+    // TODO use fetch
     const result = $.ajax({
         url: "/r/" + action,
         type: "POST",
@@ -144,6 +145,22 @@ export class RequestQueue {
     private lastRefreshTime: number = 0;
 
 
+    add(ajax: JQuery.jqXHR): void {
+        this.activeRequests.push(ajax);
+    }
+
+    remove(ajax: JQuery.jqXHR): void {
+        const index = this.activeRequests.indexOf(ajax);
+        this.activeRequests.splice(index, 1);
+    }
+
+    abort(): void {
+        this.activeRequests.forEach(request => request.abort());
+
+        this.activeRequests = [];
+    }
+
+
     /**
      * sets the timer for the next auto refresh. Ensures only one timeout
      * is queued. May be given 'override' in milliseconds if time should
@@ -175,20 +192,6 @@ export class RequestQueue {
         this.refreshTimeout = window.setTimeout(() => this.callOnRefreshFunctions(), t);
     }
 
-    add(ajax: JQuery.jqXHR): void {
-        this.activeRequests.push(ajax);
-    }
-
-    remove(ajax: JQuery.jqXHR): void {
-        const index = this.activeRequests.indexOf(ajax);
-        this.activeRequests.splice(index, 1);
-    }
-
-    abort(): void {
-        this.activeRequests.forEach(request => request.abort());
-
-        this.activeRequests = [];
-    }
 
 
     callOnRefreshFunctions() {

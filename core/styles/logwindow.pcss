@@ -1,0 +1,131 @@
+#logwindow {
+    z-index: 3000;
+    position: absolute;
+    left: 0;
+    bottom: 20px;
+    width: 705px;
+    height: 350px; 
+    color: var(--iitc-text);
+    max-height: 95%;
+
+    .scalebutton {
+        float: right;
+        width: 20px;
+        height: 20px;
+        background: url("images/dialog/scale.png");
+        opacity: 0.2;
+        transition: opacity 0.5s;
+        z-index: 2;
+        position: relative;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    .logtabs {
+        height: 20px;
+        margin: 0;
+        position: relative;        
+        list-style: none;
+        padding: 0;
+        user-select: none;
+        
+        li {
+            cursor:pointer;
+            display:inline-block;
+            height: 22px;
+            width: 5em;
+            margin-left: 4px;            
+            margin-right: 4px;            
+            padding-left: 6px;
+            text-align: center;            
+            background-color: var(--iitc-bg-color);
+            opacity: 0.7;
+            border: 1px solid var(--iitc-border-color_hi); 
+            border-bottom: none; 
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+
+            &.selected {
+                color: var(--iitc-text-highlit);
+                background-color: var(--iitc-bg-color-hi);
+                    opacity: 1;
+            }
+        }
+    }
+
+    .loglines{
+        background-color: var(--iitc-bg-color-trans);
+        backdrop-filter: blur(6px);
+        display: flex;
+        flex-direction: column;
+        height: 100%;        
+        
+        &:hover, &:focus-within {
+            background-color: var(--iitc-bg-color);
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            table-layout: fixed;
+            width: 100%;
+
+            td {
+                &:nth-child(2) {
+                    overflow: hidden;
+                    white-space: nowrap;
+                }
+            }
+
+            mark {
+                background: transparent;
+              }
+              
+            .invisep { /* required? */
+                display: inline-block;
+                width: 1px;
+                height: 1px;
+                overflow: hidden;
+                color: transparent;
+            }
+            
+            .pl_nudge_me {
+                color: #ffd652;
+            }
+
+            .pl_nudge_date {
+                background-color: #724510;
+                border-left: 1px solid #ffd652;
+                border-bottom: 1px solid #ffd652;
+                border-top: 1px solid #ffd652;
+                color: #ffd652;
+                display: inline-block;
+                float: left;
+                height: 18px;
+                text-align: center;
+            }
+
+            .system_narrowcast {
+                color: #f66;
+            }
+              
+        }
+
+        .contents {
+            border: 1px solid var(--iitc-border-color_hi); 
+            flex: 1; 
+            overflow-x: hidden;
+            overflow-y: scroll;
+        }
+
+        .sendtext {
+            height: 24px;
+            border: 1px solid var(--iitc-border-color_hi); 
+            background: transparent; 
+            color: var(--iitc-text);            
+        }
+
+    }
+}
