@@ -162,6 +162,7 @@ export const dialog = (options: DialogOptions): JQuery => {
         draggable: true,
         closeText: "",
         title: "",
+        classes: { "ui-dialog": options.dialogClass }, /* dialogClass is deprecated since JQueryUI 1.12 */
         buttons: {
             "OK": (event: JQuery.MouseEventBase) => {
                 const thisDialog = $(event.target).closest(".ui-dialog").find(".ui-dialog-content");
