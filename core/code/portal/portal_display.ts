@@ -30,7 +30,6 @@ export const renderPortalDetails = (guid?: PortalGUID) => {
     }
 
     if (!guid || !window.portals[guid]) {
-        urlPortal = guid;
         $("#portaldetails").html("");
         if (isSmartphone()) {
             $(".fullimg").remove();

@@ -117,7 +117,7 @@ const searchLocations = (query: Query) => {
                     }
                 }
 
-                urlPortalLL = [result.position!.lat, result.position!.lng];
+                selectPortalByLatLng(L.latLng(result.position!.lat, result.position!.lng));
             }
         });
     });
