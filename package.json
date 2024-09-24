@@ -23,7 +23,8 @@
     "leaflet.gridlayer.googlemutant": "^0.14.0",
     "overlapping-marker-spiderfier-leaflet": "^0.2.7",
     "rbush": "^4.0.1",
-    "ulog": "^2.0.0-beta.19"
+    "ulog": "^2.0.0-beta.19",
+    "escape-html": "^1.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
