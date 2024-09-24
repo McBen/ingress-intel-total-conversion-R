@@ -661,13 +661,7 @@ window.plugin.sync.generateUUID = function() {
     }
     return (S4(buf[0])+S4(buf[1])+'-'+S4(buf[2])+'-4'+S4(buf[3]).substring(1)+'-'+S4(yxxx(buf[4]))+'-'+S4(buf[5])+S4(buf[6])+S4(buf[7]));
   } else {
-    var d = new Date().getTime();
-    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = (d + Math.random()*16)%16 | 0;
-        d = Math.floor(d/16);
-        return (c=='x' ? r : (r&0x3|0x8)).toString(16);
-    });
-    return uuid;
+    throw new Error("window.crypto.getRandomValues is not available in this environment.");
   }
 };
 
