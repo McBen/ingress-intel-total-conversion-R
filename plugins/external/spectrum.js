@@ -294,12 +294,12 @@
             }
             else {
 
-                var appendTo = opts.appendTo === "parent" ? boundElement.parent() : $(opts.appendTo);
+                var appendTo = opts.appendTo === "parent" ? boundElement.parent() : $.find(opts.appendTo);
                 if (appendTo.length !== 1) {
                     appendTo = $("body");
                 }
 
-                appendTo.append(container);
+                $(appendTo).append(container);
             }
 
             updateSelectionPaletteFromStorage();
