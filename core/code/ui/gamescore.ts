@@ -8,7 +8,7 @@ const log = Log(LogApp.Score);
 
 const REFRESH_GAME_SCORE = 15 * MINUTES;
 
-type GameScoreResult = {
+interface GameScoreResult {
     error?: string
     result?: [string, string];
 }
@@ -37,7 +37,7 @@ const RequestGameScore = () => {
 
 
 const processGameScore = (data?: GameScoreResult): void => {
-    if (!data || !data.result) {
+    if (!data?.result) {
         log.warn("game score failed to load - unknown reason");
         return;
     }

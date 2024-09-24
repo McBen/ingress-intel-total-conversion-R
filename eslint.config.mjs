@@ -85,6 +85,7 @@ const config = tseslint.config(
                         "i": { "index": false },
                         "j": { "index": false },
                         "args": false,
+                        "res": false,
                     }
                 }],
             "unicorn/no-array-callback-reference": "off",
