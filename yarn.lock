@@ -3115,7 +3115,7 @@ escalade@^3.1.1, escalade@^3.1.2:
   resolved "https://registry.yarnpkg.com/escalade/-/escalade-3.2.0.tgz#011a3f69856ba189dffa7dc8fcce99d2a87903e5"
   integrity sha512-WUj2qlxaQtO4g6Pq5c29GTcWGDyd8itL8zTlipgECz3JesAiiOKotd8JU6otB3PACgG6xkJUyVhboMS+bje/jA==
 
-escape-html@~1.0.3:
+escape-html@^1.0.3, escape-html@~1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/escape-html/-/escape-html-1.0.3.tgz#0258eae4d3d0c0974de1c169188ef0051d1d1988"
   integrity sha512-NiSupZ4OeuGwr68lGIeym/ksIZMJodUGOSCZ/FSnTxcrekbvqrgdUxlJOMpijaKZVjAJrWrGs/6Jy8OMuyj9ow==
@@ -6087,10 +6087,10 @@ slash@^5.0.0, slash@^5.1.0:
   resolved "https://registry.yarnpkg.com/slash/-/slash-5.1.0.tgz#be3adddcdf09ac38eebe8dcdc7b1a57a75b095ce"
   integrity sha512-ZA6oR3T/pEyuqwMgAKT0/hAv8oAXckzbkmR0UkUosQ+Mc4RxGoJkRmwHgHufaenlyAgE1Mxgpdcrf75y6XcnDg==
 
-solid-js@^1.6.9:
-  version "1.8.23"
-  resolved "https://registry.yarnpkg.com/solid-js/-/solid-js-1.8.23.tgz#cbd2f8fe5eba618aa46163c83379493fd9d2823e"
-  integrity sha512-0jKzMgxmU/b3k4iJmIZJW2BIArrHN+Mug0n7m7MeHvGHWiS57ZdyTmnqNMSbGRvE73QBnTiGFJc90cPPieawaA==
+solid-js@^1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/solid-js/-/solid-js-1.9.0.tgz#1e7481e969a3879503b9c424ab6920adb6ee62cb"
+  integrity sha512-MDRx9+mtTBYfaY+Xy+F+GI57U04uYXj/I7jWQISzDUTvDXKOiPltOzoCSLXn0vk5mhs/OPZlG0UoWBaKPvlWBQ==
   dependencies:
     csstype "^3.1.0"
     seroval "^1.1.0"
