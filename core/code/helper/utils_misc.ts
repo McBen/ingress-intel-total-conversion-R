@@ -3,6 +3,7 @@ import { dialog } from "../ui/dialog";
 import { DEFAULT_ZOOM } from "../constants";
 import { renderPortalDetails } from "../portal/portal_display";
 import { autoSelectPortal } from "../map/url_paramater";
+import escapeHTML from "escape-html";
 
 /**
  * retrieves parameter from the URL?query=string.
@@ -110,7 +111,7 @@ export const convertTextToTableMagic = (text: string): string => {
         const cells = row.map((cell, k) => {
             let attributes = "";
             if (k === 0 && row.length < columnCount) {
-                attributes = ' colspan="' + (columnCount - row.length + 1) + '"';
+                attributes = ` colspan="${columnCount - row.length + 1}"`;
             }
             return "<td" + attributes + ">" + cell + "</td>";
         });
@@ -127,6 +128,7 @@ export const convertTextToTableMagic = (text: string): string => {
  * escape special characters, such as tags
  */
 export const escapeHtmlSpecialChars = (str: string): string => {
+    // TODO: replace by escape-html
     const div = document.createElement("div");
     const text = document.createTextNode(str);
     div.appendChild(text);
@@ -148,12 +150,10 @@ type genFourEnty = [string, string, string?] | undefined;
 export const genFourColumnTable = (blocks: genFourEnty[]): string => {
     const lines = blocks.map((detail, index) => {
         if (!detail) return "";
-        const title = detail[2] ? ` title="${escapeHtmlSpecialChars(detail[2])}"` : "";
-        if (index % 2 === 0) {
-            return `<tr><td${title}>${detail[1]}</td><th${title}>${detail[0]}</th>`;
-        } else {
-            return `    <th${title}>${detail[0]}</th><td${title}>${detail[1]}</td></tr>`;
-        }
+        const title = detail[2] ? ` title="${escapeHTML(detail[2])}"` : "";
+        return index % 2 === 0 ?
+            `<tr><td${title}>${detail[1]}</td><th${title}>${detail[0]}</th>`
+            : `    <th${title}>${detail[0]}</th><td${title}>${detail[1]}</td></tr>`;
     }).join("");
     return lines;
 }
@@ -191,7 +191,7 @@ export interface makePermalinkOptions {
  * Portal latlng can be omitted to create mapview-only permalink.
  */
 export const makePermalink = (latlng?: L.LatLng, options?: Partial<makePermalinkOptions>): string => {
-    options = options || {};
+    options = options ?? {};
 
     const args = [];
     if (!latlng || options.includeMapView) {
