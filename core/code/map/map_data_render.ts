@@ -50,7 +50,6 @@ export class Render {
     }
 
     clearPortalsOutsideBounds(bounds: L.LatLngBounds): void {
-        // eslint-disable-next-line guard-for-in
         for (const guid in window.portals) {
             const portal = window.portals[guid];
 
@@ -62,7 +61,6 @@ export class Render {
     }
 
     clearLinksOutsideBounds(bounds: L.LatLngBounds): void {
-        // eslint-disable-next-line guard-for-in
         for (const guid in window.links) {
             const link = window.links[guid];
 
@@ -99,8 +97,8 @@ export class Render {
      *  process deleted entity list and entity data
      */
     processTileData(tiledata: TileData) {
-        this.processDeletedGameEntityGuids(tiledata.deletedGameEntityGuids || []);
-        this.processGameEntities(tiledata.gameEntities || []);
+        this.processDeletedGameEntityGuids(tiledata.deletedGameEntityGuids ?? []);
+        this.processGameEntities(tiledata.gameEntities ?? []);
     }
 
 
@@ -400,7 +398,7 @@ export class Render {
         // Niantic have been faking link entities, based on data from fields
         // these faked links are sent along with the real portal links, causing duplicates
         // the faked ones all have longer GUIDs, based on the field GUID (with _ab, _ac, _bc appended)
-        const fakedLink = new RegExp("^[0-9a-f]{32}\.b_[ab][bc]$"); // field GUIDs always end with ".b" - faked links append the edge identifier
+        const fakedLink = new RegExp("^[0-9a-f]{32}\\.b_[ab][bc]$"); // field GUIDs always end with ".b" - faked links append the edge identifier
         if (fakedLink.test(ent[0])) return;
 
 
