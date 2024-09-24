@@ -1,5 +1,6 @@
 Ingress Intel Total Conversion - Refurbished (IITC-R)
 =====================================
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/McBen/ingress-intel-total-conversion-R/badge)](https://scorecard.dev/viewer/?uri=github.com/McBen/ingress-intel-total-conversion-R)
 
 IITC is a browser add-on that modifies the Ingress intel map.
 No mobile version here!
