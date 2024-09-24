@@ -1,7 +1,7 @@
 const express = require('express');
 const myIP = require('my-ip');
 const fs = require('fs');
-
+const escapeHtml = require('escape-html');
 let port = 8100;
 const publicDir = 'build/';
 
@@ -57,17 +57,17 @@ var IndexPage = function (request, response) {
     }
 
     function createScriptBlock(meta) {
-        let name = meta['name'] || 'unknown';
-        let desc = meta['description']; // .gsub(/^\[.*\]/,'')
+        let name = escapeHtml(meta['name'] || 'unknown');
+        let desc = escapeHtml(meta['description']); // .gsub(/^\[.*\]/,'')
 
         // for mobile: intent://reswue.gitlab.io/iitc/reswue2.user.js#Intent;scheme=https;action=android.intent.action.VIEW;end;
-        let linkDirect = meta['filename'];
-        let linkIntent = `intent://localhost:${port}/${meta['filename']}#Intent;scheme=https;action=android.intent.action.VIEW;end;`
+        let linkDirect = escapeHtml(meta['filename']);
+        let linkIntent = `intent://localhost:${port}/${escapeHtml(meta['filename'])}#Intent;scheme=https;action=android.intent.action.VIEW;end;`
         let link = isMobileClient() ? linkIntent : linkDirect;
 
         return `
             <div class='script'>
-                <a href='${link}'>${name} (${meta['filename']})</a> <span>${meta['version']}</span><br>
+                <a href='${link}'>${name} (${escapeHtml(meta['filename'])})</a> <span>${escapeHtml(meta['version'])}</span><br>
                 <div class='desc'>${desc}</div>
             </div>`;
     }
