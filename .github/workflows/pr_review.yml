@@ -8,12 +8,12 @@ jobs:
     name: reviewdog (github-pr-review)
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           submodules: 'true'
 
       - run: yarn install
-      - uses: reviewdog/action-eslint@v1
+      - uses: reviewdog/action-eslint@9a6606695f1ef9709cce821919ca3b2a6d5e6bb5 # v1.32.0
         with:
           github_token: ${{ secrets.github_token }}
           reporter: github-pr-review
@@ -23,7 +23,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
         with:
           submodules: 'true'
       - run: yarn install  
