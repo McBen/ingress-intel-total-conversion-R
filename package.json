@@ -16,6 +16,7 @@
   "dependencies": {
     "anylogger": "^1.0.11",
     "autolink-js": "^1.0.2",
+    "escape-html": "^1.0.3",
     "jquery": "^3.4.1",
     "jquery-ui": "^1.12.1",
     "leaflet": "^1.9.3",
@@ -23,8 +24,7 @@
     "leaflet.gridlayer.googlemutant": "^0.14.0",
     "overlapping-marker-spiderfier-leaflet": "^0.2.7",
     "rbush": "^3.0.1",
-    "ulog": "^2.0.0-beta.19",
-    "escape-html": "^1.0.3"
+    "ulog": "^2.0.0-beta.19"
   },
   "devDependencies": {
     "@babel/core": "^7.20.12",
