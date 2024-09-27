@@ -1,9 +1,12 @@
+// https://github.com/francoisromain/leaflet-markers-canvas
+// !! REQUIREDS RBUSH 3.0.1 !!
+
 'use strict';
 const rbush = require("rbush");
 
-function layerFactory (L) {
+function layerFactory(L) {
 
-    function extend (Parent, props) {
+    function extend(Parent, props) {
         var NewClass = function () {
             if (this.init) { this.init.apply(this, arguments); }
         };
@@ -35,7 +38,7 @@ function layerFactory (L) {
     var LatLngsIndex = extend(Common, {
         toBBox: function (marker) {
             var ll = marker._latlng;
-            return {minX: ll.lng, minY: ll.lat, maxX: ll.lng, maxY: ll.lat};
+            return { minX: ll.lng, minY: ll.lat, maxX: ll.lng, maxY: ll.lat };
         },
         compareMinX: function (a, b) { return a._latlng.lng - b._latlng.lng; },
         compareMinY: function (a, b) { return a._latlng.lat - b._latlng.lat; },
@@ -171,7 +174,7 @@ function layerFactory (L) {
         },
 
         _redraw: function () {
-            this._redrawRequest = this._redrawRequest || 
+            this._redrawRequest = this._redrawRequest ||
                 L.Util.requestAnimFrame(L.Canvas.prototype._redraw, this);
         },
 
@@ -197,7 +200,7 @@ function layerFactory (L) {
                 // Readjust Point Map
                 if (!marker._map) { marker._map = this._map; } // todo ??implement proper handling in (on)add*/remove*
                 this._drawMarker(marker);
-                this._pointsIdx.insert(marker,true);
+                this._pointsIdx.insert(marker, true);
                 isEmpty = false;
             }, this);
             this._drawing = false;
@@ -315,7 +318,7 @@ function layerFactory (L) {
         },
 
         _handleMouseOut: function (e) {
-            L.Canvas.prototype._handleMouseOut.call(this,e);
+            L.Canvas.prototype._handleMouseOut.call(this, e);
         },
 
         _fireEvent: function (layers, e, type) {
@@ -356,7 +359,7 @@ function layerFactory (L) {
         },
 
         addLayer: function (layer, groupID) {
-            return this.addMarker(layer,groupID);
+            return this.addMarker(layer, groupID);
         },
 
         // Multiple layers at a time for rBush performance
@@ -379,7 +382,7 @@ function layerFactory (L) {
         },
 
         addLayers: function (layers, groupID) {
-            return this.addMarkers(layers,groupID);
+            return this.addMarkers(layers, groupID);
         },
 
         removeGroups: function (groupIDs) {
@@ -412,7 +415,7 @@ function layerFactory (L) {
             this._latlngsIdx.remove(marker);
 
             if (redraw && this._map &&
-                  this._map.getBounds().pad(this.options.padding).contains(marker.getLatLng())) {
+                this._map.getBounds().pad(this.options.padding).contains(marker.getLatLng())) {
                 this._redraw();
             }
             marker.removeEventParent(this);
