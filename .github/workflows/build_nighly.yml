@@ -27,7 +27,7 @@ jobs:
       - name: test
         run: yarn test
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@v4.6.6
+        uses: JamesIves/github-pages-deploy-action@920cbb300dcd3f0568dbc42700c61e2fd9e6139c # v4.6.4
         with:
           folder: build
           target-folder: nightly
