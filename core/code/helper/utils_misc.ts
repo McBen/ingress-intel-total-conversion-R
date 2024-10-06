@@ -191,7 +191,9 @@ export interface makePermalinkOptions {
  * Portal latlng can be omitted to create mapview-only permalink.
  */
 export const makePermalink = (latlng?: L.LatLng, options?: Partial<makePermalinkOptions>): string => {
-    options = options || {};
+
+    options = options ?? {};
+    if (latlng && latlng.lat === undefined) { latlng = L.latLng(latlng) }; // backwards compatibilty
 
     const args = [];
     if (!latlng || options.includeMapView) {
