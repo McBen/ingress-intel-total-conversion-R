@@ -224,6 +224,7 @@ const MarkupPORTAL: Component<{ markup: Intel.MarkUpPortalType }> = p => {
         onClick={(event: Event) => { selectPortalByLatLng(latlng); event.preventDefault(); }}
         title={p.markup.address}
         class="help"
+        style="unicode-bidi: isolate;"
         href={permalink}
     >{p.markup.name}</a>
 }
