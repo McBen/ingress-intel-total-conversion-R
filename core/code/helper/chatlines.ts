@@ -208,7 +208,7 @@ const buildDividers = (rules: Rule[]): Divider[] => {
                     {
                         asText: `markup from ${index} is 'AT_PLAYER' or 'TEXT'`,
                         expression: `markup.every( (m,i) => m[0] === "TEXT" || m[0] === "AT_PLAYER" || i<${index})`,
-                        filterRule: (rule: Rule) => rule.pattern.every((m, i) => m[0] === "TEXT" || m[0] === "AT_PLAYER" || m[0] === "CHAT" || i < index) ? 1 : 0,
+                        filterRule: (rule: Rule) => rule.pattern.every((m, i) => m === "TEXT" || m === "AT_PLAYER" || m === "CHAT" || i < index) ? 1 : 0,
                         canidates: rules.filter(r => r.pattern[index] === part).map(r => r.id!),
                         requiredSize: index
                     });
@@ -248,8 +248,7 @@ const buildDividers = (rules: Rule[]): Divider[] => {
 
 
 const expression2Filter = (expression: string): FilterFunction => {
-    // eslint-disable-next-line no-eval
-    return eval(`(markup) => (${expression}) ? 1 : 0;`);
+    return eval(`(markup) => (${expression}) ? 1 : 0;`) as FilterFunction;
 }
 
 
