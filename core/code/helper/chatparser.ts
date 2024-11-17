@@ -191,3 +191,7 @@ export const getTime = (line: Intel.ChatLine): number => {
     return line[1];
 }
 
+export const getTeam = (line: Intel.ChatLine): number => {
+    return line[1];
+}
+
