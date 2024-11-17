@@ -65,7 +65,7 @@
     "postcss-image-inliner": "^7.0.1",
     "postcss-import": "^16.0.0",
     "postcss-loader": "^8.1.0",
-    "postcss-nested": "^6.0.0",
+    "postcss-nested": "^7.0.2",
     "prettier": "^3.0.3",
     "raw-loader": "^4.0.2",
     "solid-js": "^1.6.9",
