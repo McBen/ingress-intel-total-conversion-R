@@ -13,6 +13,7 @@ import { PlayerTracker } from "./tracker/player_activity_tracker";
 import { ViewOrnaments } from "./beacons/view_beacons";
 import { MachinaTracker } from "./tracker/machina_tracker.user";
 import { APStats } from "./ap-stats";
+import { KilledLinks } from "./tracker/killed-links";
 import { LayerCount } from "./info/layer-count";
 
 export const registerPlugins = (manager: PluginManager): void => {
@@ -31,6 +32,7 @@ export const registerPlugins = (manager: PluginManager): void => {
     manager.add(new MachinaTracker());
     manager.add(new ViewOrnaments());
     manager.add(new LayerCount());
+    manager.add(new KilledLinks());
 
     // does really someone uses these? ->
     manager.add(new APStats());

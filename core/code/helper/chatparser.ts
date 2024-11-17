@@ -183,6 +183,15 @@ export const getAgent = (line: Intel.ChatLine): Intel.MarkUpPlayerType => {
     return getMarkUpType(line, "PLAYER");
 }
 
+export const getGuid = (line: Intel.ChatLine): string => {
+    return line[0];
+}
+
 export const getTime = (line: Intel.ChatLine): number => {
     return line[1];
 }
+
+export const getTeam = (line: Intel.ChatLine): number => {
+    return line[1];
+}
+
