@@ -3,6 +3,7 @@ import { dialog } from "../ui/dialog";
 import { DEFAULT_ZOOM } from "../constants";
 import { renderPortalDetails } from "../portal/portal_display";
 import { autoSelectPortal } from "../map/url_paramater";
+import { IITCr } from "../IITC";
 
 /**
  * retrieves parameter from the URL?query=string.
@@ -220,7 +221,7 @@ export const zoomToAndShowPortal = (guid: PortalGUID, latlng: L.LatLng): void =>
     window.map.setView(latlng, zoom);
     // if the data is available, render it immediately. Otherwise defer
     // until it becomes available.
-    if (window.portals[guid]) {
+    if (IITCr.portals.has(guid)) {
         renderPortalDetails(guid);
     } else {
         autoSelectPortal(guid);

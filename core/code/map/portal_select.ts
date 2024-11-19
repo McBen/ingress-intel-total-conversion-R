@@ -1,4 +1,5 @@
 import { hooks } from "../helper/hooks";
+import { IITCr } from "../IITC";
 import { portalDetail } from "../portal/portal_details_get";
 import { setMarkerStyle } from "./portal_marker";
 
@@ -62,8 +63,8 @@ export const selectPortal = (guid?: PortalGUID) => {
     const oldPortalGuid = selectedPortal;
     selectedPortal = guid;
 
-    const oldPortal = oldPortalGuid && window.portals[oldPortalGuid];
-    const newPortal = guid && window.portals[guid];
+    const oldPortal = oldPortalGuid && IITCr.portals.get(oldPortalGuid);
+    const newPortal = guid && IITCr.portals.get(guid);
 
     // Restore style of unselected portal
     if (!update && oldPortal) setMarkerStyle(oldPortal, false);

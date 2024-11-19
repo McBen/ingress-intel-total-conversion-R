@@ -71,11 +71,10 @@ export const linkFilter = new Filter<IITC.Link>()
 export const fieldFilter = new Filter<IITC.Field>()
 
 const updateFilterState = () => {
-    for (const guid in window.portals) {
-        const p = window.portals[guid];
+    IITCr.portals.forEach(p => {
         if (portalFilter.filter(p)) p.remove();
         else p.addTo(window.map);
-    }
+    });
     for (const guid in window.links) {
         const link = window.links[guid];
         if (linkFilter.filter(link)) link.remove();

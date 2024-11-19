@@ -17,6 +17,14 @@ import { setupLogWindow } from "./ui/log";
 import { Fields } from "./data/Fields";
 const log = Log(LogApp.Main);
 
+// TODO: FOR COMPATIBILITY -> move to iitc-comp layer
+Object.defineProperty(window, "portals", {
+    get: (): any => {
+        // console.log("window.portals getter");
+        console.trace("window.portals getter");
+        return Object.fromEntries(IITCr.portals);
+    },
+});
 export class IITCMain {
     readonly plugins: PluginManager;
 
@@ -27,6 +35,7 @@ export class IITCMain {
     public highlighter: Highlighters;
     public artifacts: Artifacts;
 
+    public portals: Map<PortalGUID, IITC.Portal>;
     public fields: Fields;
 
 
@@ -36,6 +45,7 @@ export class IITCMain {
         this.layers = new LayerManager();
         this.highlighter = new Highlighters();
 
+        this.portals = new Map();
         this.fields = new Fields;
     }
 

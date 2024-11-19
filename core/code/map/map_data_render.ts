@@ -60,14 +60,12 @@ export class Render {
     }
 
     clearPortalsOutsideBounds(bounds: L.LatLngBounds): void {
-        for (const guid in window.portals) {
-            const portal = window.portals[guid];
-
-            // clear portals outside visible bounds - unless it's the selected portal
+        IITCr.portals.forEach((portal, guid) => {
             if (!bounds.contains(portal.getLatLng()) && guid !== selectedPortal) {
-                this.deletePortalEntity(guid);
+                // deletion will be done at endRenderPass
+                portal.remove();
             }
-        }
+        });
     }
 
     clearLinksOutsideBounds(bounds: L.LatLngBounds): void {
@@ -152,14 +150,15 @@ export class Render {
         let countl = 0;
 
         // check to see if there are any entities we haven't seen. if so, delete them
-        for (const guid in window.portals) {
+        IITCr.portals.forEach((portal, guid) => {
             const portal = window.portals[guid];
             // special case for selected portal - it's kept even if not seen
             if ((portal as RenderPortal).renderPass !== this.renderPassID && guid !== selectedPortal) {
                 this.deletePortalEntity(guid);
                 countp++;
             }
-        }
+        });
+
         for (const guid in window.links) {
             if ((window.links[guid] as RenderLink).renderPass !== this.renderPassID) {
                 this.deleteLinkEntity(guid);
@@ -188,9 +187,7 @@ export class Render {
 
 
     bringPortalsToFront() {
-        for (const guid in window.portals) {
-            window.portals[guid].bringToFront();
-        }
+        IITCr.portals.forEach(portal => portal.bringToFront());
     }
 
 
@@ -201,11 +198,11 @@ export class Render {
     }
 
     deletePortalEntity(guid: PortalGUID) {
-        const portal = window.portals[guid];
+        const portal = IITCr.portals.get(guid);
         if (portal) {
             window.ornaments.removePortal(portal);
             portal.remove();
-            delete window.portals[guid];
+            IITCr.portals.delete(guid);
             hooks.trigger("portalRemoved", { portal, data: portal.options.data });
         }
     }
@@ -247,7 +244,7 @@ export class Render {
         ];
 
         // check basic details are valid and delete the existing portal if out of date
-        const p = window.portals[guid];
+        const p = IITCr.portals.get(guid);
         if (p) {
             (p as RenderPortal).renderPass = this.renderPassID;
 
@@ -267,9 +264,9 @@ export class Render {
         const data = decodeArray.portal(ent[2] as IITC.EntityPortalDetailed, details);
 
         // check if entity already exists
-        if (ent[0] in window.portals) {
+        if (IITCr.portals.has(ent[0])) {
             // yes. now check to see if the entity data we have is newer than that in place
-            const p = window.portals[ent[0]];
+            const p = IITCr.portals.get(ent[0])!;
 
             if (!data.history || p.options.data.history === data.history) {
                 if (p.options.timestamp >= ent[1]) {
@@ -328,7 +325,7 @@ export class Render {
 
         hooks.trigger("portalAdded", { portal: marker, previousData });
         (marker as RenderPortal).renderPass = this.renderPassID;
-        window.portals[ent[0]] = marker;
+        IITCr.portals.set(ent[0], marker);
 
         // (re-)select the portal, to refresh the sidebar on any changes
         if (ent[0] === selectedPortal) {

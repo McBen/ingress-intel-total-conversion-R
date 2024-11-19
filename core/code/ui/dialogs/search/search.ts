@@ -6,6 +6,7 @@ import { renderPortalDetails } from "../../../portal/portal_display";
 import portalIcon from "!!raw-loader!../../../../images/icon-portal.svg";
 import { selectPortalByLatLng } from "../../../map/url_paramater";
 import { zoomToAndShowPortal } from "../../../helper/utils_misc";
+import { IITCr } from "../../../IITC";
 
 const NOMINATIM = "//nominatim.openstreetmap.org/search?format=json&polygon_geojson=1&q=";
 interface OpenStreetMapQueryResult {
@@ -60,11 +61,9 @@ const searchPortals = (query: Query): void => {
     const term = query.term.toLowerCase();
     const teams = ["NEU", "RES", "ENL"];
 
-    for (const guid in window.portals) {
-
-        const portal = window.portals[guid];
+    IITCr.portals.forEach((portal, guid) => {
         const data = portal.options.data;
-        if (!data.title) continue;
+        if (!data.title) return;
 
         if (data.title.toLowerCase().includes(term)) {
             const team = portal.options.team;
@@ -77,7 +76,7 @@ const searchPortals = (query: Query): void => {
                 onSelected: (result, event) => {
                     if (event.type === "dblclick") {
                         zoomToAndShowPortal(guid, portal.getLatLng());
-                    } else if (window.portals[guid]) {
+                    } else if (IITCr.portals.has(guid)) {
                         if (!window.map.getBounds().contains(result.position!)) window.map.setView(result.position!);
                         renderPortalDetails(guid);
                     } else {
@@ -87,7 +86,7 @@ const searchPortals = (query: Query): void => {
                 }
             });
         }
-    }
+    });
 }
 
 
