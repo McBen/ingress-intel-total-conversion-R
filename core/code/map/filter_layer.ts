@@ -1,6 +1,8 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable max-classes-per-file */
 
+import { IITCr } from "../IITC";
+
 type FilterFctPortal = (portal: IITC.Portal) => boolean;
 type FilterFctLink = (link: IITC.Link) => boolean;
 type FilterFctField = (link: IITC.Field) => boolean;
@@ -79,9 +81,11 @@ const updateFilterState = () => {
         if (linkFilter.filter(link)) link.remove();
         else link.addTo(window.map);
     }
-    for (const guid in window.fields) {
-        const field = window.fields[guid];
-        if (fieldFilter.filter(field)) field.remove();
-        else field.addTo(window.map);
-    }
+
+    IITCr.fields.all.forEach(field => {
+        if (fieldFilter.filter(field))
+            field.remove();
+        else
+            field.addTo(window.map);
+    });
 }

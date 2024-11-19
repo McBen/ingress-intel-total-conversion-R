@@ -87,18 +87,17 @@ export class Render {
 
 
     clearFieldsOutsideBounds(bounds: L.LatLngBounds): void {
-        for (const guid in window.fields) {
-            const field = window.fields[guid];
+        IITCr.fields.all
+            .filter(field => {
+                // NOTE: our geodesic polys can have lots of intermediate points. the bounds calculation hasn't been optimised for this
+                // so can be particularly slow. a simple bounds check based on corner points will be good enough for this check
+                const lls = field.getLatLngs();
+                const fieldBounds = L.latLngBounds([lls[0], lls[1]]).extend(lls[2]);
 
-            // NOTE: our geodesic polys can have lots of intermediate points. the bounds calculation hasn't been optimised for this
-            // so can be particularly slow. a simple bounds check based on corner points will be good enough for this check
-            const lls = field.getLatLngs();
-            const fieldBounds = L.latLngBounds([lls[0], lls[1]]).extend(lls[2]);
-
-            if (!bounds.intersects(fieldBounds)) {
-                this.deleteFieldEntity(guid);
-            }
-        }
+                if (!bounds.intersects(fieldBounds)) {
+                    field.remove();
+                }
+            })
     }
 
 
@@ -151,7 +150,6 @@ export class Render {
     endRenderPass() {
         let countp = 0;
         let countl = 0;
-        let countf = 0;
 
         // check to see if there are any entities we haven't seen. if so, delete them
         for (const guid in window.portals) {
@@ -168,12 +166,14 @@ export class Render {
                 countl++;
             }
         }
-        for (const guid in window.fields) {
-            if ((window.fields[guid] as RenderField).renderPass !== this.renderPassID) {
-                this.deleteFieldEntity(guid);
-                countf++;
-            }
-        }
+
+        const removedFields = IITCr.fields.all.filter(f => (f as RenderField).renderPass !== this.renderPassID);
+        IITCr.fields.all = IITCr.fields.all.filter(f => (f as RenderField).renderPass === this.renderPassID);
+        const countf = removedFields.length;
+        removedFields.forEach(field => {
+            field.remove();
+            hooks.trigger("fieldRemoved", { field, data: field.options.data });
+        });
 
         log.debug(`Render: end cleanup: removed ${countp} portals, ${countl} links, ${countf} fields`);
 
@@ -221,10 +221,9 @@ export class Render {
 
 
     deleteFieldEntity(guid: FieldGUID) {
-        const field = window.fields[guid];
+        const field = IITCr.fields.remove(guid);
         if (field) {
             field.remove();
-            delete window.fields[guid];
             hooks.trigger("fieldRemoved", { field, data: field.options.data });
         }
     }
@@ -359,22 +358,21 @@ export class Render {
             this.createPlaceholderPortalEntity(p.guid, p.latE6, p.lngE6, data.team);
         }
 
+        const guid = ent[0];
         // check if entity already exists
-        if (ent[0] in window.fields) {
+        const oldField = IITCr.fields.get(guid);
+        if (oldField) {
             // yes. in theory, we should never get updated data for an existing field. they're created, and they're destroyed - never changed
             // but theory and practice may not be the same thing...
-            const f = window.fields[ent[0]];
 
-            if (f.options.timestamp >= ent[1]) {
+            if (oldField.options.timestamp >= ent[1]) {
                 // this data is identical (or order) than that rendered - abort processing                
-                (f as RenderField).renderPass = this.renderPassID;
+                (oldField as RenderField).renderPass = this.renderPassID;
                 return;
             }
 
-            // the data we have is newer - two options
-            // 1. just update the data, assume the field render appearance is unmodified
-            // 2. delete the entity, then re-create with the new data
-            this.deleteFieldEntity(ent[0]); // option 2, for now
+            // delete the entity, then re-create with the new data
+            this.deleteFieldEntity(guid); // option 2, for now
         }
 
         const team = teamStringToId(ent[2][1]);
@@ -391,8 +389,7 @@ export class Render {
             interactive: false,
 
             team,
-            ent,  // @deprecated  - TO BE REMOVED AT SOME POINT! use .guid, .timestamp and .data instead
-            guid: ent[0],
+            guid,
             timestamp: ent[1],
             data
         }) as IITC.Field;
@@ -400,7 +397,7 @@ export class Render {
         hooks.trigger("fieldAdded", { field: poly });
 
         (poly as RenderField).renderPass = this.renderPassID;
-        window.fields[ent[0]] = poly;
+        IITCr.fields.add(poly);
 
         if (!fieldFilter.filter(poly)) {
             poly.addTo(entityLayer);
