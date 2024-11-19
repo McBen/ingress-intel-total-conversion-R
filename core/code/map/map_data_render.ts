@@ -71,8 +71,7 @@ export class Render {
     }
 
     clearLinksOutsideBounds(bounds: L.LatLngBounds): void {
-        for (const guid in window.links) {
-            const link = window.links[guid];
+        IITCr.links.all.forEach(link => {
 
             // NOTE: our geodesic lines can have lots of intermediate points. the bounds calculation hasn't been optimised for this
             // so can be particularly slow. a simple bounds check based on start+end point will be good enough for this check
@@ -80,9 +79,9 @@ export class Render {
             const linkBounds = L.latLngBounds(lls);
 
             if (!bounds.intersects(linkBounds)) {
-                this.deleteLinkEntity(guid);
+                this.deleteLinkEntity(link.options.guid);
             }
-        }
+        });
     }
 
 
@@ -150,7 +149,6 @@ export class Render {
      */
     endRenderPass() {
         let countp = 0;
-        let countl = 0;
         let countf = 0;
 
         // check to see if there are any entities we haven't seen. if so, delete them
@@ -162,12 +160,15 @@ export class Render {
                 countp++;
             }
         }
-        for (const guid in window.links) {
-            if ((window.links[guid] as RenderLink).renderPass !== this.renderPassID) {
-                this.deleteLinkEntity(guid);
-                countl++;
-            }
-        }
+
+        const removedLinks = IITCr.links.all.filter(f => (f as RenderLink).renderPass !== this.renderPassID);
+        IITCr.links.all = IITCr.links.all.filter(f => (f as RenderLink).renderPass === this.renderPassID);
+        const countl = removedLinks.length;
+        removedLinks.forEach(link => {
+            link.remove();
+            hooks.trigger("linkRemoved", { link, data: link.options.data });
+        });
+
         for (const guid in window.fields) {
             if ((window.fields[guid] as RenderField).renderPass !== this.renderPassID) {
                 this.deleteFieldEntity(guid);
@@ -211,10 +212,9 @@ export class Render {
     }
 
     deleteLinkEntity(guid: LinkGUID): void {
-        const link = window.links[guid];
+        const link = IITCr.links.remove(guid);
         if (link) {
             link.remove();
-            delete window.links[guid];
             hooks.trigger("linkRemoved", { link, data: link.options.data });
         }
     }
@@ -434,23 +434,20 @@ export class Render {
         this.createPlaceholderPortalEntity(data.oGuid, data.oLatE6, data.oLngE6, data.team);
         this.createPlaceholderPortalEntity(data.dGuid, data.dLatE6, data.dLngE6, data.team);
 
+        const guid = ent[0];
 
         // check if entity already exists
-        if (ent[0] in window.links) {
-            // yes. now, as sometimes links are 'faked', they have incomplete data. if the data we have is better, replace the data
-            const l = window.links[ent[0]];
-
+        const oldLink = IITCr.links.get(guid);
+        if (oldLink) {
             // the faked data will have older timestamps than real data (currently, faked set to zero)
-            if (l.options.timestamp >= ent[1]) {
+            if (oldLink.options.timestamp >= ent[1]) {
                 // this data is older or identical to the rendered data - abort processing
-                (l as RenderLink).renderPass = this.renderPassID;
+                (oldLink as RenderLink).renderPass = this.renderPassID;
                 return;
             }
 
-            // the data is newer/better - two options
-            // 1. just update the data. assume the link render appearance is unmodified
-            // 2. delete the entity, then re-create it with the new data
-            this.deleteLinkEntity(ent[0]); // option 2 - for now
+            // delete the entity, then re-create it with the new data
+            this.deleteLinkEntity(guid);
         }
 
         const team = teamStringToId(ent[2][1]);
@@ -465,8 +462,7 @@ export class Render {
             interactive: false,
 
             team,
-            ent,  // LEGACY - TO BE REMOVED AT SOME POINT! use .guid, .timestamp and .data instead
-            guid: ent[0],
+            guid,
             timestamp: ent[1],
             data
         }) as IITC.Link;
@@ -474,7 +470,7 @@ export class Render {
         hooks.trigger("linkAdded", { link: poly });
 
         (poly as RenderLink).renderPass = this.renderPassID;
-        window.links[ent[0]] = poly;
+        IITCr.links.add(poly);
 
         if (!linkFilter.filter(poly)) {
             poly.addTo(entityLayer);
