@@ -76,11 +76,11 @@ const updateFilterState = () => {
         if (portalFilter.filter(p)) p.remove();
         else p.addTo(window.map);
     }
-    for (const guid in window.links) {
-        const link = window.links[guid];
+
+    IITCr.links.all.forEach(link => {
         if (linkFilter.filter(link)) link.remove();
         else link.addTo(window.map);
-    }
+    })
 
     IITCr.fields.all.forEach(field => {
         if (fieldFilter.filter(field))

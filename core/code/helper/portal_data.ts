@@ -7,25 +7,17 @@ interface LinkInOut {
 
 export const getPortalLinks = (guid: PortalGUID): LinkInOut => {
 
-    const links: LinkInOut = { in: [], out: [] };
+    const links = IITCr.links.getByPortal(guid);
 
-    $.each(window.links, (linkGuid: LinkGUID, link) => {
-        const data = link.options.data;
-
-        if (data.oGuid === guid) {
-            links.out.push(linkGuid);
-        }
-        if (data.dGuid === guid) {
-            links.in.push(linkGuid);
-        }
-    });
-
-    return links;
+    return {
+        in: links.in.map(l => l.options.guid),
+        out: links.out.map(l => l.options.guid)
+    }
 }
 
 
 export const getPortalLinksCount = (guid: PortalGUID): number => {
-    const links = getPortalLinks(guid);
+    const links = IITCr.links.getByPortal(guid);
     return links.in.length + links.out.length;
 }
 
