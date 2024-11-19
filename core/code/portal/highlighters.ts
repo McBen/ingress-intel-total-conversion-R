@@ -63,7 +63,7 @@ export class Highlighters {
 
 
     resetPortals(): void {
-        $.each(window.portals, (guid, portal) => {
+        IITCr.portals.forEach((portal, guid) => {
             setMarkerStyle(portal, guid === selectedPortal);
         });
     }

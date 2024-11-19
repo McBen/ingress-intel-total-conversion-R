@@ -4,6 +4,7 @@ import * as L from "leaflet";
 import { normLL } from "./map";
 import { renderPortalDetails } from "../portal/portal_display";
 import { DEFAULT_ZOOM } from "../constants";
+import { IITCr } from "../IITC";
 
 export const readURLParamater = () => {
 
@@ -38,13 +39,12 @@ const urlPortalCallack = (data: any) => {
 
 let urlPortalLL: L.LatLng | undefined;
 export const selectPortalByLatLng = (ll: L.LatLng) => {
-    for (const guid in window.portals) {
-        const latlng = window.portals[guid].getLatLng();
+    IITCr.portals.forEach((portal, guid) => {
+        const latlng = portal.getLatLng();
         if (latlng.equals(ll)) {
             renderPortalDetails(guid);
-            return;
         }
-    }
+    })
 
     if (!urlPortalLL) hooks.on("portalAdded", urlPortalLLCallack);
     urlPortalLL = ll;

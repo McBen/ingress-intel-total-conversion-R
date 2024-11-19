@@ -185,7 +185,7 @@ window.ornaments = {
   // reload: addPortal also calls removePortal
   reload: function () {
     for (var guid in window.ornaments._portals) {
-      window.ornaments.addPortal(window.portals[guid]);
+      window.ornaments.addPortal(IITCr.portals.get(guid));
     }
   },
 

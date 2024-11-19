@@ -119,7 +119,7 @@ window.plugin.missions = {
     if (window.selectedPortal === null) {
       return;
     }
-    var portal = window.portals[window.selectedPortal];
+    var portal = IITCr.portals.get(window.selectedPortal);
     if (!portal || (!portal.options.data.mission && !portal.options.data.mission50plus)) {
       return;
     }

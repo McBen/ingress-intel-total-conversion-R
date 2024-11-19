@@ -2,6 +2,7 @@ import * as Chatparser from "../../helper/chatparser";
 import { ChatLineType } from "../../helper/chatlines";
 import { hooks } from "../../helper/hooks";
 import { Plugin } from "../plugin_base";
+import { IITCr } from "../../IITC";
 
 
 const enum BeaconType {
@@ -86,7 +87,7 @@ export class ViewOrnaments extends Plugin {
 
         const current = selectedPortal;
         if (!current) return;
-        const portal = window.portals[current];
+        const portal = IITCr.portals.get(current);
         if (!portal) return;
         const ornaments = portal.options.data.ornaments;
 
@@ -124,10 +125,10 @@ export class ViewOrnaments extends Plugin {
     private getOrnamentsImageBlock(ornaments: string[]): JQuery {
         const container = $("<div>");
 
-        const deployer = this.getDeployer(window.portals[selectedPortal!]);
+        const deployer = this.getDeployer(IITCr.portals.get(selectedPortal!)!);
         const ornamentsNames = this.getOrnamentsNames(ornaments, deployer);
-        ornaments.forEach((name, idx) => {
-            container.append($("<img>", { src: imagePath + name + ".png", title: ornamentsNames[idx] }));
+        ornaments.forEach((name, index) => {
+            container.append($("<img>", { src: imagePath + name + ".png", title: ornamentsNames[index] }));
         });
 
         return container;

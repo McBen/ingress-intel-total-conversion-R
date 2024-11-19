@@ -2,6 +2,7 @@ import { hooks } from "../helper/hooks";
 import { portalDetail } from "./portal_details_get";
 import { selectPortal } from "../map/portal_select";
 import { setPortalDetails } from "../ui/sidebar";
+import { IITCr } from "../IITC";
 
 const DEFAULT_PORTAL_IMG = "//commondatastorage.googleapis.com/ingress.com/img/default-portal-image.png";
 
@@ -19,7 +20,7 @@ const resetScrollOnNewPortal = () => {
 
 
 export const renderPortalDetails = (guid?: PortalGUID) => {
-    selectPortal((guid && window.portals[guid]) ? guid : undefined);
+    selectPortal((guid && IITCr.portals.get(guid)) ? guid : undefined);
     if ($("#sidebar").is(":visible")) {
         resetScrollOnNewPortal();
         lastVisible = guid;
@@ -29,7 +30,7 @@ export const renderPortalDetails = (guid?: PortalGUID) => {
         void portalDetail.request(guid);
     }
 
-    if (!guid || !window.portals[guid]) {
+    if (!guid || !IITCr.portals.has(guid)) {
         $("#portaldetails").html("");
         if (isSmartphone()) {
             $(".fullimg").remove();
@@ -41,7 +42,7 @@ export const renderPortalDetails = (guid?: PortalGUID) => {
     const details = portalDetail.get(guid);
     if (details) {
         setPortalDetails(details);
-        hooks.trigger("portalDetailsUpdated", { guid, portal: window.portals[guid], portalDetails: details, portalData: details.getPortalSummaryData() });
+        hooks.trigger("portalDetailsUpdated", { guid, portal: IITCr.portals.get(guid), portalDetails: details, portalData: details.getPortalSummaryData() });
     } else {
         // const portal = window.portals[guid];
         // const info = new PortalInfo(portal,)
