@@ -11,6 +11,17 @@ import { entityLayer } from "./map";
 const log = Log(LogApp.Map);
 
 
+interface RenderPortal extends IITC.Portal {
+    renderPass: number;
+}
+interface RenderField extends IITC.Field {
+    renderPass: number;
+}
+interface RenderLink extends IITC.Link {
+    renderPass: number;
+}
+
+
 /**
  * class to handle rendering into leaflet the JSON data from the servers
  */
@@ -22,26 +33,25 @@ export class Render {
      *  object - represents the set of all deleted game entity GUIDs seen in a render pass
      */
     private deletedGuid = new Set<EntityGUID>();
-    private seenPortalsGuid = new Set<PortalGUID>();
-    private seenLinksGuid = new Set<LinkGUID>();
-    private seenFieldsGuid = new Set<FieldGUID>();
+
+    /**
+     * ID of current renderpass
+     */
+    private renderPassID: number;
 
     /**
      * start a render pass. called as we start to make the batch of data requests to the servers
      */
     startRenderPass(bounds: L.LatLngBounds): void {
         this.deletedGuid.clear();
-        this.seenPortalsGuid.clear();
-        this.seenLinksGuid.clear();
-        this.seenFieldsGuid.clear();
 
+        this.renderPassID = Date.now();
 
         // we pad the bounds used for clearing a litle bit, as entities are sometimes returned outside of their specified tile boundaries
         // this will just avoid a few entity removals at start of render when they'll just be added again
         const paddedBounds = bounds.pad(0.1);
 
         this.clearPortalsOutsideBounds(paddedBounds);
-
         this.clearLinksOutsideBounds(paddedBounds);
         this.clearFieldsOutsideBounds(paddedBounds);
 
@@ -77,7 +87,6 @@ export class Render {
 
 
     clearFieldsOutsideBounds(bounds: L.LatLngBounds): void {
-        // eslint-disable-next-line guard-for-in
         for (const guid in window.fields) {
             const field = window.fields[guid];
 
@@ -146,27 +155,27 @@ export class Render {
 
         // check to see if there are any entities we haven't seen. if so, delete them
         for (const guid in window.portals) {
+            const portal = window.portals[guid];
             // special case for selected portal - it's kept even if not seen
-            // artifact (e.g. jarvis shard) portals are also kept - but they're always 'seen'
-            if (!this.seenPortalsGuid.has(guid) && guid !== selectedPortal) {
+            if ((portal as RenderPortal).renderPass !== this.renderPassID && guid !== selectedPortal) {
                 this.deletePortalEntity(guid);
                 countp++;
             }
         }
         for (const guid in window.links) {
-            if (!this.seenLinksGuid.has(guid)) {
+            if ((window.links[guid] as RenderLink).renderPass !== this.renderPassID) {
                 this.deleteLinkEntity(guid);
                 countl++;
             }
         }
         for (const guid in window.fields) {
-            if (!this.seenFieldsGuid.has(guid)) {
+            if ((window.fields[guid] as RenderField).renderPass !== this.renderPassID) {
                 this.deleteFieldEntity(guid);
                 countf++;
             }
         }
 
-        log.log(`Render: end cleanup: removed ${countp} portals, ${countl} links, ${countf} fields`);
+        log.debug(`Render: end cleanup: removed ${countp} portals, ${countl} links, ${countf} fields`);
 
         // reorder portals to be after links/fields
         this.bringPortalsToFront();
@@ -179,7 +188,6 @@ export class Render {
 
 
     bringPortalsToFront() {
-        // eslint-disable-next-line guard-for-in
         for (const guid in window.portals) {
             window.portals[guid].bringToFront();
         }
@@ -242,7 +250,7 @@ export class Render {
         // check basic details are valid and delete the existing portal if out of date
         const p = window.portals[guid];
         if (p) {
-            this.seenPortalsGuid.add(guid);
+            (p as RenderPortal).renderPass = this.renderPassID;
 
             if (team === p.options.data.team) return;
 
@@ -255,7 +263,6 @@ export class Render {
 
     // TODO. create by PortalInfo
     createPortalEntity(ent: IITC.EntityPortal, details: DecodePortalDetails): void { // details expected in decodeArray.portal
-        this.seenPortalsGuid.add(ent[0]);
 
         let previousData;
         const data = decodeArray.portal(ent[2] as IITC.EntityPortalDetailed, details);
@@ -267,6 +274,7 @@ export class Render {
 
             if (!data.history || p.options.data.history === data.history) {
                 if (p.options.timestamp >= ent[1]) {
+                    (p as RenderPortal).renderPass = this.renderPassID;
                     return; // this data is identical or older - abort processing
                 }
             }
@@ -320,6 +328,7 @@ export class Render {
         });
 
         hooks.trigger("portalAdded", { portal: marker, previousData });
+        (marker as RenderPortal).renderPass = this.renderPassID;
         window.portals[ent[0]] = marker;
 
         // (re-)select the portal, to refresh the sidebar on any changes
@@ -337,7 +346,6 @@ export class Render {
 
 
     createFieldEntity(ent: IITC.EntityField) {
-        this.seenFieldsGuid.add(ent[0]);
 
         const data = {
             //    type: ent[2][0],
@@ -357,7 +365,11 @@ export class Render {
             // but theory and practice may not be the same thing...
             const f = window.fields[ent[0]];
 
-            if (f.options.timestamp >= ent[1]) return; // this data is identical (or order) than that rendered - abort processing
+            if (f.options.timestamp >= ent[1]) {
+                // this data is identical (or order) than that rendered - abort processing                
+                (f as RenderField).renderPass = this.renderPassID;
+                return;
+            }
 
             // the data we have is newer - two options
             // 1. just update the data, assume the field render appearance is unmodified
@@ -383,13 +395,14 @@ export class Render {
             guid: ent[0],
             timestamp: ent[1],
             data
-        });
+        }) as IITC.Field;
 
         hooks.trigger("fieldAdded", { field: poly });
 
-        window.fields[ent[0]] = poly as IITC.Field;
+        (poly as RenderField).renderPass = this.renderPassID;
+        window.fields[ent[0]] = poly;
 
-        if (!fieldFilter.filter(poly as IITC.Field)) {
+        if (!fieldFilter.filter(poly)) {
             poly.addTo(entityLayer);
         };
     }
@@ -401,8 +414,6 @@ export class Render {
         const fakedLink = new RegExp("^[0-9a-f]{32}\\.b_[ab][bc]$"); // field GUIDs always end with ".b" - faked links append the edge identifier
         if (fakedLink.test(ent[0])) return;
 
-
-        this.seenLinksGuid.add(ent[0]);  // flag we've seen it
 
         const data = { // TODO add other properties and check correction direction
             //    type:   ent[2][0],
@@ -430,7 +441,11 @@ export class Render {
             const l = window.links[ent[0]];
 
             // the faked data will have older timestamps than real data (currently, faked set to zero)
-            if (l.options.timestamp >= ent[1]) return; // this data is older or identical to the rendered data - abort processing
+            if (l.options.timestamp >= ent[1]) {
+                // this data is older or identical to the rendered data - abort processing
+                (l as RenderLink).renderPass = this.renderPassID;
+                return;
+            }
 
             // the data is newer/better - two options
             // 1. just update the data. assume the link render appearance is unmodified
@@ -454,13 +469,14 @@ export class Render {
             guid: ent[0],
             timestamp: ent[1],
             data
-        });
+        }) as IITC.Link;
 
         hooks.trigger("linkAdded", { link: poly });
 
-        window.links[ent[0]] = poly as IITC.Link;
+        (poly as RenderLink).renderPass = this.renderPassID;
+        window.links[ent[0]] = poly;
 
-        if (!linkFilter.filter(poly as IITC.Link)) {
+        if (!linkFilter.filter(poly)) {
             poly.addTo(entityLayer);
         };
     }

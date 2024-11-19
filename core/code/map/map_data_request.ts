@@ -301,14 +301,7 @@ export class MapDataRequest {
 
         hooks.trigger("mapDataEntityInject", { callback: this.render.processGameEntities.bind(this.render) });
 
-        // TODO special artifacts handling
-        // this.render.processGameEntities(artifact.getArtifactEntities(), "summary");
-
-        let logMessage = `requesting data tiles at zoom ${dataZoom}`;
-        logMessage += " (L" + tiles.level + "+ portals";
-        logMessage += ", " + tiles.tilesPerEdge + " tiles per global edge), map zoom is " + mapZoom;
-
-        log.log(logMessage);
+        log.log(`requesting data tiles at zoom ${dataZoom} map zoom is ${mapZoom}`);
 
 
         this.requestedTileCount = 0;
