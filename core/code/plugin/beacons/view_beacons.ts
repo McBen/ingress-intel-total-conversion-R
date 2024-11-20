@@ -81,8 +81,8 @@ export class ViewOrnaments extends Plugin {
     }
 
     onPortalDetails = (): void => {
-        $("#portaldetails2 #ornaments").remove();
-        $("#portaldetails2 .imgpreview .ornamentsImages").remove();
+        $("#portaldetails #ornaments").remove();
+        $("#portaldetails .imgpreview .ornamentsImages").remove();
 
         const current = selectedPortal;
         if (!current) return;
@@ -95,12 +95,12 @@ export class ViewOrnaments extends Plugin {
 
             const images = this.getOrnamentsImageBlock(ornaments);
             images.addClass("ornamentsImages");
-            $("#portaldetails2 .imgpreview").append(images);
+            $("#portaldetails .imgpreview").append(images);
 
             const deployer = this.getDeployer(portal);
             const ornamentsNames = this.getOrnamentsNames(ornaments, deployer);
             const text = $("<div>", { id: "ornaments", text: ornamentsNames.join(",") });
-            $("#portaldetails2 .mods").after(text);
+            $("#portaldetails .mods").after(text);
         }
     }
 
