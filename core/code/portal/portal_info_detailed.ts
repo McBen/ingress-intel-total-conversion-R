@@ -3,12 +3,12 @@ import { player } from "../helper/player";
 import { FACTION } from "../constants";
 
 const MAX_RESO_PER_PLAYER = [0, 8, 4, 4, 4, 2, 2, 1, 1];
-const DESTROY_RESONATOR = 75; // AP for destroying portal
-const DESTROY_LINK = 187; // AP for destroying link
-const DESTROY_FIELD = 750; // AP for destroying field
-const CAPTURE_PORTAL = 500; // AP for capturing a portal
-const DEPLOY_RESONATOR = 125; // AP for deploying a resonator
-const COMPLETION_BONUS = 250; // AP for deploying all resonators on portal
+export const DESTROY_RESONATOR = 75; // AP for destroying portal
+export const DESTROY_LINK = 187; // AP for destroying link
+export const DESTROY_FIELD = 750; // AP for destroying field
+export const CAPTURE_PORTAL = 500; // AP for capturing a portal
+export const DEPLOY_RESONATOR = 125; // AP for deploying a resonator
+export const COMPLETION_BONUS = 250; // AP for deploying all resonators on portal
 const UPGRADE_ANOTHERS_RESONATOR = 65; // AP for upgrading another's resonator
 
 const HACK_COOLDOWN_FRIENDLY = 3 * 60; // Temp change 1.10.22
