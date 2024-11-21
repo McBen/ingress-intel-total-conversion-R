@@ -23,6 +23,19 @@ const log = Log(LogApp.Plugins);
 
 const NOOP = () => { /* */ };
 
+/**
+ * old direct field access  ( windows.fields )
+ */
+Object.defineProperty(globalThis, "fields", {
+    get: (): any => {
+        console.warn("window.fields getter has bad performace. Better use IITCr.fields.get(guid)");
+        // console.trace("window.fields getter");
+        return IITCr.fields.toOldObject();
+    },
+});
+
+
+
 // DIALOG
 (globalThis as any).alert = alert as any;
 (globalThis as any).dialog = dialog;
