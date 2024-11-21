@@ -1,5 +1,3 @@
-/* eslint-disable no-underscore-dangle */
-
 // Export functions for old IITC-Plugins
 import { alert, dialog, DIALOGS } from "./ui/dialog";
 import { idle, IdleResumeCallback } from "./map/idle";
@@ -75,13 +73,13 @@ const NOOP = () => { /* */ };
 /**
  * @deprecated even in IITC-CE it is deprecated
  */
-(globalThis as any).addLayerGroup = (name: string, layerGroup: L.LayerGroup<any>, defaultDisplay: boolean): void => {
+(globalThis as any).addLayerGroup = (name: string, layerGroup: L.LayerGroup, defaultDisplay: boolean): void => {
     IITCr.layers.addOverlay(name, layerGroup, { default: defaultDisplay });
 };
 /**
  * @deprecated even in IITC-CE it is deprecated
  */
-(globalThis as any).removeLayerGroup = (layerGroup: L.LayerGroup<any>): void => {
+(globalThis as any).removeLayerGroup = (layerGroup: L.LayerGroup): void => {
     IITCr.layers.removeOverlay(layerGroup);
 };
 
@@ -119,12 +117,11 @@ interface HighLighterNew {
 (globalThis as any).addPortalHighlighter = (name: string, hl: HighLighterFct | HighLighterNew) => {
 
     if ((hl as HighLighterNew).highlight) {
+        const lighter = hl as HighLighterNew;
         const highlight: Highlighter = {
             name,
-            // @ts-ignore
-            highlight: (p: IITC.Portal) => (hl as HighLighterNew).highlight.call(hl, { portal: p }),
-            // @ts-ignore
-            setSelected: (hl as HighLighterNew).setSelected.bind(hl)
+            highlight: (p: IITC.Portal) => lighter.highlight.call(hl, { portal: p }) as void,
+            setSelected: lighter.setSelected?.bind(hl)
         };
         IITCr.highlighter.add(highlight);
     } else {
@@ -217,7 +214,7 @@ interface IITC_ButtonOptions {
          */
         addButton: (buttonOptions: IITC_ButtonOptions): string | undefined => {
 
-            const name = migrateNames().get(buttonOptions.label) || "misc\\" + buttonOptions.label;
+            const name = migrateNames().get(buttonOptions.label) ?? "misc\\" + buttonOptions.label;
 
             const entry = IITCr.menu.addEntry({
                 id: buttonOptions.id,
