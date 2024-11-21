@@ -6,6 +6,7 @@ import * as CalcTools from "../map/map_data_calc_tools";
 import { digits } from "../helper/utils_misc";
 import * as AP from "../portal/portal_info_detailed";
 import { FACTION } from "../constants";
+import { IITCr } from "../IITC";
 
 interface APs {
     AP: number;
@@ -159,17 +160,13 @@ export class APStats extends Plugin {
         });
 
         // and now all fields that have a vertex on screen
-        $.each(window.fields, function (guid, field) {
-            // only consider fields with at least one vertex on screen
-            var points = field.getLatLngs();
-            if (displayBounds.contains(points[0]) || displayBounds.contains(points[1]) || displayBounds.contains(points[2])) {
-                if (field.options.team == FACTION.ENL) {
-                    result.res.AP += AP.DESTROY_FIELD;
-                    result.res.destroyFields++;
-                } else if (field.options.team == FACTION.RES) {
-                    result.enl.AP += AP.DESTROY_FIELD;
-                    result.enl.destroyFields++;
-                }
+        IITCr.fields.getInBounds(displayBounds).forEach(field => {
+            if (field.options.team == FACTION.ENL) {
+                result.res.AP += AP.DESTROY_FIELD;
+                result.res.destroyFields++;
+            } else if (field.options.team == FACTION.RES) {
+                result.enl.AP += AP.DESTROY_FIELD;
+                result.enl.destroyFields++;
             }
         });
 
