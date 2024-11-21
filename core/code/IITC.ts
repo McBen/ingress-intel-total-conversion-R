@@ -59,6 +59,16 @@ class Fields {
         })
     }
 
+    /**
+     * Fields with atleast one Vertex in area
+     */
+    getInBounds(bounds: L.LatLngBounds): IITC.Field[] {
+        return this.all.filter(field => {
+            const points = field.getLatLngs();
+            return bounds.contains(points[0]) || bounds.contains(points[1]) || bounds.contains(points[2]);
+        })
+    }
+
     toOldObject(): Record<string, IITC.Field> {
         const result: Record<string, IITC.Field> = {};
         this.all.forEach(f => result[f.options.guid] = f);
