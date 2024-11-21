@@ -6,6 +6,7 @@ import eslintPluginUnicorn from 'eslint-plugin-unicorn';
 import eslintPluginPreferArrow from 'eslint-plugin-prefer-arrow-functions';
 // import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 
+
 const config = tseslint.config(
     eslint.configs.recommended,
     ...tseslint.configs.strictTypeChecked,
@@ -43,7 +44,8 @@ const config = tseslint.config(
         // ESLINT rules
         rules: {
             "no-underscore-dangle": "error",
-            "prefer-arrow-functions/prefer-arrow-functions": "error"
+            "prefer-arrow-functions/prefer-arrow-functions": "error",
+            "max-classes-per-file": ["error", 1]
         },
     },
     {
