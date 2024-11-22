@@ -7,7 +7,7 @@ import { clampLatLngBounds } from "../helper/utils_misc";
 import { getDataZoomForMapZoom, getMapZoomTileParameters, latToTile, lngToTile, pointToTileId, tileToLat, tileToLng } from "./map_data_calc_tools";
 import { idle } from "./idle";
 import { mapStatus } from "../ui/status";
-import { postAjax } from "../helper/send_request";
+import { requestData } from "../helper/send_request";
 import { Log, LogApp } from "../helper/log_apps";
 import { hooks } from "../helper/hooks";
 const log = Log(LogApp.Map);
@@ -459,11 +459,7 @@ export class MapDataRequest {
 
         this.activeRequestCount += 1;
 
-        // NOTE: don't add the request with window.request.add, as we don't want the abort handling to apply to map data any more
-        postAjax("getEntities", data,
-            result => this.handleResponse(result as TileRequestResult, tiles),
-            () => this.handleResponseError(tiles)
-        );
+        void requestData("getEntities", data, result => this.handleResponse(result as TileRequestResult, tiles));
     }
 
     requeueTile(id: TileID, error: boolean) {
