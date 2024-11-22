@@ -77,6 +77,7 @@ const config = tseslint.config(
     {
         // UNICORN rules
         rules: {
+            "unicorn/prefer-global-this": "off",
             "unicorn/prevent-abbreviations": ["error",
                 {
                     "replacements": {
