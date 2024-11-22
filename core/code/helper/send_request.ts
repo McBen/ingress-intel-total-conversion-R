@@ -165,14 +165,11 @@ export const requestData = async (action: string, data: any, successCallback: (d
             throw new Error(`Response status: ${response.status}`);
         }
         const json = await response.json();
-        console.log(json);
-
         successCallback(json);
 
     } catch (error) {
         console.error(error.message);
     }
-
 
     // requests.add(result);
 }
