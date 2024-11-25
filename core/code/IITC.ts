@@ -14,7 +14,7 @@ import { Highlighters } from "./portal/highlighters";
 import { Artifacts } from "./artifact";
 import { setupSidebar } from "./ui/sidebar";
 import { setupLogWindow } from "./ui/log";
-import { Fields } from "./data/Fields";
+import { Fields } from "./data/fields";
 const log = Log(LogApp.Main);
 
 export class IITCMain {
@@ -36,7 +36,7 @@ export class IITCMain {
         this.layers = new LayerManager();
         this.highlighter = new Highlighters();
 
-        this.fields = new Fields;
+        this.fields = new Fields();
     }
 
 

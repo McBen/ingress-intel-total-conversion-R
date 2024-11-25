@@ -28,8 +28,6 @@ const NOOP = () => { /* */ };
  */
 Object.defineProperty(globalThis, "fields", {
     get: (): any => {
-        console.warn("window.fields getter has bad performace. Better use IITCr.fields.get(guid)");
-        // console.trace("window.fields getter");
         return IITCr.fields.toOldObject();
     },
 });

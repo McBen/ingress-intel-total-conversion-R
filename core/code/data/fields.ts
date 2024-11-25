@@ -2,6 +2,7 @@ import { pnpoly } from "../helper/utils_misc";
 
 export class Fields {
     public all: IITC.Field[];
+    private oldObject?: Record<string, IITC.Field>;
 
     constructor() {
         this.all = [];
@@ -9,12 +10,14 @@ export class Fields {
 
     add(field: IITC.Field) {
         this.all.push(field);
+        this.oldObject = undefined;
     }
 
 
     remove(guid: FieldGUID): IITC.Field | undefined {
         const index = this.all.findIndex(f => f.options.guid === guid);
         if (index !== -1) {
+            this.oldObject = undefined;
             return this.all.splice(index, 1)[0];
         }
         return;
@@ -55,8 +58,13 @@ export class Fields {
     }
 
     toOldObject(): Record<string, IITC.Field> {
-        const result: Record<string, IITC.Field> = {};
-        this.all.forEach(f => result[f.options.guid] = f);
-        return result;
+        if (!this.oldObject) {
+            console.warn("window.fields has bad performace. Better use IITCr.fields.get(guid)");
+            // console.trace("window.fields getter");
+
+            this.oldObject = {};
+            this.all.forEach(f => this.oldObject![f.options.guid] = f);
+        }
+        return this.oldObject;
     }
 }
