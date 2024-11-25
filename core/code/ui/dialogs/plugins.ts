@@ -48,6 +48,7 @@ export class PluginDialog {
         return $("<div>", { id: "pluginlist" }).append(entries);
     }
 
+
     private createPluginCard(plugin: Plugin): JQuery {
         return $("<div>", { class: "card" }).append(
             $("<input>", {
@@ -115,5 +116,4 @@ export class PluginDialog {
         const newCard = this.createPluginCard(plugin);
         $(event.target).parent().replaceWith(newCard);
     }
-
 }
