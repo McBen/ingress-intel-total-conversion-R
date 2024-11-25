@@ -226,3 +226,15 @@ export const zoomToAndShowPortal = (guid: PortalGUID, latlng: L.LatLng): void =>
         autoSelectPortal(guid);
     }
 }
+
+
+export const pnpoly = (polygon: L.Point[], point: L.Point): boolean => {
+    let inside = false;
+    for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+        if ((polygon[i].y > point.y) !== (polygon[j].y > point.y) &&
+            point.x < (polygon[j].x - polygon[i].x) * (point.y - polygon[i].y) / (polygon[j].y - polygon[i].y) + polygon[i].x) {
+            inside = !inside;
+        }
+    }
+    return !!inside;
+}
