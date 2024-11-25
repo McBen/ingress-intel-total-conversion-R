@@ -121,7 +121,6 @@ window.portalAccessIndicator = null;
 // not all may be added to the leaflet layers
 window.portals = {};
 window.links = {};
-window.fields = {};
 
 // plugin framework. Plugins may load earlier than iitc, so don’t
 // overwrite data

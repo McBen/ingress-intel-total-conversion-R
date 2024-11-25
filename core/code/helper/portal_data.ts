@@ -1,3 +1,5 @@
+import { IITCr } from "../IITC";
+
 interface LinkInOut {
     in: LinkGUID[];
     out: LinkGUID[];
@@ -32,20 +34,7 @@ export const getPortalLinksCount = (guid: PortalGUID): number => {
  * search through the fields for all that reference a portal
  */
 export const getPortalFields = (guid: PortalGUID): FieldGUID[] => {
-    const fields: FieldGUID[] = [];
-
-    $.each(window.fields, (g: FieldGUID, f) => {
-        const d = f.options.data;
-
-        if (d.points[0].guid === guid
-            || d.points[1].guid === guid
-            || d.points[2].guid === guid) {
-
-            fields.push(g);
-        }
-    });
-
-    return fields;
+    return IITCr.fields.getByPortal(guid).map(f => f.options.guid);
 }
 
 
