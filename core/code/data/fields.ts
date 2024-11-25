@@ -62,8 +62,9 @@ export class Fields {
             console.warn("window.fields has bad performace. Better use IITCr.fields.get(guid)");
             // console.trace("window.fields getter");
 
-            this.oldObject = {};
-            this.all.forEach(f => this.oldObject![f.options.guid] = f);
+            const result: Record<string, IITC.Field> = {};
+            this.all.forEach(f => result[f.options.guid] = f);
+            this.oldObject = result;
         }
         return this.oldObject;
     }

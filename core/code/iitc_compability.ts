@@ -31,7 +31,14 @@ Object.defineProperty(globalThis, "fields", {
         return IITCr.fields.toOldObject();
     },
 });
-
+/**
+ * old direct link access  ( windows.links )
+ */
+Object.defineProperty(window, "links", {
+    get: (): Record<string, IITC.Link> => {
+        return IITCr.links.toOldObject();
+    },
+});
 
 
 // DIALOG

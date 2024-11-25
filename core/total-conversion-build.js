@@ -120,7 +120,6 @@ window.portalAccessIndicator = null;
 // contain references to all entities loaded from the server. If render limits are hit,
 // not all may be added to the leaflet layers
 window.portals = {};
-window.links = {};
 
 // plugin framework. Plugins may load earlier than iitc, so don’t
 // overwrite data

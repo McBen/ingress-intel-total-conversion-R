@@ -15,7 +15,9 @@ import { Artifacts } from "./artifact";
 import { setupSidebar } from "./ui/sidebar";
 import { setupLogWindow } from "./ui/log";
 import { Fields } from "./data/fields";
+import { Links } from "./data/links";
 const log = Log(LogApp.Main);
+
 
 export class IITCMain {
     readonly plugins: PluginManager;
@@ -27,6 +29,7 @@ export class IITCMain {
     public highlighter: Highlighters;
     public artifacts: Artifacts;
 
+    public links: Links;
     public fields: Fields;
 
 
@@ -36,6 +39,7 @@ export class IITCMain {
         this.layers = new LayerManager();
         this.highlighter = new Highlighters();
 
+        this.links = new Links();
         this.fields = new Fields();
     }
 
