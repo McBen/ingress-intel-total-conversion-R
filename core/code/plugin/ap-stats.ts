@@ -1,5 +1,5 @@
 import { Plugin } from "./plugin_base";
-import debounce from 'debounce';
+import debounce from "debounce";
 import { hooks } from "../helper/hooks";
 import { SECONDS } from "../helper/times";
 import * as CalcTools from "../map/map_data_calc_tools";
@@ -17,9 +17,6 @@ interface APs {
     destroyFields: number;
 };
 
-
-
-
 export class APStats extends Plugin {
     public name = "Available AP statistics";
     public version = "1.0";
@@ -30,15 +27,10 @@ export class APStats extends Plugin {
     public defaultInactive = true;
 
 
-    constructor() {
-        super();
-    }
-
-
     activate() {
 
         $("#sidebar").append(
-            $("<div>", { id: "available_ap_display" }).css({ 'color': '#ffce00', 'font-size': '90%', 'padding': '4px 2px' })
+            $("<div>", { id: "available_ap_display" }).css({ "color": "#ffce00", "font-size": "90%", "padding": "4px 2px" })
         );
 
         hooks.on("mapDataRefreshEnd", this.onMapDataRefreshEnd);
@@ -66,26 +58,26 @@ export class APStats extends Plugin {
         }
 
         const result = this.compAPStats();
-        const loading = hasFinished ? '' : 'Loading...';
+        const loading = hasFinished ? "" : "Loading...";
 
         const formatRow = (team: string, data: APs) => {
-            var title = 'Destroy and capture ' + data.destroyPortals + ' portals\n'
-                + 'Destroy ' + data.destroyLinks + ' links and ' + data.destroyFields + ' fields\n'
-                + 'Capture ' + data.capturePortals + ' neutral portals, complete ' + data.finishPortals + ' portals\n'
-                + '(unknown additional AP for links/fields)';
-            return '<tr><td>' + team + '</td><td style="text-align:right" title="' + title + '">' + digits(data.AP) + '</td></tr>';
+            const title = "Destroy and capture " + data.destroyPortals + " portals\n"
+                + "Destroy " + data.destroyLinks + " links and " + data.destroyFields + " fields\n"
+                + "Capture " + data.capturePortals + " neutral portals, complete " + data.finishPortals + " portals\n"
+                + "(unknown additional AP for links/fields)";
+            return "<tr><td>" + team + '</td><td style="text-align:right" title="' + title + '">' + digits(data.AP) + "</td></tr>";
         }
 
-        $('#available_ap_display').html('Available AP in this area: '
+        $("#available_ap_display").html("Available AP in this area: "
             + loading
-            + '<table>'
-            + formatRow('Enlightened', result.enl)
-            + formatRow('Resistance', result.res)
-            + '</table>');
+            + "<table>"
+            + formatRow("Enlightened", result.enl)
+            + formatRow("Resistance", result.res)
+            + "</table>");
     }
 
     updateNoPortals() {
-        $('#available_ap_display').html('Available AP in this area: '
+        $("#available_ap_display").html("Available AP in this area: "
             + '<div style="color:red">Zoom closer to get all portals loaded.<div>');
     }
 
@@ -113,7 +105,7 @@ export class APStats extends Plugin {
 
             // AP to complete a portal - assuming it's already captured (so no CAPTURE_PORTAL)
             var completePortalAp = 0;
-            if ('resCount' in data && data.resCount < 8) {
+            if ("resCount" in data && data.resCount < 8) {
                 completePortalAp = (8 - data.resCount) * AP.DEPLOY_RESONATOR + AP.COMPLETION_BONUS;
             }
 

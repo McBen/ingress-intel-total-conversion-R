@@ -45,7 +45,9 @@ const config = tseslint.config(
         rules: {
             "no-underscore-dangle": "error",
             "prefer-arrow-functions/prefer-arrow-functions": "error",
-            "max-classes-per-file": ["error", 1]
+            "max-classes-per-file": ["error", 1],
+            "quotes": ["error", "double", { "avoidEscape": true }],
+            "indent": ["error", 4, { SwitchCase: 1 }]
         },
     },
     {
