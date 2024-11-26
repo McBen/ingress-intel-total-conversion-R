@@ -137,17 +137,22 @@ export class APStats extends Plugin {
         });
 
         // now every link that starts/ends at a point on screen
-        $.each(window.links, function (guid, link) {
-            // only consider links that start/end on-screen
-            var points = link.getLatLngs();
-            if (displayBounds.contains(points[0]) || displayBounds.contains(points[1])) {
-                if (link.options.team == FACTION.ENL) {
+        IITCr.links.getInBounds(displayBounds).forEach(link => {
+            switch (link.options.team as FACTION) {
+                case FACTION.ENL:
                     result.res.AP += AP.DESTROY_LINK;
                     result.res.destroyLinks++;
-                } else if (link.options.team == FACTION.RES) {
+                    break;
+                case FACTION.RES:
                     result.enl.AP += AP.DESTROY_LINK;
                     result.enl.destroyLinks++;
-                }
+                    break;
+                case FACTION.MAC:
+                    result.res.AP += AP.DESTROY_LINK;
+                    result.res.destroyLinks++;
+                    result.enl.AP += AP.DESTROY_LINK;
+                    result.enl.destroyLinks++;
+                    break;
             }
         });
 
