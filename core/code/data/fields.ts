@@ -42,7 +42,7 @@ export class Fields {
     getInBounds(bounds: L.LatLngBounds): IITC.Field[] {
         return this.all.filter(field => {
             const points = field.getLatLngs();
-            return bounds.contains(points[0]) || bounds.contains(points[1]) || bounds.contains(points[2]);
+            return points.some(p => bounds.contains(p));
         });
     }
 

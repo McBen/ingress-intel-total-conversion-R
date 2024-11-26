@@ -59,8 +59,8 @@ export class LocalizedScoreboard extends Plugin {
 
         let html = "";
         if (portals) {
-            const linksCount = this.getEntitiesCount(Object.values(window.links), bounds);
-            const fieldsCount = this.getEntitiesCount(Object.values(window.fields), bounds);
+            const linksCount = this.getEntitiesCount(IITCr.links.getInBounds(bounds));
+            const fieldsCount = this.getEntitiesCount(IITCr.fields.getInBounds(bounds));
             html += this.makeTable(portals, linksCount, fieldsCount);
         } else {
             html += "<p>Nothing to show!<p>";
@@ -131,10 +131,9 @@ export class LocalizedScoreboard extends Plugin {
     }
 
 
-    private getEntitiesCount(entities: IITC.Link[] | IITC.Field[], bounds: L.LatLngBounds) {
-        const onScreen = entities.filter(ent => ent.getLatLngs().some(p => bounds.contains(p)));
+    private getEntitiesCount(entities: IITC.Link[] | IITC.Field[]) {
         const counts = FACTION_NAMES.map(() => 0);
-        onScreen.forEach(entity => counts[entity.options.team]++);
+        entities.forEach(entity => counts[entity.options.team]++);
         return counts;
     }
 

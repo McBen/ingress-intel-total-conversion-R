@@ -32,6 +32,17 @@ export class Links {
         return { in: l_in, out: l_out };
     }
 
+    /**
+     * Links with atleast one Vertex in area
+     */
+    getInBounds(bounds: L.LatLngBounds): IITC.Link[] {
+        return this.all.filter(link => {
+            const points = link.getLatLngs();
+            return points.some(p => bounds.contains(p));
+        });
+    }
+
+
     toOldObject(): Record<string, IITC.Link> {
         if (!this.oldObject) {
             console.warn("window.links getter has bad performace. Better use IITCr.links.get(guid)");
