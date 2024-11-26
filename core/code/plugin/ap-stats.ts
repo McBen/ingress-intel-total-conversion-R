@@ -97,29 +97,30 @@ export class APStats extends Plugin {
 
         // Grab every portal in the viewable area and compute individual AP stats
         // (fields and links are counted separately below)
-        $.each(window.portals, function (ind, portal) {
-            var data = portal.options.data;
+        $.each(window.portals, (ind, portal) => {
+            const data = portal.options.data;
 
             // eliminate offscreen portals
             if (!displayBounds.contains(portal.getLatLng())) return true;
 
             // AP to complete a portal - assuming it's already captured (so no CAPTURE_PORTAL)
-            var completePortalAp = 0;
+            let completePortalAp = 0;
             if ("resCount" in data && data.resCount < 8) {
                 completePortalAp = (8 - data.resCount) * AP.DEPLOY_RESONATOR + AP.COMPLETION_BONUS;
             }
 
             // AP to destroy this portal
-            var destroyAp = (data.resCount || 0) * AP.DESTROY_RESONATOR;
+            const destroyAp = (data.resCount || 0) * AP.DESTROY_RESONATOR;
 
-            if (portal.options.team === FACTION.ENL) {
+            const faction: FACTION = portal.options.team;
+            if (faction === FACTION.ENL) {
                 result.res.AP += destroyAp + PORTAL_FULL_DEPLOY_AP;
                 result.res.destroyPortals++;
                 if (completePortalAp) {
                     result.enl.AP += completePortalAp;
                     result.enl.finishPortals++;
                 }
-            } else if (portal.options.team === FACTION.RES) {
+            } else if (faction === FACTION.RES) {
                 result.enl.AP += destroyAp + PORTAL_FULL_DEPLOY_AP;
                 result.enl.destroyPortals++;
                 if (completePortalAp) {
@@ -158,10 +159,11 @@ export class APStats extends Plugin {
 
         // and now all fields that have a vertex on screen
         IITCr.fields.getInBounds(displayBounds).forEach(field => {
-            if (field.options.team == FACTION.ENL) {
+            const faction: FACTION = field.options.team;
+            if (faction == FACTION.ENL) {
                 result.res.AP += AP.DESTROY_FIELD;
                 result.res.destroyFields++;
-            } else if (field.options.team == FACTION.RES) {
+            } else if (faction == FACTION.RES) {
                 result.enl.AP += AP.DESTROY_FIELD;
                 result.enl.destroyFields++;
             }
