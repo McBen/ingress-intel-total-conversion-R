@@ -128,6 +128,7 @@ export class Hooks {
     on(event: "iitcLoaded", callback: () => void, priority?: boolean): void;
     on(event: "portalDetailLoaded", callback: (data: EventPortalDetailLoaded) => void, priority?: boolean): void;
     on(event: "paneChanged", callback: (data: EventPaneChanged) => void, priority?: boolean): void;
+    on(event: string, callback: HookCallback, priority?: boolean): void;
 
     on(event: string, callback: HookCallback, priority: boolean = false) {
         if (this.hooks[event]) {

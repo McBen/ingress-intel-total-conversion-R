@@ -6,7 +6,7 @@ import { BootCallback } from "../../../types";
  * converted Plugin
  * don't load the classic ones
  */
-const oldStockPlugins = new Set(["Player activity tracker", "Machina tracker", "View Beacons", "Localized scoreboard"]);
+const oldStockPlugins = new Set(["Player activity tracker", "Machina tracker", "View Beacons", "Localized scoreboard", "Cross links"]);
 
 
 export class PluginMigrated extends Plugin {

@@ -15,6 +15,7 @@ import { MachinaTracker } from "./tracker/machina_tracker.user";
 import { APStats } from "./ap-stats";
 import { LayerCount } from "./info/layer-count";
 import { LocalizedScoreboard } from "./info/scoreboard";
+import { CrossLinks } from "./cross-links";
 
 export const registerPlugins = (manager: PluginManager): void => {
 
@@ -33,6 +34,7 @@ export const registerPlugins = (manager: PluginManager): void => {
     manager.add(new ViewOrnaments());
     manager.add(new LayerCount());
     manager.add(new LocalizedScoreboard());
+    manager.add(new CrossLinks());
 
 
     // does really someone uses these? ->

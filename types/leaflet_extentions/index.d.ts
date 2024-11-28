@@ -4,15 +4,10 @@
 
 // geodesic
 declare namespace L {
-    interface GeodesicPolylineStatic extends L.Polyline { }
-    export const GeodesicPolyline: GeodesicPolylineStatic;
-    export interface GeodesicPolyline extends Polyline {
+    export class GeodesicPolyline extends L.Polyline {
         getLatLngs(): L.LatLng[];
     }
-
-    interface GeodesicPolygonStatic extends L.Polygon { }
-    export const GeodesicPolygon: GeodesicPolygonStatic;
-    export interface GeodesicPolygon extends GeodesicPolyline { }
+    export class GeodesicPolygon extends GeodesicPolyline { }
 
     interface GeodesicCircleStatic extends L.Polyline { }
     export const GeodesicCircle: GeodesicCircleStatic;
