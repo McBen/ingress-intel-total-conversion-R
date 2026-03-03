@@ -15,7 +15,7 @@ const styles = {
 };
 
 const was = (history: number | undefined, flag: HISTORY): boolean => {
-     
+
     return (!!((history || 0) & flag));
 }
 
@@ -25,7 +25,7 @@ export class PluginHighlightPortalHistory extends Plugin {
     public version = "0.3.0";
     public description = "Use the portal fill color to denote the portal has been visited, captured, scout controlled";
     public author = "Johtaja";
-    public tags: ["portal", "highlight", "history", "captured", "visited", "unique"];
+    public tags = ["portal", "highlight", "history", "captured", "visited", "unique"];
     public defaultInactive = true;
 
 

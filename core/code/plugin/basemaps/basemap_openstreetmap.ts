@@ -10,7 +10,7 @@ export class PluginOSM extends Plugin {
     public version = "0.1.1";
     public description = "Add the native OpenStreetMap.org map tiles as an optional layer";
     public author = "jonatkins";
-    public tags: ["map", "tiles", "baselayer", "empty"];
+    public tags = ["map", "tiles", "baselayer", "empty"];
     public defaultInactive = true;
 
 

@@ -9,7 +9,7 @@ export class PluginStamenMaps extends Plugin {
     public version = "0.2.1";
     public description = "Add the 'Toner' and 'Watercolor' map layers from maps.stamen.com";
     public author = "jonatkins";
-    public tags: ["map", "tiles", "baselayer", "russia"];
+    public tags = ["map", "tiles", "baselayer", "russia"];
     public defaultInactive = true;
 
     private L_StamenTileLayer: L.TileLayer;
@@ -29,7 +29,7 @@ export class PluginStamenMaps extends Plugin {
                     'under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.'
                 ].join("")
             },
-             
+
             initialize: function (name: string, options: any) {
                 options.layer = name.replace(" ", "-").toLowerCase();
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-call

@@ -1,4 +1,4 @@
- 
+
 import { FACTION } from "../../constants";
 import { pnpoly } from "../../helper/utils_misc";
 import { IITCr } from "../../IITC";
@@ -16,7 +16,7 @@ export class LayerCount extends Plugin {
     public version = "1.0";
     public description = "Count nested fields";
     public author = "fkloft";
-    public tags: ["fields", "info", "layer"];
+    public tags = ["fields", "info", "layer"];
     public defaultInactive = true;
 
     private tooltip: HTMLElement;

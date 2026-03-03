@@ -1,4 +1,4 @@
-﻿ 
+﻿
 import { IITCr } from "../../IITC";
 import { Plugin } from "../plugin_base";
 
@@ -17,7 +17,7 @@ export class PluginGaodeMap extends Plugin {
     public version = "0.1.0";
     public description = "Map layers from AutoNavi / Gaode (高德地图)";
     public author = "johnd0e";
-    public tags: ["map", "tiles", "baselayer"];
+    public tags = ["map", "tiles", "baselayer"];
     public defaultInactive = true;
     public requires = ["fix-china-map-offset"];
 
@@ -64,13 +64,13 @@ export class PluginGaodeMap extends Plugin {
         // @ts-ignore - constructer with parameter is not expected
         const roads = new GaodeLayer({ style: 7, maxNativeZoom: 20, lang: "zh_cn" }) as L.TileLayer; // en, zh_en
         // @ts-ignore
-         
+
         const traffic = L.layerGroup([roads, new AmapTraffic({ opacity: 0.75 })]);
 
         // @ts-ignore
         const satellite = new GaodeLayer({ style: 6, type: "satellite" }) as L.TileLayer;
         // @ts-ignore
-         
+
         const satelliteRoad = L.layerGroup([satellite, new GaodeLayer({ style: 8, type: "roadnet", opacity: 0.75 })]);
 
         IITCr.layers.addBase("Gaode Roads [zh]", roads);

@@ -7,13 +7,13 @@ export class PluginHighlightMissingReso extends PluginHighlight {
     public version = "0.2.0";
     public description = "Use the portal fill color to denote if the portal is missing resonators.";
     public author = "vita10gy";
-    public tags: ["portal", "highlight", "inactive", "unclaimed"];
+    public tags = ["portal", "highlight", "inactive", "unclaimed"];
     public defaultInactive = true;
     protected menuName = "Portals Missing Resonators";
 
 
     highlight(portal: IITC.Portal): void {
-        if (portal.options.team !== FACTION.none) {
+        if (portal.options.team as FACTION !== FACTION.none) {
             const res_count = portal.options.data.resCount;
 
             if (res_count !== undefined && res_count < 8) {

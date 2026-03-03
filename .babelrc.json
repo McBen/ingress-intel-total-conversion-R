@@ -1,8 +1,1 @@
-{
-  "presets": [
-    ["@babel/env",{"targets": "> 0.15%, not dead"}],
-    "@babel/preset-typescript", 
-    "solid"
-  ],
-  "plugins": []
-}
+{ "presets": [["@babel/env", { "targets": "> 0.15%, not dead" }], ["@babel/preset-typescript", { "allowDeclareFields": true }], "solid"], "plugins": [] }

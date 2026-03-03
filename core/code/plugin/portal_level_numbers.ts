@@ -9,7 +9,7 @@ export class PluginPortalLevelNumbers extends Plugin {
     public version = "0.2.1";
     public description = "Show portal level numbers on map.";
     public author = "rongou";
-    public tags: ["portal", "level", "info"];
+    public tags = ["portal", "level", "info"];
     public defaultInactive = true;
 
     private levelLayers: Map<PortalGUID, L.Marker>;
@@ -116,7 +116,7 @@ export class PluginPortalLevelNumbers extends Plugin {
 
         const portalPoints = new Map<PortalGUID, L.Point>();
 
-         
+
         for (const guid in window.portals) {
             const p = window.portals[guid];
 

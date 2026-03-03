@@ -7,7 +7,7 @@ export class PluginHighlightOrnaments extends PluginHighlight {
     public version = "0.2.0";
     public description = "Use the portal fill color to denote portals with additional 'ornament' markers. e.g. Anomaly portals";
     public author = "jonatkins";
-    public tags: ["portal", "highlight", "ornanaments"];
+    public tags = ["portal", "highlight", "ornanaments"];
     public defaultInactive = true;
     protected menuName = "Ornaments (anomaly portals)";
 

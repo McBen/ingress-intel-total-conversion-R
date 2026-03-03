@@ -10,7 +10,7 @@ export class PluginHighlightNeedRecharge extends PluginHighlight {
         "Use the portal fill color to denote if the portal needs recharging and how much." +
         "Yellow: above 85%. Orange: above 70%. Red: above 15%. Magenta: below 15%.";
     public author = "vita10gy";
-    public tags: ["portal", "highlight", "recharge"];
+    public tags = ["portal", "highlight", "recharge"];
     public defaultInactive = true;
 
     protected menuName = "Needs Recharge (Health)";
@@ -30,10 +30,10 @@ export class PluginHighlightNeedRecharge extends PluginHighlight {
     highlight(portal: IITC.Portal): void {
         const health = portal.options.data.health;
 
-        if (health !== undefined && portal.options.team !== FACTION.none && health < 100) {
+        if (health !== undefined && portal.options.team as FACTION !== FACTION.none && health < 100) {
             const cond = this.conditions.find(c => c < health)!;
             const style = this.styles[`cond${cond}`] as L.CircleMarkerOptions;
-            console.assert(style, "plugin_rechage: not matching style defs");
+            console.assert(style !== undefined, "plugin_recharge: not matching style defs");
             portal.setStyle(style);
         }
     }

@@ -52,7 +52,7 @@ export const selectPortalByLatLng = (ll: L.LatLng) => {
 };
 
 const urlPortalLLCallack = (data: EventPortalAdded) => {
-    console.assert(urlPortalLL, "urlPortalLL not set");
+    console.assert(urlPortalLL !== undefined, "urlPortalLL not set");
     const ll = data.portal.getLatLng();
     if (ll.equals(urlPortalLL!)) {
         autoSelectPortal(data.portal.options.guid);

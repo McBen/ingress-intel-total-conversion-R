@@ -57,7 +57,7 @@ export class ViewOrnaments extends Plugin {
     public version = "1.0";
     public description = "Show ornaments in portal details";
     public author = "McBen";
-    public tags: ["ornaments", "beacon", "portal", "info"];
+    public tags = ["ornaments", "beacon", "portal", "info"];
     public defaultInactive = false;
 
     private lastDeploy = new Map<string, BeaconDeploy>();

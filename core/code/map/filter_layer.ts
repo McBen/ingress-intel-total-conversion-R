@@ -1,4 +1,4 @@
- 
+
 /* eslint-disable max-classes-per-file */
 
 import { IITCr } from "../IITC";
@@ -16,7 +16,7 @@ interface FilterLayerOptions extends L.LayerOptions {
 
 export class FilterLayer extends L.Layer {
 
-    options: FilterLayerOptions;
+    declare options: FilterLayerOptions;
 
     constructor(options: FilterLayerOptions) {
         super(options);

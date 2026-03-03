@@ -50,16 +50,14 @@ export class Plugin {
 
 
     private activateRequirements(manager: PluginManager): boolean {
-        if (!this.requires) return true;
+        if (this.requires === undefined) return true;
 
         return this.requires.every(dependency => {
             const plugin = manager.getPlugin(dependency);
-            if (!plugin) {
+            if (plugin === undefined) {
                 this.error = `requires plugin: ${dependency}`;
                 return false;
-            }
-
-            if (!plugin.enable(manager)) {
+            } else if (!plugin.enable(manager)) {
                 this.error = `required plugin: ${dependency} cannot be activated`;
                 return false;
             }
@@ -73,7 +71,7 @@ export class Plugin {
 
         this.requires.forEach(dependency => {
             const plugin = manager.getPlugin(dependency);
-            console.assert(plugin, `requires plugin: ${dependency} was not loaded`);
+            console.assert(plugin !== undefined, `requires plugin: ${dependency} was not loaded`);
             if (plugin) {
                 plugin.disable(manager);
             }

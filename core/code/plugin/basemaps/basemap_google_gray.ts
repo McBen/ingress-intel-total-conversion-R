@@ -7,7 +7,7 @@ export class PluginGrayGoolgleMap extends Plugin {
     public version = "0.1.3";
     public description = "Add a simplified gray Version of Google map tiles as an optional layer";
     public author = "jacob1123";
-    public tags: ["map", "tiles", "baselayer", "google"];
+    public tags = ["map", "tiles", "baselayer", "google"];
     public defaultInactive = true;
 
 

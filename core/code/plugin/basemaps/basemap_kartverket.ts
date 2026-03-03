@@ -8,7 +8,7 @@ export class PluginKartverketMaps extends Plugin {
     public version = "0.2.1";
     public description = "Add Kartverket.no map layers";
     public author = "johnd0e";
-    public tags: ["map", "tiles", "baselayer", "norway"];
+    public tags = ["map", "tiles", "baselayer", "norway"];
     public defaultInactive = true;
 
 
@@ -50,7 +50,7 @@ export class PluginKartverketMaps extends Plugin {
                 bakgrunnskart_forenklet: null
             },
 
-             
+
             initialize: function (layer: string, options: any) {
                 if (this.layers[layer] === undefined) {
                     if (this.mappings[layer]) {
@@ -60,14 +60,14 @@ export class PluginKartverketMaps extends Plugin {
                     }
                 }
 
-                 
+
                 (L.TileLayer as any).prototype.initialize.call(this, this.baseUrl, options);
                 this.options.layer = layer;
             }
         });
 
         (L.tileLayer as any).kartverket = (layer: string, options: any): L.TileLayer => {
-             
+
             return new (L.TileLayer as any).Kartverket(layer, options);
         };
 
@@ -84,7 +84,7 @@ export class PluginKartverketMaps extends Plugin {
         const kartverket = (L.tileLayer as any).kartverket;
         const layers = kartverket.getLayers();
 
-         
+
         for (const layerID in layers) {
             const name = layers[layerID];
             const layer = kartverket(layerID);
@@ -98,7 +98,7 @@ export class PluginKartverketMaps extends Plugin {
         const kartverket = (L.tileLayer as any).kartverket;
         const layers = kartverket.getLayers();
 
-         
+
         for (const layerID in layers) {
             IITCr.layers.removeBase(layers[layerID]);
         }

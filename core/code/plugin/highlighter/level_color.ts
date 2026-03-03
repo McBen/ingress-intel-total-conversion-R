@@ -8,7 +8,7 @@ export class PluginHighlightLevelColor extends PluginHighlight {
     public version = "0.2.0";
     public description = "Use the portal fill color to denote the portal level by using the game level colors.";
     public author = "vita10gy";
-    public tags: ["portal", "highlight", "level"];
+    public tags = ["portal", "highlight", "level"];
     public defaultInactive = true;
     protected menuName = "Level Color";
 

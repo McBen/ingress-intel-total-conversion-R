@@ -76,7 +76,7 @@ export class PlayerTracker extends Plugin {
     public version = "1.0.0";
     public description = "Draw trails for the path a user took onto the map based on status messages in COMMs. Uses up to three hours of data.";
     public author = "breunigs";
-    public tags: ["player", "agent", "track", "stalk", "where"];
+    public tags = ["player", "agent", "track", "stalk", "where"];
     public defaultInactive = false;
 
     public stored: Map<string, Player>;
@@ -94,7 +94,7 @@ export class PlayerTracker extends Plugin {
 
         this.stored = new Map();
 
-         
+
         require("./player-tracker.css");
 
         this.setOptions();
@@ -438,7 +438,7 @@ export class PlayerTracker extends Plugin {
 
         if (guessPlayerLevels === undefined || guessPlayerLevels.fetchLevelDetailsByPlayer === undefined) return;
 
-         
+
         const getLevel = (lvl: number): JQuery => {
             return $("<span>")
                 .css({

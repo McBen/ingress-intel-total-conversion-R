@@ -9,7 +9,7 @@ export class PluginHighlightWeakness extends PluginHighlight {
     public description = "Use the fill color of the portals to denote if the portal is weak. " +
         "Stronger red indicates recharge required, missing resonators, or both";
     public author = "vita10gy";
-    public tags: ["portal", "highlight", "weakness", "recharge"];
+    public tags = ["portal", "highlight", "weakness", "recharge"];
     public defaultInactive = true;
     protected menuName = "Portal Weakness";
 
@@ -18,7 +18,7 @@ export class PluginHighlightWeakness extends PluginHighlight {
         const res_count = portal.options.data.resCount;
         const health = portal.options.data.health;
 
-        if (res_count !== undefined && health !== undefined && portal.options.team !== FACTION.none) {
+        if (res_count !== undefined && health !== undefined && portal.options.team as FACTION !== FACTION.none) {
 
             const strength = (res_count / 8) * (health / 100);
             if (strength < 1) {

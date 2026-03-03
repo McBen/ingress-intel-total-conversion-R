@@ -16,7 +16,7 @@ export class PluginYandexMaps extends Plugin {
     public version = "0.3.0";
     public description = "Add Yandex.com (Russian/Русский) map layers";
     public author = "johnd0e";
-    public tags: ["map", "tiles", "baselayer", "russia"];
+    public tags = ["map", "tiles", "baselayer", "russia"];
     public defaultInactive = true;
 
     private apiKey = "";

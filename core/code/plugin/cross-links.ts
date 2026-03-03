@@ -10,8 +10,8 @@ export class CrossLinks extends Plugin {
     public version = "1.4";
     public description = "Checks for existing links that cross planned links. Requires draw-tools plugin";
     public author = "mcben";
-    public tags: ["links", "blocker", "crosslink", "draw"];
-    public requires: ["Draw tools"];
+    public tags = ["links", "blocker", "crosslink", "draw"];
+    public requires = ["Draw tools"];
 
     public defaultInactive = true;
 

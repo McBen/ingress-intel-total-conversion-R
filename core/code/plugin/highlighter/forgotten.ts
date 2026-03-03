@@ -11,7 +11,7 @@ export class PluginHighlightInactive extends PluginHighlight {
         "Shades of red from one week to one month, then tinted to purple for longer." +
         "May also highlight captured portals that are stuck and fail to decay every 24 hours.";
     public author = "jonatkins";
-    public tags: ["portal", "highlight", "inactive", "unclaimed"];
+    public tags = ["portal", "highlight", "inactive", "unclaimed"];
     public defaultInactive = true;
     protected menuName = "Inactive Portals";
 

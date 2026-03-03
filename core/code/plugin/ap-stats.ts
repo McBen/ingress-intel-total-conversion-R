@@ -22,7 +22,7 @@ export class APStats extends Plugin {
     public version = "1.0";
     public description = "Displays the per-team AP gains available in the current view";
     public author = "Hollow011";
-    public tags: ["info", "ap", "portal", "info"];
+    public tags = ["info", "ap", "portal", "info"];
 
     public defaultInactive = true;
 

@@ -9,7 +9,7 @@ export class PluginBlankMaps extends Plugin {
     public version = "0.1.2";
     public description = "Add a blank map layer - no roads or other features";
     public author = "jonatkins";
-    public tags: ["map", "tiles", "baselayer", "empty"];
+    public tags = ["map", "tiles", "baselayer", "empty"];
     public defaultInactive = true;
 
 

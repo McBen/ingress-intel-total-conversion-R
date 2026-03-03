@@ -9,7 +9,7 @@ export class PluginHidePortalOwnership extends PluginHighlight {
     public version = "0.2.0";
     public description = "Show all portals as neutral, as if uncaptured. Great for creating plans.";
     public author = "vita10gy";
-    public tags: ["portal", "highlight", "neutral", "nocolor", "owner"];
+    public tags = ["portal", "highlight", "neutral", "nocolor", "owner"];
     public defaultInactive = true;
     protected menuName = "Hide portal ownership";
 

@@ -16,7 +16,7 @@ export class PluginBingMaps extends Plugin {
     public version = "0.3.0";
     public description = "Add the bing.com map layers.";
     public author = "johnd0e";
-    public tags: ["map", "tiles", "baselayer", "microsoft"];
+    public tags = ["map", "tiles", "baselayer", "microsoft"];
     public defaultInactive = true;
 
     private apiKey = "Ajt5lr3kR35OADGQqFzptNJA3tXzXYpZoCOSnY1JgGf4tEyWBErROgnuK5V9vYEE";
@@ -42,7 +42,7 @@ export class PluginBingMaps extends Plugin {
             key: this.apiKey
         }
 
-         
+
         for (const name in this.sets) {
             const options = $.extend({}, baseOptions, this.sets[name]);
             const layer = L.bingLayer(options);
@@ -52,7 +52,7 @@ export class PluginBingMaps extends Plugin {
 
     deactivate(): void {
 
-         
+
         for (const name in this.sets) {
             IITCr.layers.removeBase("Bing " + name);
         }

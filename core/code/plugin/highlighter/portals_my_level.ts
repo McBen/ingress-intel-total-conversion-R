@@ -11,7 +11,7 @@ export class PluginHighlightMyLevel extends Plugin {
     public version = "0.2.0";
     public description = "Use the portal fill color to denote if the portal is either at and above, or at and below your level";
     public author = "vita10gy";
-    public tags: ["portal", "highlight", "level", "mylevel"];
+    public tags = ["portal", "highlight", "level", "mylevel"];
     public defaultInactive = true;
     private menuNameBelow = "Below My Level";
     private menuNameAbove = "Above My Level";

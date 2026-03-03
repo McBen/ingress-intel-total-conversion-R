@@ -16,7 +16,7 @@ export class LocalizedScoreboard extends Plugin {
     public version = "1.0";
     public description = "Display a scoreboard about all visible portals with statistics about both teams,like average portal level,link & field counts etc";
     public author = "Costaspap and harisbitsakou";
-    public tags: ["scoreboard", "portals", "count", "info"];
+    public tags = ["scoreboard", "portals", "count", "info"];
     public defaultInactive = true;
 
 

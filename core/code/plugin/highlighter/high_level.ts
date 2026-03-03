@@ -7,7 +7,7 @@ export class PluginHighlightHighLevel extends PluginHighlight {
     public version = "0.2.0";
     public description = "Use the portal fill color to denote high level portals: Purple L8, Red L7, Orange L6";
     public author = "jonatkins";
-    public tags: ["portal", "highlight", "level"];
+    public tags = ["portal", "highlight", "level"];
     public defaultInactive = true;
     protected menuName = "Higher Level Portals";
 
