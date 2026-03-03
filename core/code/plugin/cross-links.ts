@@ -88,7 +88,7 @@ export class CrossLinks extends Plugin {
                     return true;
                 }
             } else if (layer instanceof L.GeodesicPolyline) {
-                if (this.testPolyLine(layer as L.GeodesicPolyline, link)) {
+                if (this.testPolyLine(layer, link)) {
                     this.showLink(link);
                     return true;
                 }
@@ -129,11 +129,11 @@ export class CrossLinks extends Plugin {
         IITCr.links.all.forEach(link => {
             if (!this.drawnLinks.has(link.options.guid)) {
                 if (layer instanceof L.GeodesicPolygon) {
-                    if (this.testPolyLine(layer as L.GeodesicPolygon, link, true)) {
+                    if (this.testPolyLine(layer, link, true)) {
                         this.showLink(link);
                     }
                 } else if (layer instanceof L.GeodesicPolyline) {
-                    if (this.testPolyLine(layer as L.GeodesicPolyline, link)) {
+                    if (this.testPolyLine(layer, link)) {
                         this.showLink(link);
                     }
                 }

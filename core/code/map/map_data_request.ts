@@ -67,9 +67,7 @@ interface RenderQueueEntry {
 
 interface TileRequestResult {
     result: {
-        map: {
-            [id: TileID]: TileData
-        }
+        map: Record<TileID, TileData>
     },
     error: string
 }
@@ -106,7 +104,7 @@ export class MapDataRequest {
     private refreshStartTime: number;
     private timerExpectedTimeoutTime: number;
     private timer: number | undefined;
-    private tileErrorCount: { [index: TileID]: number };
+    private tileErrorCount: Record<TileID, number>;
     private requestedTileCount: number;
     private successTileCount: number;
     private failedTileCount: number;
@@ -115,7 +113,7 @@ export class MapDataRequest {
     /**
      * the 'set' of requested tile QKs
      */
-    private queuedTiles: { [index: TileID]: TileID };
+    private queuedTiles: Record<TileID, TileID>;
 
 
     private idle = false;
@@ -518,35 +516,12 @@ export class MapDataRequest {
         const errorTiles: TileID[] = [];
         const retryTiles: TileID[] = [];
         const timeoutTiles: TileID[] = [];
-        let unaccountedTiles = tiles.slice(0);
+        let unaccountedTiles = [...tiles];
 
-        if (!data || !data.result) {
-            log.warn("Request.handleResponse: request failed - requeuing..." + (data && data.error ? " error: " + data.error : ""));
-
-            // request failed - requeue all the tiles(?)
-            if (data && data.error && data.error === "RETRY") {
-                // the server can sometimes ask us to retry a request. this is botguard related, I believe
-                tiles.forEach(id => {
-                    retryTiles.push(id);
-                    this.debugTiles.setState(id, TileState.retrying);
-                });
-
-                hooks.trigger("requestFinished", { success: false });
-
-            } else {
-                tiles.forEach(id => {
-                    errorTiles.push(id);
-                    this.debugTiles.setState(id, TileState.request_fail);
-                });
-
-                hooks.trigger("requestFinished", { success: false });
-            }
-            unaccountedTiles = [];
-        } else {
+        if (data?.result) {
 
             const m = data.result.map;
 
-            // eslint-disable-next-line guard-for-in
             for (const id in m) {
                 const value = m[id];
                 unaccountedTiles.splice(unaccountedTiles.indexOf(id), 1);
@@ -582,6 +557,28 @@ export class MapDataRequest {
             }
 
             hooks.trigger("requestFinished", { success: true });
+        } else {
+            log.warn("Request.handleResponse: request failed - requeuing..." + (data?.error ? " error: " + data.error : ""));
+
+            // request failed - requeue all the tiles(?)
+            if (data?.error && data.error === "RETRY") {
+                // the server can sometimes ask us to retry a request. this is botguard related, I believe
+                tiles.forEach(id => {
+                    retryTiles.push(id);
+                    this.debugTiles.setState(id, TileState.retrying);
+                });
+
+                hooks.trigger("requestFinished", { success: false });
+
+            } else {
+                tiles.forEach(id => {
+                    errorTiles.push(id);
+                    this.debugTiles.setState(id, TileState.request_fail);
+                });
+
+                hooks.trigger("requestFinished", { success: false });
+            }
+            unaccountedTiles = [];
         }
 
         // set the queue delay based on any errors or timeouts
@@ -673,8 +670,8 @@ export class MapDataRequest {
             id,
             // the data in the render queue is modified as we go, so we need to copy the values of the arrays.
             // just storing the reference would modify the data in the cache!
-            deleted: (data.deletedGameEntityGuids || []).slice(0),
-            entities: (data.gameEntities || []).slice(0),
+            deleted: [...(data.deletedGameEntityGuids ?? [])],
+            entities: [...(data.gameEntities ?? [])],
             status
         });
 
