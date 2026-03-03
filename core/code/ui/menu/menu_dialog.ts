@@ -111,7 +111,7 @@ export class MenuDialog {
 
     removeEntry(id: string): boolean {
         const entryIndex = this.entries.findIndex(l => l.id === id);
-        if (entryIndex >= 0) {
+        if (entryIndex !== -1) {
             this.entries[entryIndex].element.remove();
             this.entries.splice(entryIndex, 1);
             return true;
@@ -156,7 +156,7 @@ export class MenuDialog {
     }
 
     menutext(title: string): string {
-        const result = title.replace(/([a-z]+)/g, char => `<span class="upper">${char}</span>`)
+        const result = title.replaceAll(/([a-z]+)/g, char => `<span class="upper">${char}</span>`)
         return result;
     }
 
@@ -207,7 +207,7 @@ export class MenuDialog {
             f.element.toggleClass("disabled", disabled ? true : false);
 
             if (f.hasCheckbox) {
-                const checked = f.isChecked && f.isChecked();
+                const checked = f.isChecked?.();
                 $(".menu_checkbox", f.element).toggleClass("checked", checked);
             }
         });

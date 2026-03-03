@@ -58,7 +58,7 @@ export const eraseCookie = (name: string): void => {
  */
 export const digits = (d: number | string): string => {
     // U+2009 - Thin Space. Recommended for use as a thousands separator
-    return d.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1 ");
+    return d.toString().replaceAll(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1 ");
 }
 
 export const showPortalPosLinks = (lat: number, lng: number, name: string) => {
@@ -97,7 +97,7 @@ export const scrollBottom = (element: string | JQuery): number => {
  */
 export const convertTextToTableMagic = (text: string): string => {
     // check if it should be converted to a table
-    if (!/\t/.test(text)) return text.replace(/\n/g, "<br>");
+    if (!text.includes("\t")) return text.replaceAll("\n", "<br>");
 
 
     // parse data
@@ -149,11 +149,7 @@ export const genFourColumnTable = (blocks: genFourEnty[]): string => {
     const lines = blocks.map((detail, index) => {
         if (!detail) return "";
         const title = detail[2] ? ` title="${escapeHtmlSpecialChars(detail[2])}"` : "";
-        if (index % 2 === 0) {
-            return `<tr><td${title}>${detail[1]}</td><th${title}>${detail[0]}</th>`;
-        } else {
-            return `    <th${title}>${detail[0]}</th><td${title}>${detail[1]}</td></tr>`;
-        }
+        return index % 2 === 0 ? `<tr><td${title}>${detail[1]}</td><th${title}>${detail[0]}</th>` : `    <th${title}>${detail[0]}</th><td${title}>${detail[1]}</td></tr>`;
     }).join("");
     return lines;
 }

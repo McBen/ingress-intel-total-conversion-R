@@ -114,9 +114,9 @@ export class PluginPortalLevelNumbers extends Plugin {
         }
 
 
-        const portalPoints: Map<PortalGUID, L.Point> = new Map();
+        const portalPoints = new Map<PortalGUID, L.Point>();
 
-        // eslint-disable-next-line guard-for-in
+         
         for (const guid in window.portals) {
             const p = window.portals[guid];
 

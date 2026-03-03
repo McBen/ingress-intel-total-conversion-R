@@ -87,11 +87,7 @@ export class MapStatusBar {
             return "all links";
         }
 
-        if (tileParameters.minLinkLength > 1000) {
-            return `>${tileParameters.minLinkLength / 1000}km`
-        } else {
-            return `>${tileParameters.minLinkLength}m`;
-        }
+        return tileParameters.minLinkLength > 1000 ? `>${tileParameters.minLinkLength / 1000}km` : `>${tileParameters.minLinkLength}m`;
     }
 
 

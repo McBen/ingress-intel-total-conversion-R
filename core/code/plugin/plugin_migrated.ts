@@ -50,7 +50,7 @@ export class PluginMigrated extends Plugin {
             return;
         }
 
-        // eslint-disable-next-line unicorn/prefer-module
+         
         require("../iitc_compability");
         this.setup();
     }

@@ -10,7 +10,7 @@ interface ChatHook {
 }
 
 let isActive = false;
-const chatHooks: Map<Chat.ChatLineType, ChatHook> = new Map();
+const chatHooks = new Map<Chat.ChatLineType, ChatHook>();
 // DEBUG-START
 let chatTypeDT: Chat.DTNode;
 let typeCounts: number[] = [];
@@ -58,16 +58,16 @@ export const off = (type: Chat.ChatLineType | Chat.ChatLineType[], callback: Cal
 
 const deregister = (type: Chat.ChatLineType, callback: CallBack, onetime: boolean) => {
 
-    let current = chatHooks.get(type);
+    const current = chatHooks.get(type);
     if (current) {
         if (onetime) {
             const index = current.callbacksOF.indexOf(callback);
-            if (index >= 0) current.callbacksOF.splice(index, 1);
-            else log.error("off callback (onetime) not registered");
+            if (index === -1) {log.error("off callback (onetime) not registered");}
+            else {current.callbacksOF.splice(index, 1);}
         } else {
             const index = current.callbacks.indexOf(callback);
-            if (index >= 0) current.callbacks.splice(index, 1);
-            else log.error("off callback not registered");
+            if (index === -1) {log.error("off callback not registered");}
+            else {current.callbacks.splice(index, 1);}
         }
 
         if (current.callbacksOF.length + current.callbacks.length === 0) {

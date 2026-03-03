@@ -2,7 +2,7 @@
 import { alert, dialog, DIALOGS } from "./ui/dialog";
 import { idle, IdleResumeCallback } from "./map/idle";
 import * as CalcTools from "./map/map_data_calc_tools";
-import * as utils from "./helper/utils_misc";
+import * as utilities from "./helper/utils_misc";
 import * as times from "./helper/times";
 import * as L from "leaflet";
 
@@ -159,29 +159,29 @@ interface HighLighterNew {
 */
 
 // utils
-(globalThis as any).makePermalink = utils.makePermalink;
-(globalThis as any).clampLatLngBounds = utils.clampLatLngBounds;
-(globalThis as any).clampLatLng = utils.clampLatLng;
-(globalThis as any).genFourColumnTable = utils.genFourColumnTable;
-(globalThis as any).uniqueArray = utils.uniqueArray;
-(globalThis as any).prettyEnergy = utils.prettyEnergy;
-(globalThis as any).escapeHtmlSpecialChars = utils.escapeHtmlSpecialChars;
-(globalThis as any).convertTextToTableMagic = utils.convertTextToTableMagic;
-(globalThis as any).scrollBottom = utils.scrollBottom;
-(globalThis as any).writeCookie = utils.writeCookie;
-(globalThis as any).eraseCookie = utils.eraseCookie;
-(globalThis as any).digits = utils.digits;
+(globalThis as any).makePermalink = utilities.makePermalink;
+(globalThis as any).clampLatLngBounds = utilities.clampLatLngBounds;
+(globalThis as any).clampLatLng = utilities.clampLatLng;
+(globalThis as any).genFourColumnTable = utilities.genFourColumnTable;
+(globalThis as any).uniqueArray = utilities.uniqueArray;
+(globalThis as any).prettyEnergy = utilities.prettyEnergy;
+(globalThis as any).escapeHtmlSpecialChars = utilities.escapeHtmlSpecialChars;
+(globalThis as any).convertTextToTableMagic = utilities.convertTextToTableMagic;
+(globalThis as any).scrollBottom = utilities.scrollBottom;
+(globalThis as any).writeCookie = utilities.writeCookie;
+(globalThis as any).eraseCookie = utilities.eraseCookie;
+(globalThis as any).digits = utilities.digits;
 (globalThis as any).zeroPad = times.zeroPad;
 (globalThis as any).unixTimeToString = times.unixTimeToString;
 (globalThis as any).unixTimeToDateTimeString = times.unixTimeToDateTimeString;
 (globalThis as any).unixTimeToHHmm = times.unixTimeToHHmm;
 (globalThis as any).formatInterval = times.formatInterval;
-(globalThis as any).showPortalPosLinks = utils.showPortalPosLinks;
-(globalThis as any).isTouchDevice = utils.isTouchDevice;
-(globalThis as any).getURLParam = utils.getURLParam;
-(globalThis as any).readCookie = utils.readCookie;
+(globalThis as any).showPortalPosLinks = utilities.showPortalPosLinks;
+(globalThis as any).isTouchDevice = utilities.isTouchDevice;
+(globalThis as any).getURLParam = utilities.getURLParam;
+(globalThis as any).readCookie = utilities.readCookie;
 (globalThis as any).selectPortalByLatLng = selectPortalByLatLng;
-(globalThis as any).zoomToAndShowPortal = utils.zoomToAndShowPortal;
+(globalThis as any).zoomToAndShowPortal = utilities.zoomToAndShowPortal;
 
 (globalThis as any).iitcCompabilityInit = () => {
     // these variables are only available after boot

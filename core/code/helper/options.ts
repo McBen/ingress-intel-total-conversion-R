@@ -6,7 +6,7 @@ import { toast } from "../ui/toast";
 export class Options<OT extends string> {
 
     private key: string;
-    private data: { [key: string]: any } = {};
+    private data: Record<string, any> = {};
 
     constructor(key: string) {
         this.key = key;
@@ -20,7 +20,7 @@ export class Options<OT extends string> {
 
     getSafe<T>(item: OT, fallback: T): T {
         const data = <T | undefined>this.data[item];
-        return data !== undefined ? data : fallback;
+        return data === undefined ? fallback : data;
     }
 
     set<T>(item: OT, data: T): void {
@@ -37,7 +37,7 @@ export class Options<OT extends string> {
         this.data = {};
         const djson = window.localStorage.getItem(this.key);
         if (djson) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+             
             this.data = JSON.parse(djson);
         }
     }

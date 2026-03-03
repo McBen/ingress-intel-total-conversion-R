@@ -67,8 +67,8 @@ export class HistoryChart {
         const col1 = this.getFactionColor(0);
         const col2 = this.getFactionColor(1);
 
-        for (var cp = 1; cp <= CP_COUNT; cp++) {
-            var scores = this.regionScore.getCPScore(cp);
+        for (let cp = 1; cp <= CP_COUNT; cp++) {
+            const scores = this.regionScore.getCPScore(cp);
 
             markers +=
                 '<g title="dummy" class="checkpoint" data-cp="' + cp + '">' +

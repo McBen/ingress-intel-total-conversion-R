@@ -1,12 +1,12 @@
 import { Component, For, Show, createMemo } from "solid-js";
-import { NoPortalMod, PortalMOD } from "../../portal/portal_info";
+import { NoPortalMod as NoPortalModule, PortalMOD } from "../../portal/portal_info";
 
 export const COLORS_MOD: Record<string, string> = { VERY_RARE: "#b08cff", RARE: "#73a8ff", COMMON: "#8cffbf" };
 
 
 export const PortalMods: Component<{ mods: PortalMOD[]; }> = p => {
     return <div class="mods">
-        <For each={p.mods}>{mod => <PortalMod mod={mod} />}</For>
+        <For each={p.mods}>{module_ => <PortalMod mod={module_} />}</For>
     </div>;
 };
 
@@ -46,14 +46,14 @@ const PortalMod: Component<{ mod: PortalMOD; }> = p => {
                     case "REMOVAL_STICKINESS": { if (value > 100) valueStr = `${value / 10000}%`; break; } // an educated guess
                 }
 
-                tooltip.push(`${valueStr} ${key.capitalize().replace(/_/g, " ")}`);
+                tooltip.push(`${valueStr} ${key.capitalize().replaceAll("_", " ")}`);
             }
         }
         return tooltip.join("\n");
     });
 
-    const modClass = createMemo(() => {
-        let itemClass = p.mod.type.toLowerCase().replace("(-)", "minus").replace("(+)", "plus").replace(/[^a-z]/g, "_");
+    const moduleClass = createMemo(() => {
+        let itemClass = p.mod.type.toLowerCase().replace("(-)", "minus").replace("(+)", "plus").replaceAll(/[^a-z]/g, "_");
 
         if (p.mod.rarity) {
             itemClass = itemClass + " " + p.mod.rarity.toLowerCase();
@@ -62,9 +62,9 @@ const PortalMod: Component<{ mod: PortalMOD; }> = p => {
     });
 
 
-    return <Show when={p.mod !== NoPortalMod} fallback={<span />}>
+    return <Show when={p.mod !== NoPortalModule} fallback={<span />}>
         <span
-            class={modClass()}
+            class={moduleClass()}
             title={text()}
             style={{
                 color: p.mod.rarity ? COLORS_MOD[p.mod.rarity] : "#fff"
@@ -77,5 +77,5 @@ const PortalMod: Component<{ mod: PortalMOD; }> = p => {
  * Format string read human able
  */
 const key2Human = (key: string): string => {
-    return key.capitalize().replace(/_/g, " ");
+    return key.capitalize().replaceAll("_", " ");
 };

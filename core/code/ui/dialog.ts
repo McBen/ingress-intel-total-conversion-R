@@ -105,7 +105,7 @@ export type DialogOptions = Partial<{
     /**
      * Dialog button definition
      */
-    buttons: JQueryUI.ButtonOptions[] | { [key: string]: () => void };
+    buttons: JQueryUI.ButtonOptions[] | Record<string, () => void>;
 }>;
 
 
@@ -170,17 +170,17 @@ export const dialog = (options: DialogOptions): JQuery => {
             }
         },
         open: function () {
-            var ui = $(this).closest(".ui-dialog");
+            const ui = $(this).closest(".ui-dialog");
             if (!options.modal) {
-                ui.draggable("option", "containment", '#map');
-                ui.resizable("option", "containment", '#map');
+                ui.draggable("option", "containment", "#map");
+                ui.resizable("option", "containment", "#map");
             }
 
-            var titlebar = ui.find('.ui-dialog-titlebar');
+            const titlebar = ui.find(".ui-dialog-titlebar");
             titlebar.find(".ui-dialog-title")
                 .addClass("ui-dialog-title-active")
                 .addClass("text-overflow-ellipsis");
-            var close = titlebar.find(".ui-dialog-titlebar-close");
+            const close = titlebar.find(".ui-dialog-titlebar-close");
 
             // Title should not show up on mouseover
             close.removeAttr("title").addClass("ui-dialog-titlebar-button");
@@ -194,12 +194,12 @@ export const dialog = (options: DialogOptions): JQuery => {
 
             if (!$(this).dialog("option", "modal")) {
                 // Start out with a cloned version of the close button
-                var collapse = close.clone();
+                const collapse = close.clone();
 
                 // Change it into a collapse button and set the click handler
                 collapse.addClass("ui-dialog-titlebar-button-collapse ui-dialog-titlebar-button-collapse-expanded");
                 collapse.click($.proxy(function () {
-                    var collapsed = ($(this).data("collapsed") === true);
+                    const collapsed = ($(this).data("collapsed") === true);
 
                     // Toggle collapsed state
                     $(this).data("collapsed", !collapsed);
@@ -217,16 +217,16 @@ export const dialog = (options: DialogOptions): JQuery => {
                     }
 
                     // Find the button pane and content dialog in this ui-dialog, and add or remove the 'hidden' class.
-                    var dialog = $(this).closest(".ui-dialog");
-                    var content = dialog.find(".ui-dialog-content");
-                    var buttonpane = dialog.find(".ui-dialog-buttonpane");
-                    var button = dialog.find(".ui-dialog-titlebar-button-collapse");
+                    const dialog = $(this).closest(".ui-dialog");
+                    const content = dialog.find(".ui-dialog-content");
+                    const buttonpane = dialog.find(".ui-dialog-buttonpane");
+                    const button = dialog.find(".ui-dialog-titlebar-button-collapse");
 
                     // Slide toggle
                     $(this).css("height", "");
                     $(content).slideToggle({
                         duration: DIALOG_SLIDE_DURATION,
-                        complete: function () {
+                        complete: () => {
                             $(buttonpane).slideToggle({
                                 duration: DIALOG_SLIDE_DURATION,
                                 complete: sizeFix

@@ -57,7 +57,7 @@ export class LogRequest {
 
         const post = this.createPostData(getOldMessages);
         postAjax(
-            'getPlexts',
+            "getPlexts",
             post,
             (data: Intel.ChatCallback) => this.processNewLogData(data, !!post.ascendingTimestampOrder, getOldMessages),
             () => {
@@ -140,8 +140,8 @@ export class LogRequest {
     processNewLogData(data: Intel.ChatCallback, isSortedAscending: boolean, oldData: boolean) {
         this.requestRunning = false;
 
-        if (!data || !data.result) {
-            return log.warn(`${this.channel} chat error. Waiting for next auto-refresh.`);
+        if (!data?.result) {
+            log.warn(`${this.channel} chat error. Waiting for next auto-refresh.`); return;
         }
 
         if (data.result.length > 0) {
@@ -152,13 +152,13 @@ export class LogRequest {
         // trigger updates
         switch (this.channel) {
             case "all":
-                hooks.trigger('publicChatDataAvailable', { raw: data, result: data.result, processed: this.data });
+                hooks.trigger("publicChatDataAvailable", { raw: data, result: data.result, processed: this.data });
                 break;
             case "faction":
-                hooks.trigger('factionChatDataAvailable', { raw: data, result: data.result, processed: this.data });
+                hooks.trigger("factionChatDataAvailable", { raw: data, result: data.result, processed: this.data });
                 break;
             case "alerts":
-                hooks.trigger('alertChatDataAvailable', { raw: data, result: data.result, processed: this.data });
+                hooks.trigger("alertChatDataAvailable", { raw: data, result: data.result, processed: this.data });
                 break;
         }
 

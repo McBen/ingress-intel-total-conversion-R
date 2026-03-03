@@ -145,7 +145,7 @@ export class DataCache<ID, T> {
         hits: number, isOld: number, miss: number,
         oldest: number,
         itemSizeMin: number, itemSizeMax: number
-    } {
+        } {
         const first = this.cache.entries().next();
         const oldest = Date.now() - first.value[1].time;
 

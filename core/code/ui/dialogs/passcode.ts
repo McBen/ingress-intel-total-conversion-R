@@ -69,7 +69,7 @@ export class PasscodeDialog {
 
     submitCode(passcode: string): void {
 
-        passcode = passcode.replace(/[^\u0020-\u007E]+/g, ""); // remove non-printable characters
+        passcode = passcode.replaceAll(/[^\u0020-\u007E]+/g, ""); // remove non-printable characters
         if (!passcode) return;
 
         this.getPasscodeSection(passcode).append("loading");
@@ -78,7 +78,7 @@ export class PasscodeDialog {
         postAjax(
             "redeemReward", { passcode },
             response => this.showResult(passcode, response as ResultData),
-            response => this.handleError(passcode, response as JQuery.jqXHR<any>)
+            response => this.handleError(passcode, response!)
         );
     }
 
@@ -98,8 +98,8 @@ export class PasscodeDialog {
         return section;
     }
 
-    handleError(passcode: string, response: JQuery.jqXHR<any>): void {
-        const StatusText: { [index: number]: string } = {
+    handleError(passcode: string, response: JQuery.jqXHR): void {
+        const StatusText: Record<number, string> = {
             429: "You have been rate-limited by the server. Wait a bit and try again.",
             500: "Internal server error"
         };

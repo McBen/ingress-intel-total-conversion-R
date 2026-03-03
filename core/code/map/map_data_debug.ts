@@ -15,7 +15,7 @@ export const enum TileState {
     "render_queue",
 }
 
-const StateColors: { [index in TileState]: { color: string, fill: string, clearDelay?: number } } = {
+const StateColors: Record<TileState, { color: string, fill: string, clearDelay?: number }> = {
     [TileState.ok]: { color: "#0f0", fill: "#0f0", clearDelay: 2 },
     [TileState.error]: { color: "#f00", fill: "#f00", clearDelay: 30 },
     [TileState.cache_fresh]: { color: "#0f0", fill: "#ff0", clearDelay: 2 },
@@ -37,10 +37,10 @@ const StateColors: { [index in TileState]: { color: string, fill: string, clearD
 export class RenderDebugTiles {
 
     private CLEAR_CHECK_TIME = 0.1;
-    private FADE_TIME = 1.0;
-    private debugTileLayer: L.LayerGroup<any>;
-    private debugTileToRectangle: { [id: TileID]: L.Rectangle } = {};
-    private debugTileClearTimes: { [id: TileID]: number } = {};
+    private FADE_TIME = 1;
+    private debugTileLayer: L.LayerGroup;
+    private debugTileToRectangle: Record<TileID, L.Rectangle> = {};
+    private debugTileClearTimes: Record<TileID, number> = {};
     private timer: number | undefined;
 
     constructor() {
@@ -111,7 +111,7 @@ export class RenderDebugTiles {
     runClearPass() {
 
         const now = Date.now();
-        // eslint-disable-next-line guard-for-in
+         
         for (const id in this.debugTileClearTimes) {
             const diff = now - this.debugTileClearTimes[id];
             if (diff > 0) {
@@ -119,7 +119,7 @@ export class RenderDebugTiles {
                     this.debugTileLayer.removeLayer(this.debugTileToRectangle[id]);
                     delete this.debugTileClearTimes[id];
                 } else {
-                    const fade = 1.0 - (diff / (this.FADE_TIME * 1000));
+                    const fade = 1 - (diff / (this.FADE_TIME * 1000));
 
                     this.debugTileToRectangle[id].setStyle({ opacity: 0.4 * fade, fillOpacity: 0.1 * fade });
                 }

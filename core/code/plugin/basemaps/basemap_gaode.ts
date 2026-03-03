@@ -1,4 +1,4 @@
-﻿/* eslint-disable object-shorthand */
+﻿ 
 import { IITCr } from "../../IITC";
 import { Plugin } from "../plugin_base";
 
@@ -35,7 +35,7 @@ export class PluginGaodeMap extends Plugin {
                 needFixChinaOffset: true // depends on fix-china-map-offset plugin
             },
 
-            initialize: function (options: { [index: string]: string | number }) {
+            initialize: function (options: Record<string, string | number>) {
                 const expand = (field: string): string => {
                     return options[field] ? `&${field}=${options[field]}` : "";
                 }
@@ -64,13 +64,13 @@ export class PluginGaodeMap extends Plugin {
         // @ts-ignore - constructer with parameter is not expected
         const roads = new GaodeLayer({ style: 7, maxNativeZoom: 20, lang: "zh_cn" }) as L.TileLayer; // en, zh_en
         // @ts-ignore
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+         
         const traffic = L.layerGroup([roads, new AmapTraffic({ opacity: 0.75 })]);
 
         // @ts-ignore
         const satellite = new GaodeLayer({ style: 6, type: "satellite" }) as L.TileLayer;
         // @ts-ignore
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+         
         const satelliteRoad = L.layerGroup([satellite, new GaodeLayer({ style: 8, type: "roadnet", opacity: 0.75 })]);
 
         IITCr.layers.addBase("Gaode Roads [zh]", roads);

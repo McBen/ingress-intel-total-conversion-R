@@ -117,7 +117,7 @@ export class Artifacts {
 
     processResult(portals: ArtifactResponse) {
 
-        // eslint-disable-next-line guard-for-in
+         
         for (const guid in portals) {
             const ent = portals[guid];
             const data = decodeArray.portal(ent, "summary") as IITC.PortalDataDetail;
@@ -183,7 +183,7 @@ export class Artifacts {
                     iconAnchor: [iconSize / 2, iconSize / 2],
                 });
 
-                var marker = L.marker(latlng, { icon: icon, interactive: false, keyboard: false, opacity: opacity });
+                const marker = L.marker(latlng, { icon: icon, interactive: false, keyboard: false, opacity: opacity });
 
                 this.layer.addLayer(marker);
             }
@@ -245,8 +245,8 @@ export class Artifacts {
             this.getPortalsWithArtifactTypes(type).forEach((portal, guid) => {
                 // this portal has data for this artifact type - add it to the table
 
-                var onclick = "zoomToAndShowPortal('" + guid + "',[" + portal.latE6 / 1E6 + "," + portal.lngE6 / 1E6 + "])";
-                var row = '<tr><td class="portal"><a onclick="' + onclick + '">' + escapeHtmlSpecialChars(portal.title) + "</a></td>";
+                const onclick = "zoomToAndShowPortal('" + guid + "',[" + portal.latE6 / 1e6 + "," + portal.lngE6 / 1e6 + "])";
+                let row = '<tr><td class="portal"><a onclick="' + onclick + '">' + escapeHtmlSpecialChars(portal.title) + "</a></td>";
 
                 row += '<td class="info">';
 
@@ -266,25 +266,25 @@ export class Artifacts {
                 row += "</td></tr>";
 
                 // sort by target portals first, then by portal GUID
-                var sortVal = (this.portalIsTarget(portal, type) ? "A" : "Z") + guid;
+                const sortValue = (this.portalIsTarget(portal, type) ? "A" : "Z") + guid;
 
-                tableRows.push([sortVal, row]);
+                tableRows.push([sortValue, row]);
             });
 
             // check for no rows, and add a note to the table instead
-            if (tableRows.length == 0) {
+            if (tableRows.length === 0) {
                 html += '<tr><td colspan="2"><i>No portals at this time</i></td></tr>';
             }
 
             // sort the rows
-            tableRows.sort(function (a, b) {
+            tableRows.sort((a, b) => {
                 if (a[0] == b[0]) return 0;
                 else if (a[0] < b[0]) return -1;
                 else return 1;
             });
 
             // and add them to the table
-            html += tableRows.map(function (a) { return a[1]; }).join("");
+            html += tableRows.map((a) => a[1]).join("");
 
 
             html += "</table>";

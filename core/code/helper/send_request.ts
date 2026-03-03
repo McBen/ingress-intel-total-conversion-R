@@ -60,7 +60,7 @@ export const postAjax = (action: string, data: any,
         requests.remove(jqXHR);
 
         // the Niantic server can return a HTTP success, but the JSON response contains an error. handle that sensibly
-        if (data && data.error && data.error === "out of date") {
+        if (data?.error && data.error === "out of date") {
             // let's call the error callback in thos case...
             if (errorCallback) {
                 errorCallback(jqXHR, textStatus, "data.error == 'out of date'");

@@ -75,7 +75,7 @@ const pluginInfoToString = (p: Plugin): string => {
 const getIITCVersion = (): string => {
     const iitc = script_info;
     const version = (iitc.script && iitc.script.version || iitc.dateTimeVersion);
-    return `${version}`;
+    return version;
 }
 
 

@@ -1,5 +1,5 @@
 import { DEFAULT_ZOOM, FACTION, FACTION_NAMES, MIN_ZOOM } from "../constants";
-import { getURLParam, readCookie, writeCookie } from "../helper/utils_misc";
+import { getURLParam as getURLParameter, readCookie, writeCookie } from "../helper/utils_misc";
 import { player } from "../helper/player";
 import { idle } from "./idle";
 import { ON_MOVE_REFRESH, requests } from "../helper/send_request";
@@ -135,7 +135,7 @@ interface SphericalMercatorS2 extends L.Projection {
 const setupCRS = () => {
     // use the earth radius value from s2 geometry library
     // https://github.com/google/s2-geometry-library-java/blob/c28f287b996c0cedc5516a0426fbd49f6c9611ec/src/com/google/common/geometry/S2LatLng.java#L31
-    const EARTH_RADIUS_METERS = 6367000.0;
+    const EARTH_RADIUS_METERS = 6367000;
     // distance calculations with that constant are a little closer to values observable in Ingress client.
     // difference is:
     // - ~0.06% when using LatLng.distanceTo() (R is 6371 vs 6367)
@@ -166,7 +166,7 @@ const setupCRS = () => {
 }
 
 
-type NormalizedPosition = {
+interface NormalizedPosition {
     center: [number, number],
     zoom: number
 }
@@ -186,15 +186,15 @@ export const normLL = (lat: string | number, lng: string | number, zoom?: string
  */
 const getPosition = (): NormalizedPosition | undefined => {
 
-    const zoom = getURLParam("z");
-    const latE6 = getURLParam("latE6");
-    const lngE6 = getURLParam("lngE6");
+    const zoom = getURLParameter("z");
+    const latE6 = getURLParameter("latE6");
+    const lngE6 = getURLParameter("lngE6");
     if (latE6 && lngE6) {
         log.log("mappos: reading email URL params");
         return normLL(parseInt(latE6) / 1e6, parseInt(lngE6) / 1e6, zoom);
     }
 
-    const ll = getURLParam("ll") || getURLParam("pll");
+    const ll = getURLParameter("ll") || getURLParameter("pll");
     if (ll) {
         log.log("mappos: reading stock Intel URL params");
         const llSplit = ll.split(",");

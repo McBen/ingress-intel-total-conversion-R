@@ -6,7 +6,7 @@ import { Log, LogApp } from "../core/code/helper/log_apps";
 const log = Log(LogApp.Chat);
 
 
-type IntelChatResult = { result: Intel.ChatLine[] };
+interface IntelChatResult { result: Intel.ChatLine[] }
 const getIntelChat = (id: string): Intel.ChatLine => {
     const chatData = intelChatData as IntelChatResult;
     const line = chatData.result.find(c => c[0] === id);
@@ -17,7 +17,7 @@ const getIntelChat = (id: string): Intel.ChatLine => {
 
 describe("chatline", () => {
     beforeEach(() => { // disable jest console processing
-        global.console = require('console');
+        global.console = require("node:console");
     });
 
     it("should build the DecisionTree", () => {
@@ -66,7 +66,7 @@ describe("chatline", () => {
 
     it("should recognize a Unknown message", () => {
         // we expect a log warning
-        const consoleWarnMock = jest.spyOn(log, 'warn').mockImplementation();
+        const consoleWarnMock = jest.spyOn(log, "warn").mockImplementation();
 
         const dt = ChatLine.buildDT();
         const unknown = getIntelChat("unknown");

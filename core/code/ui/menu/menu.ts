@@ -1,9 +1,9 @@
-/* eslint-disable no-underscore-dangle */
+ 
 import { initializeMenu, setupMenu } from "./menu_actions";
 import { MenuDialog, MenuEntry } from "./menu_dialog";
 
 
-export type MenuDefinition = {
+export interface MenuDefinition {
     id: string,
     name: string,
     shortcut?: string,
@@ -17,7 +17,7 @@ export type MenuDefinition = {
     isChecked?: () => boolean,
 }
 
-export type LayerGroups = { [id: string]: string[] };
+export type LayerGroups = Record<string, string[]>;
 
 
 export class IITCMenu extends MenuDialog {

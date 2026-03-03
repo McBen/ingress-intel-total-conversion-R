@@ -1,4 +1,4 @@
-import { NoPortalMod, PortalInfo, PortalMOD, PortalRESO } from "./portal_info";
+import { NoPortalMod as NoPortalModule, PortalInfo, PortalMOD, PortalRESO } from "./portal_info";
 import { player } from "../helper/player";
 import { FACTION } from "../constants";
 
@@ -29,10 +29,10 @@ export class PortalInfoDetailed extends PortalInfo {
     constructor(guid: PortalGUID, data: IITC.EntityPortalDetailed) {
         super(guid, data as unknown as IITC.EntityPortalOverview);
 
-        this.mods = [NoPortalMod, NoPortalMod, NoPortalMod, NoPortalMod];
+        this.mods = [NoPortalModule, NoPortalModule, NoPortalModule, NoPortalModule];
         for (let i = 0; i < 4; i++) {
-            const inMod = data[14][i];
-            if (inMod) this.mods[i] = new PortalMOD(inMod);
+            const inModule = data[14][i];
+            if (inModule) this.mods[i] = new PortalMOD(inModule);
         }
 
         this.resonators = data[15].filter(r => r !== undefined).map(r => new PortalRESO(r));
@@ -68,20 +68,20 @@ export class PortalInfoDetailed extends PortalInfo {
         // additional range boost calculation
 
         // link amps scale: first is full, second a quarter, the last two an eighth
-        const scale = [1.0, 0.25, 0.125, 0.125];
+        const scale = [1, 0.25, 0.125, 0.125];
 
-        let boost = 0.0;  // initial boost is 0.0 (i.e. no boost over standard range)
+        let boost = 0;  // initial boost is 0.0 (i.e. no boost over standard range)
 
         const linkAmps = this.getPortalModsByType("LINK_AMPLIFIER");
 
-        linkAmps.forEach((mod, i) => {
+        linkAmps.forEach((module_, i) => {
             // link amp stat LINK_RANGE_MULTIPLIER is 2000 for rare, and gives 2x boost to the range
             // and very-rare is 7000 and gives 7x the range
-            const baseMultiplier = mod.stats.LINK_RANGE_MULTIPLIER / 1000;
+            const baseMultiplier = module_.stats.LINK_RANGE_MULTIPLIER / 1000;
             boost += baseMultiplier * scale[i];
         });
 
-        return (linkAmps.length > 0) ? boost : 1.0;
+        return (linkAmps.length > 0) ? boost : 1;
     }
 
 
@@ -117,7 +117,7 @@ export class PortalInfoDetailed extends PortalInfo {
 
         const stat = typeToStat[type];
 
-        const mods = this.mods.filter(mod => mod && stat in mod.stats);
+        const mods = this.mods.filter(module_ => module_ && stat in module_.stats);
 
         // sorting mods by the stat keeps code simpler, when calculating combined mod effects
         mods.sort((a, b) => b.stats[stat] - a.stats[stat]);
@@ -130,8 +130,8 @@ export class PortalInfoDetailed extends PortalInfo {
 
         let links = 8;
 
-        linkAmps.forEach(mod => {
-            links += mod.stats.OUTGOING_LINKS_BONUS;
+        linkAmps.forEach(module_ => {
+            links += module_.stats.OUTGOING_LINKS_BONUS;
         });
 
         return links;
@@ -146,8 +146,8 @@ export class PortalInfoDetailed extends PortalInfo {
         enemyAp: number, destroyAp: number, resoAp: number, captureAp: number
     } {
         let resoCount = 0;
-        const maxResonators = MAX_RESO_PER_PLAYER.slice(0);
-        const curResonators = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+        const maxResonators = [...MAX_RESO_PER_PLAYER];
+        const currentResonators = [0, 0, 0, 0, 0, 0, 0, 0, 0];
 
         for (let n = player.level + 1; n < 9; n++) {
             maxResonators[n] = 0;
@@ -160,7 +160,7 @@ export class PortalInfoDetailed extends PortalInfo {
                     maxResonators[reso.level] -= 1;
                 }
             } else {
-                curResonators[reso.level] += 1;
+                currentResonators[reso.level] += 1;
             }
         });
 
@@ -176,7 +176,7 @@ export class PortalInfoDetailed extends PortalInfo {
         let upgradeCount = 0;
         let upgradeAvailable = maxResonators[8];
         for (let n = 7; n >= 0; n--) {
-            upgradeCount += curResonators[n];
+            upgradeCount += currentResonators[n];
             if (upgradeAvailable < upgradeCount) {
                 upgradeCount -= (upgradeCount - upgradeAvailable);
             }
@@ -208,7 +208,7 @@ export class PortalInfoDetailed extends PortalInfo {
         // note: scanner shows rounded values (adding a second FA shows: 2.5x+0.2x=2.8x, which should be 2.5x+0.25x=2.75x)
 
         // amplifier scale: first is full, second a quarter, the last two an eighth
-        const scale = [1.0, 0.25, 0.125, 0.125];
+        const scale = [1, 0.25, 0.125, 0.125];
 
         const attackValues = {
             hit_bonus: 0,
@@ -216,18 +216,18 @@ export class PortalInfoDetailed extends PortalInfo {
             attack_frequency: 0
         };
 
-        forceamps.forEach((mod, i) => {
+        forceamps.forEach((module_, i) => {
             // force amp stat FORCE_AMPLIFIER is 2000 for rare, and gives 2x boost to the range
-            const baseMultiplier = mod.stats.FORCE_AMPLIFIER / 1000;
+            const baseMultiplier = module_.stats.FORCE_AMPLIFIER / 1000;
             attackValues.force_amplifier += baseMultiplier * scale[i];
         });
 
-        turrets.forEach((mod, i) => {
+        turrets.forEach((module_, i) => {
             // turret stat ATTACK_FREQUENCY is 2000 for rare, and gives 2x boost to the range
-            const baseMultiplier = mod.stats.ATTACK_FREQUENCY / 1000;
+            const baseMultiplier = module_.stats.ATTACK_FREQUENCY / 1000;
             attackValues.attack_frequency += baseMultiplier * scale[i];
 
-            attackValues.hit_bonus += mod.stats.HIT_BONUS / 10000;
+            attackValues.hit_bonus += module_.stats.HIT_BONUS / 10000;
         });
 
         return attackValues;
@@ -242,16 +242,16 @@ export class PortalInfoDetailed extends PortalInfo {
         let cooldownTime = player.isTeam(this.team) ? HACK_COOLDOWN_FRIENDLY : HACK_COOLDOWN_ENEMY;
 
         const heatsinks = this.getPortalModsByType("HEATSINK");
-        heatsinks.forEach((mod, index) => {
-            const hackSpeed = mod.stats.HACK_SPEED / 1000000;
+        heatsinks.forEach((module_, index) => {
+            const hackSpeed = module_.stats.HACK_SPEED / 1000000;
             cooldownTime = Math.round(cooldownTime * (1 - hackSpeed * effectivenessReduction[index]));
         });
 
         let hackCount = BASE_HACK_COUNT; // default hacks
 
         const multihacks = this.getPortalModsByType("MULTIHACK");
-        multihacks.forEach((mod, index) => {
-            const extraHacks = mod.stats.BURNOUT_INSULATION;
+        multihacks.forEach((module_, index) => {
+            const extraHacks = module_.stats.BURNOUT_INSULATION;
             hackCount = hackCount + (extraHacks * effectivenessReduction[index]);
         });
 
@@ -338,7 +338,7 @@ export class PortalInfoDetailed extends PortalInfo {
         image: string, resCount: number,
         latE6: number, lngE6: number,
         health: number, team: FACTION
-    } {
+        } {
 
         // NOTE: the summary data reports unclaimed portals as level 1 - not zero as elsewhere in IITC
         let level = this.level;
@@ -346,8 +346,8 @@ export class PortalInfoDetailed extends PortalInfo {
 
         const resCount = this.resonators.length;
         const maxEnergy = this.getTotalPortalEnergy();
-        const curEnergy = this.getCurrentPortalEnergy();
-        const health = maxEnergy > 0 ? Math.floor(curEnergy / maxEnergy * 100) : 0;
+        const currentEnergy = this.getCurrentPortalEnergy();
+        const health = maxEnergy > 0 ? Math.floor(currentEnergy / maxEnergy * 100) : 0;
 
         return {
             level,

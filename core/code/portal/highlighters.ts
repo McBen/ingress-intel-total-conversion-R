@@ -43,7 +43,7 @@ export class Highlighters {
 
     remove(name: string): void {
         const highlightIndex = this.all.findIndex(h => h.name === name);
-        if (highlightIndex < 0) return;
+        if (highlightIndex === -1) return;
 
         this.all.splice(highlightIndex, 1);
         if (this.current.name === name) {

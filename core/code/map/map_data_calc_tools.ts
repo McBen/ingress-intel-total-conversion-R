@@ -61,7 +61,7 @@ export const setupDataTileParameters = () => {
 
 export const getMapZoomTileParameters = (zoom: number): TileParameters => {
 
-    const maxTilesPerEdge = window.TILE_PARAMS.TILES_PER_EDGE[window.TILE_PARAMS.TILES_PER_EDGE.length - 1];
+    const maxTilesPerEdge = window.TILE_PARAMS.TILES_PER_EDGE.at(-1)!;
 
     return {
         level: window.TILE_PARAMS.ZOOM_TO_LEVEL[zoom] || 0, // deprecated but still used in request

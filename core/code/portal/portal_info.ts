@@ -1,5 +1,5 @@
 /* eslint-disable unicorn/prevent-abbreviations */
-/* eslint-disable unicorn/switch-case-braces */
+ 
 /* eslint-disable max-classes-per-file */
 import { FACTION } from "../constants";
 
@@ -109,7 +109,7 @@ export class PortalMOD {
         this.type = data[1];
         this.rarity = data[2];
         this.stats = {} as Record<PortalModStat | string, number>;
-        // eslint-disable-next-line guard-for-in
+         
         for (const n in data[3]) {
             this.stats[n] = parseInt(data[3][n]);
         }

@@ -1,5 +1,5 @@
-/* eslint-disable unicorn/explicit-length-check */
-/* eslint-disable max-len */
+ 
+ 
 import { Component } from "solid-js";
 import { JSX } from "solid-js/jsx-runtime";
 import imgShare from "!!raw-loader!images/share.svg";
@@ -18,17 +18,17 @@ import imgEnergy100 from "!!raw-loader!images/portal/energy-icons/battery-100.sv
 
 type SVGString = string;
 type SVGSVGElementTags = JSX.SVGElementTags["svg"];
-export interface IconProps extends SVGSVGElementTags {
+export interface IconProperties extends SVGSVGElementTags {
     size?: string | number;
     color?: string;
     title?: string;
     style?: JSX.CSSProperties;
 }
 
-export const IconTemplate: Component<{ iconSrc: SVGString, props?: IconProps }> = p => {
+export const IconTemplate: Component<{ iconSrc: SVGString, props?: IconProperties }> = p => {
     const { data } = getSVGFromSource(p.iconSrc);
 
-    const props: IconProps = p.props || {}
+    const properties: IconProperties = p.props || {}
 
     // const mergedProps = mergeProps(iconSrc.a, props) as IconBaseProps;
     // const [_, svgProps] = splitProps(mergedProps, ["src"]);
@@ -37,15 +37,15 @@ export const IconTemplate: Component<{ iconSrc: SVGString, props?: IconProps }> 
 
     return (
         <svg
-            color={props.color || "currentColor"}
-            fill={props.color || "currentColor"}
+            color={properties.color || "currentColor"}
+            fill={properties.color || "currentColor"}
             stroke-width="0"
             style={{
-                ...props.style,
+                ...properties.style,
                 overflow: "visible"
             }}
-            height={props.size || "1em"}
-            width={props.size || "1em"}
+            height={properties.size || "1em"}
+            width={properties.size || "1em"}
             xmlns="http://www.w3.org/2000/svg"
             innerHTML={data}
         />
@@ -65,21 +65,21 @@ const getSVGFromSource = (source: SVGString): { data: string, attributes: NamedN
 }
 
 // Custom Icons
-export const IconShare: Component<{ props?: IconProps }> = p => {
+export const IconShare: Component<{ props?: IconProperties }> = p => {
     return <IconTemplate iconSrc={imgShare} {...p.props} />
 }
 
-export const IconEnergy0: Component<{ props?: IconProps }> = p => { return <IconTemplate iconSrc={imgEnergy0} {...p.props} /> }
-export const IconEnergy10: Component<{ props?: IconProps }> = p => { return <IconTemplate iconSrc={imgEnergy10} {...p.props} /> }
-export const IconEnergy20: Component<{ props?: IconProps }> = p => { return <IconTemplate iconSrc={imgEnergy20} {...p.props} /> }
-export const IconEnergy30: Component<{ props?: IconProps }> = p => { return <IconTemplate iconSrc={imgEnergy30} {...p.props} /> }
-export const IconEnergy40: Component<{ props?: IconProps }> = p => { return <IconTemplate iconSrc={imgEnergy40} {...p.props} /> }
-export const IconEnergy50: Component<{ props?: IconProps }> = p => { return <IconTemplate iconSrc={imgEnergy50} {...p.props} /> }
-export const IconEnergy60: Component<{ props?: IconProps }> = p => { return <IconTemplate iconSrc={imgEnergy60} {...p.props} /> }
-export const IconEnergy70: Component<{ props?: IconProps }> = p => { return <IconTemplate iconSrc={imgEnergy70} {...p.props} /> }
-export const IconEnergy80: Component<{ props?: IconProps }> = p => { return <IconTemplate iconSrc={imgEnergy80} {...p.props} /> }
-export const IconEnergy90: Component<{ props?: IconProps }> = p => { return <IconTemplate iconSrc={imgEnergy90} {...p.props} /> }
-export const IconEnergy100: Component<{ props?: IconProps }> = p => { return <IconTemplate iconSrc={imgEnergy100} {...p.props} /> }
+export const IconEnergy0: Component<{ props?: IconProperties }> = p => { return <IconTemplate iconSrc={imgEnergy0} {...p.props} /> }
+export const IconEnergy10: Component<{ props?: IconProperties }> = p => { return <IconTemplate iconSrc={imgEnergy10} {...p.props} /> }
+export const IconEnergy20: Component<{ props?: IconProperties }> = p => { return <IconTemplate iconSrc={imgEnergy20} {...p.props} /> }
+export const IconEnergy30: Component<{ props?: IconProperties }> = p => { return <IconTemplate iconSrc={imgEnergy30} {...p.props} /> }
+export const IconEnergy40: Component<{ props?: IconProperties }> = p => { return <IconTemplate iconSrc={imgEnergy40} {...p.props} /> }
+export const IconEnergy50: Component<{ props?: IconProperties }> = p => { return <IconTemplate iconSrc={imgEnergy50} {...p.props} /> }
+export const IconEnergy60: Component<{ props?: IconProperties }> = p => { return <IconTemplate iconSrc={imgEnergy60} {...p.props} /> }
+export const IconEnergy70: Component<{ props?: IconProperties }> = p => { return <IconTemplate iconSrc={imgEnergy70} {...p.props} /> }
+export const IconEnergy80: Component<{ props?: IconProperties }> = p => { return <IconTemplate iconSrc={imgEnergy80} {...p.props} /> }
+export const IconEnergy90: Component<{ props?: IconProperties }> = p => { return <IconTemplate iconSrc={imgEnergy90} {...p.props} /> }
+export const IconEnergy100: Component<{ props?: IconProperties }> = p => { return <IconTemplate iconSrc={imgEnergy100} {...p.props} /> }
 
 
 // From Solid-Icons

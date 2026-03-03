@@ -10,14 +10,13 @@ export type IdleResumeCallback = () => void;
 
 
 export class Idle {
-    private idleTime: number; // in seconds
+    private idleTime: number = 0; // in seconds
     private idleTimeLimit: number;
     private onResumeFunctions: IdleResumeCallback[];
     private lastMouseX;
     private lastMouseY;
 
     constructor() {
-        this.idleTime = 0;
         this.idleTimeLimit = MAX_IDLE_TIME;
         this.onResumeFunctions = [];
         this.lastMouseX = -1;

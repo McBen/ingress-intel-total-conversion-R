@@ -78,7 +78,7 @@ type HookCallback = (data: any) => boolean | void;
 
 export class Hooks {
 
-    private hooks: { [index: string]: HookCallback[] } = {};
+    private hooks: Record<string, HookCallback[]> = {};
     private isRunning: number;
 
     public chat = {
@@ -96,11 +96,7 @@ export class Hooks {
 
         this.isRunning++;
         const interrupted = this.hooks[event].every(callback => {
-            if (callback(data) === false) {
-                return false;
-            } else {
-                return true;
-            }
+            return callback(data) === false ? false : true;
         });
 
         this.isRunning--;
@@ -152,7 +148,7 @@ export class Hooks {
             } else {
                 if (this.isRunning) {
                     listeners[index] = () => {/* noop */ };
-                    this.hooks[event] = listeners = listeners.slice();
+                    this.hooks[event] = listeners = [...listeners];
                 }
                 listeners.splice(index, 1);
             }
@@ -161,23 +157,23 @@ export class Hooks {
 }
 
 
-type EventPortalSelected = { selectedPortalGuid: string, unselectedPortalGuid: string };
+interface EventPortalSelected { selectedPortalGuid: string, unselectedPortalGuid: string }
 
-export type EventPublicChatDataAvailable = { raw: any, result: Intel.ChatLine[], processed: any };
-export type EventFactionChatDataAvailable = { raw: any, result: Intel.ChatLine[], processed: any };
-export type EventPortalDetailsUpdated = { guid: string, portal: IITC.Portal, portalDetails: any /* class portalDetail */, portalData: IITC.PortalData };
-export type EventArtifactsUpdated = { old: any, new: any };
-export type EventMapDataRefreshStart = { bounds: L.LatLngBounds, mapZoom: number, dataZoom: number, minPortalLevel: number, tileBounds: L.LatLngBounds };
-export type EventMapDataEntityInject = { callback: (ents: any, details: DecodePortalDetails) => void }; // TODO: ents = portalDetailLoaded.ent
+export interface EventPublicChatDataAvailable { raw: any, result: Intel.ChatLine[], processed: any }
+export interface EventFactionChatDataAvailable { raw: any, result: Intel.ChatLine[], processed: any }
+export interface EventPortalDetailsUpdated { guid: string, portal: IITC.Portal, portalDetails: any /* class portalDetail */, portalData: IITC.PortalData }
+export interface EventArtifactsUpdated { old: any, new: any }
+export interface EventMapDataRefreshStart { bounds: L.LatLngBounds, mapZoom: number, dataZoom: number, minPortalLevel: number, tileBounds: L.LatLngBounds }
+export interface EventMapDataEntityInject { callback: (ents: any, details: DecodePortalDetails) => void } // TODO: ents = portalDetailLoaded.ent
 export type EventMapDataRefreshEnd = unknown;
-export type EventPortalAdded = { portal: IITC.Portal, previousData: IITC.PortalData };
-export type EventLinkAdded = { link: IITC.Link };
-export type EventFieldAdded = { field: IITC.Field };
-export type EventPortalRemoved = { portal: IITC.Portal, data: IITC.PortalData };
-export type EventLinkRemoved = { link: IITC.Link, data: IITC.LinkData };
-export type EventFieldRemoved = { field: IITC.Field, data: IITC.FieldData };
-export type EventRequestFinished = { success: boolean };
-export type EventNicknameClicked = { event: MouseEvent, nickname: string };
+export interface EventPortalAdded { portal: IITC.Portal, previousData: IITC.PortalData }
+export interface EventLinkAdded { link: IITC.Link }
+export interface EventFieldAdded { field: IITC.Field }
+export interface EventPortalRemoved { portal: IITC.Portal, data: IITC.PortalData }
+export interface EventLinkRemoved { link: IITC.Link, data: IITC.LinkData }
+export interface EventFieldRemoved { field: IITC.Field, data: IITC.FieldData }
+export interface EventRequestFinished { success: boolean }
+export interface EventNicknameClicked { event: MouseEvent, nickname: string }
 export type EventSearch = any; /* class search.Query */
 export type EventPaneChanged = string;
 

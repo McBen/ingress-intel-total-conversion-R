@@ -71,7 +71,7 @@ export class RegionScoreDialog {
 
     onRequestSuccess(data: any) {
         if (data.result === undefined) {
-            return this.onRequestFailure();
+            this.onRequestFailure(); return;
         }
 
         this.regionScore = new RegionScore(data.result as ServerResult);
@@ -115,7 +115,7 @@ export class RegionScoreDialog {
     setupToolTips() {
         const that = this;
 
-        $("g.checkpoint", this.mainDialog).each(function (i, element) {
+        $("g.checkpoint", this.mainDialog).each((i, element) => {
             const $element = $(element);
 
             const formatScore = (index: number, score_now: number[], score_last: number[]): string => {
@@ -130,8 +130,8 @@ export class RegionScoreDialog {
                 return res;
             }
 
-            let tooltip: string = "";
-            const cp = parseInt($element.attr("data-cp") as string);
+            let tooltip = "";
+            const cp = parseInt($element.attr("data-cp")!);
             if (cp) {
                 const score_now = that.regionScore.getCPScore(cp);
                 const score_last = that.regionScore.getCPScore(cp - 1);
@@ -200,7 +200,7 @@ export class RegionScoreDialog {
 
         this.regionScore.topAgents.forEach((agent, index) => {
             agentTable += "<tr>" +
-                "<td>" + (index + 1).toFixed() + "</td>" +
+                "<td>" + (index + 1).toFixed(0) + "</td>" +
                 '<td class="nickname ' + (agent.team === "RESISTANCE" ? "res" : "enl") + '">' + agent.nick + "</td></tr>";
         });
 
@@ -224,7 +224,7 @@ export class RegionScoreDialog {
             const team = FACTION_NAMES[faction];
             const teamClass = FACTION_CSS[faction];
             const teamCol = FACTION_COLORS[faction];
-            const barSize = Math.round(this.regionScore.getAvgScore(faction) / maxAverage * 100).toFixed();
+            const barSize = Math.round(this.regionScore.getAvgScore(faction) / maxAverage * 100).toFixed(0);
             result += '<tr><th class="' + teamClass + '">' + team + "</th>" +
                 '<td class="' + teamClass + '">' + digits(this.regionScore.getAvgScore(faction)) + "</td>" +
                 '<td style="width:100%"><div style="background:' + teamCol + "; width: " + barSize + "%; height: 1.3ex; border: 2px outset " + teamCol + '; margin-top: 2px"> </td>' +

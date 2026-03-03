@@ -50,9 +50,9 @@ export class PluginKartverketMaps extends Plugin {
                 bakgrunnskart_forenklet: null
             },
 
-            // eslint-disable-next-line object-shorthand
+             
             initialize: function (layer: string, options: any) {
-                if (typeof this.layers[layer] === "undefined") {
+                if (this.layers[layer] === undefined) {
                     if (this.mappings[layer]) {
                         layer = this.mappings[layer];
                     } else {
@@ -60,18 +60,18 @@ export class PluginKartverketMaps extends Plugin {
                     }
                 }
 
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+                 
                 (L.TileLayer as any).prototype.initialize.call(this, this.baseUrl, options);
                 this.options.layer = layer;
             }
         });
 
         (L.tileLayer as any).kartverket = (layer: string, options: any): L.TileLayer => {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+             
             return new (L.TileLayer as any).Kartverket(layer, options);
         };
 
-        (L.tileLayer as any).kartverket.getLayers = (): { [index: string]: string } => {
+        (L.tileLayer as any).kartverket.getLayers = (): Record<string, string> => {
             return L.extend({}, (L.TileLayer as any).Kartverket.prototype.layers);
         };
     }
@@ -84,7 +84,7 @@ export class PluginKartverketMaps extends Plugin {
         const kartverket = (L.tileLayer as any).kartverket;
         const layers = kartverket.getLayers();
 
-        // eslint-disable-next-line guard-for-in
+         
         for (const layerID in layers) {
             const name = layers[layerID];
             const layer = kartverket(layerID);
@@ -98,7 +98,7 @@ export class PluginKartverketMaps extends Plugin {
         const kartverket = (L.tileLayer as any).kartverket;
         const layers = kartverket.getLayers();
 
-        // eslint-disable-next-line guard-for-in
+         
         for (const layerID in layers) {
             IITCr.layers.removeBase(layers[layerID]);
         }

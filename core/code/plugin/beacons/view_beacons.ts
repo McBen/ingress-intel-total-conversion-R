@@ -14,20 +14,20 @@ const enum BeaconType {
     Reward
 }
 
-type BeaconNames = { name: string, type: BeaconType }
-const beaconNames: { [key: string]: BeaconNames } = {
+interface BeaconNames { name: string, type: BeaconType }
+const beaconNames: Record<string, BeaconNames> = {
     "peFRACK": { name: "Fracker", type: BeaconType.Fracker },
     "peENL": { name: "ENL", type: BeaconType.Beacon },
     "peRES": { name: "RES", type: BeaconType.Beacon },
     "peFW_ENL": { name: "Firework (ENL)", type: BeaconType.Beacon },
     "peFW_RES": { name: "Firework (RES)", type: BeaconType.Beacon },
-    'peBN_BLM': { name: "Beacon (BLM)", type: BeaconType.Beacon },
-    'peBN_ENL_WINNER': { name: "BB - Win-ENL", type: BeaconType.Battle },
-    'peBN_RES_WINNER': { name: "BB - Win-RES", type: BeaconType.Battle },
-    'peBN_TIED_WINNER': { name: "BB - Win-none", type: BeaconType.Battle },
-    'peNEMESIS': { name: "Nemesis", type: BeaconType.Beacon },
-    'peTOASTY': { name: "Toasty", type: BeaconType.Beacon },
-    'peLOOK': { name: "Target", type: BeaconType.Beacon },
+    "peBN_BLM": { name: "Beacon (BLM)", type: BeaconType.Beacon },
+    "peBN_ENL_WINNER": { name: "BB - Win-ENL", type: BeaconType.Battle },
+    "peBN_RES_WINNER": { name: "BB - Win-RES", type: BeaconType.Battle },
+    "peBN_TIED_WINNER": { name: "BB - Win-none", type: BeaconType.Battle },
+    "peNEMESIS": { name: "Nemesis", type: BeaconType.Beacon },
+    "peTOASTY": { name: "Toasty", type: BeaconType.Beacon },
+    "peLOOK": { name: "Target", type: BeaconType.Beacon },
     "sc5_p": { name: "Volatile Scout Controller Portal", type: BeaconType.Anomaly },
     "ap2_start": { name: "Shard Start (2)", type: BeaconType.Anomaly }, /* shard Feb.2024 */
     "ap3_start": { name: "Shard Start (3)", type: BeaconType.Anomaly }, /* shard Feb.2024 */
@@ -60,12 +60,12 @@ export class ViewOrnaments extends Plugin {
     public tags: ["ornaments", "beacon", "portal", "info"];
     public defaultInactive = false;
 
-    private lastDeploy: Map<string, BeaconDeploy> = new Map();
+    private lastDeploy = new Map<string, BeaconDeploy>();
 
     constructor() {
         super();
 
-        // eslint-disable-next-line @typescript-eslint/no-require-imports, unicorn/prefer-module
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         require("./styles.css");
     }
 
@@ -126,8 +126,8 @@ export class ViewOrnaments extends Plugin {
 
         const deployer = this.getDeployer(window.portals[selectedPortal!]);
         const ornamentsNames = this.getOrnamentsNames(ornaments, deployer);
-        ornaments.forEach((name, idx) => {
-            container.append($("<img>", { src: imagePath + name + ".png", title: ornamentsNames[idx] }));
+        ornaments.forEach((name, index) => {
+            container.append($("<img>", { src: imagePath + name + ".png", title: ornamentsNames[index] }));
         });
 
         return container;
@@ -143,11 +143,7 @@ export class ViewOrnaments extends Plugin {
 
     private formatTime(time: number): string {
         const date = new Date(time);
-        if (date.getMinutes() < 10) {
-            return `${date.getHours()}:0${date.getMinutes()}`
-        } else {
-            return `${date.getHours()}:${date.getMinutes()}`
-        }
+        return date.getMinutes() < 10 ? `${date.getHours()}:0${date.getMinutes()}` : `${date.getHours()}:${date.getMinutes()}`;
     }
 
     onBeaconChat = (type: ChatLineType, line: Intel.ChatLine) => {
@@ -178,6 +174,6 @@ export class ViewOrnaments extends Plugin {
         if (ornamentName.startsWith(nameRewardBeacon)) return BeaconType.Reward;
 
         if (ornamentName.startsWith("pe")) return BeaconType.Beacon;
-        return !!ornamentName ? BeaconType.Anomaly : BeaconType.none;
+        return ornamentName ? BeaconType.Anomaly : BeaconType.none;
     }
 }

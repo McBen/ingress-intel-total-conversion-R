@@ -94,7 +94,7 @@ export class PlayerTracker extends Plugin {
 
         this.stored = new Map();
 
-        // eslint-disable-next-line unicorn/prefer-module
+         
         require("./player-tracker.css");
 
         this.setOptions();
@@ -149,11 +149,7 @@ export class PlayerTracker extends Plugin {
     }
 
     setOptions(options?: Partial<TrackerOptions>) {
-        if (options) {
-            this.option = { ...this.option, ...options };
-        } else {
-            this.option = { ...DEFAULT_OPTIONS };
-        }
+        this.option = options ? { ...this.option, ...options } : { ...DEFAULT_OPTIONS };
     }
 
 
@@ -250,13 +246,13 @@ export class PlayerTracker extends Plugin {
         const actions = playerData.actions;
         // find correct place to insert.
         const i = actions.findIndex(action => action.time > newEvent.time);
-        const nextTime = i >= 0 ? i : actions.length;
-        const prevTime = Math.max(nextTime - 1, 0);
+        const nextTime = i === -1 ? actions.length : i;
+        const previousTime = Math.max(nextTime - 1, 0);
 
         // so we have an event that happened at the same time. Most likely
         // this is multiple resos destroyed at the same time.
-        if (actions[prevTime].time === newEvent.time) {
-            actions[prevTime].latlngs.push(newEvent.latlngs[0]);
+        if (actions[previousTime].time === newEvent.time) {
+            actions[previousTime].latlngs.push(newEvent.latlngs[0]);
             return;
         }
 
@@ -266,15 +262,15 @@ export class PlayerTracker extends Plugin {
         // to look at the next item in the event list. If this event is the
         // newest one, there may not be a newer event so check for that. If
         // it really is an older event at the same location, then skip it.
-        if (actions[prevTime + 1] && this.eventHasLatLng(actions[prevTime + 1], newEvent.latlngs[0])) return;
+        if (actions[previousTime + 1] && this.eventHasLatLng(actions[previousTime + 1], newEvent.latlngs[0])) return;
 
         // if this event is newer, need to look at the previous one
-        const sameLocation = this.eventHasLatLng(actions[prevTime], newEvent.latlngs[0]);
+        const sameLocation = this.eventHasLatLng(actions[previousTime], newEvent.latlngs[0]);
 
         // if it’s the same location, just update the timestamp. Otherwise
         // push as new event.
         if (sameLocation) {
-            actions[prevTime].time = newEvent.time;
+            actions[previousTime].time = newEvent.time;
         } else {
             actions.splice(nextTime, 0, newEvent);
         }
@@ -442,7 +438,7 @@ export class PlayerTracker extends Plugin {
 
         if (guessPlayerLevels === undefined || guessPlayerLevels.fetchLevelDetailsByPlayer === undefined) return;
 
-        // eslint-disable-next-line no-inner-declarations
+         
         const getLevel = (lvl: number): JQuery => {
             return $("<span>")
                 .css({
@@ -531,7 +527,7 @@ export class PlayerTracker extends Plugin {
         if (window.isSmartphone()) window.show("map");
 
         // if the user moved since the search was started, check if we have a new set of data
-        if (false === this.centerMapOnUser((<any>result).nickname as string)) {
+        if (!this.centerMapOnUser((<any>result).nickname as string)) {
             window.map.setView(result.position);
         }
 
@@ -545,7 +541,7 @@ export class PlayerTracker extends Plugin {
     onSearch = (query: IITC.SearchQuery) => {
         let term = query.term.toLowerCase();
 
-        if (term.length > 0 && term[0] === "@") term = term.slice(1);
+        if (term.length > 0 && term.startsWith("@")) term = term.slice(1);
 
         this.stored.forEach((data, nick) => {
             if (!nick.toLowerCase().includes(term)) return;

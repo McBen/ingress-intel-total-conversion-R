@@ -1,4 +1,4 @@
-/* eslint-disable unicorn/prefer-string-replace-all */
+ 
 import { Component, Match, Show, Switch, createMemo, createSignal } from "solid-js";
 import { render } from "solid-js/web";
 import { PortalInfoDetailed } from "../portal/portal_info_detailed";
@@ -130,8 +130,8 @@ const PortalHealth: Component<{ details: PortalInfoDetailed }> = p => {
 }
 
 
-const IconEnergy: Component<{ value: number }> = props => {
-    const icon = createMemo<number>(() => Math.floor(props.value / 11));
+const IconEnergy: Component<{ value: number }> = properties => {
+    const icon = createMemo<number>(() => Math.floor(properties.value / 11));
 
     return (
         <Switch>

@@ -21,7 +21,7 @@ export class PluginYandexMaps extends Plugin {
 
     private apiKey = "";
 
-    private sets: Record<string, Object> = {
+    private sets: Record<string, object> = {
         map: {
             type: "map"
         },

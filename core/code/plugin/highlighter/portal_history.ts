@@ -15,7 +15,7 @@ const styles = {
 };
 
 const was = (history: number | undefined, flag: HISTORY): boolean => {
-    // eslint-disable-next-line no-bitwise
+     
     return (!!((history || 0) & flag));
 }
 

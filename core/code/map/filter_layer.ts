@@ -1,4 +1,4 @@
-/* eslint-disable guard-for-in */
+ 
 /* eslint-disable max-classes-per-file */
 
 import { IITCr } from "../IITC";
@@ -54,7 +54,7 @@ class Filter<ENTITY> {
 
     remove(filter: FilterFunction<ENTITY>) {
         const index = this.filters.indexOf(filter);
-        if (index >= 0) {
+        if (index !== -1) {
             this.filters.splice(index, 1);
             updateFilterState();
         }

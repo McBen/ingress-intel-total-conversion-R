@@ -73,7 +73,7 @@ const searchPortals = (query: Query): void => {
                 title: data.title,
                 description: `${teams[team]}, L${data.level}, ${data.health}%, ${data.resCount} Resonators`,
                 position: portal.getLatLng(),
-                icon: "data:image/svg+xml;base64," + btoa(portalIcon.replace(/%COLOR%/g, color)),
+                icon: "data:image/svg+xml;base64," + btoa(portalIcon.replaceAll("%COLOR%", color)),
                 onSelected: (result, event) => {
                     if (event.type === "dblclick") {
                         zoomToAndShowPortal(guid, portal.getLatLng());

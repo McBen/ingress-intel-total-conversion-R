@@ -21,7 +21,7 @@ export class PluginBingMaps extends Plugin {
 
     private apiKey = "Ajt5lr3kR35OADGQqFzptNJA3tXzXYpZoCOSnY1JgGf4tEyWBErROgnuK5V9vYEE";
 
-    private sets: Record<string, Object> = {
+    private sets: Record<string, object> = {
         Road: {
             imagerySet: "RoadOnDemand"
         },
@@ -42,7 +42,7 @@ export class PluginBingMaps extends Plugin {
             key: this.apiKey
         }
 
-        // eslint-disable-next-line guard-for-in
+         
         for (const name in this.sets) {
             const options = $.extend({}, baseOptions, this.sets[name]);
             const layer = L.bingLayer(options);
@@ -52,7 +52,7 @@ export class PluginBingMaps extends Plugin {
 
     deactivate(): void {
 
-        // eslint-disable-next-line guard-for-in
+         
         for (const name in this.sets) {
             IITCr.layers.removeBase("Bing " + name);
         }

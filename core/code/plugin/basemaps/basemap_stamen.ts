@@ -29,7 +29,7 @@ export class PluginStamenMaps extends Plugin {
                     'under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.'
                 ].join("")
             },
-            // eslint-disable-next-line object-shorthand
+             
             initialize: function (name: string, options: any) {
                 options.layer = name.replace(" ", "-").toLowerCase();
                 // eslint-disable-next-line @typescript-eslint/no-unsafe-call

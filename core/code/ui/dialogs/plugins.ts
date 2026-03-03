@@ -95,7 +95,7 @@ export class PluginDialog {
 
             if (ftext) {
                 const ftextLow = ftext.toLowerCase();
-                const tagMatch = p.tags && p.tags.some(tag => tag.toLowerCase().includes(ftextLow));
+                const tagMatch = p.tags?.some(tag => tag.toLowerCase().includes(ftextLow));
                 if (!tagMatch && !p.name.toLowerCase().includes(ftextLow)) return false;
             }
 

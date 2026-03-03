@@ -65,7 +65,7 @@ export class LayerManager {
 
     removeBase(name: string): void {
         const entryIndex = this.layers.findIndex(l => l.name === name);
-        if (entryIndex < 0) {
+        if (entryIndex === -1) {
             log.warn("layer not found", name);
             return;
         }
@@ -121,7 +121,7 @@ export class LayerManager {
 
     private renameOldLayer(name: string): string {
         for (const group in groupOldLayers) {
-            const names = groupOldLayers[group] as string[];
+            const names = groupOldLayers[group];
             if (names.includes(name)) {
                 return group + "\\" + name;
             }
@@ -133,7 +133,7 @@ export class LayerManager {
 
     removeOverlay(layer: L.Layer): void {
         const entryIndex = this.layers.findIndex(l => L.stamp(l.layer) === L.stamp(layer));
-        if (entryIndex < 0) {
+        if (entryIndex === -1) {
             log.warn("overlay not found");
             return;
         }

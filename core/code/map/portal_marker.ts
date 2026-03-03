@@ -7,7 +7,7 @@ const COLOR_SELECTED_PORTAL = "#f0f";
 export const portalMarkerScale = (): number => {
     const zoom = window.map.getZoom();
     if (L.Browser.mobile) {
-        return zoom >= 16 ? 1.5 : zoom >= 14 ? 1.2 : zoom >= 11 ? 1.0 : zoom >= 8 ? 0.65 : 0.5;
+        return zoom >= 16 ? 1.5 : zoom >= 14 ? 1.2 : zoom >= 11 ? 1 : zoom >= 8 ? 0.65 : 0.5;
     } else {
         return zoom >= 14 ? 1 : zoom >= 11 ? 0.8 : zoom >= 8 ? 0.65 : 0.5;
     }

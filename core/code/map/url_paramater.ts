@@ -1,4 +1,4 @@
-import { getURLParam } from "../helper/utils_misc";
+import { getURLParam as getURLParameter } from "../helper/utils_misc";
 import { EventPortalAdded, hooks } from "../helper/hooks";
 import * as L from "leaflet";
 import { normLL } from "./map";
@@ -7,14 +7,14 @@ import { DEFAULT_ZOOM } from "../constants";
 
 export const readURLParamater = () => {
 
-    const pll = getURLParam("pll");
+    const pll = getURLParameter("pll");
     if (pll) {
         const pllSplit = pll.split(",");
         const ll = L.latLng(normLL(pllSplit[0], pllSplit[1]).center);
         selectPortalByLatLng(ll);
     }
 
-    const urlPortal = getURLParam("pguid");
+    const urlPortal = getURLParameter("pguid");
     if (urlPortal) autoSelectPortal(urlPortal);
 };
 

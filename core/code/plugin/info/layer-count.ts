@@ -1,4 +1,4 @@
-/* eslint-disable max-classes-per-file */
+ 
 import { FACTION } from "../../constants";
 import { pnpoly } from "../../helper/utils_misc";
 import { IITCr } from "../../IITC";
@@ -22,7 +22,7 @@ export class LayerCount extends Plugin {
     private tooltip: HTMLElement;
 
     activate() {
-        // eslint-disable-next-line @typescript-eslint/no-require-imports, unicorn/prefer-module
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         require("./layer-count.css");
 
         this.addControl();
@@ -34,36 +34,36 @@ export class LayerCount extends Plugin {
 
 
     addControl() {
-        const button = document.createElement('a');
-        button.className = 'leaflet-bar-part';
-        button.addEventListener('click', event => {
+        const button = document.createElement("a");
+        button.className = "leaflet-bar-part";
+        button.addEventListener("click", event => {
             const button = event.target! as HTMLElement;
-            if (button.classList.contains('active')) {
-                window.map.off('click', (event) => this.updateToolTip(event));
-                button.classList.remove('active');
+            if (button.classList.contains("active")) {
+                window.map.off("click", (event) => this.updateToolTip(event));
+                button.classList.remove("active");
             } else {
-                window.map.on('click', (event) => this.updateToolTip(event));
-                button.classList.add('active');
+                window.map.on("click", (event) => this.updateToolTip(event));
+                button.classList.add("active");
                 setTimeout(() => {
-                    this.tooltip.textContent = 'Click on map';
+                    this.tooltip.textContent = "Click on map";
                 }, 10);
             }
         }, false);
-        button.title = 'Count nested fields';
+        button.title = "Count nested fields";
 
-        this.tooltip = document.createElement('div');
-        this.tooltip.className = 'leaflet-control-layer-count-tooltip';
+        this.tooltip = document.createElement("div");
+        this.tooltip.className = "leaflet-control-layer-count-tooltip";
         button.appendChild(this.tooltip);
 
-        const container = document.createElement('div');
-        container.className = 'leaflet-control-layer-count leaflet-bar leaflet-control';
+        const container = document.createElement("div");
+        container.className = "leaflet-control-layer-count leaflet-bar leaflet-control";
         container.appendChild(button);
 
         $(".leaflet-control-container .leaflet-top.leaflet-left").append(container);
     }
 
     removeControl() {
-        window.map.off('click', this.updateToolTip);
+        window.map.off("click", this.updateToolTip);
         $(".leaflet-control-container .leaflet-top.leaflet-left .leaflet-control-layer-count").remove();
     }
 
@@ -81,7 +81,7 @@ export class LayerCount extends Plugin {
         } else if (counts.enl !== 0) {
             content = `Enl: ${counts.enl} field(s)`;
         } else {
-            content = 'No fields';
+            content = "No fields";
         }
         if (counts.drawn !== 0) {
             content += `; draw: ${counts.drawn} polygon(s)`;

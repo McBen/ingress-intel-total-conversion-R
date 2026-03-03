@@ -48,10 +48,14 @@ export class PortalDetails {
     private doRequest(guid: PortalGUID): Promise<PortalInfoDetailed> {
         const promise = new Promise<PortalInfoDetailed>((resolve, reject) => {
             postAjax("getPortalDetails", { guid },
-                data => {
+                async (data) => {
 
-                    if (data && data.error === "RETRY") return this.request(guid);
-                    if (!data || data.error || !data.result) return reject();
+                    if (data?.error === "RETRY") {
+                        const portal = await this.request(guid);
+                        resolve(portal);
+                        return;
+                    }
+                    if (!data || data.error || !data.result) { reject(new Error("Failed to retrieve portal detail data")); return; }
 
                     const portal = new PortalInfoDetailed(guid, data.result as IITC.EntityPortalDetailed);
                     this.cache.store(guid, portal);
@@ -73,7 +77,7 @@ export class PortalDetails {
                 },
                 () => {
                     hooks.trigger("portalDetailLoaded", { guid, success: false });
-                    reject();
+                    reject(new Error("Failed to retrieve portal details"));
                 }
             );
         })

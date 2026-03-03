@@ -52,7 +52,7 @@ export const WebLink = {
 
 
 const generateLink = (url: string, urlParameter: Record<string, string | number> = {}): string => {
-    // eslint-disable-next-line unicorn/no-array-callback-reference
+     
     const encodedParameters = Object.entries(urlParameter).map(kv => kv.map(encodeURIComponent).join("=")).join("&");
     return encodedParameters ? url + "?" + encodedParameters : url;
 }

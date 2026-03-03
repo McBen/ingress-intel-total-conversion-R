@@ -53,11 +53,7 @@ export const unixTimeToString = (time: string | number, full?: boolean): string 
     const timeStr = d.toLocaleTimeString();
     const date = `${d.getFullYear()}-${zeroPad(d.getMonth() + 1)}-${zeroPad(d.getDate())}`;
     if (full !== undefined && full) return date + " " + timeStr;
-    if (d.toDateString() === new Date().toDateString()) {
-        return timeStr;
-    } else {
-        return date;
-    }
+    return d.toDateString() === new Date().toDateString() ? timeStr : date;
 }
 
 
@@ -111,10 +107,6 @@ export const ago = (time: number, now: number): string => {
     const s = (now - time) / 1000;
     const h = Math.floor(s / 3600);
     const m = Math.floor((s % 3600) / 60);
-    if (h > 0) {
-        return `${h}h${m}m`;
-    } else {
-        return `${m}m`;
-    }
+    return h > 0 ? `${h}h${m}m` : `${m}m`;
 }
 
