@@ -1,15 +1,13 @@
-const express = require('express');
-const myIP = require('my-ip');
-const fs = require('fs');
-const escapeHtml = require('escape-html');
+const express = require("express");
+const myIP = require("my-ip");
+const fs = require("fs");
+const escapeHtml = require("escape-html");
 let port = 8100;
-const publicDir = 'build/';
-
+const publicDir = "build/";
 
 let pidx = process.argv.indexOf("-p");
 if (pidx === -1) pidx = process.argv.indexOf("--port");
-if (pidx !== -1) port = parseInt(process.argv[pidx + 1])
-
+if (pidx !== -1) port = parseInt(process.argv[pidx + 1]);
 
 function getLocalAdresses() {
     const ip4 = myIP();
@@ -23,14 +21,11 @@ function getLocalAdresses() {
     return adresses;
 }
 
-
 var IndexPage = function (request, response) {
-
     function scriptList() {
+        var html = "";
 
-        var html = '';
-
-        fs.readdirSync(publicDir).forEach(file => {
+        fs.readdirSync(publicDir).forEach((file) => {
             if (fs.lstatSync(publicDir + file).isFile() && file.search(/\.user\.js$/) >= 0) {
                 let meta = readScriptMeta(file);
                 html += createScriptBlock(meta);
@@ -40,13 +35,12 @@ var IndexPage = function (request, response) {
         return html;
     }
 
-
     function readScriptMeta(filename) {
         let contents = fs.readFileSync(publicDir + filename).toString();
 
         let meta = { filename: filename };
 
-        let regex = /^\s*\/\/\s*@(\w+)\s+(.+)$/mg;// example: "// @key values"
+        let regex = /^\s*\/\/\s*@(\w+)\s+(.+)$/gm; // example: "// @key values"
         let match = regex.exec(contents);
         while (match != null) {
             meta[match[1]] = match[2];
@@ -57,17 +51,13 @@ var IndexPage = function (request, response) {
     }
 
     function createScriptBlock(meta) {
-        let name = escapeHtml(meta['name'] || 'unknown');
-        let desc = escapeHtml(meta['description']); // .gsub(/^\[.*\]/,'')
-
-        // for mobile: intent://reswue.gitlab.io/iitc/reswue2.user.js#Intent;scheme=https;action=android.intent.action.VIEW;end;
-        let linkDirect = escapeHtml(meta['filename']);
-        let linkIntent = `intent://localhost:${port}/${escapeHtml(meta['filename'])}#Intent;scheme=https;action=android.intent.action.VIEW;end;`
-        let link = isMobileClient() ? linkIntent : linkDirect;
+        let name = escapeHtml(meta["name"] || "unknown");
+        let desc = escapeHtml(meta["description"]); // .gsub(/^\[.*\]/,'')
+        let link = escapeHtml(meta["filename"]);
 
         return `
             <div class='script'>
-                <a href='${link}'>${name} (${escapeHtml(meta['filename'])})</a> <span>${escapeHtml(meta['version'])}</span><br>
+                <a href='${link}'>${name} (${escapeHtml(meta["filename"])})</a> <span>${escapeHtml(meta["version"])}</span><br>
                 <div class='desc'>${desc}</div>
             </div>`;
     }
@@ -87,7 +77,7 @@ var IndexPage = function (request, response) {
     }
 
     function isMobileClient() {
-        const ua = request.headers['user-agent'];
+        const ua = request.headers["user-agent"];
         return /Android/.test(ua);
     }
 
@@ -95,27 +85,18 @@ var IndexPage = function (request, response) {
             <title>IITCPluginKit Fileserver</title>
             <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
             <style>${css()}</style>
-        </head>`
+        </head>`;
 
     response.send(head + `<body>${scriptList()}</body>`);
 };
 
-
-
 var app = express();
-app.get('/', IndexPage);
-app.get('/index', IndexPage);
+app.get("/", IndexPage);
+app.get("/index", IndexPage);
 app.use(express.static(publicDir));
 
 app.listen(port, function () {
-    console.log('ScriptServer listening at\n ', getLocalAdresses().join("\n  "));
-    console.log(' (use -p number to change port)');
-    console.log('  Directory /%s', publicDir);
+    console.log("ScriptServer listening at\n ", getLocalAdresses().join("\n  "));
+    console.log(" (use -p number to change port)");
+    console.log("  Directory /%s", publicDir);
 });
-
-
-
-
-
-
-
