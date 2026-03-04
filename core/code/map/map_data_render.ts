@@ -159,14 +159,16 @@ export class Render {
             }
         }
 
-        const removedLinks = IITCr.links.all.filter(f => (f as RenderLink).renderPass !== this.renderPassID);
-        IITCr.links.all = IITCr.links.all.filter(f => (f as RenderLink).renderPass === this.renderPassID);
-        const countl = removedLinks.length;
-        removedLinks.forEach(link => {
-            link.remove();
-            hooks.trigger("linkRemoved", { link, data: link.options.data });
+        let countl = 0;
+        IITCr.links.deleteIf(link => {
+            if ((link as RenderLink).renderPass !== this.renderPassID) {
+                link.remove();
+                hooks.trigger("linkRemoved", { link, data: link.options.data });
+                countl++;
+                return true;
+            }
+            return false;
         });
-
 
         const removedFields = IITCr.fields.all.filter(f => (f as RenderField).renderPass !== this.renderPassID);
         IITCr.fields.all = IITCr.fields.all.filter(f => (f as RenderField).renderPass === this.renderPassID);
