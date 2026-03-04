@@ -4777,7 +4777,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"enhanced-resolve@npm:^5.19.0":
+"enhanced-resolve@npm:^5.20.0":
   version: 5.20.0
   resolution: "enhanced-resolve@npm:5.20.0"
   dependencies:
@@ -5968,7 +5968,7 @@ __metadata:
     jquery-ui: "npm:^1.14.2"
     leaflet: "npm:^1.9.4"
     leaflet-plugins: "npm:^3.4.0"
-    leaflet.gridlayer.googlemutant: "npm:^0.14.1"
+    leaflet.gridlayer.googlemutant: "npm:^0.16.0"
     moment: "npm:^2.30.1"
     my-ip: "npm:^1.1.1"
     overlapping-marker-spiderfier-leaflet: "npm:^0.2.7"
@@ -5981,7 +5981,7 @@ __metadata:
     postcss-nested: "npm:^7.0.2"
     prettier: "npm:^3.8.1"
     raw-loader: "npm:^4.0.2"
-    rbush: "npm:^3.0.1"
+    rbush: "npm:^4.0.1"
     solid-js: "npm:^1.9.11"
     source-map-loader: "npm:^5.0.0"
     style-loader: "npm:^4.0.0"
@@ -5991,7 +5991,7 @@ __metadata:
     typescript: "npm:^5.9.3"
     typescript-eslint: "npm:^8.56.1"
     ulog: "npm:2.0.0-beta.19"
-    webpack: "npm:^5.105.3"
+    webpack: "npm:^5.105.4"
     webpack-cli: "npm:^6.0.1"
     webpack-merge: "npm:^6.0.1"
     webpack-strip-block: "npm:^0.3.0"
@@ -6965,10 +6965,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"leaflet.gridlayer.googlemutant@npm:^0.14.1":
-  version: 0.14.1
-  resolution: "leaflet.gridlayer.googlemutant@npm:0.14.1"
-  checksum: 10c0/5957611318eb636c67e6472ceeb3dac010a25533d391faf95477b8cd7fadbd4c5b98ddb1840f0ef34aaa847bf3ebef26ce5b5869ea099fbe8441d66da1e31a54
+"leaflet.gridlayer.googlemutant@npm:^0.16.0":
+  version: 0.16.0
+  resolution: "leaflet.gridlayer.googlemutant@npm:0.16.0"
+  checksum: 10c0/f92f6e1bc08185ed1d1fa3e3bda2b4be56e948501341860872ca00ba12f59826e2cff19dcd65f595f04f8bd9d26e154c4c3a9b4c0bb755bfe9365d72528cce58
   languageName: node
   linkType: hard
 
@@ -8582,10 +8582,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"quickselect@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "quickselect@npm:2.0.0"
-  checksum: 10c0/6c8d591bc73beae4c1996b7b7138233a7dbbbdde29b7b6d822a02d08cd220fd27613f47d6e9635989b12e250d42ef9da3448de1ed12ad962974e207ab3c3562c
+"quickselect@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "quickselect@npm:3.0.0"
+  checksum: 10c0/3a0d33b0ec06841d953accdfd735aa3d8b7922cddd12970544a2c4b0278871280d8f5ba496803600693c1e7b7b2fb57c31d2b14d99132f478888006a1be6e6b7
   languageName: node
   linkType: hard
 
@@ -8629,12 +8629,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rbush@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "rbush@npm:3.0.1"
+"rbush@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "rbush@npm:4.0.1"
   dependencies:
-    quickselect: "npm:^2.0.0"
-  checksum: 10c0/55311586c30cdedaa2220de6f1da45fe1fa806263afbf7b6f4c0078983830c2abc7771187896d68bfc9078cb279079fb4c84971831da4b74384aab2c2c417758
+    quickselect: "npm:^3.0.0"
+  checksum: 10c0/1d3c2e2c8b8111a6bcac0b36348ef55c977bc533a7a7bef44c423e24de531e43749bcf5b939008de69d97d3c6e7cf0e9040cecb4492358e6d562ea85165a1620
   languageName: node
   linkType: hard
 
@@ -9081,7 +9081,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"serialize-javascript@npm:^6.0.1, serialize-javascript@npm:^6.0.2":
+"serialize-javascript@npm:^6.0.1":
   version: 6.0.2
   resolution: "serialize-javascript@npm:6.0.2"
   dependencies:
@@ -9630,14 +9630,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"terser-webpack-plugin@npm:^5.3.16":
-  version: 5.3.16
-  resolution: "terser-webpack-plugin@npm:5.3.16"
+"terser-webpack-plugin@npm:^5.3.17":
+  version: 5.3.17
+  resolution: "terser-webpack-plugin@npm:5.3.17"
   dependencies:
     "@jridgewell/trace-mapping": "npm:^0.3.25"
     jest-worker: "npm:^27.4.5"
     schema-utils: "npm:^4.3.0"
-    serialize-javascript: "npm:^6.0.2"
     terser: "npm:^5.31.1"
   peerDependencies:
     webpack: ^5.1.0
@@ -9648,7 +9647,7 @@ __metadata:
       optional: true
     uglify-js:
       optional: true
-  checksum: 10c0/39e37c5b3015c1a5354a3633f77235677bfa06eac2608ce26d258b1d1a74070a99910319a6f2f2c437eb61dc321f66434febe01d78e73fa96b4d4393b813f4cf
+  checksum: 10c0/bfe08fbb3e5e5a8b2525dcc1705c370ca67f218051f0df241f86531ab0f1a93d5b290176ba09cff28cd5f774836684a7e436421d0641c0f4dfd07110d8d907bf
   languageName: node
   linkType: hard
 
@@ -10395,9 +10394,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:^5.105.3":
-  version: 5.105.3
-  resolution: "webpack@npm:5.105.3"
+"webpack@npm:^5.105.4":
+  version: 5.105.4
+  resolution: "webpack@npm:5.105.4"
   dependencies:
     "@types/eslint-scope": "npm:^3.7.7"
     "@types/estree": "npm:^1.0.8"
@@ -10409,7 +10408,7 @@ __metadata:
     acorn-import-phases: "npm:^1.0.3"
     browserslist: "npm:^4.28.1"
     chrome-trace-event: "npm:^1.0.2"
-    enhanced-resolve: "npm:^5.19.0"
+    enhanced-resolve: "npm:^5.20.0"
     es-module-lexer: "npm:^2.0.0"
     eslint-scope: "npm:5.1.1"
     events: "npm:^3.2.0"
@@ -10421,7 +10420,7 @@ __metadata:
     neo-async: "npm:^2.6.2"
     schema-utils: "npm:^4.3.3"
     tapable: "npm:^2.3.0"
-    terser-webpack-plugin: "npm:^5.3.16"
+    terser-webpack-plugin: "npm:^5.3.17"
     watchpack: "npm:^2.5.1"
     webpack-sources: "npm:^3.3.4"
   peerDependenciesMeta:
@@ -10429,7 +10428,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 10c0/a9a9a3a369d14f24348bd932feb07eef74a9fe194ad16704dc4f125b6055fe51a5ef1c6fdb3aa398c6f180f59aa14cb1b360695d8ea862a5ed130103ebd255e0
+  checksum: 10c0/e9896d20bac351b119d59942b7efae5b117056ecf203acc0d1a84ecbf0a5a9a80ca733735f96bd163e3530be6ab7f615cd67e5320bd3c47d709c9bfe376c3280
   languageName: node
   linkType: hard
 
